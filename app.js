@@ -119,3 +119,24 @@ document.querySelectorAll('.eco-track a').forEach(item=>{item.addEventListener('
     else{ heroVideo.play().catch(()=>{}); }
   });
 })();
+
+/* ===== BIO PORTRAIT — PAN FUSION ===== */
+(function(){
+  const storyTitle=document.querySelector('.story-title');
+  if(!storyTitle || storyTitle.querySelector('.story-portrait-v6')) return;
+
+  const portrait=document.createElement('div');
+  portrait.className='story-portrait-v6';
+  portrait.innerHTML='<img src="assets/a_high_energy_promo_poster_style_scene_a_dramatic.png" alt="Gorilla Boomin — Pan Fusion artist portrait">';
+  storyTitle.appendChild(portrait);
+
+  const style=document.createElement('style');
+  style.textContent=`
+    .story-grid-v5{align-items:stretch}
+    .story-title{display:flex;flex-direction:column;min-height:100%}
+    .story-portrait-v6{margin-top:28px;flex:1;min-height:620px;border:1px solid rgba(255,255,255,.14);border-radius:18px;overflow:hidden;background:#05050a;box-shadow:0 28px 70px rgba(0,0,0,.42),0 0 45px rgba(113,56,255,.12)}
+    .story-portrait-v6 img{display:block;width:100%;height:100%;object-fit:contain;object-position:center top;background:#05050a}
+    @media(max-width:900px){.story-title{display:block}.story-portrait-v6{min-height:0;margin-top:28px}.story-portrait-v6 img{height:auto;aspect-ratio:auto;object-fit:contain}}
+  `;
+  document.head.appendChild(style);
+})();
