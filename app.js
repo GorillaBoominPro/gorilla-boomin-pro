@@ -4,139 +4,20 @@ const ARCHIVE=[
 ];
 const VIDEOS=["copy_46D7C9CD-A7F0-4F68-A698-0FD54DCF8B66.mov"];
 const STUDIO=["wide_detailed_interior_shot_of_a_modern_home_musi.png","A9E6DC10-37FF-43E9-9E78-C1E50C39B1B7.jpg","IMG_9915.jpeg","IMG_9914.jpeg","IMG_9896.JPG","IMG_9918.JPG"];
-
-const $=s=>document.querySelector(s);
-const encodeName=name=>encodeURIComponent(name).replace(/%2F/g,'/');
-
-function loadImage(img,name,{fallbackRoot=true,finalFallback=null}={}){
-  const encoded=encodeName(name);
-  let stage=0;
-  img.onerror=()=>{
-    stage++;
-    if(stage===1 && fallbackRoot){ img.src=encoded; return; }
-    if(finalFallback){ img.onerror=null; img.src=finalFallback; return; }
-    img.onerror=null;
-    img.closest('figure')?.remove();
-  };
-  img.src='assets/'+encoded;
-}
-
-/* V5.1 repair: legacy HTML still points to assets/media/, but uploaded files live in assets/. */
-document.querySelectorAll('img[src^="assets/media/"]').forEach(img=>{
-  const name=decodeURIComponent(img.getAttribute('src').replace('assets/media/',''));
-  const gaming=img.alt==='Gaming world';
-  const fallback=gaming
-    ? 'assets/a_high_energy_glossy_neon_saturated_graphic_desi.png'
-    : 'assets/a_high_resolution_ultra_detailed_neon_gold_and_p.png';
-  loadImage(img,name,{fallbackRoot:true,finalFallback:fallback});
-});
-
-const archive=$('#archiveGrid');
-function addCard(name,i,cls=''){
-  const fig=document.createElement('figure');
-  fig.className='media-card '+cls;
-  const img=document.createElement('img');
-  img.loading='lazy';
-  img.alt='Gorilla Boomin media '+(i+1);
-  img.onclick=()=>openLightbox(img.src,img.alt);
-  loadImage(img,name,{fallbackRoot:true});
-  fig.appendChild(img);
-  archive?.appendChild(fig);
-}
-ARCHIVE.slice(0,72).forEach((n,i)=>addCard(n,i));
-
-const studioGrid=$('#studioGrid');
-STUDIO.forEach((n,i)=>{
-  const img=document.createElement('img');
-  img.loading='lazy';
-  img.alt='BOOM STUDIO '+(i+1);
-  img.onclick=()=>openLightbox(img.src,img.alt);
-  loadImage(img,n,{fallbackRoot:true});
-  studioGrid?.appendChild(img);
-});
-
-const videoGrid=$('#videoGrid');
-VIDEOS.forEach((n,i)=>{
-  const card=document.createElement('article');
-  card.className='video-card';
-  card.innerHTML=`<div class="video-wrap"><video controls preload="metadata" src="assets/${encodeName(n)}"></video></div><div class="video-copy"><span>BOOM MEDIA • VIDEO ${String(i+1).padStart(2,'0')}</span><h3>${i===0?'THE BOOM FILES':'BEHIND THE BOOM'}</h3><p>Original Gorilla Boomin media archive.</p></div>`;
-  videoGrid?.appendChild(card);
-});
-
-function openLightbox(src,alt){
-  const box=document.createElement('div');
-  box.className='lightbox';
-  box.innerHTML=`<button aria-label="Close">×</button><img src="${src}" alt="${alt}">`;
-  box.addEventListener('click',e=>{if(e.target===box||e.target.tagName==='BUTTON')box.remove()});
-  document.body.appendChild(box);
-}
-
-const menu=$('#menuBtn');
-const nav=$('#mainNav');
-menu?.addEventListener('click',()=>nav?.classList.toggle('open'));
-nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
-
-document.querySelectorAll('form[data-demo]').forEach(form=>form.addEventListener('submit',e=>{
-  e.preventDefault();
-  const note=form.querySelector('.form-note');
-  if(note){
-    note.textContent='Thanks — this form is ready for your final email/CRM connection in the live deployment.';
-    note.classList.add('show');
-  }
-}));
-
-const fakePlay=document.getElementById('fakePlay');
-if(fakePlay){fakePlay.addEventListener('click',()=>{fakePlay.textContent=fakePlay.textContent==='▶'?'Ⅱ':'▶';});}
-
-/* ===== V5 LANGUAGE SWITCHER ===== */
-(function(){
-  const toggle=document.getElementById('langToggle');
-  const langMenu=document.getElementById('langMenu');
-  const current=document.getElementById('currentLang');
-  if(!toggle || !langMenu) return;
-  toggle.addEventListener('click',()=>langMenu.classList.toggle('open'));
-  langMenu.querySelectorAll('[data-lang]').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      current.textContent=btn.dataset.lang;
-      langMenu.classList.remove('open');
-      document.documentElement.lang=btn.dataset.lang.toLowerCase();
-      localStorage.setItem('gb-language',btn.dataset.lang);
-    });
-  });
-  const saved=localStorage.getItem('gb-language');
-  if(saved) current.textContent=saved;
-  document.addEventListener('click',(e)=>{if(!e.target.closest('.language-switcher')) langMenu.classList.remove('open');});
-})();
-
-document.querySelectorAll('[data-support]').forEach(btn=>btn.addEventListener('click',()=>alert((btn.dataset.support==='coffee'?'Buy Me a Coffee':btn.dataset.support==='beer'?'Buy Me a Beer':'Tip the Artist')+' — secure payment connection will be added when the payment provider is connected.')));
-document.querySelectorAll('.eco-track a').forEach(item=>{item.addEventListener('focus',()=>item.closest('.eco-track')?.style.setProperty('animation-play-state','paused'));item.addEventListener('blur',()=>item.closest('.eco-track')?.style.removeProperty('animation-play-state'));});
-
-(function(){
-  const heroVideo=document.querySelector('.hero-cinema video');
-  if(!heroVideo) return;
-  document.addEventListener('visibilitychange',()=>{
-    if(document.hidden){ heroVideo.pause(); }
-    else{ heroVideo.play().catch(()=>{}); }
-  });
-})();
-
-/* ===== BIO PORTRAIT — PAN FUSION ===== */
-(function(){
-  const storyTitle=document.querySelector('.story-title');
-  if(!storyTitle || storyTitle.querySelector('.story-portrait-v6')) return;
-
-  const portrait=document.createElement('div');
-  portrait.className='story-portrait-v6';
-  portrait.innerHTML='<img src="assets/a_high_energy_promo_poster_style_scene_a_dramatic.png" alt="Gorilla Boomin — Pan Fusion artist portrait">';
-  storyTitle.appendChild(portrait);
-
-  const style=document.createElement('style');
-  style.textContent=`
-    .story-grid-v5{align-items:stretch}
-    .story-title{display:flex;flex-direction:column;min-height:100%}
-    .story-portrait-v6{margin-top:28px;flex:1;min-height:620px;border:1px solid rgba(255,255,255,.14);border-radius:18px;overflow:hidden;background:#05050a;box-shadow:0 28px 70px rgba(0,0,0,.42),0 0 45px rgba(113,56,255,.12)}
-    .story-portrait-v6 img{display:block;width:100%;height:100%;object-fit:contain;object-position:center top;background:#05050a}
-    @media(max-width:900px){.story-title{display:block}.story-portrait-v6{min-height:0;margin-top:28px}.story-portrait-v6 img{height:auto;aspect-ratio:auto;object-fit:contain}}
-  `;
-  document.head.appendChild(style);
-})();
+const $=s=>document.querySelector(s);const encodeName=name=>encodeURIComponent(name).replace(/%2F/g,'/');
+function loadImage(img,name,{fallbackRoot=true,finalFallback=null}={}){const encoded=encodeName(name);let stage=0;img.onerror=()=>{stage++;if(stage===1&&fallbackRoot){img.src=encoded;return;}if(finalFallback){img.onerror=null;img.src=finalFallback;return;}img.onerror=null;img.closest('figure')?.remove();};img.src='assets/'+encoded;}
+document.querySelectorAll('img[src^="assets/media/"]').forEach(img=>{const name=decodeURIComponent(img.getAttribute('src').replace('assets/media/',''));const gaming=img.alt==='Gaming world';const fallback=gaming?'assets/a_high_energy_glossy_neon_saturated_graphic_desi.png':'assets/a_high_resolution_ultra_detailed_neon_gold_and_p.png';loadImage(img,name,{fallbackRoot:true,finalFallback:fallback});});
+const archive=$('#archiveGrid');function addCard(name,i,cls=''){const fig=document.createElement('figure');fig.className='media-card '+cls;const img=document.createElement('img');img.loading='lazy';img.alt='Gorilla Boomin media '+(i+1);img.onclick=()=>openLightbox(img.src,img.alt);loadImage(img,name,{fallbackRoot:true});fig.appendChild(img);archive?.appendChild(fig);}ARCHIVE.slice(0,72).forEach((n,i)=>addCard(n,i));
+const studioGrid=$('#studioGrid');STUDIO.forEach((n,i)=>{const img=document.createElement('img');img.loading='lazy';img.alt='BOOM STUDIO '+(i+1);img.onclick=()=>openLightbox(img.src,img.alt);loadImage(img,n,{fallbackRoot:true});studioGrid?.appendChild(img);});
+const videoGrid=$('#videoGrid');VIDEOS.forEach((n,i)=>{const card=document.createElement('article');card.className='video-card';card.innerHTML=`<div class="video-wrap"><video controls preload="metadata" src="assets/${encodeName(n)}"></video></div><div class="video-copy"><span>BOOM MEDIA • VIDEO ${String(i+1).padStart(2,'0')}</span><h3>${i===0?'THE BOOM FILES':'BEHIND THE BOOM'}</h3><p>Original Gorilla Boomin media archive.</p></div>`;videoGrid?.appendChild(card);});
+function openLightbox(src,alt){const box=document.createElement('div');box.className='lightbox';box.innerHTML=`<button aria-label="Close">×</button><img src="${src}" alt="${alt}">`;box.addEventListener('click',e=>{if(e.target===box||e.target.tagName==='BUTTON')box.remove()});document.body.appendChild(box);}
+const menu=$('#menuBtn');const nav=$('#mainNav');menu?.addEventListener('click',()=>nav?.classList.toggle('open'));nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+document.querySelectorAll('form[data-demo]').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();const note=form.querySelector('.form-note');if(note){note.textContent='Thanks — this form is ready for your final email/CRM connection in the live deployment.';note.classList.add('show');}}));
+const fakePlay=document.getElementById('fakePlay');if(fakePlay){fakePlay.addEventListener('click',()=>{fakePlay.textContent=fakePlay.textContent==='▶'?'Ⅱ':'▶';});}
+(function(){const toggle=document.getElementById('langToggle');const langMenu=document.getElementById('langMenu');const current=document.getElementById('currentLang');if(!toggle||!langMenu)return;toggle.addEventListener('click',()=>langMenu.classList.toggle('open'));langMenu.querySelectorAll('[data-lang]').forEach(btn=>{btn.addEventListener('click',()=>{current.textContent=btn.dataset.lang;langMenu.classList.remove('open');document.documentElement.lang=btn.dataset.lang.toLowerCase();localStorage.setItem('gb-language',btn.dataset.lang);});});const saved=localStorage.getItem('gb-language');if(saved)current.textContent=saved;document.addEventListener('click',(e)=>{if(!e.target.closest('.language-switcher'))langMenu.classList.remove('open');});})();
+document.querySelectorAll('[data-support]').forEach(btn=>btn.addEventListener('click',()=>alert((btn.dataset.support==='coffee'?'Buy Me a Coffee':btn.dataset.support==='beer'?'Buy Me a Beer':'Tip the Artist')+' — secure payment connection will be added when the payment provider is connected.')));document.querySelectorAll('.eco-track a').forEach(item=>{item.addEventListener('focus',()=>item.closest('.eco-track')?.style.setProperty('animation-play-state','paused'));item.addEventListener('blur',()=>item.closest('.eco-track')?.style.removeProperty('animation-play-state'));});
+(function(){const heroVideo=document.querySelector('.hero-cinema video');if(!heroVideo)return;document.addEventListener('visibilitychange',()=>{if(document.hidden){heroVideo.pause();}else{heroVideo.play().catch(()=>{});}});})();
+/* BIO PORTRAIT */
+(function(){const storyTitle=document.querySelector('.story-title');if(!storyTitle||storyTitle.querySelector('.story-portrait-v6'))return;const portrait=document.createElement('div');portrait.className='story-portrait-v6';portrait.innerHTML='<img src="assets/a_high_energy_promo_poster_style_scene_a_dramatic.png" alt="Gorilla Boomin — Pan Fusion artist portrait">';storyTitle.appendChild(portrait);const style=document.createElement('style');style.textContent=`.story-grid-v5{align-items:stretch}.story-title{display:flex;flex-direction:column;min-height:100%}.story-portrait-v6{margin-top:28px;flex:1;min-height:620px;border:1px solid rgba(255,255,255,.14);border-radius:18px;overflow:hidden;background:#05050a;box-shadow:0 28px 70px rgba(0,0,0,.42),0 0 45px rgba(113,56,255,.12)}.story-portrait-v6 img{display:block;width:100%;height:100%;object-fit:contain;object-position:center top;background:#05050a}@media(max-width:900px){.story-title{display:block}.story-portrait-v6{min-height:0;margin-top:28px}.story-portrait-v6 img{height:auto;aspect-ratio:auto;object-fit:contain}}`;document.head.appendChild(style);})();
+/* GAMING WORLD — V6 */
+(function(){const worlds=document.querySelector('#worlds');if(!worlds||document.querySelector('.gaming-v6'))return;const section=document.createElement('section');section.className='gaming-v6';section.innerHTML=`<div class="gaming-v6-bg"></div><div class="gaming-v6-inner"><div class="gaming-v6-copy"><div class="kicker">WORLD 03 / GAMING</div><h2>ENTER THE<br><em>GAMING WORLD.</em></h2><p class="gaming-v6-lead"><strong>XXGORILLABOOMINXX</strong> — GTA • LIVE STREAMS • CREW • COMMUNITY</p><p>Welcome to the other side of the BOOM. High-energy gaming, GTA adventures, live streams, crew culture and the CRYM / CRYMINAL ACTS universe.</p><div class="gaming-v6-tags"><span>PLAYSTATION</span><span>ROCKSTAR</span><span>GTA</span><span>TWITCH</span><span>YOUTUBE</span><span>CRYM</span></div><a class="btn gold" href="#mediahub">WATCH / PLAY</a></div><div class="gaming-v6-art"><img src="assets/a_high_energy_glossy_neon_saturated_graphic_desi.png" alt="XXGorillaBoominXX gaming artwork"><div class="gaming-v6-badge">CRYM<br><small>CRYMINAL ACTS</small></div></div></div></section>`;worlds.insertAdjacentElement('afterend',section);const style=document.createElement('style');style.textContent=`.gaming-v6{position:relative;overflow:hidden;padding:90px max(5vw,30px);background:#07070d;border-top:1px solid #ffffff12;border-bottom:1px solid #ffffff12}.gaming-v6-bg{position:absolute;inset:0;background:radial-gradient(circle at 80% 45%,rgba(255,40,160,.22),transparent 32%),radial-gradient(circle at 18% 55%,rgba(63,38,255,.25),transparent 36%),linear-gradient(120deg,#07070d,#13091d 60%,#090713);pointer-events:none}.gaming-v6-inner{position:relative;max-width:1180px;margin:auto;display:grid;grid-template-columns:.82fr 1.18fr;gap:55px;align-items:center}.gaming-v6 h2{font-size:clamp(55px,7vw,100px);line-height:.86;margin:12px 0 24px}.gaming-v6 h2 em{font-style:normal;color:#ff4fae;text-shadow:0 0 30px rgba(255,79,174,.25)}.gaming-v6-lead{font:700 13px Orbitron;letter-spacing:1px;color:#fff}.gaming-v6-copy>p:not(.gaming-v6-lead){color:#aeb5c3;line-height:1.75;max-width:540px}.gaming-v6-tags{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0}.gaming-v6-tags span{border:1px solid #ffffff25;padding:8px 10px;border-radius:99px;font:7px Orbitron;letter-spacing:1px;color:#dce0eb}.gaming-v6-art{position:relative;border:1px solid #ffffff20;border-radius:22px;overflow:hidden;box-shadow:0 35px 90px rgba(0,0,0,.5),0 0 70px rgba(123,45,255,.18)}.gaming-v6-art img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover}.gaming-v6-badge{position:absolute;right:18px;bottom:18px;background:rgba(5,5,10,.86);border:1px solid #ff4fae88;padding:12px 16px;color:#ffcf58;font:800 18px Orbitron;letter-spacing:2px;text-align:right}.gaming-v6-badge small{font-size:6px;color:#fff;letter-spacing:1.5px}@media(max-width:900px){.gaming-v6{padding:65px 22px}.gaming-v6-inner{grid-template-columns:1fr;gap:32px}.gaming-v6-art{order:-1}.gaming-v6 h2{font-size:clamp(48px,15vw,75px)}}`;document.head.appendChild(style);})();
