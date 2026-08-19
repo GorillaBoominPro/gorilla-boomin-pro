@@ -1,0 +1,30 @@
+/* Gorilla Boomin — DJ/Producer dream polish */
+:root{--festival-pink:#ff2ca8;--festival-purple:#7b3cff;--festival-blue:#3bdcff;--festival-orange:#ff7a18}
+body{background:radial-gradient(circle at 70% 8%,rgba(123,60,255,.22),transparent 28%),radial-gradient(circle at 16% 28%,rgba(255,44,168,.14),transparent 24%),radial-gradient(circle at 82% 65%,rgba(255,122,24,.08),transparent 23%),#06060a}
+.nav-v4b{box-shadow:0 10px 40px rgba(0,0,0,.38)}
+.nav-v4b nav a[href="#djlive"]{color:var(--festival-pink)}
+.next-chapter{position:relative;min-height:760px;display:grid;align-items:end;overflow:hidden;border-block:1px solid #ffffff14;background:#050509}
+.next-chapter-media{position:absolute;inset:0}
+.next-chapter-media img{width:100%;height:100%;object-fit:cover;object-position:center 45%;filter:saturate(1.08) contrast(1.05) brightness(.9)}
+.next-chapter:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,4,8,.94) 0%,rgba(4,4,8,.64) 35%,rgba(4,4,8,.18) 68%,rgba(4,4,8,.36) 100%),linear-gradient(0deg,rgba(4,4,8,.94) 0%,transparent 55%)}
+.next-chapter-copy{position:relative;z-index:2;width:min(1240px,100%);margin:auto;padding:90px 24px 76px}
+.next-kicker{font:800 10px Orbitron;letter-spacing:3px;color:var(--festival-pink);margin-bottom:16px}
+.next-chapter h2{font-size:clamp(58px,8.6vw,128px);line-height:.82;letter-spacing:-4px;margin:0 0 22px;max-width:920px;text-shadow:0 12px 40px #000}
+.next-chapter h2 em{color:#fff}
+.next-tagline{font:800 clamp(14px,1.6vw,24px) Orbitron;letter-spacing:2px;color:#fff;margin-bottom:14px}
+.next-tagline strong{color:var(--festival-pink)}
+.next-sound{display:inline-block;border:1px solid rgba(255,44,168,.55);padding:10px 14px;background:rgba(8,8,14,.62);font:800 10px Orbitron;letter-spacing:3px;color:#ff7bc7;backdrop-filter:blur(8px)}
+.next-body{max-width:610px;font-size:17px;line-height:1.7;color:#d2cfda;margin:22px 0 26px}
+.next-actions{display:flex;gap:12px;flex-wrap:wrap}
+.next-actions .btn:first-child{background:linear-gradient(100deg,var(--festival-pink),#ff6ad1);color:#fff;box-shadow:0 0 34px rgba(255,44,168,.22)}
+.stage-flags{display:flex;gap:9px;margin-top:24px;align-items:center;font:700 9px Orbitron;letter-spacing:2px;color:#b5b0c2}.stage-flags span{padding:7px 9px;border:1px solid #fff2;background:#09090dbb}.stage-flags .tt{color:#fff}.stage-flags .ro{color:#fff}
+.festival-divider{height:8px;background:linear-gradient(90deg,var(--festival-pink),var(--festival-purple),var(--festival-blue),var(--festival-orange),var(--festival-pink));background-size:300% 100%;animation:festivalFlow 9s linear infinite;opacity:.72}
+@keyframes festivalFlow{to{background-position:300% 0}}
+.story-copy-v5 p{font-size:17px!important;line-height:1.72!important;color:#c9c6cf!important}.story-copy-v5 .story-lead{font-size:24px!important;line-height:1.46!important}.story-copy-v5 strong{font-weight:800}.story-sign{font-size:9px!important}.story-title h2{font-size:clamp(64px,8vw,118px)!important}.story-v5{background:radial-gradient(circle at 15% 16%,rgba(255,44,168,.08),transparent 24%),#08080f!important}
+.story-title:after{content:"DJ • PRODUCER • LIVE ARTIST";display:inline-block;margin-top:24px;padding:9px 12px;border:1px solid rgba(255,44,168,.42);color:#ff78c5;font:800 8px Orbitron;letter-spacing:2.2px}
+.media-hub{background:radial-gradient(circle at 75% 15%,rgba(123,60,255,.16),transparent 32%),linear-gradient(135deg,#080810,#0d0a18)!important}.media-now{border-color:rgba(255,44,168,.35);color:#ff7bc7}.dot{background:var(--festival-pink);box-shadow:0 0 14px var(--festival-pink)}
+.world-grid article{box-shadow:0 24px 60px rgba(0,0,0,.28)}.world-grid article:hover{border-color:#ffffff2d}.section h2 em{background:linear-gradient(90deg,#ffd15e,#ff59b6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-v5-lead:after{content:" • PAN FUSION TECH HOUSE";color:#ff78c5}
+@media(max-width:900px){.next-chapter{min-height:670px}.next-chapter:after{background:linear-gradient(0deg,rgba(4,4,8,.94),rgba(4,4,8,.36) 70%),linear-gradient(90deg,rgba(4,4,8,.68),transparent)}.next-chapter-copy{padding:70px 20px 55px}.next-chapter h2{font-size:64px}.next-body{font-size:15px}.stage-flags{flex-wrap:wrap}.story-copy-v5 p{font-size:16px!important}.story-copy-v5 .story-lead{font-size:21px!important}}
+@media(max-width:520px){.next-chapter{min-height:610px}.next-chapter h2{font-size:50px;letter-spacing:-2px}.next-chapter-media img{object-position:58% center}.next-chapter-copy{padding-bottom:40px}.next-tagline{font-size:13px;line-height:1.45}.next-sound{font-size:8px;letter-spacing:2px}}
+@media(prefers-reduced-motion:reduce){.festival-divider{animation:none}}
