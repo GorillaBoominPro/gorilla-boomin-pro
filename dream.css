@@ -3,6 +3,15 @@
 body{background:radial-gradient(circle at 70% 8%,rgba(123,60,255,.22),transparent 28%),radial-gradient(circle at 16% 28%,rgba(255,44,168,.14),transparent 24%),radial-gradient(circle at 82% 65%,rgba(255,122,24,.08),transparent 23%),#06060a}
 .nav-v4b{box-shadow:0 10px 40px rgba(0,0,0,.38)}
 .nav-v4b nav a[href="#djlive"]{color:var(--festival-pink)}
+
+/* HERO — same layout/colors, different visual treatment, no repeated video */
+.hero-still-v7{position:absolute;inset:0;overflow:hidden;background:#05050a}
+.hero-still-main{position:absolute;inset:0;background:url('assets/a_highly_detailed_cinematic_promo_poster_artist.png') center 32%/cover no-repeat;filter:saturate(1.06) contrast(1.04) brightness(.84);transform:scale(1.02)}
+.hero-still-cut{position:absolute;border:1px solid #ffffff18;box-shadow:0 24px 70px #0008;opacity:.64}
+.hero-still-cut-a{right:4vw;top:8%;width:23vw;height:34%;background:url('assets/Skyligfht Showtime 4.JPG') center/cover no-repeat;transform:rotate(2deg)}
+.hero-still-cut-b{right:7vw;bottom:9%;width:19vw;height:25%;background:url('assets/Skylight.jpg') center/cover no-repeat;transform:rotate(-2deg)}
+.hero-cinema .cinema-fallback{z-index:2}
+
 .next-chapter{position:relative;min-height:760px;display:grid;align-items:end;overflow:hidden;border-block:1px solid #ffffff14;background:#050509}
 .next-chapter-media{position:absolute;inset:0;overflow:hidden}
 .next-chapter-media img,.next-chapter-media video{width:100%;height:100%;object-fit:cover;object-position:center 45%;filter:saturate(1.08) contrast(1.05) brightness(.9)}
@@ -19,9 +28,23 @@ body{background:radial-gradient(circle at 70% 8%,rgba(123,60,255,.22),transparen
 .stage-flags{display:flex;gap:9px;margin-top:24px;align-items:center;font:700 9px Orbitron;letter-spacing:2px;color:#b5b0c2}.stage-flags span{padding:7px 9px;border:1px solid #fff2;background:#09090dbb}.stage-flags .tt,.stage-flags .ro{color:#fff}
 .festival-divider{height:8px;background:linear-gradient(90deg,var(--festival-pink),var(--festival-purple),var(--festival-blue),var(--festival-orange),var(--festival-pink));background-size:300% 100%;animation:festivalFlow 9s linear infinite;opacity:.72}@keyframes festivalFlow{to{background-position:300% 0}}
 .festival-section{position:relative}.festival-section:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 8% 20%,rgba(255,44,168,.045),transparent 20%),radial-gradient(circle at 92% 80%,rgba(59,220,255,.035),transparent 18%)}
-.story-copy-v5 p{font-size:17px!important;line-height:1.72!important;color:#c9c6cf!important}.story-copy-v5 .story-lead{font-size:24px!important;line-height:1.46!important}.story-copy-v5 strong{font-weight:800}.story-sign{font-size:9px!important}.story-title h2{font-size:clamp(64px,8vw,118px)!important}.story-v5{background:radial-gradient(circle at 15% 16%,rgba(255,44,168,.08),transparent 24%),#08080f!important}.story-title:after{content:"DJ • PRODUCER • LIVE ARTIST";display:inline-block;margin-top:24px;padding:9px 12px;border:1px solid rgba(255,44,168,.42);color:#ff78c5;font:800 8px Orbitron;letter-spacing:2.2px}.story-dj-card{margin-top:28px;border:1px solid #ffffff18;border-radius:14px;overflow:hidden;background:#09090e;box-shadow:0 22px 60px #0007}.story-dj-frame{aspect-ratio:4/5;background:#050509}.story-dj-frame video{width:100%;height:100%;object-fit:cover;object-position:center;display:block}.story-dj-label{padding:16px}.story-dj-label b{display:block;font:800 11px Orbitron;color:#fff;letter-spacing:1.4px}.story-dj-label span{display:block;margin-top:6px;color:#ff78c5;font:700 8px Orbitron;letter-spacing:1.5px}
+
+/* BIO — stronger hierarchy, real name first */
+.story-grid-v5{grid-template-columns:.86fr 1.14fr!important;gap:78px!important}
+.story-title h2{font-size:clamp(64px,7.2vw,108px)!important;line-height:.82!important;letter-spacing:-3px!important;text-shadow:0 10px 34px #0007}
+.story-title h2 em{background:linear-gradient(90deg,#ffd15e,#ff59b6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.story-sign{font-size:10px!important;line-height:1.8!important;color:#aeb5c3!important}.story-sign strong{display:block;color:#fff;font:800 12px Orbitron;letter-spacing:1.8px;margin-bottom:4px}
+.story-copy-v5 p{font-size:17px!important;line-height:1.72!important;color:#c9c6cf!important;margin-bottom:22px!important}.story-copy-v5 .story-lead{font-size:24px!important;line-height:1.46!important;color:#fff!important}.story-copy-v5 strong{font-weight:800;color:#fff}.story-v5{background:radial-gradient(circle at 15% 16%,rgba(255,44,168,.08),transparent 24%),#08080f!important}
+.story-title:after{display:none!important}
+.story-portrait-v6{border-color:rgba(255,44,168,.26)!important;box-shadow:0 30px 90px rgba(0,0,0,.5),0 0 50px rgba(123,60,255,.08)!important}
+.story-portrait-v6 img{object-fit:cover!important;object-position:center 20%!important}
+.bio-identity-v7{margin-top:18px;padding:18px 19px;border:1px solid #ffffff16;background:linear-gradient(135deg,#ffffff08,#ffffff02);border-left:3px solid var(--festival-pink)}
+.bio-identity-v7 span{display:block;color:#7f8798;font:800 7px Orbitron;letter-spacing:2px}.bio-identity-v7 b{display:block;margin:6px 0 5px;font:900 26px Orbitron;letter-spacing:1px;color:#fff}.bio-identity-v7 small{display:block;color:#ff78c5;font:800 8px Orbitron;letter-spacing:1.4px}
+.bio-chapter-v7{display:flex;align-items:center;gap:12px;margin:30px 0 13px;padding-top:12px;border-top:1px solid #ffffff12}.bio-chapter-v7 span{display:grid;place-items:center;min-width:34px;height:34px;border:1px solid rgba(59,220,255,.34);color:var(--festival-blue);font:800 8px Orbitron}.bio-chapter-v7 b{font:900 18px Orbitron;letter-spacing:1.2px;color:#fff}.bio-chapter-v7 b:after{content:"";display:block;width:70px;height:2px;margin-top:7px;background:linear-gradient(90deg,var(--festival-pink),transparent)}
+
 .media-hub{background:radial-gradient(circle at 75% 15%,rgba(123,60,255,.16),transparent 32%),linear-gradient(135deg,#080810,#0d0a18)!important}.media-now{border-color:rgba(255,44,168,.35);color:#ff7bc7}.dot{background:var(--festival-pink);box-shadow:0 0 14px var(--festival-pink)}.dream-live-video{aspect-ratio:16/9;background:#000;overflow:hidden}.dream-live-video video{display:block;width:100%;height:100%;object-fit:cover}
 .world-grid article{box-shadow:0 24px 60px rgba(0,0,0,.28)}.world-grid article:hover{border-color:#ffffff2d}.section h2 em{background:linear-gradient(90deg,#ffd15e,#ff59b6);-webkit-background-clip:text;background-clip:text;color:transparent}
-@media(max-width:900px){.next-chapter{min-height:670px}.next-chapter:after{background:linear-gradient(0deg,rgba(4,4,8,.94),rgba(4,4,8,.36) 70%),linear-gradient(90deg,rgba(4,4,8,.68),transparent)}.next-chapter-copy{padding:70px 20px 55px}.next-chapter h2{font-size:64px}.next-body{font-size:15px}.stage-flags{flex-wrap:wrap}.story-copy-v5 p{font-size:16px!important}.story-copy-v5 .story-lead{font-size:21px!important}.story-dj-card{max-width:520px}}
-@media(max-width:520px){.next-chapter{min-height:610px}.next-chapter h2{font-size:50px;letter-spacing:-2px}.next-chapter-media img,.next-chapter-media video{object-position:58% center}.next-chapter-copy{padding-bottom:40px}.next-tagline{font-size:13px;line-height:1.45}.next-sound{font-size:8px;letter-spacing:2px}}
-@media(prefers-reduced-motion:reduce){.festival-divider{animation:none}.next-chapter-media video,.story-dj-frame video{display:none}}
+
+@media(max-width:900px){.hero-still-cut{display:none}.hero-still-main{background-position:center top}.next-chapter{min-height:670px}.next-chapter:after{background:linear-gradient(0deg,rgba(4,4,8,.94),rgba(4,4,8,.36) 70%),linear-gradient(90deg,rgba(4,4,8,.68),transparent)}.next-chapter-copy{padding:70px 20px 55px}.next-chapter h2{font-size:64px}.next-body{font-size:15px}.stage-flags{flex-wrap:wrap}.story-grid-v5{grid-template-columns:1fr!important;gap:35px!important}.story-copy-v5 p{font-size:16px!important}.story-copy-v5 .story-lead{font-size:21px!important}.story-dj-card{max-width:520px}}
+@media(max-width:520px){.next-chapter{min-height:610px}.next-chapter h2{font-size:50px;letter-spacing:-2px}.next-chapter-media img,.next-chapter-media video{object-position:58% center}.next-chapter-copy{padding-bottom:40px}.next-tagline{font-size:13px;line-height:1.45}.next-sound{font-size:8px;letter-spacing:2px}.story-title h2{font-size:52px!important}.bio-identity-v7 b{font-size:21px}.bio-chapter-v7 b{font-size:15px}}
+@media(prefers-reduced-motion:reduce){.festival-divider{animation:none}.next-chapter-media video{display:none}}
