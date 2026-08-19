@@ -1,1 +1,0 @@
-Binary hero asset is managed in the repository tree as assets/dj-next-chapter.jpg.
