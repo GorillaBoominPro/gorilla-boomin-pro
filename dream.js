@@ -5,7 +5,7 @@
   if(!hero || $('#djlive')) return;
 
   if(!document.querySelector('link[href^="dream.css"]')){
-    const css=document.createElement('link'); css.rel='stylesheet'; css.href='dream.css?v=5'; document.head.appendChild(css);
+    const css=document.createElement('link'); css.rel='stylesheet'; css.href='dream.css?v=6'; document.head.appendChild(css);
   }
 
   // SEO / authenticity identity.
@@ -67,14 +67,14 @@
   const lead=$('.hero-v5-lead');
   if(lead) lead.textContent='DJ • PRODUCER • LIVE ARTIST • PAN FUSION TECH HOUSE • STEELPAN • GAMING';
 
-  // LISTEN / WATCH / LIVE: point to the one uploaded real performance video.
+  // LISTEN / WATCH / LIVE: use the clearest high-energy performance footage.
   const yt=$('.youtube-player');
   if(yt){
-    yt.innerHTML=`<div class="player-top"><span>GORILLA BOOMIN / LIVE ARCHIVE</span><span>103 FM MELA</span></div>
+    yt.innerHTML=`<div class="player-top"><span>GORILLA BOOMIN / LIVE ARCHIVE</span><span>BIG PEOPLE PARTY</span></div>
       <div class="dream-live-video"><video controls playsinline preload="metadata">
-        <source src="assets/Liquid%20Lee%20Performs%20At%20103%20FM%20Mela.mp4" type="video/mp4">
+        <source src="assets/GORILLA%20BOOMIN%20performs%20(Big%20People%20Party).mp4" type="video/mp4">
       </video></div>
-      <div class="yt-caption"><strong>FROM THE ARCHIVE.</strong> Real performance footage from Lee Dominique Viarruel — the live foundation behind Gorilla Boomin's next chapter.</div>`;
+      <div class="yt-caption"><strong>LIVE PERFORMANCE.</strong> Clear stage footage of Gorilla Boomin in performer mode — vocals, movement and crowd energy.</div>`;
   }
 
   // BIO: real name first, strong search identity, shorter professional chapters.
@@ -115,6 +115,24 @@
       <div class="bio-chapter-v7"><span>05</span><b>THE NEXT CHAPTER</b></div>
       <p>After stepping away from new music for years, Lee is building again with <strong>DJ / Producer</strong> at the front of the mission. <strong>BOOM STUDIO!</strong> is the production world, <strong>xXGorillaBoominXx</strong> is the gaming world, and <strong>GORILLA BOOMIN</strong> is the artist connecting it all.</p>
       <blockquote>“To make a huge difference in the world through my music.”</blockquote>`;
+  }
+
+  // BOOM FILES: two distinct archive spotlights so the career story feels real, not repetitive.
+  const media=$('#media');
+  const archiveGrid=$('#archiveGrid');
+  if(media && archiveGrid && !media.querySelector('.performance-showcase-v8')){
+    const showcase=document.createElement('div');
+    showcase.className='performance-showcase-v8';
+    showcase.innerHTML=`
+      <article class="performance-card-v8">
+        <div class="performance-video-v8"><video controls playsinline preload="metadata"><source src="assets/Gorilla%20Boomin%20Performs%20(Old%20School%20Soca%20Medley)%20at%20MMM%20Concert.mp4" type="video/mp4"></video></div>
+        <div class="performance-copy-v8"><span>WORLD STAGE / LIVE ARCHIVE</span><h3>OLD SCHOOL SOCA MEDLEY</h3><p>Concert footage that captures the entertainer behind the brand — live vocals, stage command and Caribbean performance roots.</p></div>
+      </article>
+      <article class="performance-card-v8">
+        <div class="performance-video-v8"><video controls playsinline preload="metadata"><source src="assets/Liquid%20Lee%20Performs%20At%20103%20FM%20Mela.mp4" type="video/mp4"></video></div>
+        <div class="performance-copy-v8"><span>MEDIA / PERFORMANCE ARCHIVE</span><h3>103 FM MELA</h3><p>A different chapter of Lee Dominique Viarruel on stage — another real piece of the journey that became Gorilla Boomin.</p></div>
+      </article>`;
+    archiveGrid.insertAdjacentElement('beforebegin',showcase);
   }
 
   const archiveIntro=$('#media .section-intro');
