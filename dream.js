@@ -36,13 +36,12 @@
     </div><div class="cinema-fallback"></div>`;
   }
 
-  // THE NEXT CHAPTER: the new career direction belongs immediately after the hero.
+  // THE NEXT CHAPTER: keep the strongest festival reel here.
   const live=document.createElement('section');
   live.id='djlive'; live.className='next-chapter';
   live.innerHTML=`
     <div class="next-chapter-media" aria-hidden="true">
-      <video autoplay muted loop playsinline preload="metadata">
-        <source src="assets/00_roots_to_future.mp4" type="video/mp4">
+      <video autoplay muted loop playsinline preload="metadata" poster="assets/hero-festival-poster.jpg">
         <source src="assets/hero-festival.mp4" type="video/mp4">
       </video>
     </div>
@@ -68,15 +67,14 @@
   const lead=$('.hero-v5-lead');
   if(lead) lead.textContent='DJ • PRODUCER • LIVE ARTIST • PAN FUSION TECH HOUSE • STEELPAN • GAMING';
 
-  // LISTEN / WATCH / LIVE: career proof, not another copy of the hero reel.
+  // LISTEN / WATCH / LIVE: point to the one uploaded real performance video.
   const yt=$('.youtube-player');
   if(yt){
-    yt.innerHTML=`<div class="player-top"><span>GORILLA BOOMIN / LIVE ARCHIVE</span><span>CAREER PROOF</span></div>
+    yt.innerHTML=`<div class="player-top"><span>GORILLA BOOMIN / LIVE ARCHIVE</span><span>103 FM MELA</span></div>
       <div class="dream-live-video"><video controls playsinline preload="metadata">
-        <source src="assets/02_stage_energy.mp4" type="video/mp4">
-        <source src="assets/copy_46D7C9CD-A7F0-4F68-A698-0FD54DCF8B66.mov" type="video/quicktime">
+        <source src="assets/Liquid%20Lee%20Performs%20At%20103%20FM%20Mela.mp4" type="video/mp4">
       </video></div>
-      <div class="yt-caption"><strong>FROM THE ARCHIVE.</strong> Real stages, real crowds, real performance history — the foundation behind the next chapter.</div>`;
+      <div class="yt-caption"><strong>FROM THE ARCHIVE.</strong> Real performance footage from Lee Dominique Viarruel — the live foundation behind Gorilla Boomin's next chapter.</div>`;
   }
 
   // BIO: real name first, strong search identity, shorter professional chapters.
