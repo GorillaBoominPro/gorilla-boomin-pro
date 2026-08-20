@@ -8,6 +8,17 @@
     polish.onload=()=>{
       const dream=document.createElement('script');
       dream.src='dream.js?v=2';
+      dream.onload=()=>{
+        const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+        const nodes=[]; let n;
+        while((n=walker.nextNode())) nodes.push(n);
+        nodes.forEach(node=>{
+          let t=node.nodeValue;
+          t=t.replace(/\bVSTs?\b/gi,'SAMPLE PACKS');
+          t=t.replace(/MUSIC\s*[•|,/]\s*MERCH\s*[•|,/]\s*SAMPLE PACKS/gi,'MUSIC • MERCH • SAMPLE PACKS');
+          node.nodeValue=t;
+        });
+      };
       document.body.appendChild(dream);
     };
     document.body.appendChild(polish);
