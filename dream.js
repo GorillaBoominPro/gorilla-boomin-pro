@@ -3,144 +3,35 @@
   const $=(s,r=document)=>r.querySelector(s);
   const hero=$('.hero-v5');
   if(!hero || $('#djlive')) return;
+  if(!document.querySelector('link[href^="dream.css"]')){const css=document.createElement('link');css.rel='stylesheet';css.href='dream.css?v=6';document.head.appendChild(css);}
 
-  if(!document.querySelector('link[href^="dream.css"]')){
-    const css=document.createElement('link'); css.rel='stylesheet'; css.href='dream.css?v=6'; document.head.appendChild(css);
-  }
-
-  // SEO / authenticity identity.
   document.title='Lee Dominique Viarruel | GORILLA BOOMIN — DJ, Producer & Pan Fusion Tech House Artist';
   const meta=document.querySelector('meta[name="description"]');
   if(meta) meta.content='Official website of Lee Dominique Viarruel, professionally known as GORILLA BOOMIN — DJ, producer, vocalist and steelpan artist creating Pan Fusion Tech House between Trinidad & Tobago and Romania.';
-  let canonical=document.querySelector('link[rel="canonical"]');
-  if(!canonical){canonical=document.createElement('link');canonical.rel='canonical';document.head.appendChild(canonical)}
-  canonical.href=location.origin+location.pathname;
+  let canonical=document.querySelector('link[rel="canonical"]');if(!canonical){canonical=document.createElement('link');canonical.rel='canonical';document.head.appendChild(canonical)}canonical.href=location.origin+location.pathname;
+  if(!document.querySelector('#gb-schema')){const schema=document.createElement('script');schema.id='gb-schema';schema.type='application/ld+json';schema.textContent=JSON.stringify({'@context':'https://schema.org','@type':'Person',name:'Lee Dominique Viarruel',alternateName:'GORILLA BOOMIN',jobTitle:['DJ','Music Producer','Vocalist','Steelpan Artist','Songwriter'],description:'Trinidad & Tobago-born artist, DJ, producer, vocalist and steelpan performer developing Pan Fusion Tech House from Romania for the global stage.',knowsAbout:['Pan Fusion Tech House','Electronic Dance Music','Steelpan','Music Production','Live Performance']});document.head.appendChild(schema);}
 
-  if(!document.querySelector('#gb-schema')){
-    const schema=document.createElement('script'); schema.id='gb-schema'; schema.type='application/ld+json';
-    schema.textContent=JSON.stringify({
-      '@context':'https://schema.org','@type':'Person',
-      name:'Lee Dominique Viarruel',alternateName:'GORILLA BOOMIN',
-      jobTitle:['DJ','Music Producer','Vocalist','Steelpan Artist','Songwriter'],
-      description:'Trinidad & Tobago-born artist, DJ, producer, vocalist and steelpan performer developing Pan Fusion Tech House from Romania for the global stage.',
-      knowsAbout:['Pan Fusion Tech House','Electronic Dance Music','Steelpan','Music Production','Live Performance']
-    });
-    document.head.appendChild(schema);
-  }
+  const heroCinema=$('.hero-cinema');if(heroCinema){heroCinema.innerHTML=`<div class="hero-still-v7" role="img" aria-label="Gorilla Boomin artist, DJ and live performance world"><div class="hero-still-main"></div><div class="hero-still-cut hero-still-cut-a"></div><div class="hero-still-cut hero-still-cut-b"></div></div><div class="cinema-fallback"></div>`;}
 
-  // HOME HERO: keep the layout, lose the repeated video.
-  const heroCinema=$('.hero-cinema');
-  if(heroCinema){
-    heroCinema.innerHTML=`<div class="hero-still-v7" role="img" aria-label="Gorilla Boomin artist, DJ and live performance world">
-      <div class="hero-still-main"></div><div class="hero-still-cut hero-still-cut-a"></div><div class="hero-still-cut hero-still-cut-b"></div>
-    </div><div class="cinema-fallback"></div>`;
-  }
+  const live=document.createElement('section');live.id='djlive';live.className='next-chapter';live.innerHTML=`<div class="next-chapter-media" aria-hidden="true"><video autoplay muted loop playsinline preload="metadata" poster="assets/hero-festival-poster.jpg"><source src="assets/hero-festival.mp4" type="video/mp4"></video></div><div class="next-chapter-copy"><div class="next-kicker">THE NEXT CHAPTER / LIVE</div><h2>DJ. PRODUCER.<br><em>LIVE ARTIST.</em></h2><div class="next-tagline">CARIBBEAN ROOTS. GLOBAL STAGE. <strong>FUTURE SOUND.</strong></div><div class="next-sound">PAN FUSION TECH HOUSE</div><p class="next-body">The next era puts the DJ and producer at the front — festival energy, Caribbean rhythm, live steelpan identity and electronic music designed for the drop.</p><div class="vision-line"><span>REAL HISTORY</span><b>→</b><span>NEW SOUND</span><b>→</b><span>MAIN STAGE</span></div><div class="next-actions"><a class="btn" href="#mediahub">WATCH / LISTEN</a><a class="btn ghost" href="#contact">BOOK GORILLA BOOMIN</a></div><div class="stage-flags"><span class="tt">🇹🇹 TRINIDAD &amp; TOBAGO</span><span>×</span><span class="ro">🇷🇴 ROMANIA</span><span>• WORLDWIDE</span></div></div>`;
+  hero.insertAdjacentElement('afterend',live);const divider=document.createElement('div');divider.className='festival-divider';live.insertAdjacentElement('afterend',divider);
+  const nav=$('#mainNav');if(nav&&!nav.querySelector('a[href="#djlive"]')){const a=document.createElement('a');a.href='#djlive';a.textContent='DJ / LIVE';const worlds=nav.querySelector('a[href="#worlds"]');worlds?nav.insertBefore(a,worlds):nav.prepend(a);}
+  const lead=$('.hero-v5-lead');if(lead)lead.textContent='DJ • PRODUCER • LIVE ARTIST • PAN FUSION TECH HOUSE • STEELPAN • GAMING';
 
-  // THE NEXT CHAPTER: keep the strongest festival reel here.
-  const live=document.createElement('section');
-  live.id='djlive'; live.className='next-chapter';
-  live.innerHTML=`
-    <div class="next-chapter-media" aria-hidden="true">
-      <video autoplay muted loop playsinline preload="metadata" poster="assets/hero-festival-poster.jpg">
-        <source src="assets/hero-festival.mp4" type="video/mp4">
-      </video>
-    </div>
-    <div class="next-chapter-copy">
-      <div class="next-kicker">THE NEXT CHAPTER / LIVE</div>
-      <h2>DJ. PRODUCER.<br><em>LIVE ARTIST.</em></h2>
-      <div class="next-tagline">CARIBBEAN ROOTS. GLOBAL STAGE. <strong>FUTURE SOUND.</strong></div>
-      <div class="next-sound">PAN FUSION TECH HOUSE</div>
-      <p class="next-body">The next era puts the DJ and producer at the front — festival energy, Caribbean rhythm, live steelpan identity and electronic music designed for the drop.</p>
-      <div class="vision-line"><span>REAL HISTORY</span><b>→</b><span>NEW SOUND</span><b>→</b><span>MAIN STAGE</span></div>
-      <div class="next-actions"><a class="btn" href="#mediahub">WATCH / LISTEN</a><a class="btn ghost" href="#contact">BOOK GORILLA BOOMIN</a></div>
-      <div class="stage-flags"><span class="tt">🇹🇹 TRINIDAD &amp; TOBAGO</span><span>×</span><span class="ro">🇷🇴 ROMANIA</span><span>• WORLDWIDE</span></div>
-    </div>`;
-  hero.insertAdjacentElement('afterend',live);
-  const divider=document.createElement('div'); divider.className='festival-divider'; live.insertAdjacentElement('afterend',divider);
+  const yt=$('.youtube-player');if(yt){yt.innerHTML=`<div class="player-top"><span>GORILLA BOOMIN / LIVE ARCHIVE</span><span>BIG PEOPLE PARTY</span></div><div class="dream-live-video"><video controls playsinline preload="metadata"><source src="assets/GORILLA%20BOOMIN%20performs%20(Big%20People%20Party).mp4" type="video/mp4"></video></div><div class="yt-caption"><strong>LIVE PERFORMANCE.</strong> Clear stage footage of Gorilla Boomin in performer mode — vocals, movement and crowd energy.</div>`;}
 
-  const nav=$('#mainNav');
-  if(nav && !nav.querySelector('a[href="#djlive"]')){
-    const a=document.createElement('a'); a.href='#djlive'; a.textContent='DJ / LIVE';
-    const worlds=nav.querySelector('a[href="#worlds"]'); worlds?nav.insertBefore(a,worlds):nav.prepend(a);
-  }
+  const storyTitle=$('.story-title');if(storyTitle){const originalH2=storyTitle.querySelector('h2');if(originalH2)originalH2.innerHTML='LEE DOMINIQUE<br><em>VIARRUEL.</em>';const sign=storyTitle.querySelector('.story-sign');if(sign)sign.innerHTML='<strong>PROFESSIONALLY KNOWN AS GORILLA BOOMIN</strong><br>DJ • PRODUCER • VOCALIST • STEELPAN ARTIST';const oldDreamCard=storyTitle.querySelector('.story-dj-card');if(oldDreamCard)oldDreamCard.remove();const legacyPortrait=storyTitle.querySelector('.story-portrait-v6 img');if(legacyPortrait){legacyPortrait.src='assets/Skylight.jpg';legacyPortrait.alt='Lee Dominique Viarruel — professionally known as Gorilla Boomin';}const badge=document.createElement('div');badge.className='bio-identity-v7';badge.innerHTML='<span>THE ARTIST</span><b>GORILLA BOOMIN</b><small>PAN FUSION TECH HOUSE • DJ / PRODUCER • LIVE ARTIST</small>';storyTitle.appendChild(badge);}
 
-  const lead=$('.hero-v5-lead');
-  if(lead) lead.textContent='DJ • PRODUCER • LIVE ARTIST • PAN FUSION TECH HOUSE • STEELPAN • GAMING';
+  const storyCopy=$('.story-copy-v5');if(storyCopy){storyCopy.innerHTML=`<p class="story-lead"><strong>Lee Dominique Viarruel</strong>, professionally known as <strong>GORILLA BOOMIN</strong>, is a Trinidad &amp; Tobago-born vocalist, steelpan artist, songwriter, DJ and producer now building his next chapter from Romania.</p><div class="bio-chapter-v7"><span>01</span><b>ROOTS &amp; IDENTITY</b></div><p>Music entered his life early. Performing from age 11, Lee developed first as a vocalist and entertainer while steelpan became one of the signatures of his musical identity. His pan journey included personal training and mentorship from Ken “Professor” Philmore and Len “Boogsie” Sharpe.</p><div class="bio-chapter-v7"><span>02</span><b>THE WORLD STAGE</b></div><p>His career expanded internationally through bands, hotels, resorts, casinos and cruise ships, followed by seven years in Japan performing as a singer, dancer and musician with J.J. Renaude’s Body &amp; Soul Show Group of Australia in Tokyo and Kamogawa, Chiba.</p><p>Along the way he performed in productions and shared stages or musical spaces with artists including <strong>Shaggy, Rihanna, Machel Montano, Kes, David Rudder and Super Blue.</strong></p><div class="bio-chapter-v7"><span>03</span><b>THE DJ AWAKENING</b></div><p>Cruise-ship life around Miami and the Bahamas opened another door: DJs, clubs and electronic dance music. That world reshaped the vision — combining the instinct of a live entertainer with the control, energy and scale of modern electronic production.</p><div class="bio-chapter-v7"><span>04</span><b>PAN FUSION TECH HOUSE</b></div><p>Today the focus is <strong>Pan Fusion Tech House</strong>: Caribbean soul meeting club and festival energy. Steelpan can become the hook, texture, melody or drop, fused with Tech House, Latin Tech, Afro House, Dancehall, Soca and future-facing electronic production.</p><div class="bio-chapter-v7"><span>05</span><b>THE NEXT CHAPTER</b></div><p>After stepping away from new music for years, Lee is building again with <strong>DJ / Producer</strong> at the front of the mission. <strong>BOOM STUDIO!</strong> is the production world, <strong>xXGorillaBoominXx</strong> is the gaming world, and <strong>GORILLA BOOMIN</strong> is the artist connecting it all.</p><blockquote>“To make a huge difference in the world through my music.”</blockquote>`;}
 
-  // LISTEN / WATCH / LIVE: use the clearest high-energy performance footage.
-  const yt=$('.youtube-player');
-  if(yt){
-    yt.innerHTML=`<div class="player-top"><span>GORILLA BOOMIN / LIVE ARCHIVE</span><span>BIG PEOPLE PARTY</span></div>
-      <div class="dream-live-video"><video controls playsinline preload="metadata">
-        <source src="assets/GORILLA%20BOOMIN%20performs%20(Big%20People%20Party).mp4" type="video/mp4">
-      </video></div>
-      <div class="yt-caption"><strong>LIVE PERFORMANCE.</strong> Clear stage footage of Gorilla Boomin in performer mode — vocals, movement and crowd energy.</div>`;
-  }
+  const media=$('#media'),archiveGrid=$('#archiveGrid');if(media&&archiveGrid&&!media.querySelector('.performance-showcase-v8')){const showcase=document.createElement('div');showcase.className='performance-showcase-v8';showcase.innerHTML=`<article class="performance-card-v8"><div class="performance-video-v8"><video controls playsinline preload="metadata"><source src="assets/Gorilla%20Boomin%20Performs%20(Old%20School%20Soca%20Medley)%20at%20MMM%20Concert.mp4" type="video/mp4"></video></div><div class="performance-copy-v8"><span>WORLD STAGE / LIVE ARCHIVE</span><h3>OLD SCHOOL SOCA MEDLEY</h3><p>Concert footage that captures the entertainer behind the brand — live vocals, stage command and Caribbean performance roots.</p></div></article><article class="performance-card-v8"><div class="performance-video-v8"><video controls playsinline preload="metadata"><source src="assets/Liquid%20Lee%20Performs%20At%20103%20FM%20Mela.mp4" type="video/mp4"></video></div><div class="performance-copy-v8"><span>MEDIA / PERFORMANCE ARCHIVE</span><h3>103 FM MELA</h3><p>A different chapter of Lee Dominique Viarruel on stage — another real piece of the journey that became Gorilla Boomin.</p></div></article>`;archiveGrid.insertAdjacentElement('beforebegin',showcase);}
+  const archiveIntro=$('#media .section-intro');if(archiveIntro)archiveIntro.textContent='A career told through real moments — stages, steelpan, cruise ships, media, DJ evolution, performances and the road into the next chapter.';const now=$('.media-now');if(now)now.innerHTML='<span class="dot"></span> NOW PLAYING / PAN FUSION TECH HOUSE';
 
-  // BIO: real name first, strong search identity, shorter professional chapters.
-  const storyTitle=$('.story-title');
-  if(storyTitle){
-    const originalH2=storyTitle.querySelector('h2');
-    if(originalH2) originalH2.innerHTML='LEE DOMINIQUE<br><em>VIARRUEL.</em>';
-    const sign=storyTitle.querySelector('.story-sign');
-    if(sign) sign.innerHTML='<strong>PROFESSIONALLY KNOWN AS GORILLA BOOMIN</strong><br>DJ • PRODUCER • VOCALIST • STEELPAN ARTIST';
+  // BRAND LOCK: replace legacy labels without disturbing the finished layout.
+  document.querySelectorAll('.top-marquee span,.ticker,.world-tech-v51 span,.track-info strong').forEach(el=>{if(/PAN FUSION(?! TECH HOUSE)/i.test(el.textContent))el.textContent=el.textContent.replace(/PAN FUSION(?! TECH HOUSE)/gi,'PAN FUSION TECH HOUSE');});
+  const soundHeading=$('#music h2');if(soundHeading)soundHeading.innerHTML='PAN FUSION<br><em>TECH HOUSE.</em>';
+  const featureArt=$('#music .feature-art');if(featureArt)featureArt.alt='Pan Fusion Tech House artwork';
+  const networkCards=document.querySelectorAll('#network article');networkCards.forEach(card=>{const title=card.querySelector('b');if(title&&/VST SPOT/i.test(title.textContent)){title.textContent='SAMPLE PACKS';const p=card.querySelector('p');if(p)p.textContent='Future BOOM STUDIO packs for steelpan loops, Caribbean percussion, vocal chops, drum loops, FX and one-shots.';}});
 
-    const oldDreamCard=storyTitle.querySelector('.story-dj-card'); if(oldDreamCard) oldDreamCard.remove();
-    const legacyPortrait=storyTitle.querySelector('.story-portrait-v6 img');
-    if(legacyPortrait){legacyPortrait.src='assets/Skylight.jpg';legacyPortrait.alt='Lee Dominique Viarruel — professionally known as Gorilla Boomin';}
-
-    const badge=document.createElement('div'); badge.className='bio-identity-v7';
-    badge.innerHTML='<span>THE ARTIST</span><b>GORILLA BOOMIN</b><small>PAN FUSION TECH HOUSE • DJ / PRODUCER • LIVE ARTIST</small>';
-    storyTitle.appendChild(badge);
-  }
-
-  const storyCopy=$('.story-copy-v5');
-  if(storyCopy){
-    storyCopy.innerHTML=`
-      <p class="story-lead"><strong>Lee Dominique Viarruel</strong>, professionally known as <strong>GORILLA BOOMIN</strong>, is a Trinidad &amp; Tobago-born vocalist, steelpan artist, songwriter, DJ and producer now building his next chapter from Romania.</p>
-
-      <div class="bio-chapter-v7"><span>01</span><b>ROOTS &amp; IDENTITY</b></div>
-      <p>Music entered his life early. Performing from age 11, Lee developed first as a vocalist and entertainer while steelpan became one of the signatures of his musical identity. His pan journey included personal training and mentorship from Ken “Professor” Philmore and Len “Boogsie” Sharpe.</p>
-
-      <div class="bio-chapter-v7"><span>02</span><b>THE WORLD STAGE</b></div>
-      <p>His career expanded internationally through bands, hotels, resorts, casinos and cruise ships, followed by seven years in Japan performing as a singer, dancer and musician with J.J. Renaude’s Body &amp; Soul Show Group of Australia in Tokyo and Kamogawa, Chiba.</p>
-      <p>Along the way he performed in productions and shared stages or musical spaces with artists including <strong>Shaggy, Rihanna, Machel Montano, Kes, David Rudder and Super Blue.</strong></p>
-
-      <div class="bio-chapter-v7"><span>03</span><b>THE DJ AWAKENING</b></div>
-      <p>Cruise-ship life around Miami and the Bahamas opened another door: DJs, clubs and electronic dance music. That world reshaped the vision — combining the instinct of a live entertainer with the control, energy and scale of modern electronic production.</p>
-
-      <div class="bio-chapter-v7"><span>04</span><b>PAN FUSION TECH HOUSE</b></div>
-      <p>Today the focus is <strong>Pan Fusion Tech House</strong>: Caribbean soul meeting club and festival energy. Steelpan can become the hook, texture, melody or drop, fused with Tech House, Latin Tech, Afro House, Dancehall, Soca and future-facing electronic production.</p>
-
-      <div class="bio-chapter-v7"><span>05</span><b>THE NEXT CHAPTER</b></div>
-      <p>After stepping away from new music for years, Lee is building again with <strong>DJ / Producer</strong> at the front of the mission. <strong>BOOM STUDIO!</strong> is the production world, <strong>xXGorillaBoominXx</strong> is the gaming world, and <strong>GORILLA BOOMIN</strong> is the artist connecting it all.</p>
-      <blockquote>“To make a huge difference in the world through my music.”</blockquote>`;
-  }
-
-  // BOOM FILES: two distinct archive spotlights so the career story feels real, not repetitive.
-  const media=$('#media');
-  const archiveGrid=$('#archiveGrid');
-  if(media && archiveGrid && !media.querySelector('.performance-showcase-v8')){
-    const showcase=document.createElement('div');
-    showcase.className='performance-showcase-v8';
-    showcase.innerHTML=`
-      <article class="performance-card-v8">
-        <div class="performance-video-v8"><video controls playsinline preload="metadata"><source src="assets/Gorilla%20Boomin%20Performs%20(Old%20School%20Soca%20Medley)%20at%20MMM%20Concert.mp4" type="video/mp4"></video></div>
-        <div class="performance-copy-v8"><span>WORLD STAGE / LIVE ARCHIVE</span><h3>OLD SCHOOL SOCA MEDLEY</h3><p>Concert footage that captures the entertainer behind the brand — live vocals, stage command and Caribbean performance roots.</p></div>
-      </article>
-      <article class="performance-card-v8">
-        <div class="performance-video-v8"><video controls playsinline preload="metadata"><source src="assets/Liquid%20Lee%20Performs%20At%20103%20FM%20Mela.mp4" type="video/mp4"></video></div>
-        <div class="performance-copy-v8"><span>MEDIA / PERFORMANCE ARCHIVE</span><h3>103 FM MELA</h3><p>A different chapter of Lee Dominique Viarruel on stage — another real piece of the journey that became Gorilla Boomin.</p></div>
-      </article>`;
-    archiveGrid.insertAdjacentElement('beforebegin',showcase);
-  }
-
-  const archiveIntro=$('#media .section-intro');
-  if(archiveIntro) archiveIntro.textContent='A career told through real moments — stages, steelpan, cruise ships, media, DJ evolution, performances and the road into the next chapter.';
-  const now=$('.media-now');
-  if(now) now.innerHTML='<span class="dot"></span> NOW PLAYING / PAN FUSION TECH HOUSE';
-
-  ['worlds','music','studio','mediahub','story','media'].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.classList.add('festival-section');
-  });
+  ['worlds','music','studio','mediahub','story','media'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('festival-section');});
 })();
