@@ -45,10 +45,10 @@
         }
 
         const hotfix=document.createElement('script');
-        hotfix.src='site-hotfix.js?v=2';
+        hotfix.src='site-hotfix.js?v=3';
         hotfix.onload=()=>{
           const gamingFix=document.createElement('script');
-          gamingFix.src='gaming-fix.js?v=1';
+          gamingFix.src='gaming-fix.js?v=2';
           document.body.appendChild(gamingFix);
         };
         document.body.appendChild(hotfix);
