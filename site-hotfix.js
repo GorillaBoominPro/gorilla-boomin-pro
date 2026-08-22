@@ -3,69 +3,41 @@
   const $=(s,r=document)=>r.querySelector(s);
   const $$=(s,r=document)=>[...r.querySelectorAll(s)];
 
-  const socials={
-    youtube:'https://youtube.com/@gorillaboomin',
-    instagram:'https://www.instagram.com/gorillaboomin/',
-    tiktok:'https://www.tiktok.com/@gorilla.boomin',
-    facebook:'https://www.facebook.com/share/1DSJXghqv2/',
-    x:'https://x.com/gorillaboomin'
-  };
+  const socials={youtube:'https://youtube.com/@gorillaboomin',instagram:'https://www.instagram.com/gorillaboomin/',tiktok:'https://www.tiktok.com/@gorilla.boomin',facebook:'https://www.facebook.com/share/1DSJXghqv2/',x:'https://x.com/gorillaboomin'};
 
-  // Keep the umbrella / website header as GORILLA BOOMIN PRO.
-  const brand=$('.brand');
-  if(brand){const label=brand.querySelector('span:last-child');if(label)label.innerHTML='GORILLA <b>BOOMIN</b><small>PRO</small>';}
+  const brand=$('.brand');if(brand){const label=brand.querySelector('span:last-child');if(label)label.innerHTML='GORILLA <b>BOOMIN</b><small>PRO</small>';}
 
-  // Avoid showing BIG PEOPLE PARTY twice before the main BOOM FILES archive.
   $$('.performance-showcase-v8 .performance-card-v8').forEach(card=>{const title=card.querySelector('h3');if(title&&/BIG PEOPLE PARTY/i.test(title.textContent))card.remove();});
-
-  // Give visible poster art to videos while scrolling.
-  const oldSchool=$('.performance-showcase-v8 .performance-card-v8');
-  if(oldSchool){const video=oldSchool.querySelector('video');if(video){video.poster='assets/a_highly_detailed_cinematic_promo_poster_artist.png';video.preload='metadata';}}
-  const youtubeVideo=$('.youtube-player video');
-  if(youtubeVideo){youtubeVideo.poster='assets/Skylight.jpg';youtubeVideo.preload='metadata';}
-
-  // Hide the known broken legacy MOV until new media is uploaded.
+  const oldSchool=$('.performance-showcase-v8 .performance-card-v8');if(oldSchool){const video=oldSchool.querySelector('video');if(video){video.poster='assets/a_highly_detailed_cinematic_promo_poster_artist.png';video.preload='metadata';}}
+  const youtubeVideo=$('.youtube-player video');if(youtubeVideo){youtubeVideo.poster='assets/Skylight.jpg';youtubeVideo.preload='metadata';}
   $$('#videoGrid .video-card').forEach(card=>{const video=card.querySelector('video');if(!video)return;let handled=false;const removeBroken=()=>{if(handled)return;handled=true;card.remove();};video.addEventListener('error',removeBroken,{once:true});const src=decodeURIComponent(video.currentSrc||video.getAttribute('src')||'');if(/copy_46D7C9CD-A7F0-4F68-A698-0FD54DCF8B66\.mov/i.test(src))removeBroken();});
 
-  // Replace any older artist-social URLs already rendered by previous passes.
   const rewrite=(el,url)=>{if(!el)return;el.href=url;el.target='_blank';el.rel='noopener noreferrer';};
-  $$('.official-socials a,.official-socials-v9 a,.eco-track a[data-group="social"]').forEach(a=>{
-    const t=a.textContent.toLowerCase();
-    if(t.includes('youtube')&&!t.includes('gaming')) rewrite(a,socials.youtube);
-    else if(t.includes('instagram')) rewrite(a,socials.instagram);
-    else if(t.includes('tiktok')&&!t.includes('gaming')) rewrite(a,socials.tiktok);
-    else if(t.includes('facebook')) rewrite(a,socials.facebook);
-    else if(t==='x'||t.includes(' twitter')) rewrite(a,socials.x);
-  });
+  $$('.official-socials a,.official-socials-v9 a,.eco-track a[data-group="social"]').forEach(a=>{const t=a.textContent.toLowerCase();if(t.includes('youtube')&&!t.includes('gaming'))rewrite(a,socials.youtube);else if(t.includes('instagram'))rewrite(a,socials.instagram);else if(t.includes('tiktok')&&!t.includes('gaming'))rewrite(a,socials.tiktok);else if(t.includes('facebook'))rewrite(a,socials.facebook);else if(t==='x'||t.includes(' twitter'))rewrite(a,socials.x);});
 
-  // Highly visible icon row in the site header, plus a persistent mobile dock.
-  const iconSvg={
-    youtube:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8ZM9.8 15.5v-7l6.1 3.5-6.1 3.5Z"/></svg>',
-    instagram:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5Zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5Zm5.2-3.1a1.1 1.1 0 1 1-1.1 1.1 1.1 1.1 0 0 1 1.1-1.1Z"/></svg>',
-    tiktok:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3h3a5 5 0 0 0 4 4v3a8 8 0 0 1-4-1.1V15a6 6 0 1 1-6-6v3a3 3 0 1 0 3 3V3Z"/></svg>',
-    facebook:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4.5c-.5-.1-2-.2-3.3-.2-3 0-5 1.8-5 5.2V12H5v4h3.7v8h4.4v-8h3.6l.6-4h-4.2V9.9c0-1.2.3-1.9 1.9-1.9Z"/></svg>',
-    x:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 2H22l-6.8 7.8L23 22h-6.1l-4.8-6.3L6.6 22H3.5l7.2-8.2L3.2 2h6.2l4.3 5.7L18.9 2Zm-1.1 17.8h1.7L8.5 4H6.7l11.1 15.8Z"/></svg>'
-  };
+  const iconSvg={youtube:'<svg viewBox="0 0 24 24"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8ZM9.8 15.5v-7l6.1 3.5-6.1 3.5Z"/></svg>',instagram:'<svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5Z"/></svg>',tiktok:'<svg viewBox="0 0 24 24"><path d="M14 3h3a5 5 0 0 0 4 4v3a8 8 0 0 1-4-1.1V15a6 6 0 1 1-6-6v3a3 3 0 1 0 3 3V3Z"/></svg>',facebook:'<svg viewBox="0 0 24 24"><path d="M14 8h3V4.5c-.5-.1-2-.2-3.3-.2-3 0-5 1.8-5 5.2V12H5v4h3.7v8h4.4v-8h3.6l.6-4h-4.2V9.9c0-1.2.3-1.9 1.9-1.9Z"/></svg>',x:'<svg viewBox="0 0 24 24"><path d="M18.9 2H22l-6.8 7.8L23 22h-6.1l-4.8-6.3L6.6 22H3.5l7.2-8.2L3.2 2h6.2l4.3 5.7L18.9 2Z"/></svg>'};
   const socialMarkup=()=>Object.entries(socials).map(([k,url])=>`<a class="gb-social-${k}" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="Gorilla Boomin on ${k}">${iconSvg[k]}</a>`).join('');
+  const header=$('.nav-v4b');if(header&&!$('.gb-social-header')){const row=document.createElement('div');row.className='gb-social-header';row.innerHTML=socialMarkup();const menu=$('#menuBtn');header.insertBefore(row,menu||null);}
+  if(!$('.gb-social-mobile')){const dock=document.createElement('nav');dock.className='gb-social-mobile';dock.innerHTML=socialMarkup();document.body.appendChild(dock);}
+  const contact=$('#contact');if(contact&&!$('.gb-social-contact')){const block=document.createElement('div');block.className='gb-social-contact';block.innerHTML=`<div class="gb-social-contact-title">FOLLOW GORILLA BOOMIN</div><div class="gb-social-contact-row">${socialMarkup()}</div>`;const first=contact.querySelector(':scope > div');if(first)first.appendChild(block);}
 
-  const header=$('.nav-v4b');
-  if(header&&!$('.gb-social-header')){const row=document.createElement('div');row.className='gb-social-header';row.innerHTML=socialMarkup();const menu=$('#menuBtn');header.insertBefore(row,menu||null);}
-  if(!$('.gb-social-mobile')){const dock=document.createElement('nav');dock.className='gb-social-mobile';dock.setAttribute('aria-label','Official Gorilla Boomin social media');dock.innerHTML=socialMarkup();document.body.appendChild(dock);}
-
-  // Full labeled social block in Contact if not already present.
-  const contact=$('#contact');
-  if(contact){let block=$('.gb-social-contact');if(!block){block=document.createElement('div');block.className='gb-social-contact';block.innerHTML=`<div class="gb-social-contact-title">FOLLOW GORILLA BOOMIN</div><div class="gb-social-contact-row">${socialMarkup()}</div>`;const first=contact.querySelector(':scope > div');if(first)first.appendChild(block);}}
-
-  if(!$('#boom-hotfix-style')){
-    const style=document.createElement('style');style.id='boom-hotfix-style';style.textContent=`
-      .brand>span:last-child small{display:inline-block!important;margin-left:7px;color:#e7b84d!important;font-size:.62em!important;letter-spacing:1.5px!important;vertical-align:middle!important}
-      .performance-showcase-v8:has(.performance-card-v8:only-child){grid-template-columns:minmax(0,820px);justify-content:start}
-      .performance-video-v8 video,.dream-live-video video{background:#050508}
-      .gb-social-header{display:flex;align-items:center;gap:8px;margin-left:auto;margin-right:12px}.gb-social-header a,.gb-social-mobile a,.gb-social-contact-row a{display:grid;place-items:center;width:36px;height:36px;border:1px solid #ffffff24;background:#08080dcc;color:#fff;text-decoration:none;transition:.2s}.gb-social-header a:hover,.gb-social-contact-row a:hover{transform:translateY(-2px);border-color:#e7b84d88}.gb-social-header svg,.gb-social-mobile svg,.gb-social-contact-row svg{width:17px;height:17px;fill:currentColor}.gb-social-youtube{color:#ff4d5a!important}.gb-social-instagram{color:#ff5fb7!important}.gb-social-tiktok{color:#69f4ed!important}.gb-social-facebook{color:#72a7ff!important}.gb-social-x{color:#fff!important}
-      .gb-social-contact{margin-top:28px;padding-top:20px;border-top:1px solid #ffffff18}.gb-social-contact-title{font:800 9px Orbitron;letter-spacing:2.5px;color:#8f96a5;margin-bottom:12px}.gb-social-contact-row{display:flex;gap:10px;flex-wrap:wrap}
-      .gb-social-mobile{display:none}
-      @media(max-width:900px){.gb-social-header{display:none}.gb-social-mobile{position:fixed;left:50%;transform:translateX(-50%);bottom:max(12px,env(safe-area-inset-bottom));z-index:9999;display:flex;gap:7px;padding:7px;border:1px solid #ffffff20;background:#060609e8;backdrop-filter:blur(14px);box-shadow:0 12px 40px #000a;border-radius:999px}.gb-social-mobile a{width:42px;height:42px;border-radius:50%}.gb-social-mobile svg{width:19px;height:19px}body{padding-bottom:74px}}
-      @media(max-width:520px){.brand>span:last-child small{margin-left:4px!important;font-size:.55em!important;letter-spacing:1px!important}.performance-showcase-v8{gap:18px!important}.gb-social-mobile{gap:5px;padding:6px}.gb-social-mobile a{width:40px;height:40px}.gb-social-contact-row{gap:8px}}
-    `;document.head.appendChild(style);
+  // STORY PRIORITY: move the existing full Bio / My Story section directly after the opening artist identity area.
+  // This keeps the original content/design intact but lets new visitors learn who Gorilla Boomin is much earlier.
+  const story=$('#story');
+  if(story){
+    const artistIdentity=$('.artist-identity-v8')||$('.dream-artist-identity')||$('.ecosystem-v51');
+    if(artistIdentity && artistIdentity.parentNode) artistIdentity.insertAdjacentElement('afterend',story);
+    else {
+      const hero=$('.hero-v5');
+      if(hero) hero.insertAdjacentElement('afterend',story);
+    }
   }
+
+  if(!$('#boom-hotfix-style')){const style=document.createElement('style');style.id='boom-hotfix-style';style.textContent=`
+    .brand>span:last-child small{display:inline-block!important;margin-left:7px;color:#e7b84d!important;font-size:.62em!important;letter-spacing:1.5px!important;vertical-align:middle!important}.performance-showcase-v8:has(.performance-card-v8:only-child){grid-template-columns:minmax(0,820px);justify-content:start}.performance-video-v8 video,.dream-live-video video{background:#050508}
+    .gb-social-header{display:flex;align-items:center;gap:8px;margin-left:auto;margin-right:12px}.gb-social-header a,.gb-social-mobile a,.gb-social-contact-row a{display:grid;place-items:center;width:36px;height:36px;border:1px solid #ffffff24;background:#08080dcc;color:#fff;text-decoration:none}.gb-social-header svg,.gb-social-mobile svg,.gb-social-contact-row svg{width:17px;height:17px;fill:currentColor}.gb-social-youtube{color:#ff4d5a!important}.gb-social-instagram{color:#ff5fb7!important}.gb-social-tiktok{color:#69f4ed!important}.gb-social-facebook{color:#72a7ff!important}.gb-social-x{color:#fff!important}.gb-social-contact{margin-top:28px;padding-top:20px;border-top:1px solid #ffffff18}.gb-social-contact-title{font:800 9px Orbitron;letter-spacing:2.5px;color:#8f96a5;margin-bottom:12px}.gb-social-contact-row{display:flex;gap:10px;flex-wrap:wrap}.gb-social-mobile{display:none}
+    #story{scroll-margin-top:90px}
+    @media(max-width:900px){.gb-social-header{display:none}.gb-social-mobile{position:fixed;left:50%;transform:translateX(-50%);bottom:max(12px,env(safe-area-inset-bottom));z-index:9999;display:flex;gap:7px;padding:7px;border:1px solid #ffffff20;background:#060609e8;backdrop-filter:blur(14px);box-shadow:0 12px 40px #000a;border-radius:999px}.gb-social-mobile a{width:42px;height:42px;border-radius:50%}.gb-social-mobile svg{width:19px;height:19px}body{padding-bottom:74px}}
+    @media(max-width:520px){.brand>span:last-child small{margin-left:4px!important;font-size:.55em!important;letter-spacing:1px!important}.performance-showcase-v8{gap:18px!important}.gb-social-mobile{gap:5px;padding:6px}.gb-social-mobile a{width:40px;height:40px}.gb-social-contact-row{gap:8px}}
+  `;document.head.appendChild(style);}
 })();
