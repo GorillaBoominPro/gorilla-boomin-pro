@@ -45,7 +45,12 @@
         }
 
         const hotfix=document.createElement('script');
-        hotfix.src='site-hotfix.js?v=1';
+        hotfix.src='site-hotfix.js?v=2';
+        hotfix.onload=()=>{
+          const gamingFix=document.createElement('script');
+          gamingFix.src='gaming-fix.js?v=1';
+          document.body.appendChild(gamingFix);
+        };
         document.body.appendChild(hotfix);
       };
       document.body.appendChild(dream);
