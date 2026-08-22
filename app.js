@@ -43,6 +43,10 @@
           const intro=contact.querySelector(':scope > div');
           if(intro) intro.appendChild(socials);
         }
+
+        const hotfix=document.createElement('script');
+        hotfix.src='site-hotfix.js?v=1';
+        document.body.appendChild(hotfix);
       };
       document.body.appendChild(dream);
     };
