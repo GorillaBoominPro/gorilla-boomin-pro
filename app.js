@@ -49,6 +49,11 @@
         hotfix.onload=()=>{
           const gamingFix=document.createElement('script');
           gamingFix.src='gaming-fix.js?v=2';
+          gamingFix.onload=()=>{
+            const albums=document.createElement('script');
+            albums.src='live-albums.js?v=1';
+            document.body.appendChild(albums);
+          };
           document.body.appendChild(gamingFix);
         };
         document.body.appendChild(hotfix);
