@@ -10,8 +10,8 @@
     video.removeAttribute('src');
     video.innerHTML='';
     const source=document.createElement('source');
-    source.src='assets/gorilla-boomin-gaming.mov';
-    source.type='video/quicktime';
+    source.src='assets/gorilla-boomin-gaming-web.mp4';
+    source.type='video/mp4';
     video.appendChild(source);
     video.preload='metadata';
     video.playsInline=true;
