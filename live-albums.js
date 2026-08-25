@@ -2,12 +2,16 @@
 (function(){
 const albums=[
 {title:'LIVE AT SEA',sub:'Cocktails • Steelpan • Caribbean Lounge',src:'assets/Gorilla_Boomin_Live_At_Sea_WEB.mp3',cover:'assets/ChatGPT Image Aug 23, 2026, 02_26_57 AM.png',tracks:[['00:00','Port of Viarruel (Jazz Intro)',0],['00:51','Summertime',51],['10:39','Stir It Up',639],['13:26','Jammin’',806],['18:35','Is This Love',1115],['27:49','Waiting in Vain — Lounge Version',1669]]},
-{title:'POOLSIDE IN PARADISE',sub:'Live Caribbean Cruise Sessions',src:'assets/Gorilla_Boomin_Poolside_In_Paradise_WEB.mp3',cover:'assets/ChatGPT Image Aug 23, 2026, 02_26_12 AM.png',tracks:[['00:00','Jammin’ — Poolside Version',0],['03:19','Margaritaville',199],['07:29','Brown Eyed Girl',449],['11:49','No Woman, No Cry',709],['13:42','Waiting in Vain',822],['18:21','Sweat (A La La La La Long)',1101],['23:06','Red Red Wine',1386]]}
+{title:'POOLSIDE IN PARADISE',sub:'Live Caribbean Cruise Sessions',src:'assets/Gorilla_Boomin_Poolside_In_Paradise_WEB.mp3',cover:'assets/ChatGPT Image Aug 23, 2026, 02_26_12 AM.png',tracks:[['00:00','Jammin’ — Poolside Version',0],['03:19','Margaritaville',199],['07:29','Brown Eyed Girl',449],['11:49','No Woman, No Cry',709],['13:42','Waiting in Vain',822],['18:21','Sweat (A La La La La Long)',1101],['23:06','Red Red Wine',1386]]},
+{title:'HOT HOT HOT',sub:'Soca Fire • Reggae Vibes • Live Caribbean Medley',src:'assets/album03-hot-hot-hot-live-archive.mp3',cover:'assets/album03-hot-hot-hot-cover-final-v2.jpg',tracks:[
+['01:00','Hot Hot Hot',60,'SOCA FIRE'],['03:25','Kitty Cat',205,'SOCA FIRE'],['07:26','Who Let the Dogs Out',446,'SOCA FIRE'],['10:02','Dollar Wine',602,'SOCA FIRE'],['14:09','Passion',849,'SOCA FIRE'],['18:14','Big Truck',1094,'SOCA FIRE'],['22:25','Jump',1345,'SOCA FIRE'],
+['24:25','Sweat (A La La La La Long)',1465,'REGGAE VIBES'],['27:42','Red Red Wine',1662,'REGGAE VIBES'],['30:48','Trying to Get to You',1848,'REGGAE VIBES'],['32:25','Brand New Second Hand Girl',1945,'REGGAE VIBES'],['33:42','Anything for You',2022,'REGGAE VIBES'],['35:04','Fresh Vegetable',2104,'REGGAE VIBES'],['36:06','I Really Had to Get You',2166,'REGGAE VIBES'],['36:39','Just Friends',2199,'REGGAE VIBES'],['37:29','Everybody Claims',2249,'REGGAE VIBES'],['40:00','Knocking on Heaven’s Door',2400,'REGGAE VIBES']
+]}
 ];
 function build(){
  const music=document.querySelector('#music'); if(!music||document.querySelector('.live-albums'))return;
  const sec=document.createElement('section'); sec.className='live-albums';
- sec.innerHTML='<div class="live-kicker">GORILLA BOOMIN / LIVE ARCHIVES</div><h2>TWO MOODS.<br><em>ONE LIVE EXPERIENCE.</em></h2><p class="live-intro">Cruise ship performances from the archive — steelpan, vocals, Caribbean lounge and poolside energy. Choose an album, press play, or jump directly to a song.</p><div class="album-grid"></div>';
+ sec.innerHTML='<div class="live-kicker">GORILLA BOOMIN / LIVE ARCHIVES</div><h2>THREE LIVE CHAPTERS.<br><em>ONE CARIBBEAN STORY.</em></h2><p class="live-intro">Cruise ship and live-stage performances from the archive — lounge, poolside, Soca fire and Reggae vibes. Choose an album, press play, or jump directly to a song.</p><div class="album-grid"></div>';
  const grid=sec.querySelector('.album-grid');
  albums.forEach((a,ai)=>{
   const card=document.createElement('article'); card.className='album-card';
@@ -51,7 +55,11 @@ function build(){
     if(!audio.paused)raf=requestAnimationFrame(renderEQ);else drawIdle();
   };
   const startAudio=async()=>{document.querySelectorAll('.album-card audio').forEach(x=>{if(x!==audio)x.pause()});if(ensureAudioGraph()&&audioCtx&&audioCtx.state==='suspended')await audioCtx.resume();await audio.play();renderEQ();};
-  a.tracks.forEach((t,i)=>{const b=document.createElement('button');b.type='button';b.className='track';b.innerHTML='<span>'+String(i+1).padStart(2,'0')+'</span><b>'+t[1]+'</b><time>'+t[0]+'</time>';b.onclick=()=>{audio.currentTime=t[2];startAudio().catch(()=>{})};list.appendChild(b)});
+  let lastSection='';
+  a.tracks.forEach((t,i)=>{
+    if(t[3]&&t[3]!==lastSection){lastSection=t[3];const label=document.createElement('div');label.className='track-section';label.textContent=t[3];list.appendChild(label)}
+    const b=document.createElement('button');b.type='button';b.className='track';b.innerHTML='<span>'+String(i+1).padStart(2,'0')+'</span><b>'+t[1]+'</b><time>'+t[0]+'</time>';b.onclick=()=>{audio.currentTime=t[2];startAudio().catch(()=>{})};list.appendChild(b)
+  });
   play.onclick=()=>{if(audio.paused)startAudio().catch(()=>{});else audio.pause()};
   audio.onplay=()=>{play.textContent='❚❚ PAUSE';renderEQ()}; audio.onpause=()=>{play.textContent='▶ PLAY';cancelAnimationFrame(raf);drawIdle()};
   audio.onloadedmetadata=()=>dur.textContent=fmt(audio.duration);
