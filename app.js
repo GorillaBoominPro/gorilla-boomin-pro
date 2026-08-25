@@ -1,6 +1,6 @@
 /* GORILLA BOOMIN PRO — safe loader for preserved V5 + final polish + dream pass */
 (function(){
-  const albumStyle=document.createElement('link'); albumStyle.rel='stylesheet'; albumStyle.href='live-albums.css?v=1'; document.head.appendChild(albumStyle);
+  const albumStyle=document.createElement('link'); albumStyle.rel='stylesheet'; albumStyle.href='live-albums.css?v=2'; document.head.appendChild(albumStyle);
   const legacy=document.createElement('script');
   legacy.src='legacy-app.js?v=1';
   legacy.onload=()=>{
@@ -24,7 +24,7 @@
         document.querySelectorAll('.eco-track a[data-group="social"]').forEach(a=>{const label=a.textContent.toLowerCase();if(label.includes('youtube'))setExternal(a,socialLinks.artistYouTube);else if(label.includes('instagram'))setExternal(a,socialLinks.instagram);else if(label.includes('tiktok'))setExternal(a,socialLinks.gamingTikTok);else if(label.includes('twitch'))setExternal(a,socialLinks.twitch);});
         const contact=document.querySelector('#contact');
         if(contact&&!document.querySelector('.official-socials')){const socials=document.createElement('div');socials.className='official-socials';socials.innerHTML='<span>OFFICIAL LINKS</span><a href="'+socialLinks.artistYouTube+'" target="_blank" rel="noopener noreferrer">▶ YOUTUBE / ARTIST</a><a href="'+socialLinks.facebook+'" target="_blank" rel="noopener noreferrer">f FACEBOOK</a><a href="'+socialLinks.instagram+'" target="_blank" rel="noopener noreferrer">◎ INSTAGRAM</a><a href="'+socialLinks.gamingYouTube+'" target="_blank" rel="noopener noreferrer">▶ YOUTUBE / GAMING</a><a href="'+socialLinks.gamingTikTok+'" target="_blank" rel="noopener noreferrer">♪ TIKTOK / GAMING</a><a href="'+socialLinks.twitch+'" target="_blank" rel="noopener noreferrer">◫ TWITCH / GAMING</a>';const intro=contact.querySelector(':scope > div');if(intro)intro.appendChild(socials);}
-        const hotfix=document.createElement('script');hotfix.src='site-hotfix.js?v=3';hotfix.onload=()=>{const gamingFix=document.createElement('script');gamingFix.src='gaming-fix.js?v=2';gamingFix.onload=()=>{const albums=document.createElement('script');albums.src='live-albums.js?v=1';document.body.appendChild(albums);};document.body.appendChild(gamingFix);};document.body.appendChild(hotfix);
+        const hotfix=document.createElement('script');hotfix.src='site-hotfix.js?v=3';hotfix.onload=()=>{const gamingFix=document.createElement('script');gamingFix.src='gaming-fix.js?v=2';gamingFix.onload=()=>{const albums=document.createElement('script');albums.src='live-albums.js?v=3';albums.onload=()=>{const cards=document.querySelectorAll('.album-card');if(cards[2]){const audio=cards[2].querySelector('audio');const img=cards[2].querySelector('.album-cover-img');if(audio)audio.src='assets/album03-hot-hot-hot-live-archive%20(2).mp3';if(img)img.src='assets/album03-hot-hot-hot-cover-final-v2.jpg';}};document.body.appendChild(albums);};document.body.appendChild(gamingFix);};document.body.appendChild(hotfix);
       };document.body.appendChild(dream);
     };document.body.appendChild(polish);
   };document.body.appendChild(legacy);
