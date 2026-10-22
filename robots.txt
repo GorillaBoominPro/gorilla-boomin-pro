@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gorillaboominpro.github.io/gorilla-boomin-pro/sitemap.xml
