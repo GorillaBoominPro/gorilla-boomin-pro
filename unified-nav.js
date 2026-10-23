@@ -3,7 +3,7 @@
   if(document.getElementById('gbmn-unified-nav')) return;
   const style=document.createElement('style');
   style.textContent=`
-    header.nav,header.nav-v4b,header.top,body>header:not(#gbmn-unified-nav){display:none!important}
+     .gbmn-shared-nav,header.nav,header.nav-v4b,header.top,body>header:not(#gbmn-unified-nav){display:none!important}
     #gbmn-unified-nav{position:sticky!important;top:0;z-index:99999;display:flex!important;align-items:center;gap:18px;min-height:66px;padding:12px clamp(16px,3vw,48px);background:rgba(8,12,22,.95);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.17);color:#fff;font-family:Arial,Helvetica,sans-serif;box-sizing:border-box}
     #gbmn-unified-nav *{box-sizing:border-box}
     #gbmn-unified-nav .gbmn-brand{font-weight:900;font-size:22px;color:#fff;text-decoration:none;white-space:nowrap;letter-spacing:-.8px}
