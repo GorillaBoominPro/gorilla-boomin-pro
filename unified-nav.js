@@ -45,5 +45,6 @@
   else {const lang=document.createElement('a');lang.href='redesign-v2.html';lang.textContent='🌐';lang.title='Languages on main website';lang.style.color='#fff';nav.appendChild(lang)}
   toggle.addEventListener('click',()=>{const open=nav.classList.toggle('gbmn-open');toggle.setAttribute('aria-expanded',String(open))});
   menu.addEventListener('click',()=>{nav.classList.remove('gbmn-open');toggle.setAttribute('aria-expanded','false')});
+  document.querySelectorAll('.gbmn-shared-nav, header.nav, header.nav-v4b, header.top').forEach(el=>el.remove());
   document.body.insertBefore(nav,document.body.firstChild);
 })();
