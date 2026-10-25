@@ -13,8 +13,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: true
-      - name: Check video processing tools
-        run: ffmpeg -hide_banner -version
+      - name: Install video processing tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          ffmpeg -hide_banner -version
       - name: Clean and normalize live concert sound without changing video
         shell: bash
         run: |
