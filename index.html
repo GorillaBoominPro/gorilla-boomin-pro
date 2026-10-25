@@ -112,4 +112,22 @@
   const observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(!entry.isIntersecting)return;entry.target.classList.add('signal-visible');if(entry.target.classList.contains('master-logo-showcase'))entry.target.classList.add('signal-active');observer.unobserve(entry.target)})},{threshold:.08,rootMargin:'0px 0px 40px 0px'});
   targets.forEach(function(el){el.classList.add('signal-reveal-ready');observer.observe(el)});
 })();
-</script><script>/* The cinematic slots use still-image fallbacks until optimized clips are uploaded to assets/. */(function(){const clips=['signal-listening.mp4','signal-pads.mp4','signal-pulse.mp4'];const hero=document.querySelector('.hero-cinema');if(!hero)return;let i=0;hero.addEventListener('error',()=>{hero.style.display='none'},true);hero.addEventListener('ended',()=>{i=(i+1)%clips.length;hero.querySelector('source').src='assets/'+clips[i];hero.load();hero.play().catch(()=>{})});hero.loop=false;const crowd=document.querySelector('.world-cinema video');if(crowd)crowd.addEventListener('error',()=>{crowd.style.display='none'},true)})();</script><script src="unified-nav.js" defer></script></body></html>
+</script><script>/* The cinematic slots use still-image fallbacks until optimized clips are uploaded to assets/. */(function(){const clips=['signal-listening.mp4','signal-pads.mp4','signal-pulse.mp4'];const hero=document.querySelector('.hero-cinema');if(!hero)return;let i=0;hero.addEventListener('error',()=>{hero.style.display='none'},true);hero.addEventListener('ended',()=>{i=(i+1)%clips.length;hero.querySelector('source').src='assets/'+clips[i];hero.load();hero.play().catch(()=>{})});hero.loop=false;const crowd=document.querySelector('.world-cinema video');if(crowd)crowd.addEventListener('error',()=>{crowd.style.display='none'},true)})();</script><script src="unified-nav.js" defer></script><style id="gbmn-home-audio-css">
+#gbmn-sound-control{position:fixed;right:18px;bottom:20px;z-index:999999;border:1px solid #f0354c;border-radius:999px;background:rgba(9,12,20,.95);color:#fff;padding:12px 18px;font-size:12px;letter-spacing:.08em;font-weight:800;box-shadow:0 6px 28px #0008;cursor:pointer}
+#gbmn-sound-control:hover,#gbmn-sound-control:focus-visible{background:#9b182d;outline:2px solid #fff;outline-offset:2px}
+@media(max-width:600px){#gbmn-sound-control{right:12px;bottom:12px;padding:11px 14px;font-size:11px}}
+</style>
+<audio id="gbmn-home-audio" preload="none" loop src="assets/Gorilla_Boomin_Poolside_In_Paradise_WEB.mp3"></audio>
+<button type="button" id="gbmn-sound-control" aria-label="Turn on Gorilla Boomin homepage music" aria-pressed="false">♪ TURN ON THE BOOM 🔊</button>
+<script>
+(function(){
+ const audio=document.getElementById('gbmn-home-audio');
+ const button=document.getElementById('gbmn-sound-control');
+ if(!audio||!button)return;
+ audio.volume=.28;
+ button.addEventListener('click',async function(){
+  if(audio.paused){try{await audio.play();button.textContent='♫ SOUND ON · MUTE';button.setAttribute('aria-pressed','true');button.setAttribute('aria-label','Mute homepage music');}catch(e){button.textContent='♪ TAP TO PLAY MUSIC';}}
+  else {audio.pause();button.textContent='♪ TURN ON THE BOOM 🔊';button.setAttribute('aria-pressed','false');button.setAttribute('aria-label','Turn on Gorilla Boomin homepage music');}
+ });
+})();
+</script></body></html>
