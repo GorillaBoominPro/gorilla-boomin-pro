@@ -1,0 +1,46 @@
+name: Clean 103 FM Mela audio
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/clean-mela-audio.yml'
+permissions:
+  contents: write
+jobs:
+  clean-audio:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Check video processing tools
+        run: ffmpeg -hide_banner -version
+      - name: Clean and normalize live concert sound without changing video
+        shell: bash
+        run: |
+          set -euo pipefail
+          ffmpeg -hide_banner -loglevel warning -y \
+            -i "assets/Liquid Lee Performs At 103 FM Mela.mp4" \
+            -map 0:v:0 -map 0:a:0 -c:v copy \
+            -af "highpass=f=65,lowpass=f=16000,afftdn=nf=-28:tn=1,acompressor=threshold=-18dB:ratio=2:attack=20:release=200:makeup=2,loudnorm=I=-16:TP=-1.5:LRA=12" \
+            -c:a aac -b:a 192k -movflags +faststart \
+            "assets/103-fm-mela-clean-audio.mp4"
+      - name: Publish enhanced soundtrack to EPK
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('gorilla-boomin-epk.html')
+          s=p.read_text()
+          old='assets/Liquid%20Lee%20Performs%20At%20103%20FM%20Mela.mp4'
+          new='assets/103-fm-mela-clean-audio.mp4'
+          if old not in s and new not in s:
+              raise SystemExit('EPK video reference missing; refusing unexpected change')
+          p.write_text(s.replace(old,new))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/103-fm-mela-clean-audio.mp4 gorilla-boomin-epk.html
+          git commit -m "Improve 103 FM Mela concert audio, preserve original visuals"
+          git push
