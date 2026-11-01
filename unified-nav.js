@@ -27,7 +27,8 @@
   const links=[
     ['HOME','/'],
     ['THE ARTIST','gorilla-boomin-artist-v2.html'],
-    ['MUSIC','/#music'],
+    ['MUSIC','music.html'],
+    ['VIDEO','music.html#video-world'],
     ['MAN OF STEEL','man-of-steel-v2.html'],
     ['BASS CULTURE','bass-culture-v2.html'],
     ['STUDIO','/#studio'],
@@ -38,7 +39,7 @@
   const toggle=document.createElement('button');toggle.type='button';toggle.className='gbmn-toggle';toggle.setAttribute('aria-expanded','false');toggle.textContent='☰ MENU';nav.appendChild(toggle);
   const menu=document.createElement('nav');menu.className='gbmn-links';menu.setAttribute('aria-label','Main site navigation');
   const current=location.pathname.split('/').pop()||'index.html';
-  links.forEach(([label,url])=>{const a=document.createElement('a');a.href=url;a.textContent=label;if(label==='BOOKINGS')a.className='gbmn-book';if((label==='HOME'&&current==='index.html')||(label==='THE ARTIST'&&current==='gorilla-boomin-artist-v2.html')||(label==='MAN OF STEEL'&&current==='man-of-steel-v2.html')||(label==='BASS CULTURE'&&current==='bass-culture-v2.html')||(label==='EPK'&&current==='gorilla-boomin-epk.html'))a.setAttribute('aria-current','page');menu.appendChild(a)});
+  links.forEach(([label,url])=>{const a=document.createElement('a');a.href=url;a.textContent=label;if(label==='BOOKINGS')a.className='gbmn-book';if((label==='HOME'&&current==='index.html')||(label==='THE ARTIST'&&current==='gorilla-boomin-artist-v2.html')||(label==='MUSIC'&&current==='music.html')||(label==='MAN OF STEEL'&&current==='man-of-steel-v2.html')||(label==='BASS CULTURE'&&current==='bass-culture-v2.html')||(label==='EPK'&&current==='gorilla-boomin-epk.html'))a.setAttribute('aria-current','page');menu.appendChild(a)});
   nav.appendChild(menu);
   const existingLanguage=document.getElementById('site-language');
   if(existingLanguage){existingLanguage.classList.add('gbmn-language');existingLanguage.setAttribute('aria-label','Website language');nav.appendChild(existingLanguage)}
