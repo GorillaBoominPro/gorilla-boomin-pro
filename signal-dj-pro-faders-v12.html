@@ -1,0 +1,281 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>G//BMN: SIGNAL DJ | Console Rebuild 1</title><style>
+*{box-sizing:border-box}body{margin:0;background:#070809;color:#d4d9e0;font:12px Arial,Helvetica,sans-serif}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:2px solid #fff;outline-offset:3px}h1,h2,p{margin:0}header{max-width:1660px;margin:auto;padding:16px 18px 11px;display:flex;align-items:center;justify-content:space-between;gap:12px}h1{font-size:25px;letter-spacing:-1px}h1 em{font-style:normal;color:#ed1737}.caption{font-size:10px;color:#a1a7ad;letter-spacing:1px}.chip{border:1px solid #544a4f;padding:7px 9px;color:#ee9ca9}main{max-width:1660px;margin:auto;padding:0 12px 30px}.import{background:#151719;border:1px solid #404347;padding:10px 15px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}.import label{font-weight:700;color:#d1d4d9}.import input[type=file]{max-width:250px}.import input[type=search]{background:#090e14;border:1px solid #5a626c;color:white;padding:7px}.tracks{display:flex;gap:7px;overflow-x:auto;max-width:100%;flex:1}.trackitem{white-space:nowrap;background:#24282c;color:#fff;border:1px solid #505962;padding:7px 9px}.trackitem:hover{border-color:#ef435b}.trackitem b{color:#ed9eaa}
+.console{margin-top:9px;display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,.9fr) minmax(0,1fr);background:#111315;border:5px solid #2b2d31;box-shadow:0 13px 35px #000;border-radius:5px;min-height:660px}.deck{padding:13px;background:linear-gradient(105deg,#242629,#121416 55%,#242528);border-right:2px solid #08090a;min-width:0}.deck.right{border-left:2px solid #08090a;border-right:0}.topstrip{display:flex;justify-content:space-between;border-bottom:1px solid #555961;padding-bottom:12px;align-items:center}.topstrip strong{letter-spacing:2px;font-size:13px}.tiny{font-size:9px;color:#9ea8b3}.utility{display:flex;justify-content:space-between;gap:5px;margin:12px 0}.utility button,.smallbtn{background:linear-gradient(#363b40,#171a1d);color:#e2e4e8;border:1px solid #5b626a;padding:7px 10px;border-radius:2px;font-size:10px}.platterZone{display:grid;grid-template-columns:minmax(0,1fr) 30px;gap:8px;align-items:center}.deck.right .platterZone{grid-template-columns:30px minmax(0,1fr)}.deck.right .platterZone .pitchrail{grid-column:1;grid-row:1}.deck.right .platterZone .jog{grid-column:2;grid-row:1}
+.jog{width:min(100%,365px);aspect-ratio:1;margin:9px auto 15px;border-radius:50%;border:7px solid #191c1f;background:repeating-conic-gradient(#61686e 0deg 2deg,#24282c 2deg 6deg,#484b51 6deg 9deg);box-shadow:0 0 0 4px #55585d,inset 0 0 0 13px #0b0c0e,0 9px 24px #000d;position:relative;touch-action:none;cursor:grab;user-select:none}.jog::before{content:"";position:absolute;inset:9%;border:3px solid #444950;border-radius:50%;background:radial-gradient(circle at 30% 22%,#43484d,#15191d 52%,#06070a 78%)}.jogRing{position:absolute;inset:-4px;border:3px solid #8bb8ce;border-radius:50%;box-shadow:0 0 8px #61caff66;opacity:.4;pointer-events:none}.jog.playing .jogRing{opacity:1;box-shadow:0 0 12px #5bcbff,0 0 24px #438cbc}.platterMark{position:absolute;inset:13%;border:2px dashed #a0a6ae44;border-radius:50%;pointer-events:none}.jog.playing .platterMark{animation:spin 1.95s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.centerdisc{position:absolute;inset:33%;border:4px solid #10161c;background:radial-gradient(circle,#1d394b,#02070e 75%);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;box-shadow:0 0 0 2px #737b86;pointer-events:none}.centerdisc b{font-size:clamp(13px,1.6vw,23px);color:#edf7fe}.centerdisc small{font-size:9px;color:#5ac8ff}.pitchrail{height:245px;display:flex;flex-direction:column;align-items:center;gap:8px}.pitchrail label{font-size:8px;writing-mode:vertical-rl;letter-spacing:1px}.pitchrail input{writing-mode:vertical-lr;direction:rtl;height:190px;width:26px;accent-color:#bbc3c9}.pitchrail output{font-size:10px}.transportRow{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:end}.roundPair{display:flex;flex-direction:column;gap:10px;align-items:center}.roundPair button{width:48px;height:48px;border-radius:50%;border:3px solid #655a4a;background:radial-gradient(circle,#2f3032,#090b0d);color:#fff;box-shadow:0 0 0 2px #12151a;font-weight:900}.roundPair .play{border-color:#36ad69;color:#9af5ba}.roundPair .cue{border-color:#f4aa34;color:#ffe4a5}.roundPair .active{box-shadow:0 0 0 2px #12151a,0 0 15px currentColor}.pads{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.pads button{height:48px;color:#dbe7f2;background:#151718;border:2px solid var(--pad);box-shadow:inset 0 -5px 0 #0008;font-weight:700;font-size:9px}.pads button.set{background:color-mix(in srgb,var(--pad),black 70%)}.padinfo{font-size:9px;color:#9fa7b0;margin:6px 0}.deck-footer{margin-top:12px;display:flex;gap:7px;align-items:center;flex-wrap:wrap}.deck-footer input[type=file]{max-width:160px;font-size:9px}.deck-footer button{font-size:10px}.deck-footer span{color:#aac9db}.deckwave{width:100%;height:44px;background:#030810;border:1px solid #3a4d60;margin:10px 0}
+.mixer{background:linear-gradient(120deg,#1f2225,#0e1012 36%,#202327);padding:10px;border-right:1px solid #090a0b;min-width:0}.display{background:#050e18;border:3px solid #292f35;padding:9px;height:155px;box-shadow:inset 0 0 20px #000}.display .dhead{display:flex;justify-content:space-between;gap:5px;color:#9ec3dd;font-size:9px}.display canvas{width:100%;height:63px;margin-top:9px;background:#03101d}.dtracks{display:flex;justify-content:space-between;font-size:9px;margin-top:7px;color:#d4e7f2}.mixbody{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) 63px;gap:3px;margin-top:13px}.channel{border:1px solid #393d41;background:#141619;text-align:center;padding:6px 3px}.channel>b{display:block;color:#f5c16c;font-size:12px;margin-bottom:6px}.knobWrap{margin:4px 0 10px}.knobWrap label{display:block;font-size:8px;color:#a6afb7;margin-bottom:4px}.knob{display:block;width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#65696c,#171a1d 66%);border:2px solid #4d5358;margin:0 auto 5px;box-shadow:0 2px 4px #000;position:relative}.knob::after{content:"";width:2px;height:10px;background:#eee;position:absolute;left:11px;top:2px}.knobWrap input{width:100%;height:9px;accent-color:#c7ccd1}.chFader{height:120px;width:25px;writing-mode:vertical-lr;direction:rtl;accent-color:#bcc5cb}.sidefx{padding:6px;background:#171b20;border:1px solid #40464e;display:flex;flex-direction:column;align-items:center;gap:8px}.sidefx b{font-size:9px;color:#d3d8dc}.sidefx button{background:#24282d;color:#d8e8ff;border:1px solid #515a65;padding:7px;font-size:9px}.master-meter{width:14px;height:85px;border:1px solid #3d4945;background:#141d18;display:flex;align-items:end}.master-meter i{display:block;width:100%;height:0;background:linear-gradient(to top,#32c66c 65%,#e4d445 85%,#ee4242)}.crossSection{margin-top:12px;border-top:1px solid #393e43;text-align:center;padding-top:12px}.crossSection input{width:78%;accent-color:#e7e7e7}.crossSection label{display:block;font-size:9px;letter-spacing:1px}.controls{display:flex;justify-content:space-between;gap:5px;align-items:center;margin-top:8px}.controls button{padding:8px;background:#383030;border:1px solid #76535b;color:#fff}.status{font-size:11px;color:#d0aeb5;margin-top:8px;min-height:20px}.notes{color:#9ca8b5;font-size:11px;margin-top:12px;line-height:1.6}
+@media(max-width:1120px){.console{grid-template-columns:1fr 1fr}.mixer{grid-column:1/-1;grid-row:2}.deck.right{grid-column:2;grid-row:1}.jog{max-width:290px}}@media(max-width:630px){.console{display:flex;flex-direction:column}.deck.right{order:2}.mixer{order:3}.jog{max-width:280px}}.hidden{display:none!important}
+.ch-vu{height:70px;width:13px;margin:7px auto;background:#050a0a;border:1px solid #47514f;display:flex;align-items:flex-end}.ch-vu i{width:100%;height:0%;background:linear-gradient(to top,#2bc76c 0 65%,#f4db50 85%,#f64848 100%);transition:height .09s}.channel{min-width:0}.channel .knobWrap input{max-width:100%}.channel .chFader{height:125px}.deck .jog.playing .jogRing{filter:brightness(1.2)}</style><style id="fine-detail-v3">
+/* Exterior tempo rails with lower outer-edge placement, mirrored per deck */
+.platterZone{position:relative!important;display:flex!important;justify-content:center!important;align-items:center!important;min-height:365px!important;padding:0 27px!important}
+.platterZone .jog{flex:0 1 345px!important;margin:8px auto 18px!important;min-width:0}
+.platterZone .pitchrail{position:absolute!important;bottom:1px!important;right:auto!important;left:0!important;height:230px!important;width:30px!important;border:1px solid #353a3f;background:#121417;padding:8px 0 3px!important;gap:4px!important}
+#right .platterZone .pitchrail{left:auto!important;right:0!important}
+.platterZone .pitchrail input{height:170px!important;width:23px!important;accent-color:#d8dadd}
+.platterZone .pitchrail:before{content:"−      0      +";position:absolute;left:-15px;top:85px;color:#b7c0c7;font:8px Arial;writing-mode:vertical-rl;letter-spacing:13px;pointer-events:none}
+.platterZone .pitchrail output{font-size:9px}
+.channel .knobWrap{position:relative;margin:7px 0 12px!important}
+.channel .knob{height:33px;width:33px;border:3px solid #626970;background:radial-gradient(circle at 30% 22%,#818890,#3a3e43 45%,#121417 85%);box-shadow:inset 0 1px 2px #bbb8,0 3px 4px #000b}
+.channel .knob:after{width:3px;height:11px;left:12px;background:#e6e6e6}
+.channel .knobWrap input:not(.chFader){accent-color:#b9bfc5;height:13px}
+.channel .chFader{width:32px!important;height:155px!important;accent-color:#e5e6e7!important;cursor:pointer}
+.channel .ch-vu{height:95px!important}
+.channel{background:linear-gradient(#202327,#101113)!important;border:1px solid #41464a!important}
+.channel>b{color:#efc276;font-size:12px;letter-spacing:.08em}
+.crossSection input#cross{height:22px!important;accent-color:#dce0e3!important;cursor:pointer}
+.transportRow{margin-top:22px}
+@media(max-width:1120px){.platterZone{min-height:310px!important}.platterZone .jog{max-width:290px!important}}
+@media(max-width:630px){.platterZone{min-height:300px!important}.platterZone .jog{max-width:270px!important}}
+</style><style id="signal-decks-bottom-up-v4">
+/* Deck-only rebuild: lower transport and pads follow user reference */
+.console .deck{padding:10px 12px 7px!important;min-height:0}
+.deckshell{display:flex;flex-direction:column;min-height:100%}
+.deckshell.hidden{display:none}
+.deck-upper-tools{display:flex;gap:5px;justify-content:space-between;margin:5px 0 0}
+.deck-upper-tools button{padding:5px 4px;font-size:8px;flex:1;min-width:0}
+.platterZone{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:0!important;min-height:0!important;flex:1}
+.platterZone .jog{width:min(92%,360px)!important;max-width:360px!important;margin:13px auto 9px!important}
+.transportRow{display:grid!important;grid-template-columns:60px minmax(0,1fr) 45px!important;gap:7px!important;align-items:end!important;margin:4px 0 0!important;min-height:164px!important}
+.roundPair{display:flex!important;align-items:center!important;justify-content:end!important;gap:11px!important;flex-direction:column!important;padding-bottom:6px!important}
+.roundPair button{height:44px!important;width:44px!important;flex-shrink:0}
+.pad-bank{min-width:0;align-self:end;padding-bottom:5px}
+.pad-modes{display:flex;gap:4px;justify-content:space-between;margin:0 0 7px}
+.pad-modes button{padding:6px 5px;font-size:8px;min-width:0;flex:1}
+.padinfo{font-size:8px!important;margin:3px 0 5px!important;letter-spacing:.06em}
+.pads{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}
+.pads button{height:40px!important;min-height:0!important;border-radius:1px!important}
+.transportRow .pitchrail{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-end!important;height:154px!important;width:42px!important;padding:2px 0 0!important;gap:3px!important;background:#101317!important;border:1px solid #3f4245!important}
+#right .transportRow .pitchrail{left:auto!important;right:auto!important}
+.transportRow .pitchrail::before{display:none!important}
+.transportRow .pitchrail label{writing-mode:horizontal-tb!important;font-size:8px!important;letter-spacing:0!important}
+.transportRow .pitchrail input{writing-mode:vertical-lr!important;direction:rtl!important;appearance:slider-vertical;width:27px!important;height:119px!important;accent-color:#d9dcdf!important;cursor:pointer}
+.transportRow .pitchrail output{font-size:9px!important}
+.deck-footer{order:0!important;display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:5px!important;margin:0 0 4px!important;padding:3px 0!important;border-top:1px solid #333a41}
+.deck-footer input[type=file]{max-width:110px!important}
+.deckwave{height:35px!important;margin:7px 0!important}
+.utility{margin:7px 0!important;padding:0 0 5px!important}
+@media(max-width:1120px){.transportRow{grid-template-columns:55px minmax(0,1fr) 42px!important;gap:5px!important}.pads button{height:35px!important}.platterZone .jog{max-width:300px!important}}
+@media(max-width:630px){.transportRow{grid-template-columns:55px minmax(0,1fr) 45px!important}.platterZone .jog{max-width:310px!important}}
+</style><style id="v4-tempo-left-correction">
+/* Both tempo faders anchored to the bottom-left of their own deck. */
+.transportRow{grid-template-columns:44px 54px minmax(0,1fr)!important}
+.transportRow .pitchrail{grid-column:1!important;grid-row:1!important}
+.transportRow .roundPair{grid-column:2!important;grid-row:1!important}
+.transportRow .pad-bank{grid-column:3!important;grid-row:1!important}
+@media(max-width:1120px){.transportRow{grid-template-columns:42px 51px minmax(0,1fr)!important}}
+@media(max-width:630px){.transportRow{grid-template-columns:42px 51px minmax(0,1fr)!important}}
+</style><style id="deck-v5-reference-geometry">
+/* Photo-led controls: condensed and hardware-proportioned, decks only. */
+.deckshell{gap:0!important}
+.deckshell .utility{margin:2px 0!important;padding:2px 0!important}
+.deck-control-strip{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;padding:4px 0 0}
+.deck-control-strip .upper-left,.deck-control-strip .upper-right{display:flex;gap:3px;flex-wrap:wrap}
+.deck-control-strip .smallbtn{font-size:8px;padding:5px 4px;color:#d9dee7;background:linear-gradient(#45494e,#181b1f);border:1px solid #656a72;border-radius:3px}
+.deck-control-strip .upper-left .smallbtn:first-child,.deck-control-strip .upper-left .smallbtn:nth-child(2){border-color:#ca911a;color:#ffdc86}
+.deck-control-strip .upper-right .smallbtn:first-child{border-color:#e4b22b;color:#f4c25d}
+.deck-upper-tools{margin:2px 0!important}
+.deckshell .deckwave{height:26px!important;margin:3px 0!important}
+.deckshell .platterZone{padding:0!important;margin:0!important;min-height:0!important}
+.deckshell .platterZone .jog{width:min(100%,420px)!important;max-width:420px!important;margin:2px auto!important}
+.deckshell .deck-footer{margin:2px 0!important;min-height:0!important}
+.deckshell .transportRow{grid-template-columns:55px 55px minmax(0,1fr)!important;gap:7px!important;min-height:218px!important;align-items:stretch!important;margin:0!important}
+.deckshell .transportRow .pitchrail{height:216px!important;width:53px!important;border:1px solid #4a525b!important;background:linear-gradient(90deg,#16191c,#34383e 55%,#0f1215)!important;justify-content:center!important;padding:4px!important}
+.deckshell .transportRow .pitchrail input{height:174px!important;width:32px!important;accent-color:#d1d6db!important}
+.deckshell .transportRow .roundPair{justify-content:flex-end!important;padding-bottom:8px!important}
+.deckshell .transportRow .roundPair button{height:49px!important;width:49px!important;box-shadow:0 0 0 3px #232a30,0 3px 7px #0009!important}
+.deckshell .pad-bank{padding-bottom:0!important}
+.deckshell .pad-modes{margin-bottom:4px!important}
+.deckshell .pads{gap:6px!important}
+.deckshell .pads button{aspect-ratio:1/1!important;height:auto!important;min-height:0!important;width:100%!important;border-width:2px!important;font-size:12px!important}
+.deckshell .padinfo{margin:2px 0!important}
+.deckshell{padding-bottom:0!important}
+@media(max-width:1100px){.deckshell .transportRow{grid-template-columns:43px 45px minmax(0,1fr)!important;gap:4px!important}.deckshell .transportRow .pitchrail{width:42px!important}.deckshell .transportRow .roundPair button{width:42px!important;height:42px!important}.deck-control-strip{grid-template-columns:1fr}.deckshell .platterZone .jog{max-width:370px!important}}
+</style><style id="deck-v6-transport-refinement">
+/* Both tempo rails on RIGHT: positioned beside and rising alongside the jog. */
+.deckshell .platterZone{overflow:visible!important;padding-right:55px!important}
+.deckshell .platterZone .jog{width:min(100%,420px)!important}
+.deckshell .transportRow{grid-template-columns:68px minmax(0,1fr) 62px!important;gap:8px!important;position:relative!important;min-height:215px!important;overflow:visible!important}
+.deckshell .transportRow .roundPair{grid-column:1!important;grid-row:1!important;align-items:center!important;justify-content:flex-end!important;gap:14px!important;z-index:2}
+.deckshell .transportRow .pad-bank{grid-column:2!important;grid-row:1!important}
+.deckshell .transportRow .pitchrail{grid-column:3!important;grid-row:1!important;position:absolute!important;right:0!important;left:auto!important;bottom:0!important;top:auto!important;width:56px!important;height:390px!important;z-index:3!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;align-items:center!important;background:linear-gradient(90deg,#15181d,#353a42 50%,#15181d)!important;border:1px solid #5e6670!important;border-radius:5px!important}
+.deckshell .transportRow .pitchrail input{height:335px!important;width:38px!important;writing-mode:vertical-lr!important;direction:rtl!important;appearance:slider-vertical!important}
+.deckshell .transportRow .roundPair button{width:62px!important;height:62px!important;min-width:62px!important;min-height:62px!important;font-size:15px!important;border-radius:50%!important}
+.deckshell .transportRow .roundPair .play{font-size:23px!important}
+.deckshell .pads button{aspect-ratio:1/1!important;height:auto!important}
+@media(max-width:1100px){.deckshell .transportRow{grid-template-columns:56px minmax(0,1fr) 49px!important;gap:5px!important}.deckshell .transportRow .pitchrail{width:46px!important;height:315px!important}.deckshell .transportRow .pitchrail input{height:260px!important}.deckshell .transportRow .roundPair button{width:52px!important;height:52px!important;min-width:52px!important;min-height:52px!important}.deckshell .platterZone{padding-right:45px!important}}
+</style><style id="ref-deck-left-v7">
+/* LEFT DECK reference: tightly packed hardware-inspired arrangement */
+.deckshell{position:relative!important;background:repeating-linear-gradient(90deg,#17191d 0,#1a1d21 2px,#17191d 4px)!important}
+.deck-upper-tools,.deck-control-strip{display:none!important}
+.ref-tools{display:contents}
+.ref-left-stack{position:absolute;left:5px;top:55px;width:59px;display:flex;align-items:center;flex-direction:column;gap:9px;z-index:5}
+.ref-right-stack{position:absolute;right:4px;top:58px;width:58px;display:flex;align-items:center;flex-direction:column;gap:9px;z-index:5}
+.ref-tools button{border:1px solid #505862;border-radius:5px;background:linear-gradient(#373e47,#101217);box-shadow:0 2px 4px #0009;color:#c4d0db;padding:7px 3px;font-size:8px;cursor:pointer;width:100%}
+.ref-tools label,.ref-search b{font-size:8px;color:#aeb9c4;letter-spacing:.03em;text-align:center}
+.ref-loops{display:flex;gap:3px;width:110px;transform:translateX(26px)}
+.ref-loops button{background:radial-gradient(circle,#f1b949,#b77706);color:#171819;border-radius:50%;height:32px;width:47px;font-size:7px}
+.ref-search{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:4px;width:100%;text-align:center}
+.ref-search b{grid-column:1/-1}
+.ref-right-stack input{width:100%;accent-color:#b9bfc8}
+.deckshell .platterZone{padding:0 64px!important;margin:2px 0!important}
+.deckshell .platterZone .jog{width:100%!important;max-width:470px!important;margin:0 auto!important;box-shadow:0 0 0 8px #343943,0 0 0 12px #8c9094,0 7px 22px #000e!important}
+.deckshell .transportRow{grid-template-columns:66px minmax(0,1fr) 56px!important;gap:8px!important;min-height:190px!important;margin:0!important}
+.deckshell .transportRow .roundPair{grid-column:1!important;grid-row:1!important;gap:8px!important;padding-bottom:6px!important}
+.deckshell .transportRow .roundPair button{width:61px!important;height:61px!important;min-width:61px!important;min-height:61px!important;font-size:12px!important}
+.deckshell .transportRow .roundPair .cue{border:3px solid #ffac28!important}
+.deckshell .transportRow .roundPair .play{border:3px solid #25d877!important;font-size:23px!important}
+.deckshell .transportRow .pad-bank{grid-column:2!important;grid-row:1!important;align-self:end!important}
+.deckshell .pads{gap:5px!important}
+.deckshell .pads button{aspect-ratio:1/1!important;border-width:3px!important;border-radius:2px!important;max-height:85px}
+.deckshell .transportRow .pitchrail{grid-column:3!important;grid-row:1!important;position:absolute!important;right:0!important;bottom:0!important;left:auto!important;width:55px!important;height:350px!important}
+.deckshell .transportRow .pitchrail input{height:288px!important}
+.deckshell .padinfo{margin:0 0 4px!important}
+.deckshell .deck-footer{font-size:9px}
+@media(max-width:1250px){.ref-left-stack,.ref-right-stack{width:41px}.deckshell .platterZone{padding:0 45px!important}.deckshell .transportRow{grid-template-columns:53px minmax(0,1fr) 47px!important;gap:4px!important}.deckshell .transportRow .roundPair button{height:49px!important;width:49px!important;min-width:49px!important;min-height:49px!important}.deckshell .transportRow .pitchrail{width:45px!important;height:285px!important}.deckshell .transportRow .pitchrail input{height:225px!important}.ref-loops{width:85px;transform:translateX(23px)}}
+</style><style id="app-deck-photo-alignment-v8">
+/* Precise deck architecture derived from supplied controller photograph: compact, hardware-style */
+.deckshell{position:relative!important;overflow:hidden!important;padding:4px 8px 5px!important;min-height:0!important}
+.deckshell .utility{min-height:24px!important}
+.deckshell .ref-left-stack{top:88px!important;left:6px!important;gap:12px!important;width:49px!important}
+.deckshell .ref-right-stack{top:90px!important;right:5px!important;gap:14px!important;width:50px!important}
+.deckshell .ref-loops{transform:translateX(35px)!important;gap:5px!important}
+.deckshell .ref-loops button{width:43px!important;height:37px!important}
+.deckshell .deckwave{height:24px!important;margin:3px 0!important}
+.deckshell .platterZone{padding:0 52px!important;margin:12px 0 0!important;min-height:0!important;flex:0 0 auto!important}
+.deckshell .platterZone .jog{width:100%!important;max-width:490px!important;margin:0 auto!important;aspect-ratio:1!important;box-shadow:0 0 0 6px #202429,0 0 0 10px #777b82,0 2px 15px #000c!important}
+.deckshell .deck-footer{margin-top:5px!important}
+.deckshell .transportRow{display:grid!important;grid-template-columns:65px minmax(0,1fr) 54px!important;gap:7px!important;min-height:177px!important;margin:0!important;align-items:end!important}
+.deckshell .transportRow .roundPair{grid-column:1!important;grid-row:1!important;justify-content:flex-end!important;gap:12px!important;padding-bottom:2px!important}
+.deckshell .transportRow .roundPair button{width:59px!important;height:59px!important;min-width:59px!important;min-height:59px!important;font-weight:bold!important}
+.deckshell .transportRow .pad-bank{grid-column:2!important;grid-row:1!important;min-width:0!important;align-self:end!important}
+.deckshell .pad-modes{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important;margin-bottom:8px!important}
+.deckshell .pad-modes button{padding:5px 1px!important;font-size:7px!important;min-width:0!important;border-radius:2px!important}
+.deckshell .pad-modes button:nth-child(2){border-color:#f0a526!important;color:#f0a526!important}
+.deckshell .pad-modes button:nth-child(3){border-color:#33bbf8!important;color:#33bbf8!important}
+.deckshell .pad-modes button:nth-child(4){border-color:#e34b4b!important;color:#e34b4b!important}
+.deckshell .padinfo{display:flex;justify-content:space-between;align-items:center;height:14px!important}
+.deckshell .clear-small{background:#16191e;color:#c2c7cf;font-size:7px;padding:1px 5px;border:1px solid #59636f}
+.deckshell .pads{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}
+.deckshell .pads button{aspect-ratio:1/1!important;height:auto!important;max-height:none!important;min-width:0!important;border:3px solid var(--pad)!important;border-radius:3px!important;background:linear-gradient(135deg,#26282e,#0b0d0f)!important;font-size:12px!important}
+.deckshell .transportRow .pitchrail{grid-column:3!important;grid-row:1!important;right:0!important;bottom:0!important;top:auto!important;left:auto!important;height:305px!important;width:51px!important;padding:3px 0!important}
+.deckshell .transportRow .pitchrail input{height:247px!important;width:31px!important}
+.deckshell .padinfo,.deckshell .pad-modes{position:relative;z-index:1}
+@media(min-width:1400px){.deckshell .transportRow{grid-template-columns:72px minmax(0,1fr) 59px!important;min-height:208px!important}.deckshell .transportRow .roundPair button{width:66px!important;height:66px!important}.deckshell .transportRow .pitchrail{height:355px!important;width:56px!important}.deckshell .transportRow .pitchrail input{height:296px!important}}
+@media(max-width:1050px){.deckshell .platterZone{padding:0 40px!important}.deckshell .transportRow{grid-template-columns:49px minmax(0,1fr) 43px!important;gap:4px!important}.deckshell .transportRow .roundPair button{width:46px!important;height:46px!important;min-width:46px!important;min-height:46px!important}.deckshell .transportRow .pitchrail{height:260px!important;width:42px!important}.deckshell .transportRow .pitchrail input{height:204px!important}.deckshell .pads{gap:4px!important}.deckshell .ref-left-stack,.deckshell .ref-right-stack{width:38px!important}}
+</style><style id="v9-lower-hardware-fit">
+/* Reference placement: widen hardware rails, bring all lower controls to bottom */
+.deckshell{position:relative!important;display:flex!important;flex-direction:column!important;padding:5px 10px 7px!important;min-height:780px!important}
+.deckshell .platterZone{flex:0 0 auto!important;padding:0 76px!important;margin:5px 0 0!important}
+.deckshell .platterZone .jog{max-width:430px!important;margin:0 auto!important}
+.deckshell .ref-left-stack{width:67px!important;left:8px!important;top:93px!important;gap:9px!important}
+.deckshell .ref-right-stack{width:64px!important;right:8px!important;top:94px!important;gap:9px!important}
+.deckshell .ref-left-stack button,.deckshell .ref-right-stack button{min-height:25px!important}
+.deckshell .ref-search{margin-top:5px!important}
+.deckshell .deck-footer{margin-top:3px!important;margin-bottom:auto!important;min-height:22px!important}
+.deckshell .transportRow{margin-top:auto!important;min-height:230px!important;grid-template-columns:90px minmax(0,1fr) 67px!important;gap:9px!important;align-items:end!important;padding-bottom:1px!important}
+.deckshell .transportRow .roundPair{grid-column:1!important;grid-row:1!important;justify-content:flex-end!important;gap:17px!important;padding:0 0 6px!important}
+.deckshell .transportRow .roundPair button{width:80px!important;height:80px!important;min-width:80px!important;min-height:80px!important;font-size:17px!important}
+.deckshell .transportRow .roundPair .play{font-size:28px!important}
+.deckshell .transportRow .pad-bank{grid-column:2!important;grid-row:1!important;align-self:end!important;padding:0!important}
+.deckshell .pad-modes{margin-bottom:7px!important}
+.deckshell .pads{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:7px!important}
+.deckshell .pads button{aspect-ratio:1/1!important;max-height:none!important;height:auto!important;border-radius:3px!important}
+.deckshell .transportRow .pitchrail{grid-column:3!important;grid-row:1!important;right:0!important;bottom:0!important;top:auto!important;left:auto!important;width:64px!important;height:365px!important}
+.deckshell .transportRow .pitchrail input{height:304px!important;width:37px!important}
+@media(max-width:1280px){.deckshell{min-height:660px!important}.deckshell .platterZone{padding:0 56px!important}.deckshell .ref-left-stack,.deckshell .ref-right-stack{width:47px!important}.deckshell .transportRow{grid-template-columns:65px minmax(0,1fr) 50px!important;gap:6px!important;min-height:190px!important}.deckshell .transportRow .roundPair button{width:60px!important;height:60px!important;min-width:60px!important;min-height:60px!important}.deckshell .transportRow .pitchrail{width:49px!important;height:295px!important}.deckshell .transportRow .pitchrail input{height:233px!important}}
+</style><style id="v10-jog-center-side-spacing">
+/* Center both jogs in their deck faceplates, independent of side control rails. */
+.deckshell .platterZone{display:flex!important;align-items:center!important;justify-content:center!important;padding:0!important;width:100%!important;margin:9px 0 0!important}
+.deckshell .platterZone .jog{width:min(72%,430px)!important;max-width:430px!important;margin:0 auto!important;flex:0 0 auto!important}
+.deckshell .ref-left-stack{top:112px!important;left:8px!important;display:flex!important;flex-direction:column!important;align-items:center!important;width:67px!important;gap:0!important}
+.deckshell .ref-loops{margin-bottom:30px!important}
+.deckshell .ref-left-stack>button:nth-child(2){margin-top:33px!important}
+.deckshell .ref-left-stack>button:nth-child(3){margin-top:39px!important}
+.deckshell .ref-left-stack>button:nth-child(4){margin-top:54px!important}
+.deckshell .ref-search{margin-top:39px!important;row-gap:10px!important}
+.deckshell .ref-search b{margin-top:7px!important}
+.deckshell .ref-right-stack{top:112px!important}
+@media(max-width:1280px){.deckshell .platterZone .jog{width:min(76%,360px)!important}.deckshell .ref-left-stack{width:47px!important}.deckshell .ref-loops{margin-bottom:16px!important}.deckshell .ref-left-stack>button:nth-child(2){margin-top:18px!important}.deckshell .ref-left-stack>button:nth-child(3){margin-top:21px!important}.deckshell .ref-left-stack>button:nth-child(4){margin-top:30px!important}.deckshell .ref-search{margin-top:25px!important}}
+</style><style id="right-side-v11">
+.deckshell .ref-right-stack{width:78px!important;right:2px!important;top:88px!important;gap:6px!important;align-items:center!important}
+.deckshell .ref-right-stack label{font-size:9px!important;line-height:1.18!important;text-align:center!important;color:#e1e2e5!important;max-width:75px!important}
+.deckshell .ref-right-stack .rotary-shell{width:45px;height:45px;position:relative;border:1px solid #454c54;border-radius:50%;background:radial-gradient(circle at 32% 25%,#747980,#252931 48%,#080a0e 72%);box-shadow:0 2px 5px #000c, inset 0 2px 3px #ffffff30;margin:2px auto 5px}
+.deckshell .ref-right-stack .rotary-shell::after{content:"";position:absolute;top:5px;left:21px;width:3px;height:14px;background:#fff;box-shadow:0 0 4px #fff7;transform:rotate(-25deg);transform-origin:50% 17px;pointer-events:none}
+.deckshell .ref-right-stack .rotary-shell input{width:100%!important;height:100%!important;opacity:.02;position:absolute;inset:0;cursor:ew-resize;z-index:2}
+.deckshell .ref-right-stack button.vinyl-blue{min-height:37px!important;width:65px!important;color:#28b5ff!important;border:3px solid #263c54!important;box-shadow:inset 0 0 0 2px #008ded,0 1px 4px #000!important;background:#070e19!important;font-weight:800!important;font-size:12px!important}
+.deckshell .ref-right-stack .sync-label{margin-top:23px!important}
+.deckshell .ref-right-stack .sync-duo{display:flex;gap:4px;background:#101318;border:1px solid #454951;border-radius:25px;padding:4px 2px;min-width:92px;justify-content:center;transform:translateX(-6px)}
+.deckshell .ref-right-stack .sync-duo button{width:41px!important;height:41px!important;min-height:41px!important;border-radius:50%!important;padding:0!important;font-size:9px!important;font-weight:800!important;border:3px solid #eee!important;color:#fff!important;background:#15191d!important}
+.deckshell .ref-right-stack .sync-duo button:last-child{border-color:#f5b52e!important;color:#f6c15d!important}
+.deckshell .ref-right-stack .master-tempo-label{margin-top:65px!important}
+.deckshell .ref-right-stack button.master-tempo-led{width:37px!important;height:37px!important;min-height:37px!important;padding:0!important;border-radius:50%!important;border:3px solid #42464d!important;background:radial-gradient(circle at 40% 35%,#5b6068,#131519 60%)!important;display:flex;align-items:center;justify-content:center}
+.deckshell .ref-right-stack .master-tempo-led span{width:12px;height:12px;border-radius:50%;background:#a52029;box-shadow:0 0 5px #bd1118}
+.deckshell .ref-right-stack .master-tempo-led[aria-pressed=true] span{background:#ff2429;box-shadow:0 0 12px #fb242a}
+.deckshell .platterZone{padding-left:76px!important;padding-right:84px!important}
+@media(max-width:1280px){.deckshell .ref-right-stack{width:58px!important;right:2px!important}.deckshell .ref-right-stack .sync-duo{min-width:76px;gap:1px;transform:translateX(-5px)}.deckshell .ref-right-stack .sync-duo button{width:34px!important;height:34px!important;min-height:34px!important;font-size:7px!important}.deckshell .platterZone{padding-left:56px!important;padding-right:60px!important}}
+</style><style id="pro-hardware-faders-v12">
+/* Custom hardware fader assemblies retain native range inputs and Web Audio handlers */
+.deckshell .transportRow .pitchrail{background:linear-gradient(90deg,#171a1e,#3c424a 49%,#111316)!important;border:2px solid #555d66!important;box-shadow:inset 0 3px 8px #000c,0 2px 4px #0008!important;border-radius:6px!important;overflow:visible!important}
+.deckshell .transportRow .pitchrail input{appearance:none!important;-webkit-appearance:none!important;writing-mode:vertical-lr!important;direction:rtl!important;background:linear-gradient(90deg,transparent 43%,#050506 43% 57%,transparent 57%)!important;border:1px solid #4e545c!important;cursor:ns-resize!important}
+.deckshell .transportRow .pitchrail input::-webkit-slider-thumb{appearance:none!important;-webkit-appearance:none!important;width:43px!important;height:19px!important;border-radius:3px!important;border:2px solid #aeb2b7!important;background:repeating-linear-gradient(0deg,#aeb5be 0 2px,#6f7782 2px 4px)!important;box-shadow:0 3px 8px #000d,inset 0 2px 2px #fff9!important}
+.deckshell .transportRow .pitchrail input::-moz-range-thumb{width:43px;height:19px;border-radius:3px;border:2px solid #b0b6bd;background:repeating-linear-gradient(0deg,#aeb5be 0 2px,#6f7782 2px 4px)}
+.channel .chFader{appearance:none!important;-webkit-appearance:none!important;writing-mode:vertical-lr!important;direction:rtl!important;width:32px!important;height:164px!important;background:linear-gradient(90deg,#3c4249 0 42%,#050607 42% 58%,#333840 58%)!important;border:1px solid #56606b!important;border-radius:3px!important;margin:9px auto!important;cursor:ns-resize!important}
+.channel .chFader::-webkit-slider-thumb{appearance:none!important;-webkit-appearance:none!important;width:41px!important;height:22px!important;background:repeating-linear-gradient(0deg,#e4e8eb 0 3px,#818990 3px 5px)!important;border:2px solid #c3c8ce!important;border-radius:3px!important;box-shadow:0 2px 5px #000c!important}
+.channel .chFader::-moz-range-thumb{width:41px;height:22px;border:2px solid #c3c8ce;border-radius:3px;background:repeating-linear-gradient(0deg,#e4e8eb 0 3px,#818990 3px 5px)}
+.crossSection #cross{appearance:none!important;-webkit-appearance:none!important;width:min(90%,340px)!important;height:23px!important;margin:10px auto 15px!important;display:block!important;border:1px solid #5f646e!important;border-radius:4px!important;background:linear-gradient(0deg,#383e46 0 38%,#060809 38% 62%,#383e46 62%)!important;cursor:ew-resize!important}
+.crossSection #cross::-webkit-slider-thumb{appearance:none!important;-webkit-appearance:none!important;height:34px!important;width:24px!important;border-radius:4px!important;border:2px solid #bbbfc4!important;background:repeating-linear-gradient(90deg,#d3d7dc 0 3px,#888f99 3px 5px)!important;box-shadow:0 3px 6px #000b!important}
+.crossSection #cross::-moz-range-thumb{height:34px;width:24px;border-radius:4px;border:2px solid #bbbfc4;background:repeating-linear-gradient(90deg,#d3d7dc 0 3px,#888f99 3px 5px)}
+.crossSection{padding-bottom:10px!important}.channel .knobWrap:last-of-type label{font-size:9px}
+</style></head><body><header><div><h1>G<span style="color:#ed1737">//</span>BMN: <em>SIGNAL DJ</em></h1><div class="caption">CLUB CONSOLE / APP V12 · PRO HARDWARE FADERS</div></div><div class="chip">WORKING PROTOTYPE · NOT CLUB READY</div></header><main><div class="import"><label for="files">LOCAL MUSIC LIBRARY</label><input id="files" type="file" multiple accept="audio/*,.mp3,.wav,.flac,.aiff,.m4a"><input id="search" type="search" placeholder="Search imported music"><div class="tracks" id="tracks"><span class="tiny">Choose songs from Desktop or external drive</span></div><button id="more" class="smallbtn">SHOW C + D</button></div><div class="console"><section id="left" class="deck"><div class="topstrip"><strong>DECK A</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section><section class="mixer"><div class="display"><div class="dhead"><b>G//BMN: CLUB CONTROL</b><span>4-CHANNEL MIXER · LOCAL AUDIO</span></div><canvas id="screen" width="500" height="70"></canvas><div class="dtracks"><span id="labelA">A: NO TRACK</span><span id="labelB">B: NO TRACK</span></div></div><div class="mixbody" id="mixbody"></div><div class="crossSection"><label>CROSSFADER A/C ↔ B/D</label><input type="range" id="cross" min="0" max="100" value="50"><div class="controls"><label>MASTER <input id="master" type="range" min="0" max="100" value="65"></label><button id="stop">STOP ALL</button></div><div class="status" id="status" role="status">Load audio files to start.</div></div></section><section id="right" class="deck right"><div class="topstrip"><strong>DECK B</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section></div><p class="notes">Rebuilt from the layout principles of your reference photos: two large decks, side tempo faders, round CUE/PLAY buttons, 16 pads and central four-channel mixer. Play, seek, jog nudging, faders, three-band EQ, filters and hot cues have functional code. Automatic BPM, true beatgrids, scratching, stems, FX, booth/headphone routing and hardware integration are not implemented. Load only music you are authorized to play. Audio stays local to your browser session.</p><a href="apps.html" style="color:#ff9eaa">← DIGITAL UNIVERSE</a></main>
+<script>
+(()=>{'use strict';
+window.addEventListener('error',e=>{const el=document.getElementById('status');if(el)el.textContent='JavaScript error: '+e.message});const $=id=>document.getElementById(id),list=[],D={};let ctx,master;const fmt=x=>Number.isFinite(x)?String(Math.floor(x/60)).padStart(2,'0')+':'+String(Math.floor(x%60)).padStart(2,'0'):'00:00';const status=x=>$('status').textContent=x;
+for(const k of ['A','B','C','D']){const host=k==='A'||k==='C'?'left':'right',el=document.createElement('div');el.className='deckshell deck-'+k;if(k==='C'||k==='D')el.classList.add('hidden');el.innerHTML='<div class="utility"><b>DECK '+k+'</b><button type="button" id="loop-'+k+'">LOOP 4B</button><button type="button" id="loopoff-'+k+'">EXIT LOOP</button><span id="bpm-'+k+'">BPM: MANUAL 128</span></div><canvas class="deckwave" id="wave-'+k+'" width="500" height="44"></canvas><div class="deck-control-strip"><div class="upper-left"><button type="button" class="smallbtn" id="in-'+k+'">IN / CUE</button><button type="button" class="smallbtn" id="out-'+k+'">OUT</button><button type="button" class="smallbtn" id="reloop-'+k+'">RELOOP</button><button type="button" class="smallbtn" id="slip-'+k+'">SLIP</button><button type="button" class="smallbtn" id="reverse-'+k+'">REV</button></div><div class="upper-right"><button type="button" class="smallbtn" id="sync-'+k+'">BEAT SYNC</button><button type="button" class="smallbtn" id="keylock-'+k+'">KEY LOCK</button><button type="button" class="smallbtn" id="tempreset-'+k+'">TEMPO RESET</button></div></div><div class="ref-tools"><div class="ref-left-stack"><div class="ref-loops"><button type="button" id="r-in-'+k+'">IN / CUE</button><button type="button" id="r-out-'+k+'">OUT</button></div><button type="button" id="r-slip-'+k+'">SLIP</button><button type="button" id="r-reverse-'+k+'">REV</button><button type="button" id="r-shift-'+k+'">SHIFT</button><div class="ref-search"><b>TRACK SEARCH</b><button type="button" id="r-trackprev-'+k+'">◀◀</button><button type="button" id="r-tracknext-'+k+'">▶▶</button><b>SEARCH</b><button type="button" id="r-seekback-'+k+'">◀</button><button type="button" id="r-seekforward-'+k+'">▶</button></div></div><div class="ref-right-stack"><label>VINYL SPEED ADJUST</label><div class="rotary-shell"><input aria-label="Vinyl speed adjustment" id="r-vspeed-'+k+'" type="range" min="0" max="100" value="50"></div><label>JOG MODE</label><button type="button" class="vinyl-blue" id="r-vinyl-'+k+'">VINYL</button><label>JOG ADJUST</label><div class="rotary-shell"><input aria-label="Jog adjust" id="r-jogadjust-'+k+'" type="range" min="0" max="100" value="50"></div><label class="sync-label">BEAT SYNC</label><div class="sync-duo"><button type="button" id="r-sync-'+k+'">SYNC</button><button type="button" id="r-master-'+k+'">MASTER</button></div><label class="master-tempo-label">MASTER TEMPO</label><button type="button" class="master-tempo-led" id="r-mtempo-'+k+'" aria-pressed="false"><span></span></button></div></div><div class="deck-upper-tools"><button type="button" class="smallbtn" id="jumpback-'+k+'">− BEAT JUMP</button><button type="button" class="smallbtn" id="jumpforward-'+k+'">+ BEAT JUMP</button><button type="button" class="smallbtn" id="vinyl-'+k+'" aria-pressed="true">VINYL MODE</button></div><div class="platterZone"><div class="jog" id="jog-'+k+'" tabindex="0"><div class="jogRing"></div><div class="platterMark"></div><div class="centerdisc"><b id="clock-'+k+'">00:00</b><small>DECK '+k+'</small></div></div></div><div class="deck-footer"><label>LOAD <input type="file" id="file-'+k+'" accept="audio/*"></label><span id="name-'+k+'">NO TRACK</span><label>BPM <input id="manual-'+k+'" type="number" min="60" max="220" value="128" style="width:60px"></label></div><div class="transportRow"><div class="roundPair"><button type="button" class="cue" id="cue-'+k+'">CUE</button><button type="button" class="play" id="play-'+k+'">▶</button></div><div class="pad-bank"><div class="pad-modes"><button type="button" class="smallbtn active" id="padmode-'+k+'">HOT CUE</button><button type="button" class="smallbtn" id="beatloop-'+k+'">BEAT LOOP</button><button type="button" class="smallbtn" id="sliploop-'+k+'">SLIP LOOP</button><button type="button" class="smallbtn" id="beatjump-'+k+'">BEAT JUMP</button></div><div class="padinfo">HOT CUE <button type="button" class="clear-small" id="padclear-'+k+'">DELETE CUES</button></div><div class="pads" id="pads-'+k+'"></div></div><div class="pitchrail"><label>TEMPO</label><input id="speed-'+k+'" type="range" min="80" max="120" value="100" orient="vertical"><output id="speedval-'+k+'">0%</output></div></div><audio id="audio-'+k+'"></audio>';$(host).appendChild(el);const d=D[k]={audio:$('audio-'+k),url:null,source:null,gain:null,filters:[],cues:Array(8).fill(null),loop:null,shell:el,analyser:null};for(let i=0;i<8;i++){let btn=document.createElement('button');btn.type='button';btn.textContent=i+1;btn.style.setProperty('--pad',['#f34348','#4ac0f5','#a8d154','#a58bff'][i%4]);btn.addEventListener('click',e=>{if(!d.audio.src)return;if(e.shiftKey){d.cues[i]=null;btn.classList.remove('set')}else if(d.cues[i]===null){d.cues[i]=d.audio.currentTime;btn.classList.add('set')}else d.audio.currentTime=d.cues[i]});$('pads-'+k).appendChild(btn)}
+const chan=document.createElement('div');chan.className='channel';chan.innerHTML='<b>CH '+k+'</b><div class="ch-vu" aria-label="Channel '+k+' signal level"><i id="chvu-'+k+'"></i></div>'+['TRIM','HI','MID','LOW','FILTER'].map(n=>'<div class="knobWrap"><label>'+n+'</label><div class="knob"></div><input id="'+n+'-'+k+'" aria-label="'+n+' channel '+k+'" type="range" min="'+(n==='FILTER'?-100:n==='TRIM'?0:-24)+'" max="'+(n==='FILTER'?100:n==='TRIM'?150:12)+'" value="'+(n==='TRIM'?80:0)+'"></div>').join('')+'<div class="knobWrap"><label>CHANNEL FADER</label><input class="chFader" id="level-'+k+'" type="range" min="0" max="100" value="80"></div>'; $('mixbody').appendChild(chan);
+$('file-'+k).addEventListener('change',e=>{if(e.target.files[0])load(k,e.target.files[0])});
+$('play-'+k).onclick=async()=>{if(!d.audio.src){status('Load a track into deck '+k);return}try{await init();if(d.audio.paused)await d.audio.play();else d.audio.pause()}catch(e){status('Playback error: '+e.message)}};
+$('cue-'+k).onclick=()=>{d.audio.pause();d.audio.currentTime=0};
+$('speed-'+k).oninput=e=>{d.audio.playbackRate=e.target.value/100;$('speedval-'+k).textContent=(e.target.value-100)+'%';$('bpm-'+k).textContent='BPM: '+(Number($('manual-'+k).value)*d.audio.playbackRate).toFixed(1)};
+$('manual-'+k).oninput=()=>$('speed-'+k).dispatchEvent(new Event('input'));
+$('loop-'+k).onclick=()=>{if(!Number.isFinite(d.audio.duration))return;const bpm=Number($('manual-'+k).value);if(!(bpm>0))return;d.loop=[d.audio.currentTime,Math.min(d.audio.duration,d.audio.currentTime+240/bpm)]};$('loopoff-'+k).onclick=()=>d.loop=null;
+d.audio.ontimeupdate=()=>{if(d.loop&&d.audio.currentTime>=d.loop[1]-.04)d.audio.currentTime=d.loop[0];$('clock-'+k).textContent=fmt(d.audio.currentTime)};
+d.audio.onplay=()=>{$('jog-'+k).classList.add('playing');$('play-'+k).textContent='Ⅱ'};d.audio.onpause=()=>{$('jog-'+k).classList.remove('playing');$('play-'+k).textContent='▶'};d.audio.onended=d.audio.onpause;
+let previous=null;const jog=$('jog-'+k);jog.onpointerdown=e=>{if(!d.audio.src)return;previous=e.clientY;jog.setPointerCapture(e.pointerId)};jog.onpointermove=e=>{if(previous===null)return;const dy=e.clientY-previous;previous=e.clientY;if(d.audio.paused)d.audio.currentTime=Math.max(0,Math.min(d.audio.duration||0,d.audio.currentTime-dy*.07));else d.audio.playbackRate=Math.max(.8,Math.min(1.2,Number($('speed-'+k).value)/100-dy*.004))};const release=()=>{previous=null;d.audio.playbackRate=Number($('speed-'+k).value)/100};jog.onpointerup=release;jog.onpointercancel=release;jog.onlostpointercapture=release;
+$('in-'+k).onclick=()=>{if(!d.audio.src)return;d.loopIn=d.audio.currentTime;status('Deck '+k+' loop IN set')};
+$('out-'+k).onclick=()=>{if(!d.audio.src||d.loopIn==null)return;d.loop=[d.loopIn,Math.max(d.loopIn+.05,d.audio.currentTime)];status('Deck '+k+' loop OUT set')};
+$('reloop-'+k).onclick=()=>{if(d.loop){d.audio.currentTime=d.loop[0]}else status('Set IN and OUT to create a loop')};
+$('slip-'+k).onclick=()=>status('Slip mode is not yet implemented');
+$('reverse-'+k).onclick=()=>status('Reverse playback requires a future audio-engine update');
+$('sync-'+k).onclick=()=>status('Beat sync requires analyzed beatgrids; not implemented yet');
+$('keylock-'+k).onclick=()=>status('Key lock requires pitch-preserving timestretch; not implemented yet');
+$('tempreset-'+k).onclick=()=>{$('speed-'+k).value=100;$('speed-'+k).dispatchEvent(new Event('input'))};
+for(const [name,source] of [['in','in'],['out','out'],['slip','slip'],['reverse','reverse'],['vinyl','vinyl'],['sync','sync']])$('r-'+name+'-'+k).onclick=()=>$((source==='in'?'in':source==='out'?'out':source==='slip'?'slip':source==='reverse'?'reverse':source==='vinyl'?'vinyl':'sync')+'-'+k).click();
+$('r-shift-'+k).onclick=()=>status('Hold Shift on your keyboard when selecting cue pads to clear them');
+$('r-trackprev-'+k).onclick=()=>{if(d.audio.src)d.audio.currentTime=0};
+$('r-tracknext-'+k).onclick=()=>status('Choose your next song from the music library');
+$('r-seekback-'+k).onclick=()=>{if(d.audio.src)d.audio.currentTime=Math.max(0,d.audio.currentTime-5)};
+$('r-seekforward-'+k).onclick=()=>{if(d.audio.src)d.audio.currentTime=Math.min(d.audio.duration||0,d.audio.currentTime+5)};
+$('r-mtempo-'+k).onclick=e=>{const on=e.currentTarget.getAttribute('aria-pressed')!=='true';e.currentTarget.setAttribute('aria-pressed',String(on));status('Master tempo indicator '+(on?'ON — key lock audio processing not yet implemented':'OFF'))};
+$('r-master-'+k).onclick=()=>status('Manual master-deck assignment is not connected yet');
+$('jumpback-'+k).onclick=()=>{if(d.audio.src)d.audio.currentTime=Math.max(0,d.audio.currentTime-60/Number($('manual-'+k).value)*4)};
+$('jumpforward-'+k).onclick=()=>{if(d.audio.src)d.audio.currentTime=Math.min(d.audio.duration||0,d.audio.currentTime+60/Number($('manual-'+k).value)*4)};
+$('vinyl-'+k).onclick=e=>{const state=e.currentTarget.getAttribute('aria-pressed')==='true';e.currentTarget.setAttribute('aria-pressed',String(!state));e.currentTarget.textContent=state?'VINYL OFF':'VINYL MODE'};
+$('beatloop-'+k).onclick=()=>{if(!d.audio.src)return;const bpm=Number($('manual-'+k).value)||128;d.loop=[d.audio.currentTime,Math.min(d.audio.duration||Infinity,d.audio.currentTime+240/bpm)];status('4 beat loop set on deck '+k)};
+$('sliploop-'+k).onclick=()=>status('Slip loop needs a separate underlying playhead; coming later');
+$('beatjump-'+k).onclick=()=>{if(!d.audio.src)return;d.audio.currentTime=Math.min(d.audio.duration||Infinity,d.audio.currentTime+240/(Number($('manual-'+k).value)||128));status('Jumped four beats')};
+$('padmode-'+k).onclick=()=>status('Deck '+k+' hot cues are active; additional pad modes are later features.');
+$('padclear-'+k).onclick=()=>{d.cues.fill(null);for(const p of $('pads-'+k).children)p.classList.remove('set');status('Deck '+k+' hot cues cleared.')};
+for(const n of ['TRIM','HI','MID','LOW','FILTER','level'])$(n+'-'+k).oninput=mix;
+}
+document.getElementById('status').textContent='DECKS & MIXER LOADED — choose your music';
+const side=document.createElement('aside');side.className='sidefx';side.innerHTML='<b>MASTER</b><div class="master-meter"><i id="meter"></i></div><b>FX</b><button type="button" disabled title="Coming later">BEAT FX</button><button type="button" disabled title="Coming later">CUE BUS</button><b>LIGHT SIGNAL</b><small>FUTURE</small>';$('mixbody').appendChild(side);
+async function init(){if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.connect(ctx.destination);for(const k of Object.keys(D)){const d=D[k],ac=d.audio;d.source=ctx.createMediaElementSource(ac);const low=ctx.createBiquadFilter(),mid=ctx.createBiquadFilter(),high=ctx.createBiquadFilter(),filter=ctx.createBiquadFilter();low.type='lowshelf';low.frequency.value=260;mid.type='peaking';mid.frequency.value=1100;high.type='highshelf';high.frequency.value=3800;d.filters=[low,mid,high,filter];d.gain=ctx.createGain();d.source.connect(low).connect(mid).connect(high).connect(filter).connect(d.gain).connect(master);d.analyser=ctx.createAnalyser();d.analyser.fftSize=512;d.gain.connect(d.analyser)}mix()}if(ctx.state==='suspended')await ctx.resume()}
+function mix(){if(!ctx)return;const x=Number($('cross').value)/100,t=ctx.currentTime;master.gain.setTargetAtTime(Number($('master').value)/100,t,.015);for(const k of Object.keys(D)){const d=D[k],f=d.filters,g=k==='A'||k==='C'?Math.cos(x*Math.PI/2):Math.sin(x*Math.PI/2),trim=Number($('TRIM-'+k).value)/100,vol=Number($('level-'+k).value)/100;d.gain.gain.setTargetAtTime(g*trim*vol,t,.018);f[0].gain.setTargetAtTime(Number($('LOW-'+k).value),t,.015);f[1].gain.setTargetAtTime(Number($('MID-'+k).value),t,.015);f[2].gain.setTargetAtTime(Number($('HI-'+k).value),t,.015);let v=Number($('FILTER-'+k).value);f[3].type=v<0?'lowpass':v>0?'highpass':'allpass';f[3].frequency.setTargetAtTime(v<0?20000*Math.pow(.02,-v/100):v>0?30*Math.pow(350,v/100):1000,t,.015)}}
+$('cross').oninput=mix;$('master').oninput=mix;$('stop').onclick=()=>Object.values(D).forEach(d=>d.audio.pause());
+const wave=(k,b)=>{const el=$('wave-'+k),c=el.getContext('2d'),samples=b.getChannelData(0),w=el.width,h=el.height;c.fillStyle='#030813';c.fillRect(0,0,w,h);const step=Math.max(1,Math.floor(samples.length/w));for(let i=0;i<w;i++){let peak=0;for(let j=i*step;j<Math.min(samples.length,(i+1)*step);j+=Math.max(1,Math.floor(step/30)))peak=Math.max(peak,Math.abs(samples[j]));let hh=Math.max(1,peak*h*.94);c.fillStyle=peak>.75?'#eac256':peak>.4?'#40c9ee':'#266dcb';c.fillRect(i,(h-hh)/2,1,hh)}};
+async function load(k,file){const d=D[k];d.audio.pause();if(d.url)URL.revokeObjectURL(d.url);d.url=URL.createObjectURL(file);d.audio.src=d.url;d.audio.load();d.cues=Array(8).fill(null);d.loop=null;for(const b of $('pads-'+k).children)b.classList.remove('set');$('name-'+k).textContent=file.name;status('Deck '+k+': '+file.name);if(k==='A'||k==='B')$('label'+k).textContent=k+': '+file.name;try{const ac=new (window.AudioContext||window.webkitAudioContext)();const decoded=await ac.decodeAudioData(await file.arrayBuffer());wave(k,decoded);await ac.close()}catch(e){status('Track loaded; waveform unavailable for this format')}}
+$('files').onchange=e=>{for(const f of e.target.files)if(!list.some(x=>x.name===f.name&&x.size===f.size))list.push(f);render();e.target.value=''};$('search').oninput=render;
+function render(){const host=$('tracks');host.replaceChildren();const q=$('search').value.toLowerCase();for(const f of list.filter(x=>x.name.toLowerCase().includes(q))){let group=document.createElement('span');group.className='trackitem';group.append(document.createTextNode(f.name+' '));for(const k of ['A','B','C','D']){const b=document.createElement('button');b.textContent=k;b.title='Load to deck '+k;b.onclick=()=>load(k,f);group.append(b)}host.append(group)}if(!host.children.length)host.textContent=list.length?'No matching tracks':'Choose music files above'};
+$('more').onclick=()=>{const x=D.C.shell.classList.toggle('hidden');D.D.shell.classList.toggle('hidden');$('more').textContent=x?'SHOW C + D':'HIDE C + D'};
+function frame(){for(const k of Object.keys(D)){const d=D[k],bar=$('chvu-'+k);if(!bar)continue;if(!d.analyser||d.audio.paused){bar.style.height='0%';continue}const vals=new Uint8Array(d.analyser.fftSize);d.analyser.getByteTimeDomainData(vals);let power=0;for(const v of vals){let n=(v-128)/128;power+=n*n}bar.style.height=Math.min(100,Math.round(Math.sqrt(power/vals.length)*240))+'%'}const c=$('screen'),g=c.getContext('2d'),w=c.width,h=c.height;g.fillStyle='#03101c';g.fillRect(0,0,w,h);let sum=0;for(const k of ['A','B']){const d=D[k];if(!d.analyser||d.audio.paused)continue;const buf=new Uint8Array(d.analyser.frequencyBinCount);d.analyser.getByteFrequencyData(buf);const half=h/2;for(let i=0;i<w;i+=3){const val=buf[Math.floor(i/w*buf.length)]/255;const height=val*(half-3);g.fillStyle=k==='A'?'#3dcefa':'#f4a542';const base=k==='A'?half/2:half*1.5;g.fillRect(i,base-height/2,2,height)}sum+=buf.reduce((a,b)=>a+b,0)/buf.length}$('meter').style.height=Math.min(100,sum/2.4)+'%';requestAnimationFrame(frame)}frame();
+})();
+</script></body></html>
