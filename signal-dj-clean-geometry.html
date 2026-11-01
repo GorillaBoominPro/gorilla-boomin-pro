@@ -99,13 +99,14 @@ $('cue-'+k).onclick=()=>{if(!d.audio.src)return;if(d.audio.paused){d.mainCue=d.a
 
 $('speed-'+k).oninput=e=>{d.audio.playbackRate=e.target.value/100;$('speedval-'+k).textContent=(e.target.value-100)+'%';$('bpm-'+k).textContent='BPM: '+(Number($('manual-'+k).value)*d.audio.playbackRate).toFixed(1)};
 $('manual-'+k).oninput=()=>$('speed-'+k).dispatchEvent(new Event('input'));
-$('loop-'+k).onclick=()=>{if(!Number.isFinite(d.audio.duration))return;const bpm=Number($('manual-'+k).value);if(!(bpm>0))return;d.loop=[d.audio.currentTime,Math.min(d.audio.duration,d.audio.currentTime+240/bpm)]};$('loopoff-'+k).onclick=()=>d.loop=null;
+d.savedLoop=null;
+$('loop-'+k).onclick=()=>{if(!Number.isFinite(d.audio.duration))return;const bpm=Number($('manual-'+k).value)||128;const start=d.audio.currentTime;d.loop=[start,Math.min(d.audio.duration,start+240/bpm)];d.savedLoop=[...d.loop];status('Deck '+k+' 4-beat loop active')};$('loopoff-'+k).onclick=()=>{if(d.loop)d.savedLoop=[...d.loop];d.loop=null;status('Deck '+k+' loop exited')};
 d.audio.ontimeupdate=()=>{if(d.loop&&d.audio.currentTime>=d.loop[1]-.04)d.audio.currentTime=d.loop[0];$('clock-'+k).textContent=fmt(d.audio.currentTime)};
 d.audio.onplay=()=>{$('jog-'+k).classList.add('playing');$('play-'+k).textContent='Ⅱ'};d.audio.onpause=()=>{$('jog-'+k).classList.remove('playing');$('play-'+k).textContent='▶'};d.audio.onended=d.audio.onpause;
 let previous=null;const jog=$('jog-'+k);jog.onpointerdown=e=>{if(!d.audio.src)return;previous=e.clientY;jog.setPointerCapture(e.pointerId)};jog.onpointermove=e=>{if(previous===null)return;const dy=e.clientY-previous;previous=e.clientY;if(d.audio.paused)d.audio.currentTime=Math.max(0,Math.min(d.audio.duration||0,d.audio.currentTime-dy*.07));else d.audio.playbackRate=Math.max(.8,Math.min(1.2,Number($('speed-'+k).value)/100-dy*.004))};const release=()=>{previous=null;d.audio.playbackRate=Number($('speed-'+k).value)/100};jog.onpointerup=release;jog.onpointercancel=release;jog.onlostpointercapture=release;
 $('in-'+k).onclick=()=>{if(!d.audio.src)return;d.loopIn=d.audio.currentTime;status('Deck '+k+' loop IN set')};
-$('out-'+k).onclick=()=>{if(!d.audio.src||d.loopIn==null)return;d.loop=[d.loopIn,Math.max(d.loopIn+.05,d.audio.currentTime)];status('Deck '+k+' loop OUT set')};
-$('reloop-'+k).onclick=()=>{if(d.loop){d.audio.currentTime=d.loop[0]}else status('Set IN and OUT to create a loop')};
+$('out-'+k).onclick=()=>{if(!d.audio.src||d.loopIn==null)return;d.loop=[d.loopIn,Math.max(d.loopIn+.05,d.audio.currentTime)];d.savedLoop=[...d.loop];status('Deck '+k+' loop OUT set')};
+$('reloop-'+k).onclick=()=>{const target=d.loop||d.savedLoop;if(target){d.loop=[...target];d.audio.currentTime=d.loop[0];status('Deck '+k+' loop recalled')}else status('Set a loop first')};
 $('slip-'+k).onclick=()=>status('Slip mode is not yet implemented');
 $('reverse-'+k).onclick=()=>status('Reverse playback requires a future audio-engine update');
 $('sync-'+k).onclick=()=>status('Beat sync requires analyzed beatgrids; not implemented yet');
@@ -113,7 +114,7 @@ $('keylock-'+k).onclick=()=>status('Key lock requires pitch-preserving timestret
 $('reset-ring-'+k).onclick=()=>$('tempreset-'+k).click();
 $('tempreset-'+k).onclick=()=>{$('speed-'+k).value=100;$('speed-'+k).dispatchEvent(new Event('input'))};
 for(const [name,source] of [['in','in'],['out','out'],['slip','slip'],['reverse','reverse'],['vinyl','vinyl'],['sync','sync']])$('r-'+name+'-'+k).onclick=()=>$((source==='in'?'in':source==='out'?'out':source==='slip'?'slip':source==='reverse'?'reverse':source==='vinyl'?'vinyl':'sync')+'-'+k).click();
-$('r-loopcutter-'+k).onclick=()=>{if(!d.audio.src)return;const bpm=Number($('manual-'+k).value)||128;const beats= d.loop&&Math.abs((d.loop[1]-d.loop[0])*bpm/60-4)<.4?8:4;d.loop=[d.audio.currentTime,Math.min(d.audio.duration||Infinity,d.audio.currentTime+beats*60/bpm)];status('Deck '+k+' '+beats+'-beat loop cutter')};
+$('r-loopcutter-'+k).onclick=()=>{if(!d.audio.src)return;const bpm=Number($('manual-'+k).value)||128;const beats= d.loop&&Math.abs((d.loop[1]-d.loop[0])*bpm/60-4)<.4?8:4;d.loop=[d.audio.currentTime,Math.min(d.audio.duration||Infinity,d.audio.currentTime+beats*60/bpm)];d.savedLoop=[...d.loop];status('Deck '+k+' '+beats+'-beat loop cutter')};
 $('r-shift-'+k).onclick=()=>status('Hold Shift on your keyboard when selecting cue pads to clear them');
 $('r-trackprev-'+k).onclick=()=>{if(d.audio.src)d.audio.currentTime=0};
 $('r-tracknext-'+k).onclick=()=>status('Choose your next song from the music library');
