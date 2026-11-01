@@ -31,7 +31,7 @@
 .deckshell .direction-label{position:absolute;top:47%;left:0;color:#ddd;font-size:8px}
 .deckshell .ref-left-stack .reverse-red-square{position:absolute;top:50%;left:0;width:58px;height:34px;padding:0;border:3px solid #41464d;border-radius:3px;background:linear-gradient(#f78b83,#d91c29);color:#111;font-weight:800}
 .deckshell .ref-left-stack #r-shift-A,.deckshell .ref-left-stack #r-shift-B,.deckshell .ref-left-stack #r-shift-C,.deckshell .ref-left-stack #r-shift-D{position:absolute;top:69%;left:0;width:56px;margin:0;font-size:9px}
-.deckshell .ref-search{position:absolute;top:78%;left:0;width:58px;display:grid;grid-template-columns:repeat(2,1fr);gap:4px}
+.deckshell .ref-search{position:absolute;top:75%;left:0;width:58px;display:grid;grid-template-columns:repeat(2,1fr);gap:4px}
 .deckshell .ref-search b{grid-column:1/-1;font-size:8px;text-align:center}
 .deckshell .ref-search button{width:100%;height:27px;min-height:0;padding:2px;font-size:10px}
 .deckshell .ref-right-stack{position:absolute;right:1%;top:11%;width:14%;height:60%;display:flex;flex-direction:column;align-items:center;gap:7px;z-index:4}
@@ -44,8 +44,8 @@
 .deckshell .ref-right-stack .sync-duo{display:flex;gap:3px;align-items:center;justify-content:center;min-width:83px}
 .deckshell .ref-right-stack .sync-duo button{width:38px;height:38px;min-height:38px;border-radius:50%;padding:0;font-size:8px;border:3px solid white;background:#202429;color:#fff}
 .deckshell .ref-right-stack .sync-duo button:last-child{border-color:#ecae24;color:#ffc648}
-.deckshell .ref-right-stack .master-tempo-label{position:absolute;top:78%;margin:0}
-.deckshell .ref-right-stack .master-tempo-led{position:absolute;top:85%;width:33px;height:33px;min-height:33px;border-radius:50%;padding:0;background:#14171a;border:3px solid #474b52;display:grid;place-items:center}
+.deckshell .ref-right-stack .master-tempo-label{position:absolute;top:73%;margin:0}
+.deckshell .ref-right-stack .master-tempo-led{position:absolute;top:80%;width:33px;height:33px;min-height:33px;border-radius:50%;padding:0;background:#14171a;border:3px solid #474b52;display:grid;place-items:center}
 .deckshell .ref-right-stack .master-tempo-led span{width:11px;height:11px;border-radius:50%;background:#fb282c;box-shadow:0 0 7px red}
 .deckshell .transportRow{position:absolute;left:2%;right:2%;bottom:1.7%;height:33%;margin:0;padding:0;min-height:0;display:grid;grid-template-columns:18% minmax(0,1fr) 13%;column-gap:1.5%;align-items:end;overflow:visible}
 .deckshell .transportRow .roundPair{position:relative;grid-column:1;grid-row:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:10px;padding:0;margin:0}
@@ -62,7 +62,7 @@
 .deckshell .transportRow .pitchrail{grid-column:3;grid-row:1;position:absolute;bottom:0;right:0;left:auto;top:auto;height:145%;width:100%;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;padding:4px 0;background:repeating-linear-gradient(to bottom,#34383d 0 9px,#e4e6e799 9px 10px,#34383d 10px 15px);border:2px solid #5a6068;border-radius:5px}
 .deckshell .transportRow .pitchrail label,.deckshell .transportRow .pitchrail output{font-size:9px}
 .deckshell .transportRow .pitchrail input{appearance:slider-vertical;writing-mode:vertical-lr;direction:rtl;width:28px;height:82%;accent-color:#d9dee5;cursor:ns-resize}
-.deckshell .transportRow .tempo-side-hardware{position:absolute;right:15%;bottom:46%;display:flex;align-items:center;flex-direction:column-reverse;gap:4px;z-index:6}
+.deckshell .transportRow .tempo-side-hardware{position:absolute;right:15%;bottom:50%;display:flex;align-items:center;flex-direction:column-reverse;gap:4px;z-index:6}
 .deckshell .tempo-side-hardware .reset-ring{width:32px;height:32px;padding:0;border-radius:50%;background:#22272b;border:3px solid #555b61;display:grid;place-items:center}
 .deckshell .tempo-side-hardware .reset-ring span{width:13px;height:9px;background:#87ef07;border-radius:6px;box-shadow:0 0 8px #81f000}
 .deckshell .tempo-side-hardware label{font-size:8px;text-align:center}
@@ -75,6 +75,16 @@
 .deckshell .transportRow .pad-bank{align-self:end;min-width:0}
 .deckshell .pads button{box-sizing:border-box;min-height:0}
 .deckshell .transportRow .roundPair{padding-bottom:2px}
+
+/* Keep the left search cluster above the fixed lower bank, and reserve ring clearance. */
+.deckshell .ref-left-stack{pointer-events:none}
+.deckshell .ref-left-stack button,.deckshell .ref-left-stack input{pointer-events:auto}
+.deckshell .ref-right-stack{pointer-events:none}
+.deckshell .ref-right-stack button,.deckshell .ref-right-stack input{pointer-events:auto}
+.deckshell .transportRow .pad-bank{position:relative;z-index:5}
+.deckshell .transportRow .roundPair{position:relative;z-index:5}
+.deckshell .transportRow .tempo-side-hardware{z-index:6}
+.deckshell .transportRow .pad-modes button{white-space:nowrap;overflow:hidden;text-overflow:clip}
 </style></head><body><header><div><h1>G<span style="color:#ed1737">//</span>BMN: <em>SIGNAL DJ</em></h1><div class="caption">CLUB CONSOLE / PAD CLIPPING REPAIR</div></div><div class="chip">WORKING PROTOTYPE · NOT CLUB READY</div></header><main><div class="import"><label for="files">LOCAL MUSIC LIBRARY</label><input id="files" type="file" multiple accept="audio/*,.mp3,.wav,.flac,.aiff,.m4a"><input id="search" type="search" placeholder="Search imported music"><div class="tracks" id="tracks"><span class="tiny">Choose songs from Desktop or external drive</span></div><button id="more" class="smallbtn">SHOW C + D</button></div><div class="console"><section id="left" class="deck"><div class="topstrip"><strong>DECK A</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section><section class="mixer"><div class="display"><div class="dhead"><b>G//BMN: CLUB CONTROL</b><span>4-CHANNEL MIXER · LOCAL AUDIO</span></div><canvas id="screen" width="500" height="70"></canvas><div class="dtracks"><span id="labelA">A: NO TRACK</span><span id="labelB">B: NO TRACK</span></div></div><div class="mixbody" id="mixbody"></div><div class="crossSection"><label>CROSSFADER A/C ↔ B/D</label><input type="range" id="cross" min="0" max="100" value="50"><div class="controls"><label>MASTER <input id="master" type="range" min="0" max="100" value="65"></label><button id="stop">STOP ALL</button></div><div class="status" id="status" role="status">Load audio files to start.</div></div></section><section id="right" class="deck right"><div class="topstrip"><strong>DECK B</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section></div><p class="notes">Rebuilt from the layout principles of your reference photos: two large decks, side tempo faders, round CUE/PLAY buttons, 16 pads and central four-channel mixer. Play, seek, jog nudging, faders, three-band EQ, filters and hot cues have functional code. Automatic BPM, true beatgrids, scratching, stems, FX, booth/headphone routing and hardware integration are not implemented. Load only music you are authorized to play. Audio stays local to your browser session.</p><a href="apps.html" style="color:#ff9eaa">← DIGITAL UNIVERSE</a></main>
 <script>
 (()=>{'use strict';
