@@ -542,6 +542,15 @@ background:radial-gradient(circle at 50% 50%,#633f35 0 3px,transparent 3.4px) ce
 .mixer .a9-mic-switch.is-on .a9-mic-switch-button{background:linear-gradient(90deg,#168345 0 65%,#a5ffd0 65%)!important}
 .mixer .fx-beat-row button,.mixer .fx-freq button[data-band]{cursor:pointer!important}
 .mixer .fx-beat-row button.is-active,.mixer .fx-freq button.is-active{border-color:#65cdff!important;box-shadow:inset 0 0 8px #41a2ff,0 0 5px #339ffb!important}
+</style><style id="signal-context-info-view">
+#signal-info-view{position:fixed;z-index:9000;left:12px;bottom:12px;width:min(365px,calc(100vw - 24px));padding:12px 15px;background:linear-gradient(145deg,#1d252d,#0b1015);border:1px solid #65717e;border-left:4px solid #e4213c;border-radius:7px;box-shadow:0 5px 25px #000c;color:#dce7f0;pointer-events:auto}
+#signal-info-view .info-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px}
+#signal-info-view strong{font-size:12px;color:#fff;letter-spacing:.07em}
+#signal-info-view p{font-size:12px;line-height:1.5;color:#c6d2dd;margin:0;min-height:37px}
+#signal-info-view button{background:#293440;border:1px solid #697786;border-radius:3px;color:#e2ecf2;padding:3px 7px}
+#signal-info-view[hidden]{display:none!important}
+#signal-info-view .info-status{font-size:10px;color:#96a9b9;margin-top:6px}
+@media(max-width:650px){#signal-info-view{left:7px;bottom:7px;width:calc(100vw - 14px);padding:8px 11px}}
 </style></head><body><header><div><h1>G<span style="color:#ed1737">//</span>BMN: <em>SIGNAL DJ</em></h1><div class="caption">CLUB CONSOLE / PAD CLIPPING REPAIR</div></div><div class="chip">WORKING PROTOTYPE · NOT CLUB READY</div></header><main><div class="import"><label for="files">LOCAL MUSIC LIBRARY</label><input id="files" type="file" multiple accept="audio/*,.mp3,.wav,.flac,.aiff,.m4a"><input id="search" type="search" placeholder="Search imported music"><div class="tracks" id="tracks"><span class="tiny">Choose songs from Desktop or external drive</span></div><button id="more" class="smallbtn">SHOW C + D</button></div><div class="keyboard-hint"><b>KEYBOARD:</b> Deck A — Q Play / W Cue / A-S Beat Jump &nbsp; | &nbsp; Deck B — O Play / P Cue / K-L Beat Jump. Shortcuts pause while typing.</div><div class="console"><section id="left" class="deck"><div class="topstrip"><strong>DECK A</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section><section class="mixer"><div class="mixer-switch"><button id="toggle-mixer" type="button">HIDE MIXER · EXPAND LIBRARY</button><span id="analysis-count">IMPORT AUDIO TO ANALYZE</span></div><div class="display"><div class="dhead"><b>G//BMN: CLUB CONTROL</b><span>4-CHANNEL MIXER · LOCAL AUDIO</span></div><div class="central-screen-controls"><button type="button" data-central="library">CRATES</button><button type="button" data-central="performance">WAVES</button><button type="button" data-central="stream">STREAMING</button><button type="button" data-central="sampler">SAMPLER</button></div><div id="central-library" class="central-panel" hidden><input id="central-search" placeholder="Search imported tracks / crates"><div class="library-actions"><label>FOLDER <input id="library-folder" type="file" webkitdirectory multiple accept="audio/*"></label><label>SORT <select id="library-sort"><option value="name">NAME</option><option value="artist">ARTIST</option><option value="genre">GENRE</option><option value="bpm">BPM</option></select></label></div><div class="library-labels"><b>SONG</b><b>ARTIST</b><b>GENRE</b><b>BPM</b><b>LOAD</b></div><div id="central-list"></div></div><div id="central-sampler" class="central-panel" hidden><strong>LIVE SAMPLER · TWO BANKS</strong><p>Use the pads under either deck to trigger samples. Program steps to repeat a groove.</p><div id="sampler-bank-info">Deck A + Deck B · 16 pads per bank</div></div><div id="central-stream" class="central-panel" hidden><input id="stream-search" placeholder="Search term"><button id="stream-submit" type="button">SEARCH WEB</button><small>Opens provider search pages; no licensed deck streaming integration.</small><div id="stream-links"></div></div><canvas id="screen" width="500" height="140"></canvas><div class="dtracks"><span id="labelA">A: NO TRACK</span><span id="labelB">B: NO TRACK</span></div></div><div class="mixbody" id="mixbody"></div><div class="crossSection"><label>CROSSFADER A/C ↔ B/D</label><input type="range" id="cross" min="0" max="100" value="50"><div class="controls"><label>MASTER <input id="master" type="range" min="0" max="100" value="65"></label><button id="stop">STOP ALL</button></div><div class="status" id="status" role="status">Load audio files to start.</div></div></section><section id="right" class="deck right"><div class="topstrip"><strong>DECK B</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section></div><p class="notes">Rebuilt from the layout principles of your reference photos: two large decks, side tempo faders, round CUE/PLAY buttons, 16 pads and central four-channel mixer. Play, seek, jog nudging, faders, three-band EQ, filters and hot cues have functional code. Automatic BPM, true beatgrids, scratching, stems, FX, booth/headphone routing and hardware integration are not implemented. Load only music you are authorized to play. Audio stays local to your browser session.</p><a href="apps.html" style="color:#ff9eaa">← DIGITAL UNIVERSE</a></main>
 <script>
 (()=>{'use strict';
@@ -951,5 +960,60 @@ function frame(){for(const k of Object.keys(D)){const d=D[k],bar=$('chvu-'+k);if
   ctx2.fillStyle=playing?'#4dff99':'#586470';ctx2.beginPath();ctx2.arc(band.x,32,3,0,Math.PI*2);ctx2.fill();
  }
 }updateJogRing(k);const cv=$('wave-'+k);traceWave(cv,k,d.audio.currentTime,cv.width,cv.height);art.style.animationPlayState=d.audio.paused?'paused':'running';art.style.animationDuration=(1.8/Math.max(.1,d.audio.playbackRate))+'s'}if(masterAnalyser){const buf=new Uint8Array(masterAnalyser.fftSize);masterAnalyser.getByteTimeDomainData(buf);let power=0;for(const v of buf){const x=(v-128)/128;power+=x*x}const rms=Math.sqrt(power/buf.length);$('meter').style.height=Math.min(100,Math.round(rms*220))+'%'}else $('meter').style.height='0%';requestAnimationFrame(frame)}frame();
+})();
+</script><aside id="signal-info-view" aria-live="polite"><div class="info-top"><strong>ⓘ SIGNAL DJ · INFO VIEW</strong><button type="button" id="signal-info-hide" aria-label="Hide Info View">×</button></div><p id="signal-info-description">Move your mouse over a control to learn what it does. Select controls to test the mixer.</p><div class="info-status">Hover · keyboard focus · touch</div></aside><script id="signal-info-view-script">
+(function(){
+ const panel=document.getElementById('signal-info-view'),out=document.getElementById('signal-info-description');
+ const help={
+  'color-fx-power':'Sound Color FX enable/bypass. When ON, select an effect and turn the COLOR knob on a playing channel. The microphone switch is separate.',
+  'color-fx-parameter':'Sound Color FX PARAMETER. Drag up/down or use the mouse wheel to alter the selected effect character.',
+  'mic-toggle':'Microphone ON/OFF. Requests browser microphone access. Start with MIC LEVEL low to avoid speaker feedback.',
+  'mic-level':'Microphone input LEVEL. Drag vertically, scroll, or use arrow keys. Requires microphone permission and MIC ON.',
+  'mic-high':'Microphone HI EQ. Boost or cut high frequencies of the live microphone.',
+  'mic-low':'Microphone LOW EQ. Boost or cut bass frequencies of the live microphone.',
+  'headphone-mix':'Headphone CUE / MASTER balance. Requires separate headphone output to monitor safely.',
+  'headphone-level':'Headphone monitor volume. Start low and raise slowly. Requires a configured separate output.',
+  'cue-device':'Select a separate hardware audio output for headphone cue monitoring.',
+  'cue-enable':'Enable headphone preview on the selected separate output.',
+  'cue-level':'Additional headphone cue gain control.',
+  'beat-tap':'Tap repeatedly in time with the music to set the Beat FX tempo.',
+  'beat-effect':'Select Beat FX algorithm: ECHO, DELAY, or SPACE. These use simplified browser audio processing.',
+  'beat-channel':'Choose the channel receiving Beat FX. The channel needs to be playing.',
+  'beat-time':'Set the rhythmic Beat FX delay duration.',
+  'beat-depth':'Set Beat FX intensity, from dry to stronger effect.',
+  'beat-fx-toggle':'Beat FX ON/OFF. Enables the selected effect for the chosen channel.',
+  'beat-more':'Increase Beat FX rhythmic duration.',
+  'beat-less':'Decrease Beat FX rhythmic duration.',
+  'beat-label':'Current beat-duration display. Use left and right arrows to change it.',
+  'master':'MASTER level. Controls overall speaker output volume.',
+  'cross':'Crossfader. Left favors decks A/C and right favors B/D; center blends both.',
+  'more':'Show or hide additional decks C and D.',
+  'files':'Import local audio files into the DJ library.',
+  'stop':'Stop all playing decks.',
+  'toggle-mixer':'Hide the hardware mixer and expand the library, or restore the mixer.'
+ };
+ const titleHelp=(el)=>{
+  if(el.dataset.colorFx)return 'SOUND COLOR FX · '+el.dataset.colorFx+': Select this algorithm. Its sound is controlled by each channel COLOR knob and the PARAMETER knob; the playing channel must be audible.';
+  if(el.dataset.band)return 'BEAT FX · '+el.dataset.band+': Include or exclude this frequency band from the Beat FX send.';
+  if(el.dataset.beatValue)return 'BEAT FX · '+el.textContent.trim()+': Choose this rhythmic beat division.';
+  if(el.id && help[el.id])return help[el.id];
+  const m=(el.id||'').match(/^(TRIM|HI|MID|LOW|FILTER|level|mixcue|play|cue|sync|master|load|jog)-([ABCD])$/i);
+  if(m){const n=m[1].toUpperCase(),ch=m[2];
+   const desc={TRIM:'Input gain before EQ and channel fader.',HI:'High-frequency EQ boost/cut.',MID:'Midrange EQ boost/cut.',LOW:'Bass EQ boost/cut.',FILTER:'Channel COLOR knob. Center is neutral; turn left or right to apply the selected Sound Color FX.',LEVEL:'Channel volume fader.',MIXCUE:'Route this channel to separate headphone cue output.',PLAY:'Start or pause this deck.',CUE:'Set or return to the cue point.',SYNC:'Attempt tempo synchronization with the other deck.',MASTER:'Mark this deck as tempo master.'};
+   return 'CHANNEL '+ch+' · '+(desc[n]||n+'. Deck performance control.');
+  }
+  const label=el.getAttribute('aria-label')||el.title||el.closest('label')?.textContent?.trim();
+  if(el.disabled)return (label||el.textContent.trim()||'This control')+': Currently unavailable or visual-only; not yet connected to the audio engine.';
+  if(label)return label;
+  if(el.matches('button,input,select'))return (el.textContent||el.name||el.type||'Control').trim()+': Interactive control. Adjust and listen for its effect.';
+  return null;
+ };
+ let last=null;
+ const identify=(target)=>target.closest('button,input,select,[role="slider"],[data-color-fx],[data-band],[data-beat-value],.utility-knob,.a9-mic-switch');
+ function showFor(target){if(panel.hidden||panel.contains(target))return;const el=identify(target);if(!el||el===last)return;last=el;const msg=titleHelp(el);if(msg)out.textContent=msg}
+ document.addEventListener('pointerover',e=>showFor(e.target));
+ document.addEventListener('focusin',e=>showFor(e.target));
+ document.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')showFor(e.target)});
+ document.getElementById('signal-info-hide').onclick=()=>{panel.hidden=true;last=null;let button=document.getElementById('signal-info-restore');if(!button){button=document.createElement('button');button.id='signal-info-restore';button.textContent='ⓘ HELP';button.style.cssText='position:fixed;left:10px;bottom:10px;z-index:9000;padding:8px 12px;background:#18232d;color:#fff;border:1px solid #9cabba;border-radius:5px';document.body.appendChild(button)}button.hidden=false;button.onclick=()=>{panel.hidden=false;button.hidden=true}};
 })();
 </script></body></html>
