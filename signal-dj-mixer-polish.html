@@ -1106,6 +1106,7 @@ window.signalDJControl={
  document.getElementById('settings-streaming').onclick=()=>selectScreen('stream');
  document.getElementById('settings-waves').onclick=()=>selectScreen('performance');
  const recButton=document.getElementById('settings-record'),recStatus=document.getElementById('settings-record-result');
+ window.addEventListener('beforeunload',e=>{if(recorder?.state==='recording'){e.preventDefault();e.returnValue=''}});
  recButton.onclick=async()=>{
   if(recorder&&recorder.state==='recording'){recorder.stop();return}
   try{
@@ -1117,8 +1118,9 @@ window.signalDJControl={
    const type=['audio/webm;codecs=opus','audio/webm'].find(t=>MediaRecorder.isTypeSupported(t))||'';
    recorder=new MediaRecorder(recordStream.stream,type?{mimeType:type}:undefined);
    recorder.ondataavailable=e=>{if(e.data&&e.data.size)recorded.push(e.data)};
+   recorder.onerror=e=>{recStatus.textContent='Recorder error: '+(e.error?.message||'Unknown');feedback.textContent='Recording failed; do not rely on this take.'};
    recorder.onstop=()=>{try{audio.masterNode.disconnect(recordStream)}catch(e){}const blob=new Blob(recorded,{type:recorder.mimeType||'audio/webm'});if(blob.size){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='G-BMN-SIGNAL-DJ-set-'+new Date().toISOString().replace(/[:.]/g,'-')+'.webm';a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);recStatus.textContent='Recording saved: '+Math.round(blob.size/1024)+' KB';feedback.textContent='Saved local recording download.'}else recStatus.textContent='Recording produced no audio data';recButton.textContent='START RECORDING';recorder=null};
-   recorder.start(1000);recButton.textContent='STOP & SAVE';recStatus.textContent='Recording master output…';feedback.textContent='Recording locally. No broadcast started.';
+   recorder.start(1000);recButton.textContent='STOP & SAVE';recStatus.textContent='Recording master output… Keep this browser tab open until saved.';feedback.textContent='Recording locally. No broadcast started.';
   }catch(e){recStatus.textContent='Record failed: '+e.message;feedback.textContent='Recording unavailable.'}
  };
 })();
