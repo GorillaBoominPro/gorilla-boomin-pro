@@ -804,51 +804,56 @@ d.savedLoop=null;
 $('loop-'+k).onclick=()=>{if(!Number.isFinite(d.audio.duration))return;const bpm=Number($('manual-'+k).value)||128;const start=d.audio.currentTime;d.loop=[start,Math.min(d.audio.duration,start+240/bpm)];d.savedLoop=[...d.loop];status('Deck '+k+' 4-beat loop active')};$('loopoff-'+k).onclick=()=>{if(d.loop)d.savedLoop=[...d.loop];d.loop=null;status('Deck '+k+' loop exited')};
 d.audio.ontimeupdate=()=>{if(d.loop&&d.audio.currentTime>=d.loop[1]-.04)d.audio.currentTime=d.loop[0];$('clock-'+k).textContent=fmt(d.audio.currentTime)};
 d.audio.onplay=()=>{$('jog-'+k).classList.add('playing');$('play-'+k).textContent='Ⅱ'};d.audio.onpause=()=>{$('jog-'+k).classList.remove('playing');$('play-'+k).textContent='▶'};d.audio.onended=d.audio.onpause;
-/* Vinyl jog: plays actual decoded track material in short forward/reverse grains. */
+/* Continuous AudioWorklet vinyl scratch, with original track routed through existing mixer FX. */
 let scratch=null;const jog=$('jog-'+k);jog.style.touchAction='none';
 const angle=e=>{const b=jog.getBoundingClientRect();return Math.atan2(e.clientY-(b.top+b.height/2),e.clientX-(b.left+b.width/2))};
-function scratchGrain(delta){
- if(!ctx||!d.scratchBuffer||!d.filters?.[0])return;
- const buffer=d.scratchBuffer,rate=buffer.sampleRate,seconds=Math.min(.17,Math.max(.035,Math.abs(delta)*.12)),length=Math.min(Math.floor(seconds*rate),buffer.length);
- if(length<32)return;
- const reverse=delta<0,at=Math.max(0,Math.min(buffer.duration-seconds,(scratch.position||0)-(reverse?seconds:0)));
- const grain=ctx.createBuffer(buffer.numberOfChannels,length,rate);
- for(let ch=0;ch<grain.numberOfChannels;ch++){
-  const input=buffer.getChannelData(ch),out=grain.getChannelData(ch),start=Math.floor(at*rate);
-  for(let n=0;n<length;n++)out[n]=input[Math.min(input.length-1,start+(reverse?length-1-n:n))];
- }
- const source=ctx.createBufferSource(),envelope=ctx.createGain(),now=ctx.currentTime;
- source.buffer=grain;envelope.gain.setValueAtTime(0,now);
- envelope.gain.linearRampToValueAtTime(.85,now+.004);
- envelope.gain.setValueAtTime(.85,now+Math.max(.005,seconds-.012));
- envelope.gain.linearRampToValueAtTime(0,now+seconds);
- source.connect(envelope).connect(d.filters[0]);source.start(now);source.stop(now+seconds+.005);
- source.onended=()=>{source.disconnect();envelope.disconnect()};
-}
+const clampPos=position=>Math.max(0,Math.min((d.scratchBuffer?.duration||d.audio.duration||0)-.001,position));
+const scratchModule=()=>window.__signalScratchModule||(window.__signalScratchModule=ctx.audioWorklet.addModule('signal-scratch-worklet.js?v=2').catch(e=>{window.__signalScratchModule=null;throw e}));
 jog.onpointerdown=async e=>{
- if(!d.audio.src||e.button>0)return;
- if($('vinyl-'+k).getAttribute('aria-pressed')!=='true'){scratch={pointer:e.pointerId,last:angle(e),position:d.audio.currentTime,nudge:true};jog.setPointerCapture(e.pointerId);return}
- try{await init()}catch(err){status('Audio initialization unavailable: '+err.message);return}
- if(!d.scratchBuffer){status('Deck '+k+': scratch audio is preparing; try again after track analysis');return}
- const wasPlaying=!d.audio.paused;d.audio.pause();
- scratch={pointer:e.pointerId,last:angle(e),position:d.audio.currentTime,wasPlaying,lastGrain:0,nudge:false};d.scratchPosition=scratch.position;
- jog.setPointerCapture(e.pointerId);jog.classList.add('scratching');
+ if(!d.audio.src||e.button>0||scratch)return;
+ const vinyl=$('vinyl-'+k).getAttribute('aria-pressed')==='true';
+ if(!vinyl){scratch={pointer:e.pointerId,last:angle(e),position:d.audio.currentTime,nudge:true};jog.setPointerCapture(e.pointerId);return}
+ try{
+  await init();
+  if(!ctx.audioWorklet||!window.AudioWorkletNode)throw Error('AudioWorklet unavailable in this browser');
+  if(!d.scratchBuffer)throw Error('Track still decoding for scratching');
+  await scratchModule();
+  const buffer=d.scratchBuffer;
+  if(buffer.duration>900)throw Error('Scratch preview currently limited to tracks under 15 minutes');
+  const wasPlaying=!d.audio.paused;d.audio.pause();
+  const node=new AudioWorkletNode(ctx,'signal-scratch-processor',{numberOfInputs:0,numberOfOutputs:1,outputChannelCount:[Math.min(2,buffer.numberOfChannels)]});
+  node.connect(d.filters[0]);
+  const channels=Array.from({length:Math.min(2,buffer.numberOfChannels)},(_,ch)=>buffer.getChannelData(ch).slice());
+  node.port.postMessage({type:'buffer',rate:buffer.sampleRate,channels},channels.map(a=>a.buffer));
+  const position=clampPos(d.audio.currentTime);
+  node.port.postMessage({type:'start',position});
+  scratch={pointer:e.pointerId,last:angle(e),lastTime:performance.now(),position,wasPlaying,nudge:false,node,rate:0};
+  d.scratchPosition=position;jog.setPointerCapture(e.pointerId);jog.classList.add('scratching');
+ }catch(err){status('Deck '+k+' scratch unavailable: '+err.message)}
 };
 jog.onpointermove=e=>{
  if(!scratch||e.pointerId!==scratch.pointer)return;
  const next=angle(e);let diff=next-scratch.last;
  if(diff>Math.PI)diff-=2*Math.PI;if(diff< -Math.PI)diff+=2*Math.PI;
- scratch.last=next;
+ const now=performance.now(),dt=Math.max(.008,Math.min(.1,(now-(scratch.lastTime||now-16))/1000));
+ scratch.last=next;scratch.lastTime=now;
  const seconds=diff/(Math.PI*2)*1.8;
- if(scratch.nudge){d.audio.currentTime=Math.max(0,Math.min(d.audio.duration||0,d.audio.currentTime+seconds));return}
- scratch.position=Math.max(0,Math.min(d.scratchBuffer.duration-.001,scratch.position+seconds));d.scratchPosition=scratch.position;
- const now=performance.now();
- if(Math.abs(diff)>.009&&now-scratch.lastGrain>35){scratch.lastGrain=now;scratchGrain(seconds)}
+ scratch.position=clampPos(scratch.position+seconds);
+ if(scratch.nudge){d.audio.currentTime=scratch.position;return}
+ d.scratchPosition=scratch.position;
+ const velocity=Math.max(-8,Math.min(8,seconds/dt));
+ scratch.rate=velocity;
+ scratch.node.port.postMessage({type:'move',rate:velocity,position:scratch.position});
 };
 const release=e=>{
  if(!scratch||(e&&e.pointerId!==scratch.pointer))return;
  const old=scratch;scratch=null;d.scratchPosition=null;jog.classList.remove('scratching');
- if(!old.nudge){d.audio.currentTime=Math.max(0,Math.min(d.audio.duration||0,old.position));if(old.wasPlaying)d.audio.play().catch(()=>{})}
+ if(!old.nudge){
+  old.node.port.postMessage({type:'stop'});
+  setTimeout(()=>{try{old.node.disconnect();old.node.port.close()}catch(e){}},90);
+  d.audio.currentTime=clampPos(old.position);
+  if(old.wasPlaying)d.audio.play().catch(()=>{});
+ }
  d.audio.playbackRate=Number($('speed-'+k).value)/100;
 };
 jog.onpointerup=release;jog.onpointercancel=release;jog.onlostpointercapture=release;
