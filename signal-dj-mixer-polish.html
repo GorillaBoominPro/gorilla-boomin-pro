@@ -567,6 +567,26 @@ background:radial-gradient(circle at 50% 50%,#633f35 0 3px,transparent 3.4px) ce
 #signal-settings-panel .onair-light{background:#341f27;color:#ffbdc4;padding:6px;text-align:center;border-radius:5px}
 #signal-settings-panel .onair-light.active{background:#a41c32;color:white;box-shadow:0 0 10px #e83554}
 #signal-settings-panel #settings-feedback{margin-top:12px;min-height:20px;color:#9ce7b7;font-size:12px}
+</style><style id="signal-settings-navigation-v2">
+#signal-settings-panel{width:min(940px,98vw)!important;height:min(740px,92vh)!important;max-height:92vh!important;overflow:hidden!important;padding:0!important;display:flex!important;flex-direction:column!important;background:#161b21!important}
+#signal-settings-panel .settings-head{padding:16px 20px!important;border-bottom:1px solid #48515b!important;background:#101419!important;flex-shrink:0}
+#signal-settings-panel .settings-head h2{font-size:17px!important;letter-spacing:.06em}
+#signal-settings-panel .settings-layout{display:grid;grid-template-columns:182px minmax(0,1fr);flex:1;min-height:0}
+#signal-settings-panel .settings-nav{display:flex;flex-direction:column;gap:3px;padding:12px 7px;background:#20262e;border-right:1px solid #46505a;overflow-y:auto}
+#signal-settings-panel .settings-nav button{font-weight:600;font-size:11px;text-align:left!important;display:flex;align-items:center;gap:9px;padding:12px 10px!important;background:transparent!important;border:0!important;border-left:3px solid transparent!important;border-radius:3px!important;color:#bec8d1!important;min-height:42px}
+#signal-settings-panel .settings-nav button.active{border-left-color:#ee2845!important;background:#343d48!important;color:white!important}
+#signal-settings-panel .settings-nav button:hover{background:#303b47!important;color:white!important}
+#signal-settings-panel .settings-content{padding:22px;overflow-y:auto;min-width:0;min-height:0;background:linear-gradient(#1a2027,#151a20)}
+#signal-settings-panel .settings-content-title{font-size:19px;color:white;margin:0 0 6px}
+#signal-settings-panel .settings-content-subtitle{margin:0 0 18px;color:#aebbc9;font-size:12px;line-height:1.5}
+#signal-settings-panel .settings-grid{margin:0!important;display:block!important}
+#signal-settings-panel .settings-grid section{display:none!important;background:#242d37!important;border-color:#495b69!important;padding:19px!important;gap:13px!important}
+#signal-settings-panel .settings-grid section.active{display:flex!important}
+#signal-settings-panel .settings-grid section h3{display:none}
+#signal-settings-panel .settings-grid section p,#signal-settings-panel .settings-grid section small{font-size:12px;line-height:1.6}
+#signal-settings-panel #settings-feedback{padding-top:10px}
+#signal-settings-panel .settings-nav-footer{margin-top:auto;border-top:1px solid #4e5962;padding:10px 6px;color:#a0aebb;font-size:10px}
+@media(max-width:600px){#signal-settings-panel .settings-layout{grid-template-columns:116px minmax(0,1fr)}#signal-settings-panel .settings-nav button{font-size:10px!important;padding:9px 5px!important}#signal-settings-panel .settings-content{padding:12px}#signal-settings-panel .settings-head{padding:11px!important}#signal-settings-panel .settings-head h2{font-size:12px!important}}
 </style></head><body><header><div><h1>G<span style="color:#ed1737">//</span>BMN: <em>SIGNAL DJ</em></h1><div class="caption">CLUB CONSOLE / PAD CLIPPING REPAIR</div></div><div style="display:flex;align-items:center;gap:9px"><button type="button" id="signal-settings-open">⚙ SETTINGS</button><div class="chip">WORKING PROTOTYPE · NOT CLUB READY</div></div></header><main><div class="import"><label for="files">LOCAL MUSIC LIBRARY</label><input id="files" type="file" multiple accept="audio/*,.mp3,.wav,.flac,.aiff,.m4a"><input id="search" type="search" placeholder="Search imported music"><div class="tracks" id="tracks"><span class="tiny">Choose songs from Desktop or external drive</span></div><button id="more" class="smallbtn">SHOW C + D</button></div><div class="keyboard-hint"><b>KEYBOARD:</b> Deck A — Q Play / W Cue / A-S Beat Jump &nbsp; | &nbsp; Deck B — O Play / P Cue / K-L Beat Jump. Shortcuts pause while typing.</div><div class="console"><section id="left" class="deck"><div class="topstrip"><strong>DECK A</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section><section class="mixer"><div class="mixer-switch"><button id="toggle-mixer" type="button">HIDE MIXER · EXPAND LIBRARY</button><span id="analysis-count">IMPORT AUDIO TO ANALYZE</span></div><div class="display"><div class="dhead"><b>G//BMN: CLUB CONTROL</b><span>4-CHANNEL MIXER · LOCAL AUDIO</span></div><div class="central-screen-controls"><button type="button" data-central="library">CRATES</button><button type="button" data-central="performance">WAVES</button><button type="button" data-central="stream">STREAMING</button><button type="button" data-central="sampler">SAMPLER</button></div><div id="central-library" class="central-panel" hidden><input id="central-search" placeholder="Search imported tracks / crates"><div class="library-actions"><label>FOLDER <input id="library-folder" type="file" webkitdirectory multiple accept="audio/*"></label><label>SORT <select id="library-sort"><option value="name">NAME</option><option value="artist">ARTIST</option><option value="genre">GENRE</option><option value="bpm">BPM</option></select></label></div><div class="library-labels"><b>SONG</b><b>ARTIST</b><b>GENRE</b><b>BPM</b><b>LOAD</b></div><div id="central-list"></div></div><div id="central-sampler" class="central-panel" hidden><strong>LIVE SAMPLER · TWO BANKS</strong><p>Use the pads under either deck to trigger samples. Program steps to repeat a groove.</p><div id="sampler-bank-info">Deck A + Deck B · 16 pads per bank</div></div><div id="central-stream" class="central-panel" hidden><input id="stream-search" placeholder="Search term"><button id="stream-submit" type="button">SEARCH WEB</button><small>Opens provider search pages; no licensed deck streaming integration.</small><div id="stream-links"></div></div><canvas id="screen" width="500" height="140"></canvas><div class="dtracks"><span id="labelA">A: NO TRACK</span><span id="labelB">B: NO TRACK</span></div></div><div class="mixbody" id="mixbody"></div><div class="crossSection"><label>CROSSFADER A/C ↔ B/D</label><input type="range" id="cross" min="0" max="100" value="50"><div class="controls"><label>MASTER <input id="master" type="range" min="0" max="100" value="65"></label><button id="stop">STOP ALL</button></div><div class="status" id="status" role="status">Load audio files to start.</div></div></section><section id="right" class="deck right"><div class="topstrip"><strong>DECK B</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section></div><p class="notes">Rebuilt from the layout principles of your reference photos: two large decks, side tempo faders, round CUE/PLAY buttons, 16 pads and central four-channel mixer. Play, seek, jog nudging, faders, three-band EQ, filters and hot cues have functional code. Automatic BPM, true beatgrids, scratching, stems, FX, booth/headphone routing and hardware integration are not implemented. Load only music you are authorized to play. Audio stays local to your browser session.</p><a href="apps.html" style="color:#ff9eaa">← DIGITAL UNIVERSE</a></main>
 <script>
 (()=>{'use strict';
@@ -1075,5 +1095,38 @@ window.signalDJGetMasterForRecording=async()=>{await init();if(!ctx||!master)thr
    recorder.start(1000);recButton.textContent='STOP & SAVE';recStatus.textContent='Recording master output…';feedback.textContent='Recording locally. No broadcast started.';
   }catch(e){recStatus.textContent='Record failed: '+e.message;feedback.textContent='Recording unavailable.'}
  };
+})();
+</script><script id="signal-settings-navigation-script">
+(function(){
+ const dialog=document.getElementById('signal-settings-panel');
+ const grid=dialog.querySelector('.settings-grid');
+ if(!grid)return;
+ const items=[
+  ['Audio & Speakers','Configure speakers, microphone and output-device support.'],
+  ['Wi-Fi & Bluetooth','Connection guidance and device latency.'],
+  ['MIDI Mapping','Check connected controllers and mapping availability.'],
+  ['Keyboard','Learn the current performance shortcuts.'],
+  ['ON AIR','Manage the broadcast-status indicator.'],
+  ['Record Sets','Record the master mix and save it locally.'],
+  ['Streaming & Social','YouTube, Facebook and streaming workflows.'],
+  ['Visualizers','Open audio waveforms and display options.'],
+  ['Website','Open the official G//BMN: website.'],
+  ['About App','Current app capabilities and limitations.']
+ ];
+ const sections=[...grid.querySelectorAll(':scope > section')];
+ const layout=document.createElement('div');layout.className='settings-layout';
+ const nav=document.createElement('nav');nav.className='settings-nav';nav.setAttribute('aria-label','Settings categories');
+ const content=document.createElement('div');content.className='settings-content';
+ const title=document.createElement('h3');title.className='settings-content-title';
+ const subtitle=document.createElement('p');subtitle.className='settings-content-subtitle';
+ const feedback=document.getElementById('settings-feedback');
+ const footer=document.createElement('div');footer.className='settings-nav-footer';footer.textContent='G//BMN: SIGNAL DJ · PROTOTYPE';
+ nav.appendChild(footer);content.append(title,subtitle,grid,feedback);layout.append(nav,content);dialog.appendChild(layout);
+ const icons=['🔊','📶','🎚','⌨','🔴','⏺','🌐','🌈','🦍','ⓘ'];
+ const buttons=[];
+ function select(index){sections.forEach((section,i)=>{section.classList.toggle('active',i===index);section.hidden=i!==index});buttons.forEach((button,i)=>{button.classList.toggle('active',i===index);button.setAttribute('aria-current',i===index?'page':'false')});title.textContent=items[index][0];subtitle.textContent=items[index][1];feedback.textContent=''}
+ sections.forEach((section,i)=>{const item=items[i]||['Other','Settings'];const button=document.createElement('button');button.type='button';button.textContent=(icons[i]||'⚙')+'  '+item[0];button.onclick=()=>select(i);nav.insertBefore(button,footer);buttons.push(button)});
+ select(0);
+ const opener=document.getElementById('signal-settings-open');opener.addEventListener('click',()=>select(0));
 })();
 </script></body></html>
