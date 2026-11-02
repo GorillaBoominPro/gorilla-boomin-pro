@@ -652,6 +652,17 @@ body.signal-immersive .deckshell .transportRow .pitchrail output{font-size:10px}
 @media(max-width:1320px){body.signal-immersive .console{grid-template-columns:minmax(0,1.14fr) minmax(295px,.82fr) minmax(0,1.14fr)}}
 @media(max-width:1050px){body.signal-immersive .console{min-width:1050px}body.signal-immersive{overflow-x:auto}}
 @media(max-width:640px){body.signal-immersive .console{min-width:0;display:flex;flex-direction:column}body.signal-immersive .deckshell{height:745px}}
+</style><style id="signal-screen-check-styles">
+#signal-screen-check{padding:9px 11px;background:#202329;border:1px solid #556675;border-radius:4px;color:#f3f5fa;font-weight:700;white-space:nowrap}
+#signal-screen-diagnostics{position:fixed;inset:0;z-index:99990;background:#000b;display:grid;place-items:center;padding:16px}
+#signal-screen-diagnostics[hidden]{display:none!important}
+#signal-screen-diagnostics .screen-panel{width:min(600px,100%);max-height:85dvh;overflow:auto;background:#171b22;color:#eaf0f7;border:1px solid #637282;border-radius:10px;padding:20px;box-shadow:0 15px 55px #000b;font:14px/1.5 Arial,sans-serif}
+#signal-screen-diagnostics h2{font-size:20px;margin:0 0 10px;color:#f3f5fa}
+#signal-screen-diagnostics pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0b0f14;border:1px solid #35414c;padding:12px;border-radius:5px;font-size:12px}
+#signal-screen-diagnostics .screen-actions{display:flex;flex-wrap:wrap;gap:8px}
+#signal-screen-diagnostics button{background:#2d3440;border:1px solid #65788c;color:white;padding:10px 14px;border-radius:5px;font-weight:700}
+#signal-screen-diagnostics button:first-child{background:#a91b37}
+@media(max-width:720px){#signal-screen-check{padding:7px;font-size:10px}}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -663,7 +674,12 @@ body.signal-immersive .deckshell .transportRow .pitchrail output{font-size:10px}
     <div class="boot-controls"><button id="signal-power" type="button">⏻ POWER ON + SOUND</button><button id="signal-silent" type="button" class="boot-muted">SILENT START</button></div>
   </div>
 </div>
-<header><div><h1>G<span style="color:#ed1737">//</span>BMN: <em>SIGNAL DJ</em></h1><div class="caption">CLUB CONSOLE / PAD CLIPPING REPAIR</div></div><div style="display:flex;align-items:center;gap:9px"><button type="button" id="signal-fullview" aria-pressed="false">⛶ FULL VIEW</button><button type="button" id="signal-settings-open">⚙ SETTINGS</button><div class="chip">WORKING PROTOTYPE · NOT CLUB READY</div></div></header><main><div class="import"><label for="files">LOCAL MUSIC LIBRARY</label><input id="files" type="file" multiple accept="audio/*,.mp3,.wav,.flac,.aiff,.m4a"><input id="search" type="search" placeholder="Search imported music"><div class="tracks" id="tracks"><span class="tiny">Choose songs from Desktop or external drive</span></div><button id="more" class="smallbtn">SHOW C + D</button></div><div class="keyboard-hint"><b>KEYBOARD:</b> Deck A — Q Play / W Cue / A-S Beat Jump &nbsp; | &nbsp; Deck B — O Play / P Cue / K-L Beat Jump. Shortcuts pause while typing.</div><div class="console"><section id="left" class="deck"><div class="topstrip"><strong>DECK A</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section><section class="mixer"><div class="mixer-switch"><button id="toggle-mixer" type="button">HIDE MIXER · EXPAND LIBRARY</button><span id="analysis-count">IMPORT AUDIO TO ANALYZE</span></div><div class="display"><div class="dhead"><b>G//BMN: CLUB CONTROL</b><span>4-CHANNEL MIXER · LOCAL AUDIO</span></div><div class="central-screen-controls"><button type="button" data-central="library">CRATES</button><button type="button" data-central="performance">WAVES</button><button type="button" data-central="stream">STREAMING</button><button type="button" data-central="sampler">SAMPLER</button></div><div id="central-library" class="central-panel" hidden><input id="central-search" placeholder="Search imported tracks / crates"><div class="library-actions"><label>FOLDER <input id="library-folder" type="file" webkitdirectory multiple accept="audio/*"></label><label>SORT <select id="library-sort"><option value="name">NAME</option><option value="artist">ARTIST</option><option value="genre">GENRE</option><option value="bpm">BPM</option></select></label></div><div class="library-labels"><b>SONG</b><b>ARTIST</b><b>GENRE</b><b>BPM</b><b>LOAD</b></div><div id="central-list"></div></div><div id="central-sampler" class="central-panel" hidden><strong>LIVE SAMPLER · TWO BANKS</strong><p>Use the pads under either deck to trigger samples. Program steps to repeat a groove.</p><div id="sampler-bank-info">Deck A + Deck B · 16 pads per bank</div></div><div id="central-stream" class="central-panel" hidden><input id="stream-search" placeholder="Search term"><button id="stream-submit" type="button">SEARCH WEB</button><small>Opens provider search pages; no licensed deck streaming integration.</small><div id="stream-links"></div></div><canvas id="screen" width="500" height="140"></canvas><div class="dtracks"><span id="labelA">A: NO TRACK</span><span id="labelB">B: NO TRACK</span></div></div><div class="mixbody" id="mixbody"></div><div class="crossSection"><label>CROSSFADER A/C ↔ B/D</label><input type="range" id="cross" min="0" max="100" value="50"><div class="controls"><label>MASTER <input id="master" type="range" min="0" max="100" value="65"></label><button id="stop">STOP ALL</button></div><div class="status" id="status" role="status">Load audio files to start.</div></div></section><section id="right" class="deck right"><div class="topstrip"><strong>DECK B</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section></div><p class="notes">Rebuilt from the layout principles of your reference photos: two large decks, side tempo faders, round CUE/PLAY buttons, 16 pads and central four-channel mixer. Play, seek, jog nudging, faders, three-band EQ, filters and hot cues have functional code. Automatic BPM, true beatgrids, scratching, stems, FX, booth/headphone routing and hardware integration are not implemented. Load only music you are authorized to play. Audio stays local to your browser session.</p><a href="apps.html" style="color:#ff9eaa">← DIGITAL UNIVERSE</a></main>
+<div id="signal-screen-diagnostics" role="dialog" aria-modal="true" aria-labelledby="signal-screen-title" hidden>
+<div class="screen-panel"><h2 id="signal-screen-title">SIGNAL DJ · SCREEN CHECK</h2>
+<p>Measures your display and console fit. No music files or personal data are collected or sent.</p>
+<pre id="signal-screen-report"></pre>
+<div class="screen-actions"><button id="signal-screen-copy" type="button">COPY REPORT</button><button id="signal-screen-refresh" type="button">MEASURE AGAIN</button><button id="signal-screen-close" type="button">CLOSE</button></div>
+</div></div><header><div><h1>G<span style="color:#ed1737">//</span>BMN: <em>SIGNAL DJ</em></h1><div class="caption">CLUB CONSOLE / PAD CLIPPING REPAIR</div></div><div style="display:flex;align-items:center;gap:9px"><button type="button" id="signal-fullview" aria-pressed="false">⛶ FULL VIEW</button><button type="button" id="signal-screen-check" title="Measure screen and console fit">▣ SCREEN CHECK</button><button type="button" id="signal-settings-open">⚙ SETTINGS</button><div class="chip">WORKING PROTOTYPE · NOT CLUB READY</div></div></header><main><div class="import"><label for="files">LOCAL MUSIC LIBRARY</label><input id="files" type="file" multiple accept="audio/*,.mp3,.wav,.flac,.aiff,.m4a"><input id="search" type="search" placeholder="Search imported music"><div class="tracks" id="tracks"><span class="tiny">Choose songs from Desktop or external drive</span></div><button id="more" class="smallbtn">SHOW C + D</button></div><div class="keyboard-hint"><b>KEYBOARD:</b> Deck A — Q Play / W Cue / A-S Beat Jump &nbsp; | &nbsp; Deck B — O Play / P Cue / K-L Beat Jump. Shortcuts pause while typing.</div><div class="console"><section id="left" class="deck"><div class="topstrip"><strong>DECK A</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section><section class="mixer"><div class="mixer-switch"><button id="toggle-mixer" type="button">HIDE MIXER · EXPAND LIBRARY</button><span id="analysis-count">IMPORT AUDIO TO ANALYZE</span></div><div class="display"><div class="dhead"><b>G//BMN: CLUB CONTROL</b><span>4-CHANNEL MIXER · LOCAL AUDIO</span></div><div class="central-screen-controls"><button type="button" data-central="library">CRATES</button><button type="button" data-central="performance">WAVES</button><button type="button" data-central="stream">STREAMING</button><button type="button" data-central="sampler">SAMPLER</button></div><div id="central-library" class="central-panel" hidden><input id="central-search" placeholder="Search imported tracks / crates"><div class="library-actions"><label>FOLDER <input id="library-folder" type="file" webkitdirectory multiple accept="audio/*"></label><label>SORT <select id="library-sort"><option value="name">NAME</option><option value="artist">ARTIST</option><option value="genre">GENRE</option><option value="bpm">BPM</option></select></label></div><div class="library-labels"><b>SONG</b><b>ARTIST</b><b>GENRE</b><b>BPM</b><b>LOAD</b></div><div id="central-list"></div></div><div id="central-sampler" class="central-panel" hidden><strong>LIVE SAMPLER · TWO BANKS</strong><p>Use the pads under either deck to trigger samples. Program steps to repeat a groove.</p><div id="sampler-bank-info">Deck A + Deck B · 16 pads per bank</div></div><div id="central-stream" class="central-panel" hidden><input id="stream-search" placeholder="Search term"><button id="stream-submit" type="button">SEARCH WEB</button><small>Opens provider search pages; no licensed deck streaming integration.</small><div id="stream-links"></div></div><canvas id="screen" width="500" height="140"></canvas><div class="dtracks"><span id="labelA">A: NO TRACK</span><span id="labelB">B: NO TRACK</span></div></div><div class="mixbody" id="mixbody"></div><div class="crossSection"><label>CROSSFADER A/C ↔ B/D</label><input type="range" id="cross" min="0" max="100" value="50"><div class="controls"><label>MASTER <input id="master" type="range" min="0" max="100" value="65"></label><button id="stop">STOP ALL</button></div><div class="status" id="status" role="status">Load audio files to start.</div></div></section><section id="right" class="deck right"><div class="topstrip"><strong>DECK B</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section></div><p class="notes">Rebuilt from the layout principles of your reference photos: two large decks, side tempo faders, round CUE/PLAY buttons, 16 pads and central four-channel mixer. Play, seek, jog nudging, faders, three-band EQ, filters and hot cues have functional code. Automatic BPM, true beatgrids, scratching, stems, FX, booth/headphone routing and hardware integration are not implemented. Load only music you are authorized to play. Audio stays local to your browser session.</p><a href="apps.html" style="color:#ff9eaa">← DIGITAL UNIVERSE</a></main>
 <script>
 (()=>{'use strict';
 window.addEventListener('error',e=>{const el=document.getElementById('status');if(el)el.textContent='JavaScript error: '+e.message});const $=id=>document.getElementById(id),list=[],D={};let ctx,master,cueBus,cueOutput,cuePlayer,cueActive={A:false,B:false,C:false,D:false};const fmt=x=>Number.isFinite(x)?String(Math.floor(x/60)).padStart(2,'0')+':'+String(Math.floor(x%60)).padStart(2,'0'):'00:00';const status=x=>$('status').textContent=x;
@@ -1431,5 +1447,49 @@ refreshPlaylists();
  });
  document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement){immersive=false;document.body.classList.remove('signal-immersive')}sync()});
  sync();
+})();
+</script><script id="signal-screen-diagnostics-script">
+(()=>{
+ const open=document.getElementById('signal-screen-check'),modal=document.getElementById('signal-screen-diagnostics');
+ if(!open||!modal)return;
+ const report=document.getElementById('signal-screen-report'),close=document.getElementById('signal-screen-close');
+ let previous=null;
+ function rect(selector){
+  const el=document.querySelector(selector);if(!el)return 'not found';
+  const r=el.getBoundingClientRect();
+  return Math.round(r.width)+' × '+Math.round(r.height)+' px; x='+Math.round(r.left)+' y='+Math.round(r.top)+
+    (el.scrollWidth>el.clientWidth+3?' (horizontal overflow)':'');
+ }
+ function measure(){
+  const root=document.documentElement,consoleEl=document.querySelector('.console');
+  const over=consoleEl?Math.max(0,Math.round(consoleEl.scrollWidth-consoleEl.clientWidth)):0;
+  const rows=[
+    'SIGNAL DJ — DISPLAY DIAGNOSTICS',
+    'Viewport: '+innerWidth+' × '+innerHeight+' CSS px',
+    'Screen: '+screen.width+' × '+screen.height+' CSS px',
+    'Pixel ratio: '+devicePixelRatio,
+    'Browser zoom estimate: not available reliably',
+    'Fullscreen API active: '+Boolean(document.fullscreenElement),
+    'Expanded layout: '+document.body.classList.contains('signal-immersive'),
+    'Console: '+rect('.console'),
+    'Deck A: '+rect('.deck:not(.right)'),
+    'Mixer: '+rect('.mixer'),
+    'Deck B: '+rect('.deck.right'),
+    'Console internal horizontal overflow: '+over+'px',
+    'Page horizontal overflow: '+Math.max(0,root.scrollWidth-root.clientWidth)+'px',
+    'Orientation: '+(innerWidth>=innerHeight?'landscape':'portrait')
+  ];
+  report.textContent=rows.join('\n');
+ }
+ function hide(){modal.hidden=true;previous?.focus?.()}
+ open.addEventListener('click',()=>{previous=document.activeElement;measure();modal.hidden=false;close.focus()});
+ close.addEventListener('click',hide);
+ modal.addEventListener('click',e=>{if(e.target===modal)hide()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)hide()});
+ document.getElementById('signal-screen-refresh').addEventListener('click',measure);
+ document.getElementById('signal-screen-copy').addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(report.textContent);document.getElementById('signal-screen-copy').textContent='COPIED';}
+  catch(e){report.focus();alert('Clipboard unavailable here. Select and copy the report manually.')}
+ });
 })();
 </script></body></html>
