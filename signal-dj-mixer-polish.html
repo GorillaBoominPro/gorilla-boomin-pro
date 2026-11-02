@@ -808,7 +808,7 @@ d.audio.onplay=()=>{$('jog-'+k).classList.add('playing');$('play-'+k).textConten
 let scratch=null;const jog=$('jog-'+k);jog.style.touchAction='none';
 const angle=e=>{const b=jog.getBoundingClientRect();return Math.atan2(e.clientY-(b.top+b.height/2),e.clientX-(b.left+b.width/2))};
 const clampPos=position=>Math.max(0,Math.min((d.scratchBuffer?.duration||d.audio.duration||0)-.001,position));
-const scratchModule=()=>window.__signalScratchModule||(window.__signalScratchModule=ctx.audioWorklet.addModule('signal-scratch-worklet.js?v=2').catch(e=>{window.__signalScratchModule=null;throw e}));
+const scratchModule=()=>window.__signalScratchModule||(window.__signalScratchModule=ctx.audioWorklet.addModule('signal-scratch-worklet.js?v=3').catch(e=>{window.__signalScratchModule=null;throw e}));
 jog.onpointerdown=async e=>{
  if(!d.audio.src||e.button>0||scratch)return;
  const vinyl=$('vinyl-'+k).getAttribute('aria-pressed')==='true';
