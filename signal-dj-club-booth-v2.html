@@ -801,6 +801,27 @@ body.signal-booth-v2 .signal-cdjx-pad-dock .signal-booth-stems{position:absolute
 body.signal-booth-v2 .signal-cdjx-pad-dock .signal-booth-stems[hidden]{display:none!important}
 body.signal-booth-v2 .signal-cdjx-pad-dock .stems-grid button{min-height:56px!important;font-size:11px!important}
 @media(max-width:1250px){body.signal-booth-v2 .deckshell{height:1040px!important;min-height:1040px!important}body.signal-booth-v2 .signal-cdjx-pad-dock .pads button{height:53px!important}}
+</style><style id="signal-cdjx-precision-pass">
+/* Precision pass: jog/pad clearance, side-control readability, unclipped LCD. */
+body.signal-booth-v2 .deckshell .platterZone{top:41%!important;width:59%!important;left:20.5%!important;max-height:30%!important}
+body.signal-booth-v2 .deckshell .ref-left-stack{top:41%!important;left:2.5%!important;height:34%!important}
+body.signal-booth-v2 .deckshell .ref-right-stack{top:41%!important;right:2%!important;height:34%!important}
+body.signal-booth-v2 .deckshell .ref-left-stack #r-shift-A,body.signal-booth-v2 .deckshell .ref-left-stack #r-shift-B{top:67%!important}
+body.signal-booth-v2 .deckshell .ref-left-stack .ref-search{top:79%!important}
+body.signal-booth-v2 .deckshell .ref-right-stack .sync-label{top:69%!important}
+body.signal-booth-v2 .deckshell .ref-right-stack .sync-duo{top:78%!important;right:-3px!important}
+body.signal-booth-v2 .deckshell .ref-right-stack .master-tempo-label{top:104%!important}
+body.signal-booth-v2 .deckshell .ref-right-stack .master-tempo-led{top:113%!important}
+body.signal-booth-v2 .deckshell .transportRow{bottom:22%!important;height:14%!important}
+body.signal-booth-v2 .deckshell .signal-cdjx-pad-dock{height:20%!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-track{display:block!important;white-space:normal!important;overflow:hidden!important;line-height:1.2;min-height:24px}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-title{display:block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-key{display:block;float:right;font-size:9px;color:#a5b8c7}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid{margin-top:4px!important}
+body.signal-booth-v2 .deckshell>.signal-cdjx-screen{height:33.5%!important}
+body.signal-booth-v2 .deckshell>.signal-cdjx-screen .cdjx-wave-slot{overflow:hidden}
+body.signal-booth-v2 .signal-cdjx-screen .deck-wave-area:before{content:'WAVEFORM · LIVE TRACK';font-size:8px}
+body.signal-booth-v2 .signal-cdjx-screen .deck-wave-area .deck-color{display:none!important}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -1817,7 +1838,7 @@ for(const k of ['A','B']){
  const update=()=>{
   const audio=document.getElementById('audio-'+k),name=document.getElementById('name-'+k);
   if(audio){const sec=audio.currentTime||0;monitor.querySelector('.cdjx-time').textContent=String(Math.floor(sec/60)).padStart(2,'0')+':'+String(Math.floor(sec%60)).padStart(2,'0');}
-  monitor.querySelector('.cdjx-title').textContent=name?.textContent||'NO TRACK LOADED';
+  monitor.querySelector('.cdjx-title').textContent=audio?.src?(name?.textContent||'LOADED TRACK'):'NO TRACK LOADED';
   monitor.querySelector('.cdjx-bpm').textContent=document.getElementById('lcd-bpm-'+k)?.textContent||'128.0';
   monitor.querySelector('.cdjx-tempo').textContent=document.getElementById('speedval-'+k)?.textContent||'0%';
  };
