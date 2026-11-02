@@ -786,6 +786,21 @@ body.signal-booth-v2 .signal-cdjx-pad-dock .padinfo{margin-bottom:2px}
 body.signal-booth-v2 .signal-cdjx-pad-dock .signal-booth-stems:not([hidden]){position:relative;z-index:10;background:#11171d;box-shadow:0 -7px 22px #000}
 body.signal-booth-v2 .deck-sampler{display:none!important}
 @media(max-width:1250px){body.signal-booth-v2 .deckshell{height:900px!important}body.signal-booth-v2 .signal-cdjx-screen .deckwave{height:65px!important}}
+</style><style id="signal-bottom-base-v2">
+/* Use the full rectangular deck base; make performance pads comfortably touch-sized. */
+body.signal-booth-v2 .deck{background:linear-gradient(125deg,#22262b,#111417 42%,#22262b);border-bottom:3px solid #4e545a;padding-bottom:10px}
+body.signal-booth-v2 .deckshell{height:1100px!important;min-height:1100px!important;max-height:none!important;background:linear-gradient(105deg,#24282c 0%,#111518 50%,#25292e 100%)!important;border:2px solid #525960!important;border-radius:3px!important}
+body.signal-booth-v2 .deckshell .transportRow{bottom:22%!important;height:15%!important}
+body.signal-booth-v2 .deckshell .signal-cdjx-pad-dock{bottom:1.3%!important;top:auto!important;height:20%!important;max-height:none!important;min-height:0!important;box-sizing:border-box;padding:10px 8px!important;margin:0!important;background:linear-gradient(#22262c,#111519)!important;border:2px solid #48525d!important;border-radius:4px!important}
+body.signal-booth-v2 .signal-cdjx-pad-dock .pad-bank{padding:4px 0!important;border:0!important}
+body.signal-booth-v2 .signal-cdjx-pad-dock .pads{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important}
+body.signal-booth-v2 .signal-cdjx-pad-dock .pads button{height:64px!important;min-height:54px!important;aspect-ratio:auto!important;border-width:3px!important;border-radius:5px!important;font-size:13px!important}
+body.signal-booth-v2 .signal-cdjx-pad-dock .pad-modes button{min-height:30px!important;font-size:9px!important}
+body.signal-booth-v2 .signal-cdjx-pad-dock .padinfo{font-size:10px!important;margin:6px 0!important;height:auto!important}
+body.signal-booth-v2 .signal-cdjx-pad-dock .signal-booth-stems{position:absolute!important;bottom:100%!important;left:0;right:0;margin:0!important;border-radius:4px 4px 0 0!important;box-shadow:0 -9px 25px #0009!important}
+body.signal-booth-v2 .signal-cdjx-pad-dock .signal-booth-stems[hidden]{display:none!important}
+body.signal-booth-v2 .signal-cdjx-pad-dock .stems-grid button{min-height:56px!important;font-size:11px!important}
+@media(max-width:1250px){body.signal-booth-v2 .deckshell{height:1040px!important;min-height:1040px!important}body.signal-booth-v2 .signal-cdjx-pad-dock .pads button{height:53px!important}}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
