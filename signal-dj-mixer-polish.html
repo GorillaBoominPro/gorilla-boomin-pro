@@ -403,6 +403,34 @@
  .mixer .mixbody{grid-template-columns:minmax(72px,.85fr) repeat(4,minmax(45px,1fr)) minmax(84px,1fr)!important}
  .mixer .mixbody>.channel{min-height:790px!important}
 }
+</style><style id="signal-a9-knob-meter-correction">
+/* DJM-A9 channel identity: pale TRIM, three matching EQs, distinct silver COLOR. */
+.mixer .channel{position:relative!important}
+.mixer .channel .knobWrap:has(input[id^="TRIM-"]) .knob.rotary-control{
+background:radial-gradient(circle at 33% 22%,#ffffff,#e6e9eb 36%,#a3aab0 77%)!important;
+border-color:#c1c7ca!important;box-shadow:0 0 0 2px #282e33,0 3px 5px #000b!important}
+.mixer .channel .knobWrap:has(input[id^="TRIM-"]) .knob.rotary-control::after{background:#252b31!important}
+.mixer .channel .knobWrap:has(input[id^="FILTER-"]) .knob.rotary-control{
+width:44px!important;height:44px!important;min-width:44px!important;
+background:radial-gradient(circle at 32% 19%,#eef0f2,#b9c1c9 26%,#69737b 64%,#303940 86%)!important;
+border-color:#aeb8c1!important;box-shadow:0 0 0 2px #303840,0 3px 6px #000c!important}
+.mixer .channel .knobWrap:has(input[id^="HI-"]) .knob.rotary-control,
+.mixer .channel .knobWrap:has(input[id^="MID-"]) .knob.rotary-control,
+.mixer .channel .knobWrap:has(input[id^="LOW-"]) .knob.rotary-control{
+background:radial-gradient(circle at 32% 22%,#7d8890,#454d56 40%,#171b20 83%)!important;border-color:#727d86!important}
+.mixer .channel .ch-vu{
+position:absolute!important;left:3px!important;top:162px!important;margin:0!important;
+width:12px!important;height:132px!important;border:0!important;border-radius:0!important;
+display:block!important;overflow:hidden!important;box-shadow:none!important;
+background:radial-gradient(circle at 50% 50%,#34413b 0 3px,transparent 3.4px) center bottom/12px 11px repeat-y!important;
+}
+.mixer .channel .ch-vu i{
+position:absolute!important;bottom:0!important;left:0!important;width:100%!important;
+background:radial-gradient(circle at 50% 50%,#38f981 0 3px,transparent 3.4px) center bottom/12px 11px repeat-y!important;
+filter:drop-shadow(0 0 2px #34d880);border:0!important;display:block!important}
+.mixer .channel .ch-vu:after{content:"";position:absolute;top:0;left:0;width:100%;height:23%;
+background:radial-gradient(circle at 50% 50%,#633f35 0 3px,transparent 3.4px) center top/12px 11px repeat-y;pointer-events:none;opacity:.72}
+@media(max-width:1320px){.mixer .channel .ch-vu{left:1px!important;width:9px!important;background-size:9px 10px!important}.mixer .channel .ch-vu i{background-size:9px 10px!important}}
 </style></head><body><header><div><h1>G<span style="color:#ed1737">//</span>BMN: <em>SIGNAL DJ</em></h1><div class="caption">CLUB CONSOLE / PAD CLIPPING REPAIR</div></div><div class="chip">WORKING PROTOTYPE · NOT CLUB READY</div></header><main><div class="import"><label for="files">LOCAL MUSIC LIBRARY</label><input id="files" type="file" multiple accept="audio/*,.mp3,.wav,.flac,.aiff,.m4a"><input id="search" type="search" placeholder="Search imported music"><div class="tracks" id="tracks"><span class="tiny">Choose songs from Desktop or external drive</span></div><button id="more" class="smallbtn">SHOW C + D</button></div><div class="keyboard-hint"><b>KEYBOARD:</b> Deck A — Q Play / W Cue / A-S Beat Jump &nbsp; | &nbsp; Deck B — O Play / P Cue / K-L Beat Jump. Shortcuts pause while typing.</div><div class="console"><section id="left" class="deck"><div class="topstrip"><strong>DECK A</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section><section class="mixer"><div class="mixer-switch"><button id="toggle-mixer" type="button">HIDE MIXER · EXPAND LIBRARY</button><span id="analysis-count">IMPORT AUDIO TO ANALYZE</span></div><div class="display"><div class="dhead"><b>G//BMN: CLUB CONTROL</b><span>4-CHANNEL MIXER · LOCAL AUDIO</span></div><div class="central-screen-controls"><button type="button" data-central="library">CRATES</button><button type="button" data-central="performance">WAVES</button><button type="button" data-central="stream">STREAMING</button><button type="button" data-central="sampler">SAMPLER</button></div><div id="central-library" class="central-panel" hidden><input id="central-search" placeholder="Search imported tracks / crates"><div class="library-actions"><label>FOLDER <input id="library-folder" type="file" webkitdirectory multiple accept="audio/*"></label><label>SORT <select id="library-sort"><option value="name">NAME</option><option value="artist">ARTIST</option><option value="genre">GENRE</option><option value="bpm">BPM</option></select></label></div><div class="library-labels"><b>SONG</b><b>ARTIST</b><b>GENRE</b><b>BPM</b><b>LOAD</b></div><div id="central-list"></div></div><div id="central-sampler" class="central-panel" hidden><strong>LIVE SAMPLER · TWO BANKS</strong><p>Use the pads under either deck to trigger samples. Program steps to repeat a groove.</p><div id="sampler-bank-info">Deck A + Deck B · 16 pads per bank</div></div><div id="central-stream" class="central-panel" hidden><input id="stream-search" placeholder="Search term"><button id="stream-submit" type="button">SEARCH WEB</button><small>Opens provider search pages; no licensed deck streaming integration.</small><div id="stream-links"></div></div><canvas id="screen" width="500" height="140"></canvas><div class="dtracks"><span id="labelA">A: NO TRACK</span><span id="labelB">B: NO TRACK</span></div></div><div class="mixbody" id="mixbody"></div><div class="crossSection"><label>CROSSFADER A/C ↔ B/D</label><input type="range" id="cross" min="0" max="100" value="50"><div class="controls"><label>MASTER <input id="master" type="range" min="0" max="100" value="65"></label><button id="stop">STOP ALL</button></div><div class="status" id="status" role="status">Load audio files to start.</div></div></section><section id="right" class="deck right"><div class="topstrip"><strong>DECK B</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section></div><p class="notes">Rebuilt from the layout principles of your reference photos: two large decks, side tempo faders, round CUE/PLAY buttons, 16 pads and central four-channel mixer. Play, seek, jog nudging, faders, three-band EQ, filters and hot cues have functional code. Automatic BPM, true beatgrids, scratching, stems, FX, booth/headphone routing and hardware integration are not implemented. Load only music you are authorized to play. Audio stays local to your browser session.</p><a href="apps.html" style="color:#ff9eaa">← DIGITAL UNIVERSE</a></main>
 <script>
 (()=>{'use strict';
