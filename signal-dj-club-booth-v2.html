@@ -822,6 +822,22 @@ body.signal-booth-v2 .deckshell>.signal-cdjx-screen{height:33.5%!important}
 body.signal-booth-v2 .deckshell>.signal-cdjx-screen .cdjx-wave-slot{overflow:hidden}
 body.signal-booth-v2 .signal-cdjx-screen .deck-wave-area:before{content:'WAVEFORM · LIVE TRACK';font-size:8px}
 body.signal-booth-v2 .signal-cdjx-screen .deck-wave-area .deck-color{display:none!important}
+</style><style id="signal-booth-alignment-v3">
+/* Deck layout correction: give left command stack its own orderly rows. */
+body.signal-booth-v2 .deckshell .ref-left-stack{top:40.5%!important;height:37%!important;left:2%!important;width:15%!important;z-index:5}
+body.signal-booth-v2 .deckshell .ref-left-stack #r-shift-A,
+body.signal-booth-v2 .deckshell .ref-left-stack #r-shift-B{top:61%!important;left:0!important;width:60px!important;height:28px!important;font-size:9px!important}
+body.signal-booth-v2 .deckshell .ref-left-stack .ref-search{top:72%!important;left:0!important;width:64px!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:3px!important}
+body.signal-booth-v2 .deckshell .ref-left-stack .ref-search b{position:static!important;grid-column:1/-1!important;font-size:7px!important;white-space:nowrap!important;line-height:12px!important}
+body.signal-booth-v2 .deckshell .ref-left-stack .ref-search button{position:static!important;width:100%!important;height:24px!important;font-size:10px!important;transform:none!important}
+body.signal-booth-v2 .deckshell .ref-left-stack .reverse-red-square{top:47%!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-track{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:7px!important;white-space:nowrap!important;padding:4px!important;min-height:28px!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-title{flex:1!important;min-width:0!important;overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;font-size:11px!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-key{flex:none!important;float:none!important;white-space:nowrap!important}
+body.signal-booth-v2 .signal-cdjx-screen .deck-wave-area .deck-color{display:none!important}
+body.signal-booth-v2 .signal-cdjx-screen .deck-wave-area{overflow:hidden!important}
+body.signal-booth-v2 .signal-cdjx-screen .deck-wave-area:before{content:''!important;display:none!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid{margin-top:8px!important}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -1838,7 +1854,7 @@ for(const k of ['A','B']){
  const update=()=>{
   const audio=document.getElementById('audio-'+k),name=document.getElementById('name-'+k);
   if(audio){const sec=audio.currentTime||0;monitor.querySelector('.cdjx-time').textContent=String(Math.floor(sec/60)).padStart(2,'0')+':'+String(Math.floor(sec%60)).padStart(2,'0');}
-  monitor.querySelector('.cdjx-title').textContent=audio?.src?(name?.textContent||'LOADED TRACK'):'NO TRACK LOADED';
+  monitor.querySelector('.cdjx-title').textContent=audio?.src?((name?.textContent||'LOADED TRACK').replace(/\s*[✦◆•]\s*\d+(?:\.\d+)?\s*BPM.*$/i,'').replace(/\s*NO TRACK\s*\+\s*UNKNOWN ARTIST.*$/i,'').trim()||'LOADED TRACK'):'NO TRACK LOADED';
   monitor.querySelector('.cdjx-bpm').textContent=document.getElementById('lcd-bpm-'+k)?.textContent||'128.0';
   monitor.querySelector('.cdjx-tempo').textContent=document.getElementById('speedval-'+k)?.textContent||'0%';
  };
