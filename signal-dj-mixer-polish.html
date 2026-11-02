@@ -587,6 +587,11 @@ background:radial-gradient(circle at 50% 50%,#633f35 0 3px,transparent 3.4px) ce
 #signal-settings-panel #settings-feedback{padding-top:10px}
 #signal-settings-panel .settings-nav-footer{margin-top:auto;border-top:1px solid #4e5962;padding:10px 6px;color:#a0aebb;font-size:10px}
 @media(max-width:600px){#signal-settings-panel .settings-layout{grid-template-columns:116px minmax(0,1fr)}#signal-settings-panel .settings-nav button{font-size:10px!important;padding:9px 5px!important}#signal-settings-panel .settings-content{padding:12px}#signal-settings-panel .settings-head{padding:11px!important}#signal-settings-panel .settings-head h2{font-size:12px!important}}
+</style><style id="signal-expanded-settings-css">
+#signal-settings-panel .settings-content input,#signal-settings-panel .settings-content select{background:#131c26;color:#e8f3ff;border:1px solid #667b8b;border-radius:5px;padding:9px;max-width:100%;width:100%}
+#signal-settings-panel .settings-content h4{font-size:12px;color:#e5eef4;margin:12px 0 2px}
+#signal-settings-panel .settings-crate-list{max-height:145px;overflow:auto;border:1px solid #475666;padding:7px;background:#121b23;color:#d5e0e8}
+#signal-settings-panel .settings-content small{display:block}
 </style></head><body><header><div><h1>G<span style="color:#ed1737">//</span>BMN: <em>SIGNAL DJ</em></h1><div class="caption">CLUB CONSOLE / PAD CLIPPING REPAIR</div></div><div style="display:flex;align-items:center;gap:9px"><button type="button" id="signal-settings-open">⚙ SETTINGS</button><div class="chip">WORKING PROTOTYPE · NOT CLUB READY</div></div></header><main><div class="import"><label for="files">LOCAL MUSIC LIBRARY</label><input id="files" type="file" multiple accept="audio/*,.mp3,.wav,.flac,.aiff,.m4a"><input id="search" type="search" placeholder="Search imported music"><div class="tracks" id="tracks"><span class="tiny">Choose songs from Desktop or external drive</span></div><button id="more" class="smallbtn">SHOW C + D</button></div><div class="keyboard-hint"><b>KEYBOARD:</b> Deck A — Q Play / W Cue / A-S Beat Jump &nbsp; | &nbsp; Deck B — O Play / P Cue / K-L Beat Jump. Shortcuts pause while typing.</div><div class="console"><section id="left" class="deck"><div class="topstrip"><strong>DECK A</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section><section class="mixer"><div class="mixer-switch"><button id="toggle-mixer" type="button">HIDE MIXER · EXPAND LIBRARY</button><span id="analysis-count">IMPORT AUDIO TO ANALYZE</span></div><div class="display"><div class="dhead"><b>G//BMN: CLUB CONTROL</b><span>4-CHANNEL MIXER · LOCAL AUDIO</span></div><div class="central-screen-controls"><button type="button" data-central="library">CRATES</button><button type="button" data-central="performance">WAVES</button><button type="button" data-central="stream">STREAMING</button><button type="button" data-central="sampler">SAMPLER</button></div><div id="central-library" class="central-panel" hidden><input id="central-search" placeholder="Search imported tracks / crates"><div class="library-actions"><label>FOLDER <input id="library-folder" type="file" webkitdirectory multiple accept="audio/*"></label><label>SORT <select id="library-sort"><option value="name">NAME</option><option value="artist">ARTIST</option><option value="genre">GENRE</option><option value="bpm">BPM</option></select></label></div><div class="library-labels"><b>SONG</b><b>ARTIST</b><b>GENRE</b><b>BPM</b><b>LOAD</b></div><div id="central-list"></div></div><div id="central-sampler" class="central-panel" hidden><strong>LIVE SAMPLER · TWO BANKS</strong><p>Use the pads under either deck to trigger samples. Program steps to repeat a groove.</p><div id="sampler-bank-info">Deck A + Deck B · 16 pads per bank</div></div><div id="central-stream" class="central-panel" hidden><input id="stream-search" placeholder="Search term"><button id="stream-submit" type="button">SEARCH WEB</button><small>Opens provider search pages; no licensed deck streaming integration.</small><div id="stream-links"></div></div><canvas id="screen" width="500" height="140"></canvas><div class="dtracks"><span id="labelA">A: NO TRACK</span><span id="labelB">B: NO TRACK</span></div></div><div class="mixbody" id="mixbody"></div><div class="crossSection"><label>CROSSFADER A/C ↔ B/D</label><input type="range" id="cross" min="0" max="100" value="50"><div class="controls"><label>MASTER <input id="master" type="range" min="0" max="100" value="65"></label><button id="stop">STOP ALL</button></div><div class="status" id="status" role="status">Load audio files to start.</div></div></section><section id="right" class="deck right"><div class="topstrip"><strong>DECK B</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section></div><p class="notes">Rebuilt from the layout principles of your reference photos: two large decks, side tempo faders, round CUE/PLAY buttons, 16 pads and central four-channel mixer. Play, seek, jog nudging, faders, three-band EQ, filters and hot cues have functional code. Automatic BPM, true beatgrids, scratching, stems, FX, booth/headphone routing and hardware integration are not implemented. Load only music you are authorized to play. Audio stays local to your browser session.</p><a href="apps.html" style="color:#ff9eaa">← DIGITAL UNIVERSE</a></main>
 <script>
 (()=>{'use strict';
@@ -1128,5 +1133,78 @@ window.signalDJGetMasterForRecording=async()=>{await init();if(!ctx||!master)thr
  sections.forEach((section,i)=>{const item=items[i]||['Other','Settings'];const button=document.createElement('button');button.type='button';button.textContent=(icons[i]||'⚙')+'  '+item[0];button.onclick=()=>select(i);nav.insertBefore(button,footer);buttons.push(button)});
  select(0);
  const opener=document.getElementById('signal-settings-open');opener.addEventListener('click',()=>select(0));
+})();
+</script><script id="signal-settings-expanded">
+(function(){
+ const modal=document.getElementById('signal-settings-panel');
+ const sections=[...modal.querySelectorAll('.settings-grid > section')];
+ const mk=(tag,attrs={},value='')=>{const e=document.createElement(tag);Object.assign(e,attrs);if(value)e.textContent=value;return e};
+ const note=(section,text)=>section.appendChild(mk('small',{},text));
+ const persisted=(key,fallback)=>{try{return JSON.parse(localStorage.getItem('signal.dj.'+key))??fallback}catch(e){return fallback}};
+ const save=(key,val)=>{try{localStorage.setItem('signal.dj.'+key,JSON.stringify(val))}catch(e){}};
+ const addHeading=(section,text)=>section.appendChild(mk('h4',{},text));
+ const audio=sections[0],mapping=sections[2],keyboard=sections[3],record=sections[5],visual=sections[7];
+ const profiles=persisted('audioProfiles',{}),profileSelect=mk('select',{id:'settings-profile-select'}),profileName=mk('input',{placeholder:'Profile name, e.g. HOME STUDIO',maxLength:40});
+ const mode=mk('select',{id:'settings-output-mode'});
+ [['speaker','SPEAKERS ONLY'],['headphones','SPEAKER + HEADPHONE'],['external','EXTERNAL AUDIO DEVICE']].forEach(([v,t])=>mode.add(new Option(t,v)));
+ const audioOutput=mk('select',{id:'settings-master-device'}),audioStatus=mk('small',{id:'settings-audio-device-status'});
+ addHeading(audio,'AUDIO ROUTING · PRESET');
+ audio.append(mode,profileSelect,profileName,audioOutput);
+ const refreshAudio=mk('button',{},'REFRESH AUDIO DEVICES'),applyAudio=mk('button',{},'APPLY OUTPUT'),saveProfile=mk('button',{},'SAVE PROFILE');
+ audio.append(refreshAudio,applyAudio,saveProfile,audioStatus);
+ function refreshProfiles(){profileSelect.replaceChildren(new Option('SELECT SAVED PROFILE',''));Object.keys(profiles).sort().forEach(name=>profileSelect.add(new Option(name,name)))}
+ refreshProfiles();
+ async function listAudio(){audioOutput.replaceChildren(new Option('SYSTEM DEFAULT',''));if(!navigator.mediaDevices?.enumerateDevices){audioStatus.textContent='Output enumeration unavailable; use system audio settings.';return}
+ try{const devices=await navigator.mediaDevices.enumerateDevices();devices.filter(x=>x.kind==='audiooutput'&&x.deviceId).forEach(x=>audioOutput.add(new Option(x.label||'Audio output',x.deviceId)));audioStatus.textContent='Available outputs listed. Browser permissions may hide device names.'}catch(e){audioStatus.textContent=e.message}}
+ refreshAudio.onclick=listAudio;listAudio();
+ applyAudio.onclick=async()=>{try{if(!window.signalDJGetMasterForRecording)throw Error('Mixer not initialized');const obj=await window.signalDJGetMasterForRecording();const dest=audioOutput.value;if(typeof obj.audioContext.setSinkId!=='function')throw Error('AudioContext output selection unavailable; select speakers in your operating system');await obj.audioContext.setSinkId(dest||'');audioStatus.textContent='Applied audio output. Check audio before performing.'}catch(e){audioStatus.textContent='Cannot apply: '+e.message}};
+ saveProfile.onclick=()=>{const name=profileName.value.trim();if(!name)return;profiles[name]={mode:mode.value,deviceId:audioOutput.value};save('audioProfiles',profiles);refreshProfiles();profileSelect.value=name;audioStatus.textContent='Saved device preference. Reconnect hardware before applying.'};
+ profileSelect.onchange=()=>{const p=profiles[profileSelect.value];if(p){mode.value=p.mode;audioOutput.value=p.deviceId;if(audioOutput.value!==p.deviceId)audioStatus.textContent='Saved device is not currently available.'}};
+ note(audio,'Separate headphones: set up an additional output in the mixer CUE section. Channel routing and latency reporting depend on browser and hardware support.');
+ const crateSection=mk('div',{className:'settings-library-block'}),crateName=mk('input',{placeholder:'New crate / playlist name'}),crateSelect=mk('select'),crateList=mk('div',{className:'settings-crate-list'}),crateMessage=mk('small');
+ const crates=persisted('crates',{});
+ const createCrate=mk('button',{},'CREATE CRATE'),addTrack=mk('button',{},'ADD LOADED DECK TRACK'),removeCrate=mk('button',{},'DELETE CRATE');
+ const library=sections[3];addHeading(library,'MUSIC CRATES & PLAYLISTS');library.append(crateSection);
+ crateSection.append(crateName,createCrate,crateSelect,addTrack,removeCrate,crateList,crateMessage);
+ const redrawCrates=()=>{crateSelect.replaceChildren(new Option('SELECT CRATE',''));Object.keys(crates).sort().forEach(n=>crateSelect.add(new Option(n,n)));showCrate()};
+ function showCrate(){crateList.replaceChildren();for(const name of crates[crateSelect.value]||[])crateList.appendChild(mk('div',{},'♫ '+name));crateMessage.textContent='Crate names persist; audio files must be re-imported after reopening the page.'}
+ createCrate.onclick=()=>{const name=crateName.value.trim();if(!name)return;crates[name]??=[];save('crates',crates);redrawCrates();crateSelect.value=name;showCrate()};
+ crateSelect.onchange=showCrate;
+ addTrack.onclick=()=>{const name=crateSelect.value;if(!name){crateMessage.textContent='Create or select a crate first.';return}const track=['A','B'].map(k=>document.getElementById('name-'+k)?.textContent).find(x=>x&&x.trim()&&!/NO TRACK/i.test(x));if(!track){crateMessage.textContent='Load a track on deck A or B first.';return}if(!crates[name].includes(track))crates[name].push(track);save('crates',crates);showCrate()};
+ removeCrate.onclick=()=>{if(!crateSelect.value)return;delete crates[crateSelect.value];save('crates',crates);redrawCrates()};
+ redrawCrates();
+ const keyMaps=persisted('keyMaps',{q:'play-A',w:'cue-A',o:'play-B',p:'cue-B',a:'jumpback-A',s:'jumpforward-A',k:'jumpback-B',l:'jumpforward-B'});
+ addHeading(keyboard,'KEYBOARD MAPPING');const keyAction=mk('select'),keyBind=mk('button',{},'PRESS TO ASSIGN A KEY'),keyMessage=mk('small');
+ const actions=['play-A','cue-A','jumpback-A','jumpforward-A','play-B','cue-B','jumpback-B','jumpforward-B'];
+ actions.forEach(a=>keyAction.add(new Option(a.replace(/-/g,' · ').toUpperCase(),a)));
+ keyboard.append(keyAction,keyBind,keyMessage);
+ const mappings=()=>Object.entries(keyMaps).map(([k,v])=>k.toUpperCase()+' → '+v).join('   |   ');
+ keyMessage.textContent=mappings();
+ let learning=false;
+ keyBind.onclick=()=>{learning=true;keyBind.textContent='PRESS KEY…'};
+ document.addEventListener('keydown',e=>{if(learning){e.preventDefault();e.stopImmediatePropagation();if(!['Escape','Tab','Enter'].includes(e.key)){for(const key of Object.keys(keyMaps))if(keyMaps[key]===keyAction.value)delete keyMaps[key];keyMaps[e.key.toLowerCase()]=keyAction.value;save('keyMaps',keyMaps);keyMessage.textContent=mappings()}learning=false;keyBind.textContent='PRESS TO ASSIGN A KEY';return}
+ if(modal.closest('#signal-settings')?.hidden!==true)return;if(e.repeat||e.ctrlKey||e.altKey||e.metaKey||['INPUT','TEXTAREA','SELECT'].includes(e.target?.tagName))return;
+ const action=keyMaps[e.key.toLowerCase()];if(!action)return;e.preventDefault();e.stopImmediatePropagation();document.getElementById(action)?.click()
+ },true);
+ const midiButton=mk('button',{},'ENABLE MIDI LEARN'),midiStatus=mk('small'),midiAction=mk('select');actions.forEach(a=>midiAction.add(new Option(a,a)));
+ mapping.append(midiAction,midiButton,midiStatus);const midiMappings=persisted('midiMaps',{});
+ let midiLearn=false;
+ midiButton.onclick=async()=>{try{if(!navigator.requestMIDIAccess)throw Error('Web MIDI unsupported here');const access=await navigator.requestMIDIAccess();midiLearn=true;midiStatus.textContent='Move a MIDI controller button or knob to assign '+midiAction.value;
+ const connect=input=>{input.onmidimessage=e=>{const bytes=[...e.data];const key=bytes[0]+':'+bytes[1];if(midiLearn){midiMappings[key]=midiAction.value;save('midiMaps',midiMappings);midiLearn=false;midiStatus.textContent='Assigned '+key+' → '+midiAction.value;return}if(bytes[2]>0&&midiMappings[key])document.getElementById(midiMappings[key])?.click()}};
+ access.inputs.forEach(connect);access.onstatechange=()=>access.inputs.forEach(connect);
+ if(!access.inputs.size)midiStatus.textContent='No MIDI input detected. Connect hardware and retry.'}catch(e){midiStatus.textContent=e.message}};
+ note(mapping,'MIDI learn currently maps button presses and pad triggers, not continuous knob/fader values.');
+ const checkRecord=mk('button',{},'CHECK RECORDING SUPPORT'),recordInfo=mk('small');
+ record.append(checkRecord,recordInfo);checkRecord.onclick=()=>{recordInfo.textContent=window.MediaRecorder?'MediaRecorder supported. Record a short set, stop, and verify the downloaded file before relying on it.':'Recording is unsupported in this browser.'};
+ const visButton=mk('button',{},'OPEN LIVE VISUALIZER'),visStatus=mk('small');
+ visual.append(visButton,visStatus);
+ visButton.onclick=()=>{const win=window.open('','signal-dj-visualizer','width=900,height=520');if(!win){visStatus.textContent='Allow pop-ups to open the visualizer.';return}
+ const doc=win.document;doc.title='G//BMN: SIGNAL DJ · VISUALIZER';doc.body.style.cssText='margin:0;background:#080b12;color:#f6f6f6;display:grid;place-items:center;height:100vh;font:700 3vw Arial';doc.body.textContent='G//BMN:  · SIGNAL DJ  · VISUALS';visStatus.textContent='Second display opened. Audio-reactive graphics are not yet wired.'};
+ const autoBox=mk('div',{className:'settings-automix'}),autoStart=mk('button',{},'ENABLE AUTOMIX A → B'),autoStop=mk('button',{},'STOP AUTOMIX'),autoInfo=mk('small');
+ const autoSection=sections[7];addHeading(autoSection,'AUTOMIX · EXPERIMENTAL');autoSection.append(autoBox);autoBox.append(autoStart,autoStop,autoInfo);
+ let automix=false,handler=null;
+ autoStart.onclick=()=>{automix=true;autoInfo.textContent='Automix armed. When deck A ends, deck B will start if loaded.';const a=document.querySelector('#left audio');if(a){handler=()=>{if(automix)document.getElementById('play-B')?.click()};a.addEventListener('ended',handler,{once:true})}else autoInfo.textContent='Deck A audio element unavailable.'};
+ autoStop.onclick=()=>{automix=false;autoInfo.textContent='Automix disabled.'};
+ note(autoSection,'Experimental end-of-track handoff only; no automatic beatmatching, phrase mixing or crossfade.');
 })();
 </script></body></html>
