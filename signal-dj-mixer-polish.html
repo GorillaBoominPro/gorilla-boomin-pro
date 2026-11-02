@@ -1293,7 +1293,20 @@ window.signalDJControl={
 <section><h3>🌈 Visualizers</h3><p>The center WAVES view shows deck waveforms. Additional performance visualizers are planned.</p><button id="settings-waves" type="button">SHOW WAVES</button></section>
 <section><h3>🦍 Website</h3><p>Official G//BMN: artist, DJ and booking hub.</p><a href="https://gorillaboomin.com/" target="_blank" rel="noopener">GORILLABOOMIN.COM ↗</a></section>
 <section><h3>ⓘ About App</h3><p><strong>G//BMN: SIGNAL DJ</strong> · Browser-based DJ console prototype. Local audio playback, mixer EQ, effects and basic recording depend on browser support.</p><p>Not certified for professional club use. Some hardware-style controls and streaming integrations are still in development.</p></section>
-</div><div id="settings-feedback"></div></div></div><script id="signal-settings-script">
+<section id="settings-club-training"><h3>🎓 CLUB STANDARD TRAINING</h3>
+<p><strong>START SMALL. PLAY BIG.</strong> Train with an affordable controller while learning the signal flow and techniques used in professional DJ booths.</p>
+<p><strong>Training profile:</strong> Select the hardware you want to practise with. This does not claim automatic controller compatibility.</p>
+<label for="signal-training-controller">Controller / practice setup</label>
+<select id="signal-training-controller"><option value="keyboard">Keyboard + Mouse</option><option value="flx4">DDJ-FLX4 (mapping verification required)</option><option value="generic">Generic MIDI controller (manual mapping)</option><option value="none">On-screen decks only</option></select>
+<button type="button" id="signal-training-save">SAVE TRAINING PROFILE</button>
+<small id="signal-training-status" role="status"></small>
+<h4>TRAINING OBJECTIVES</h4>
+<ul><li>Club deck navigation: play, cue, loop, pitch and jog control</li><li>Four-channel mixer principles: gain, EQ, filters, cue and crossfader</li><li>Performance workflows: beatmatching, phrasing, transitions and recording</li><li>Advanced features roadmap: stems, beatgrids, controller layers and smart cueing</li></ul>
+<p><strong>Available prototype:</strong> Virtual decks, mixer controls, track imports, crates and experimental scratching. <strong>Not yet verified:</strong> FLX4 plug-and-play mapping, reliable real-time stems, hardware-level latency or professional booth certification.</p>
+<button type="button" id="signal-training-open-library">OPEN LIBRARY VIEW</button>
+<button type="button" id="signal-training-open-midi">OPEN MIDI SETTINGS</button>
+<small>Educational simulation only. Hardware feel, layout and controls can differ from actual club equipment.</small>
+</section></div><div id="settings-feedback"></div></div></div><script id="signal-settings-script">
 (function(){
  const modal=document.getElementById('signal-settings'),opener=document.getElementById('signal-settings-open'),closer=document.getElementById('signal-settings-close'),feedback=document.getElementById('settings-feedback');
  let previous=null,recorder=null,recorded=[],recordStream=null;
@@ -1412,7 +1425,8 @@ refreshPlaylists();
   ['Playlists','Build session playlists from imported music files.'],
   ['Keyboard & MIDI Learn','Assign shortcuts and MIDI controls.'],
   ['Master Visualizer','Open an audio-reactive visualizer.'],
-  ['Basic Automix','Play imported tracks consecutively without beatmatching.']
+  ['Basic Automix','Play imported tracks consecutively without beatmatching.'],
+  ['Club Standard Training','Affordable hardware, professional DJ workflow and learning goals.']
  ];
  const sections=[...grid.querySelectorAll(':scope > section')];
  const layout=document.createElement('div');layout.className='settings-layout';
@@ -1423,7 +1437,7 @@ refreshPlaylists();
  const feedback=document.getElementById('settings-feedback');
  const footer=document.createElement('div');footer.className='settings-nav-footer';footer.textContent='G//BMN: SIGNAL DJ · PROTOTYPE';
  nav.appendChild(footer);content.append(title,subtitle,grid,feedback);layout.append(nav,content);dialog.appendChild(layout);
- const icons=['🔊','📶','🎚','⌨','🔴','⏺','🌐','🌈','🦍','ⓘ','🔉','🎵','🎹','🌈','🔀'];
+ const icons=['🔊','📶','🎚','⌨','🔴','⏺','🌐','🌈','🦍','ⓘ','🔉','🎵','🎹','🌈','🔀','🎓'];
  const buttons=[];
  function select(index){sections.forEach((section,i)=>{section.classList.toggle('active',i===index);section.hidden=i!==index});buttons.forEach((button,i)=>{button.classList.toggle('active',i===index);button.setAttribute('aria-current',i===index?'page':'false')});title.textContent=items[index][0];subtitle.textContent=items[index][1];feedback.textContent=''}
  sections.forEach((section,i)=>{const item=items[i]||['Other','Settings'];const button=document.createElement('button');button.type='button';button.textContent=(icons[i]||'⚙')+'  '+item[0];button.onclick=()=>select(i);nav.insertBefore(button,footer);buttons.push(button)});
@@ -1648,5 +1662,15 @@ refreshPlaylists();
  const watcher=new MutationObserver(()=>{if(!samplersOpen)document.querySelectorAll('.deck-sampler').forEach(el=>{if(el.style.display!=='none')el.style.display='none'})});
  watcher.observe(document.querySelector('.console'),{subtree:true,childList:true});
  apply();
+})();
+</script><script id="signal-club-training-settings-script">
+(()=>{
+ const select=document.getElementById('signal-training-controller'),save=document.getElementById('signal-training-save'),status=document.getElementById('signal-training-status');
+ if(!select||!save)return;
+ const key='signal.dj.trainingController';
+ try{const saved=localStorage.getItem(key);if(saved&&[...select.options].some(o=>o.value===saved))select.value=saved}catch(e){}
+ save.onclick=()=>{try{localStorage.setItem(key,select.value);status.textContent='Training preference saved on this device. Controller mapping still requires verification.'}catch(e){status.textContent='Storage unavailable; selection active for this session.'}};
+ document.getElementById('signal-training-open-library').onclick=()=>{document.getElementById('signal-settings-close')?.click();const drawer=document.getElementById('signal-browser-drawer');if(drawer?.hidden)document.getElementById('signal-browser-toggle')?.click();};
+ document.getElementById('signal-training-open-midi').onclick=()=>{const nav=[...document.querySelectorAll('.settings-nav button')];const btn=nav.find(b=>b.textContent.includes('MIDI Mapping'));btn?.click();};
 })();
 </script></body></html>
