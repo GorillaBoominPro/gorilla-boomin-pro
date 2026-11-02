@@ -22,6 +22,15 @@
 #signal-boot .boot-controls button.boot-muted{border-color:#777;background:#25252c;box-shadow:none}
 #signal-boot.boot-running #signal-power,#signal-boot.boot-running #signal-silent{display:none}
 @media(prefers-reduced-motion:reduce){#signal-boot,#signal-boot .boot-logo,#signal-boot .boot-progress{transition:none!important}}
+
+/* Full-view performance mode */
+#signal-fullview{background:#202329;color:#f4f4f7;border:1px solid #b23545;border-radius:4px;padding:9px 12px;font-weight:800;letter-spacing:.05em;white-space:nowrap}
+#signal-fullview:focus-visible{outline:2px solid #fff;outline-offset:3px}
+body.signal-immersive header{max-width:none;padding:8px 12px}
+body.signal-immersive main{max-width:none;padding:0 5px 10px}
+body.signal-immersive .console{margin-top:4px}
+body.signal-immersive{overflow-x:hidden}
+@media(max-width:640px){#signal-fullview{padding:8px;font-size:10px}body.signal-immersive header{gap:6px;flex-wrap:wrap}}
 </style><style id="signal-fixed-layout">
 /* Unified, measured deck chassis. All previous stacked patches removed. */
 .console{display:grid;grid-template-columns:minmax(0,1.14fr) minmax(295px,.82fr) minmax(0,1.14fr);align-items:start}
@@ -633,7 +642,7 @@ background:radial-gradient(circle at 50% 50%,#633f35 0 3px,transparent 3.4px) ce
     <div class="boot-controls"><button id="signal-power" type="button">⏻ POWER ON + SOUND</button><button id="signal-silent" type="button" class="boot-muted">SILENT START</button></div>
   </div>
 </div>
-<header><div><h1>G<span style="color:#ed1737">//</span>BMN: <em>SIGNAL DJ</em></h1><div class="caption">CLUB CONSOLE / PAD CLIPPING REPAIR</div></div><div style="display:flex;align-items:center;gap:9px"><button type="button" id="signal-settings-open">⚙ SETTINGS</button><div class="chip">WORKING PROTOTYPE · NOT CLUB READY</div></div></header><main><div class="import"><label for="files">LOCAL MUSIC LIBRARY</label><input id="files" type="file" multiple accept="audio/*,.mp3,.wav,.flac,.aiff,.m4a"><input id="search" type="search" placeholder="Search imported music"><div class="tracks" id="tracks"><span class="tiny">Choose songs from Desktop or external drive</span></div><button id="more" class="smallbtn">SHOW C + D</button></div><div class="keyboard-hint"><b>KEYBOARD:</b> Deck A — Q Play / W Cue / A-S Beat Jump &nbsp; | &nbsp; Deck B — O Play / P Cue / K-L Beat Jump. Shortcuts pause while typing.</div><div class="console"><section id="left" class="deck"><div class="topstrip"><strong>DECK A</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section><section class="mixer"><div class="mixer-switch"><button id="toggle-mixer" type="button">HIDE MIXER · EXPAND LIBRARY</button><span id="analysis-count">IMPORT AUDIO TO ANALYZE</span></div><div class="display"><div class="dhead"><b>G//BMN: CLUB CONTROL</b><span>4-CHANNEL MIXER · LOCAL AUDIO</span></div><div class="central-screen-controls"><button type="button" data-central="library">CRATES</button><button type="button" data-central="performance">WAVES</button><button type="button" data-central="stream">STREAMING</button><button type="button" data-central="sampler">SAMPLER</button></div><div id="central-library" class="central-panel" hidden><input id="central-search" placeholder="Search imported tracks / crates"><div class="library-actions"><label>FOLDER <input id="library-folder" type="file" webkitdirectory multiple accept="audio/*"></label><label>SORT <select id="library-sort"><option value="name">NAME</option><option value="artist">ARTIST</option><option value="genre">GENRE</option><option value="bpm">BPM</option></select></label></div><div class="library-labels"><b>SONG</b><b>ARTIST</b><b>GENRE</b><b>BPM</b><b>LOAD</b></div><div id="central-list"></div></div><div id="central-sampler" class="central-panel" hidden><strong>LIVE SAMPLER · TWO BANKS</strong><p>Use the pads under either deck to trigger samples. Program steps to repeat a groove.</p><div id="sampler-bank-info">Deck A + Deck B · 16 pads per bank</div></div><div id="central-stream" class="central-panel" hidden><input id="stream-search" placeholder="Search term"><button id="stream-submit" type="button">SEARCH WEB</button><small>Opens provider search pages; no licensed deck streaming integration.</small><div id="stream-links"></div></div><canvas id="screen" width="500" height="140"></canvas><div class="dtracks"><span id="labelA">A: NO TRACK</span><span id="labelB">B: NO TRACK</span></div></div><div class="mixbody" id="mixbody"></div><div class="crossSection"><label>CROSSFADER A/C ↔ B/D</label><input type="range" id="cross" min="0" max="100" value="50"><div class="controls"><label>MASTER <input id="master" type="range" min="0" max="100" value="65"></label><button id="stop">STOP ALL</button></div><div class="status" id="status" role="status">Load audio files to start.</div></div></section><section id="right" class="deck right"><div class="topstrip"><strong>DECK B</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section></div><p class="notes">Rebuilt from the layout principles of your reference photos: two large decks, side tempo faders, round CUE/PLAY buttons, 16 pads and central four-channel mixer. Play, seek, jog nudging, faders, three-band EQ, filters and hot cues have functional code. Automatic BPM, true beatgrids, scratching, stems, FX, booth/headphone routing and hardware integration are not implemented. Load only music you are authorized to play. Audio stays local to your browser session.</p><a href="apps.html" style="color:#ff9eaa">← DIGITAL UNIVERSE</a></main>
+<header><div><h1>G<span style="color:#ed1737">//</span>BMN: <em>SIGNAL DJ</em></h1><div class="caption">CLUB CONSOLE / PAD CLIPPING REPAIR</div></div><div style="display:flex;align-items:center;gap:9px"><button type="button" id="signal-fullview" aria-pressed="false">⛶ FULL VIEW</button><button type="button" id="signal-settings-open">⚙ SETTINGS</button><div class="chip">WORKING PROTOTYPE · NOT CLUB READY</div></div></header><main><div class="import"><label for="files">LOCAL MUSIC LIBRARY</label><input id="files" type="file" multiple accept="audio/*,.mp3,.wav,.flac,.aiff,.m4a"><input id="search" type="search" placeholder="Search imported music"><div class="tracks" id="tracks"><span class="tiny">Choose songs from Desktop or external drive</span></div><button id="more" class="smallbtn">SHOW C + D</button></div><div class="keyboard-hint"><b>KEYBOARD:</b> Deck A — Q Play / W Cue / A-S Beat Jump &nbsp; | &nbsp; Deck B — O Play / P Cue / K-L Beat Jump. Shortcuts pause while typing.</div><div class="console"><section id="left" class="deck"><div class="topstrip"><strong>DECK A</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section><section class="mixer"><div class="mixer-switch"><button id="toggle-mixer" type="button">HIDE MIXER · EXPAND LIBRARY</button><span id="analysis-count">IMPORT AUDIO TO ANALYZE</span></div><div class="display"><div class="dhead"><b>G//BMN: CLUB CONTROL</b><span>4-CHANNEL MIXER · LOCAL AUDIO</span></div><div class="central-screen-controls"><button type="button" data-central="library">CRATES</button><button type="button" data-central="performance">WAVES</button><button type="button" data-central="stream">STREAMING</button><button type="button" data-central="sampler">SAMPLER</button></div><div id="central-library" class="central-panel" hidden><input id="central-search" placeholder="Search imported tracks / crates"><div class="library-actions"><label>FOLDER <input id="library-folder" type="file" webkitdirectory multiple accept="audio/*"></label><label>SORT <select id="library-sort"><option value="name">NAME</option><option value="artist">ARTIST</option><option value="genre">GENRE</option><option value="bpm">BPM</option></select></label></div><div class="library-labels"><b>SONG</b><b>ARTIST</b><b>GENRE</b><b>BPM</b><b>LOAD</b></div><div id="central-list"></div></div><div id="central-sampler" class="central-panel" hidden><strong>LIVE SAMPLER · TWO BANKS</strong><p>Use the pads under either deck to trigger samples. Program steps to repeat a groove.</p><div id="sampler-bank-info">Deck A + Deck B · 16 pads per bank</div></div><div id="central-stream" class="central-panel" hidden><input id="stream-search" placeholder="Search term"><button id="stream-submit" type="button">SEARCH WEB</button><small>Opens provider search pages; no licensed deck streaming integration.</small><div id="stream-links"></div></div><canvas id="screen" width="500" height="140"></canvas><div class="dtracks"><span id="labelA">A: NO TRACK</span><span id="labelB">B: NO TRACK</span></div></div><div class="mixbody" id="mixbody"></div><div class="crossSection"><label>CROSSFADER A/C ↔ B/D</label><input type="range" id="cross" min="0" max="100" value="50"><div class="controls"><label>MASTER <input id="master" type="range" min="0" max="100" value="65"></label><button id="stop">STOP ALL</button></div><div class="status" id="status" role="status">Load audio files to start.</div></div></section><section id="right" class="deck right"><div class="topstrip"><strong>DECK B</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section></div><p class="notes">Rebuilt from the layout principles of your reference photos: two large decks, side tempo faders, round CUE/PLAY buttons, 16 pads and central four-channel mixer. Play, seek, jog nudging, faders, three-band EQ, filters and hot cues have functional code. Automatic BPM, true beatgrids, scratching, stems, FX, booth/headphone routing and hardware integration are not implemented. Load only music you are authorized to play. Audio stays local to your browser session.</p><a href="apps.html" style="color:#ff9eaa">← DIGITAL UNIVERSE</a></main>
 <script>
 (()=>{'use strict';
 window.addEventListener('error',e=>{const el=document.getElementById('status');if(el)el.textContent='JavaScript error: '+e.message});const $=id=>document.getElementById(id),list=[],D={};let ctx,master,cueBus,cueOutput,cuePlayer,cueActive={A:false,B:false,C:false,D:false};const fmt=x=>Number.isFinite(x)?String(Math.floor(x/60)).padStart(2,'0')+':'+String(Math.floor(x%60)).padStart(2,'0'):'00:00';const status=x=>$('status').textContent=x;
@@ -1372,5 +1381,34 @@ refreshPlaylists();
  }
  power.addEventListener('click',()=>start(true));
  silent.addEventListener('click',()=>start(false));
+})();
+</script>
+<script id="signal-fullview-script">
+(()=>{
+ const button=document.getElementById('signal-fullview');
+ if(!button)return;
+ let immersive=false;
+ function sync(){
+   const active=!!document.fullscreenElement;
+   button.textContent=(active||immersive)?'⤡ EXIT FULL VIEW':'⛶ FULL VIEW';
+   button.setAttribute('aria-pressed',String(active||immersive));
+ }
+ button.addEventListener('click',async()=>{
+   if(document.fullscreenElement){
+     try{await document.exitFullscreen()}catch(e){console.warn(e)}
+     immersive=false;document.body.classList.remove('signal-immersive');sync();return;
+   }
+   if(immersive){immersive=false;document.body.classList.remove('signal-immersive');sync();return}
+   immersive=true;document.body.classList.add('signal-immersive');
+   if(document.documentElement.requestFullscreen){
+     try{await document.documentElement.requestFullscreen()}catch(e){
+       /* iPhone Safari and embedded browsers may not support element fullscreen. */
+       console.info('Browser fullscreen unavailable; using expanded layout.',e)
+     }
+   }
+   sync();
+ });
+ document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement){immersive=false;document.body.classList.remove('signal-immersive')}sync()});
+ sync();
 })();
 </script></body></html>
