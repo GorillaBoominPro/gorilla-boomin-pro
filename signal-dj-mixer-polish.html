@@ -729,7 +729,7 @@ function updateColorFx(d,v,t){
   smoothing(d.colorDelay.delayTime,space?.065+param*.17:.22+param*.55);
   smoothing(d.colorFeedback.gain,space?.35+intensity*.30:.2+intensity*.58);
   smoothing(d.colorDelayTone.frequency,space?1700+param*2600:850+param*2400);
-  smoothing(d.colorWet.gain,intensity*(space?.38:.6));
+  smoothing(d.colorWet.gain,intensity*(space?.42:.65));
  }else if(mode==='NOISE'){
   // A filtered-noise wash with channel LEVEL/CROSSFADER tracking.
   if(d.colorNoiseGain && !d.colorNoiseSource){
@@ -800,7 +800,23 @@ function mix(){if(!ctx)return;const x=Number($('cross').value)/100,t=ctx.current
 const monitor=document.createElement('div');monitor.className='headphone-routing';monitor.innerHTML='<strong>HEADPHONE PREVIEW</strong><select id="cue-device"><option value="">SELECT SEPARATE OUTPUT</option></select><button type="button" id="cue-enable">ENABLE CUE</button><label>CUE LEVEL <input id="cue-level" type="range" min="0" max="100" value="70"></label><small id="cue-note">Requires browser output selection and a separate audio device.</small>';
 const colorButtons=[...document.querySelectorAll('[data-color-fx]')];
 function setColorFxEnabled(on){colorFxEnabled=!!on;const power=document.getElementById('color-fx-power');power.setAttribute('aria-pressed',String(colorFxEnabled));power.textContent=colorFxEnabled?'COLOR FX ON':'COLOR FX OFF';power.classList.toggle('fx-powered',colorFxEnabled);mix();status('Sound Color FX '+(colorFxEnabled?'ON · turn a channel COLOR knob':'OFF · bypassed'))}
-function selectColorFx(name){activeColorFx=name;colorButtons.forEach(b=>{const selected=b.dataset.colorFx===name;b.classList.toggle('is-active',selected);b.setAttribute('aria-pressed',String(selected))});mix();if(colorFxEnabled)status(name+' selected · turn COLOR knob on playing channel')}
+function selectColorFx(name){
+ activeColorFx=name;
+ colorButtons.forEach(b=>{const selected=b.dataset.colorFx===name;b.classList.toggle('is-active',selected);b.setAttribute('aria-pressed',String(selected))});
+ // An untouched COLOR knob is centered at zero and therefore makes ALL six effects inaudible.
+ // On an explicit effect selection, audition a modest value on currently playing channels.
+ if(colorFxEnabled && ctx){
+  for(const k of Object.keys(D)){
+   const d=D[k],input=$('FILTER-'+k);
+   if(d.audio.paused||!input||Math.abs(Number(input.value))>2)continue;
+   input.value=name==='FILTER'||name==='SWEEP'?-65:65;
+   input.dispatchEvent(new Event('input',{bubbles:true}));
+   const knob=input.previousElementSibling;
+   if(knob){const min=Number(input.min),max=Number(input.max),f=(Number(input.value)-min)/(max-min);knob.style.setProperty('--rotary-angle',(-135+f*270)+'deg');knob.setAttribute('aria-valuenow',input.value)}
+  }
+ }
+ mix();status(name+' selected'+(colorFxEnabled?' · active deck COLOR engaged when centered':' · switch COLOR FX ON'));
+}
 document.getElementById('color-fx-power').onclick=()=>setColorFxEnabled(!colorFxEnabled);
 colorButtons.forEach(b=>b.addEventListener('click',()=>selectColorFx(b.dataset.colorFx)));
 const colorParam=document.getElementById('color-fx-parameter');
