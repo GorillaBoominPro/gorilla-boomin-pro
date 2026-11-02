@@ -1159,6 +1159,7 @@ $('adv-playlist-add').onclick=()=>{const n=$('adv-playlist-select').value,i=Numb
 $('adv-playlist-delete').onclick=()=>{const n=$('adv-playlist-select').value;if(!n)return;delete playlists[n];localPut('signal-playlists-v1',playlists);refreshPlaylists()};
 $('adv-playlist-export').onclick=()=>{const n=$('adv-playlist-select').value;if(!n)return;const blob=new Blob([JSON.stringify({name:n,tracks:playlists[n]},null,2)],{type:'application/json'}),a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=n.replace(/[^a-z0-9_-]/gi,'_')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000)};
 document.getElementById('signal-settings-open').addEventListener('click',refreshPlaylists);
+const libRefresh=document.getElementById('files');libRefresh?.addEventListener('change',()=>setTimeout(refreshPlaylists,200));document.getElementById('library-folder')?.addEventListener('change',()=>setTimeout(refreshPlaylists,200));
 const original={q:'play-A',w:'cue-A',o:'play-B',p:'cue-B'};
 let keymap=localGet('signal-custom-keys',{}),midimap=localGet('signal-midi-map',{}),learningKey=false,learningMidi=false,midi=null;
 function renderMaps(){const arr=[...Object.entries(keymap).map(([k,a])=>'Key '+k.toUpperCase()+' → '+a),...Object.entries(midimap).map(([k,a])=>'MIDI '+k+' → '+a)];$('adv-map-list').textContent=arr.join(' · ')||'Default keys: Q/W for A, O/P for B. Assign additional shortcuts here.'}
@@ -1201,7 +1202,12 @@ refreshPlaylists();
   ['Streaming & Social','YouTube, Facebook and streaming workflows.'],
   ['Visualizers','Open audio waveforms and display options.'],
   ['Website','Open the official G//BMN: website.'],
-  ['About App','Current app capabilities and limitations.']
+  ['About App','Current app capabilities and limitations.'],
+  ['Audio Routing','Choose master audio output and save profiles where supported.'],
+  ['Playlists','Build session playlists from imported music files.'],
+  ['Keyboard & MIDI Learn','Assign shortcuts and MIDI controls.'],
+  ['Master Visualizer','Open an audio-reactive visualizer.'],
+  ['Basic Automix','Play imported tracks consecutively without beatmatching.']
  ];
  const sections=[...grid.querySelectorAll(':scope > section')];
  const layout=document.createElement('div');layout.className='settings-layout';
@@ -1212,7 +1218,7 @@ refreshPlaylists();
  const feedback=document.getElementById('settings-feedback');
  const footer=document.createElement('div');footer.className='settings-nav-footer';footer.textContent='G//BMN: SIGNAL DJ · PROTOTYPE';
  nav.appendChild(footer);content.append(title,subtitle,grid,feedback);layout.append(nav,content);dialog.appendChild(layout);
- const icons=['🔊','📶','🎚','⌨','🔴','⏺','🌐','🌈','🦍','ⓘ'];
+ const icons=['🔊','📶','🎚','⌨','🔴','⏺','🌐','🌈','🦍','ⓘ','🔉','🎵','🎹','🌈','🔀'];
  const buttons=[];
  function select(index){sections.forEach((section,i)=>{section.classList.toggle('active',i===index);section.hidden=i!==index});buttons.forEach((button,i)=>{button.classList.toggle('active',i===index);button.setAttribute('aria-current',i===index?'page':'false')});title.textContent=items[index][0];subtitle.textContent=items[index][1];feedback.textContent=''}
  sections.forEach((section,i)=>{const item=items[i]||['Other','Settings'];const button=document.createElement('button');button.type='button';button.textContent=(icons[i]||'⚙')+'  '+item[0];button.onclick=()=>select(i);nav.insertBefore(button,footer);buttons.push(button)});
