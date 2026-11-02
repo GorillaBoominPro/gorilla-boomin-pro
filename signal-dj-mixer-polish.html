@@ -592,6 +592,18 @@ background:radial-gradient(circle at 50% 50%,#633f35 0 3px,transparent 3.4px) ce
 #signal-settings-panel .settings-content h4{font-size:12px;color:#e5eef4;margin:12px 0 2px}
 #signal-settings-panel .settings-crate-list{max-height:145px;overflow:auto;border:1px solid #475666;padding:7px;background:#121b23;color:#d5e0e8}
 #signal-settings-panel .settings-content small{display:block}
+</style><style id="signal-advanced-workspace-css">
+.signal-advanced-section{display:flex;flex-direction:column;gap:9px}
+.signal-advanced-section select,.signal-advanced-section input{background:#131d26;border:1px solid #668091;border-radius:4px;padding:6px;color:#fff;min-width:0;width:100%}
+.signal-advanced-section button{cursor:pointer}
+.signal-advanced-section .advanced-line{display:flex;gap:6px;flex-wrap:wrap}
+.signal-advanced-section .advanced-line>*{flex:1;min-width:75px}
+.signal-advanced-section .muted{color:#b7c9d5;font-size:11px}
+#signal-playlists{display:flex;flex-direction:column;gap:6px;max-height:180px;overflow:auto}
+#signal-playlists button{text-align:left}
+#signal-viz-popup{position:fixed;inset:0;z-index:9800;background:#05090fee;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+#signal-viz-popup[hidden]{display:none}
+#signal-viz-canvas{width:min(96vw,1000px);height:min(70vh,520px);background:#060b12}
 </style></head><body><header><div><h1>G<span style="color:#ed1737">//</span>BMN: <em>SIGNAL DJ</em></h1><div class="caption">CLUB CONSOLE / PAD CLIPPING REPAIR</div></div><div style="display:flex;align-items:center;gap:9px"><button type="button" id="signal-settings-open">⚙ SETTINGS</button><div class="chip">WORKING PROTOTYPE · NOT CLUB READY</div></div></header><main><div class="import"><label for="files">LOCAL MUSIC LIBRARY</label><input id="files" type="file" multiple accept="audio/*,.mp3,.wav,.flac,.aiff,.m4a"><input id="search" type="search" placeholder="Search imported music"><div class="tracks" id="tracks"><span class="tiny">Choose songs from Desktop or external drive</span></div><button id="more" class="smallbtn">SHOW C + D</button></div><div class="keyboard-hint"><b>KEYBOARD:</b> Deck A — Q Play / W Cue / A-S Beat Jump &nbsp; | &nbsp; Deck B — O Play / P Cue / K-L Beat Jump. Shortcuts pause while typing.</div><div class="console"><section id="left" class="deck"><div class="topstrip"><strong>DECK A</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section><section class="mixer"><div class="mixer-switch"><button id="toggle-mixer" type="button">HIDE MIXER · EXPAND LIBRARY</button><span id="analysis-count">IMPORT AUDIO TO ANALYZE</span></div><div class="display"><div class="dhead"><b>G//BMN: CLUB CONTROL</b><span>4-CHANNEL MIXER · LOCAL AUDIO</span></div><div class="central-screen-controls"><button type="button" data-central="library">CRATES</button><button type="button" data-central="performance">WAVES</button><button type="button" data-central="stream">STREAMING</button><button type="button" data-central="sampler">SAMPLER</button></div><div id="central-library" class="central-panel" hidden><input id="central-search" placeholder="Search imported tracks / crates"><div class="library-actions"><label>FOLDER <input id="library-folder" type="file" webkitdirectory multiple accept="audio/*"></label><label>SORT <select id="library-sort"><option value="name">NAME</option><option value="artist">ARTIST</option><option value="genre">GENRE</option><option value="bpm">BPM</option></select></label></div><div class="library-labels"><b>SONG</b><b>ARTIST</b><b>GENRE</b><b>BPM</b><b>LOAD</b></div><div id="central-list"></div></div><div id="central-sampler" class="central-panel" hidden><strong>LIVE SAMPLER · TWO BANKS</strong><p>Use the pads under either deck to trigger samples. Program steps to repeat a groove.</p><div id="sampler-bank-info">Deck A + Deck B · 16 pads per bank</div></div><div id="central-stream" class="central-panel" hidden><input id="stream-search" placeholder="Search term"><button id="stream-submit" type="button">SEARCH WEB</button><small>Opens provider search pages; no licensed deck streaming integration.</small><div id="stream-links"></div></div><canvas id="screen" width="500" height="140"></canvas><div class="dtracks"><span id="labelA">A: NO TRACK</span><span id="labelB">B: NO TRACK</span></div></div><div class="mixbody" id="mixbody"></div><div class="crossSection"><label>CROSSFADER A/C ↔ B/D</label><input type="range" id="cross" min="0" max="100" value="50"><div class="controls"><label>MASTER <input id="master" type="range" min="0" max="100" value="65"></label><button id="stop">STOP ALL</button></div><div class="status" id="status" role="status">Load audio files to start.</div></div></section><section id="right" class="deck right"><div class="topstrip"><strong>DECK B</strong><small class="tiny">G//BMN: PERFORMANCE</small></div></section></div><p class="notes">Rebuilt from the layout principles of your reference photos: two large decks, side tempo faders, round CUE/PLAY buttons, 16 pads and central four-channel mixer. Play, seek, jog nudging, faders, three-band EQ, filters and hot cues have functional code. Automatic BPM, true beatgrids, scratching, stems, FX, booth/headphone routing and hardware integration are not implemented. Load only music you are authorized to play. Audio stays local to your browser session.</p><a href="apps.html" style="color:#ff9eaa">← DIGITAL UNIVERSE</a></main>
 <script>
 (()=>{'use strict';
@@ -1002,6 +1014,15 @@ function frame(){for(const k of Object.keys(D)){const d=D[k],bar=$('chvu-'+k);if
  }
 }updateJogRing(k);const cv=$('wave-'+k);traceWave(cv,k,d.audio.currentTime,cv.width,cv.height);art.style.animationPlayState=d.audio.paused?'paused':'running';art.style.animationDuration=(1.8/Math.max(.1,d.audio.playbackRate))+'s'}if(masterAnalyser){const buf=new Uint8Array(masterAnalyser.fftSize);masterAnalyser.getByteTimeDomainData(buf);let power=0;for(const v of buf){const x=(v-128)/128;power+=x*x}const rms=Math.sqrt(power/buf.length);$('meter').style.height=Math.min(100,Math.round(rms*220))+'%'}else $('meter').style.height='0%';requestAnimationFrame(frame)}frame();
 window.signalDJGetMasterForRecording=async()=>{await init();if(!ctx||!master)throw Error('Master audio unavailable');return {audioContext:ctx,masterNode:master}};
+window.signalDJControl={
+ getLibrary:()=>list.map(f=>({name:f.name,size:f.size,file:f})),
+ loadTrack:(deck,index)=>{const f=list[index];if(f&&D[deck])load(deck,f)},
+ deck:(k)=>D[k]?.audio,
+ action:(a,k)=>{const btn=document.getElementById((a==='play'?'play':a==='cue'?'cue':a==='jumpback'?'jumpback':'jumpforward')+'-'+k);if(btn)btn.click()},
+ async audio(){await init();return {ctx,master,cuePlayer,cueOutput}},
+ refresh:()=>{renderCentral();render()},
+ getDecks:()=>D
+};
 })();
 </script><aside id="signal-info-view" aria-live="polite"><div class="info-top"><strong>ⓘ SIGNAL DJ · INFO VIEW</strong><button type="button" id="signal-info-hide" aria-label="Hide Info View">×</button></div><p id="signal-info-description">Move your mouse over a control to learn what it does. Select controls to test the mixer.</p><div class="info-status">Hover · keyboard focus · touch</div></aside><script id="signal-info-view-script">
 (function(){
@@ -1100,6 +1121,70 @@ window.signalDJGetMasterForRecording=async()=>{await init();if(!ctx||!master)thr
    recorder.start(1000);recButton.textContent='STOP & SAVE';recStatus.textContent='Recording master output…';feedback.textContent='Recording locally. No broadcast started.';
   }catch(e){recStatus.textContent='Record failed: '+e.message;feedback.textContent='Recording unavailable.'}
  };
+})();
+</script><script id="signal-advanced-workspace-script">
+(function(){
+const api=()=>window.signalDJControl;
+const $=id=>document.getElementById(id);
+const grid=document.querySelector('#signal-settings-panel .settings-grid');
+const temp=document.createElement('div');temp.innerHTML=`<section class="signal-advanced-section"><h3>Audio Routing & Profiles</h3><p>Select a master output if the browser supports AudioContext.setSinkId. Headphone output remains independently configured in the mixer CUE section. macOS may require permission before device names appear.</p><div class="advanced-line"><select id="adv-audio-profile"><option value="studio">HOME STUDIO</option><option value="headphones">HEADPHONES</option><option value="stage">LIVE PERFORMANCE</option></select><button id="adv-save-profile">SAVE PROFILE</button></div><select id="adv-master-output"><option value="">SYSTEM DEFAULT OUTPUT</option></select><div class="advanced-line"><button id="adv-scan-audio">SCAN OUTPUTS</button><button id="adv-apply-audio">APPLY OUTPUT</button></div><p id="adv-audio-status" class="muted">Changing the system's default device or splitting physical channels may require macOS or desktop audio software.</p></section>
+<section class="signal-advanced-section"><h3>Playlists & Crates</h3><p>Choose imported tracks to build a playlist. The list of track names can be saved; the actual audio must be imported again after reopening the app.</p><div class="advanced-line"><input id="adv-playlist-name" placeholder="New playlist name"><button id="adv-playlist-create">CREATE</button></div><select id="adv-playlist-select"><option value="">SELECT PLAYLIST</option></select><select id="adv-track-select"><option value="">SELECT IMPORTED TRACK</option></select><button id="adv-playlist-add">ADD TRACK</button><div id="signal-playlists"></div><div class="advanced-line"><button id="adv-playlist-export">EXPORT LIST</button><button id="adv-playlist-delete">DELETE LIST</button></div></section>
+<section class="signal-advanced-section"><h3>Keyboard & MIDI Learn</h3><p>Assign a shortcut or MIDI note / CC to deck PLAY or CUE. MIDI support and hardware permissions vary by browser. These are local control assignments, not hardware mixer audio routing.</p><select id="adv-map-action"><option value="play-A">Deck A Play/Pause</option><option value="cue-A">Deck A Cue</option><option value="play-B">Deck B Play/Pause</option><option value="cue-B">Deck B Cue</option></select><div class="advanced-line"><button id="adv-key-learn">LEARN KEY</button><button id="adv-midi-learn">LEARN MIDI</button></div><button id="adv-midi-connect">CONNECT MIDI</button><div id="adv-map-list" class="muted"></div><button id="adv-map-reset">RESET MAPPINGS</button></section>
+<section class="signal-advanced-section"><h3>Visualizer & Broadcast</h3><p>Audio-reactive visualization can be displayed on a second screen. ON AIR graphics are local only. Broadcasting to YouTube or social media requires an authorized encoder or streaming integration.</p><button id="adv-viz-open">OPEN MASTER VISUALIZER</button><small class="muted">Pop-up can be dragged to a second monitor. Browser-based audio analysis.</small></section>
+<section class="signal-advanced-section"><h3>Automix (Basic)</h3><p>Play consecutive tracks from imported files on Deck A. This is simple end-of-track sequencing, not beatmatched transitions or professional automatic DJ mixing.</p><div class="advanced-line"><button id="adv-auto-start">START AUTOMIX</button><button id="adv-auto-stop">STOP AUTOMIX</button></div><small id="adv-auto-state">Automix off.</small></section>`;
+while(temp.firstElementChild)grid.appendChild(temp.firstElementChild);
+function notify(id,msg){$(id).textContent=msg}
+const localGet=(k,def)=>{try{return JSON.parse(localStorage.getItem(k))||def}catch(e){return def}};
+const localPut=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+let profiles=localGet('signal-audio-profiles',{});
+async function scanAudio(){
+const sel=$('adv-master-output');sel.replaceChildren(new Option('SYSTEM DEFAULT OUTPUT',''));
+if(!navigator.mediaDevices?.enumerateDevices){notify('adv-audio-status','Device enumeration unavailable. Use macOS Sound settings.');return}
+try{const devices=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='audiooutput'&&d.deviceId);devices.forEach(d=>sel.add(new Option(d.label||'Audio output (permission may be needed)',d.deviceId)));notify('adv-audio-status',devices.length+' output(s) found. Browser output selection requires AudioContext.setSinkId support.')}catch(e){notify('adv-audio-status',e.message)}
+}
+$('adv-scan-audio').onclick=scanAudio;
+$('adv-save-profile').onclick=()=>{profiles[$('adv-audio-profile').value]={output:$('adv-master-output').value};localPut('signal-audio-profiles',profiles);notify('adv-audio-status','Profile saved on this device. Audio files and physical channel routing are not saved.')};
+$('adv-audio-profile').onchange=()=>{$('adv-master-output').value=profiles[$('adv-audio-profile').value]?.output||''};
+$('adv-apply-audio').onclick=async()=>{try{const {ctx}=await api().audio();if(typeof ctx.setSinkId!=='function')throw Error('This browser does not support Web Audio output selection. Use macOS Sound settings.');await ctx.setSinkId($('adv-master-output').value||'');notify('adv-audio-status','Master output applied. Test at low volume; headphone output must be configured separately.')}catch(e){notify('adv-audio-status','Cannot apply: '+e.message)}};
+let playlists=localGet('signal-playlists-v1',{});
+function imported(){return api()?.getLibrary()||[]}
+function refreshPlaylists(){
+const select=$('adv-playlist-select');const current=select.value;select.replaceChildren(new Option('SELECT PLAYLIST',''));Object.keys(playlists).forEach(n=>select.add(new Option(n,n)));select.value=current&&playlists[current]?current:(Object.keys(playlists)[0]||'');
+const tracks=$('adv-track-select'),old=tracks.value;tracks.replaceChildren(new Option('SELECT IMPORTED TRACK',''));imported().forEach((f,i)=>tracks.add(new Option(f.name,String(i))));tracks.value=old;
+const host=$('signal-playlists');host.replaceChildren();for(const [i,t] of (playlists[select.value]||[]).entries()){const row=document.createElement('div');row.className='advanced-line';const name=document.createElement('span');name.textContent=(i+1)+'. '+t.name;name.style.flex='3';row.appendChild(name);for(const deck of ['A','B']){const b=document.createElement('button');b.textContent='LOAD '+deck;b.onclick=()=>{const idx=imported().findIndex(f=>f.name===t.name&&f.size===t.size);if(idx>=0)api().loadTrack(deck,idx);else alert('Import this audio file again to load it.')};row.appendChild(b)}host.appendChild(row)}
+}
+$('adv-playlist-select').onchange=refreshPlaylists;
+$('adv-playlist-create').onclick=()=>{const name=$('adv-playlist-name').value.trim();if(!name)return;if(!playlists[name])playlists[name]=[];localPut('signal-playlists-v1',playlists);refreshPlaylists();$('adv-playlist-select').value=name;refreshPlaylists()};
+$('adv-playlist-add').onclick=()=>{const n=$('adv-playlist-select').value,i=Number($('adv-track-select').value),f=imported()[i];if(!n||!f)return;playlists[n].push({name:f.name,size:f.size});localPut('signal-playlists-v1',playlists);refreshPlaylists()};
+$('adv-playlist-delete').onclick=()=>{const n=$('adv-playlist-select').value;if(!n)return;delete playlists[n];localPut('signal-playlists-v1',playlists);refreshPlaylists()};
+$('adv-playlist-export').onclick=()=>{const n=$('adv-playlist-select').value;if(!n)return;const blob=new Blob([JSON.stringify({name:n,tracks:playlists[n]},null,2)],{type:'application/json'}),a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=n.replace(/[^a-z0-9_-]/gi,'_')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000)};
+document.getElementById('signal-settings-open').addEventListener('click',refreshPlaylists);
+const original={q:'play-A',w:'cue-A',o:'play-B',p:'cue-B'};
+let keymap=localGet('signal-custom-keys',{}),midimap=localGet('signal-midi-map',{}),learningKey=false,learningMidi=false,midi=null;
+function renderMaps(){const arr=[...Object.entries(keymap).map(([k,a])=>'Key '+k.toUpperCase()+' → '+a),...Object.entries(midimap).map(([k,a])=>'MIDI '+k+' → '+a)];$('adv-map-list').textContent=arr.join(' · ')||'Default keys: Q/W for A, O/P for B. Assign additional shortcuts here.'}
+function perform(action){const [a,deck]=action.split('-');const b=document.getElementById(a+'-'+deck);if(b)b.click()}
+$('adv-key-learn').onclick=()=>{learningKey=true;learningMidi=false;$('adv-key-learn').textContent='PRESS A KEY…'};
+document.addEventListener('keydown',e=>{
+if(learningKey){e.preventDefault();e.stopImmediatePropagation();const key=e.key.toLowerCase();if(key!=='escape'&&key.length===1&&!e.repeat){keymap[key]=$('adv-map-action').value;localPut('signal-custom-keys',keymap);renderMaps()}learningKey=false;$('adv-key-learn').textContent='LEARN KEY';return}
+if(e.repeat||e.metaKey||e.ctrlKey||e.altKey||e.target.closest('input,textarea,select,[contenteditable],#signal-settings'))return;
+const a=keymap[e.key.toLowerCase()];if(a){e.preventDefault();e.stopImmediatePropagation();perform(a)}
+},true);
+function attachMidi(input){input.onmidimessage=e=>{const [status,n,v]=e.data||[];if((status&0xf0)===0xb0||(status&0xf0)===0x90){if((status&0xf0)===0x90&&v===0)return;const key=(status&0xf0)+':'+n;if(learningMidi){midimap[key]=$('adv-map-action').value;localPut('signal-midi-map',midimap);learningMidi=false;$('adv-midi-learn').textContent='LEARN MIDI';renderMaps()}else if(midimap[key]&&v>0)perform(midimap[key])}}}
+$('adv-midi-connect').onclick=async()=>{if(!navigator.requestMIDIAccess){$('adv-map-list').textContent='Web MIDI unsupported in this browser.';return}try{midi=await navigator.requestMIDIAccess();for(const input of midi.inputs.values())attachMidi(input);midi.onstatechange=()=>{for(const input of midi.inputs.values())attachMidi(input)};renderMaps();$('adv-map-list').textContent+=' · Connected '+midi.inputs.size+' MIDI input(s).'}catch(e){$('adv-map-list').textContent='MIDI unavailable: '+e.message}};
+$('adv-midi-learn').onclick=()=>{learningMidi=true;learningKey=false;$('adv-midi-learn').textContent='MOVE MIDI CONTROL…'};
+$('adv-map-reset').onclick=()=>{keymap={};midimap={};localPut('signal-custom-keys',keymap);localPut('signal-midi-map',midimap);renderMaps()};
+renderMaps();
+let automix=false,autoIndex=0;
+const deckA=()=>api()?.deck('A');
+function nextTrack(){if(!automix)return;const files=imported();if(!files.length){automix=false;notify('adv-auto-state','Import tracks first.');return}const i=autoIndex++%files.length;api().loadTrack('A',i);const deck=deckA();if(deck){const play=()=>{deck.removeEventListener('canplay',play);deck.play().catch(e=>notify('adv-auto-state',e.message))};deck.addEventListener('canplay',play);notify('adv-auto-state','Automix: '+files[i].name)}}
+$('adv-auto-start').onclick=()=>{automix=true;autoIndex=0;const deck=deckA();if(deck)deck.addEventListener('ended',nextTrack);nextTrack()};
+$('adv-auto-stop').onclick=()=>{automix=false;deckA()?.removeEventListener('ended',nextTrack);notify('adv-auto-state','Automix off.')};
+let vizFrame=0,analyser=null,buf=null;
+const popup=document.createElement('div');popup.id='signal-viz-popup';popup.hidden=true;popup.innerHTML='<button id="signal-viz-close">CLOSE VISUALIZER</button><canvas id="signal-viz-canvas" width="1000" height="520"></canvas><small>Local master-spectrum visualization only · not a broadcast</small>';document.body.appendChild(popup);
+function draw(){if(popup.hidden)return;const canvas=$('signal-viz-canvas'),g=canvas.getContext('2d');g.fillStyle='#050a12';g.fillRect(0,0,canvas.width,canvas.height);if(analyser){analyser.getByteFrequencyData(buf);const count=64,w=canvas.width/count;for(let i=0;i<count;i++){const v=buf[Math.floor(i*buf.length/count)]/255;g.fillStyle=i%2?'#e32442':'#47b8ff';g.fillRect(i*w,canvas.height-v*canvas.height,w-3,v*canvas.height)}}vizFrame=requestAnimationFrame(draw)}
+$('adv-viz-open').onclick=async()=>{try{const a=await api().audio();analyser=a.ctx.createAnalyser();analyser.fftSize=512;a.master.connect(analyser);buf=new Uint8Array(analyser.frequencyBinCount);popup.hidden=false;draw()}catch(e){alert(e.message)}};
+$('signal-viz-close').onclick=()=>{popup.hidden=true;cancelAnimationFrame(vizFrame);analyser?.disconnect();analyser=null};
+refreshPlaylists();
 })();
 </script><script id="signal-settings-navigation-script">
 (function(){
