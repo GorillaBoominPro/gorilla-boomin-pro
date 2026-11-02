@@ -976,6 +976,7 @@ function frame(){for(const k of Object.keys(D)){const d=D[k],bar=$('chvu-'+k);if
   ctx2.fillStyle=playing?'#4dff99':'#586470';ctx2.beginPath();ctx2.arc(band.x,32,3,0,Math.PI*2);ctx2.fill();
  }
 }updateJogRing(k);const cv=$('wave-'+k);traceWave(cv,k,d.audio.currentTime,cv.width,cv.height);art.style.animationPlayState=d.audio.paused?'paused':'running';art.style.animationDuration=(1.8/Math.max(.1,d.audio.playbackRate))+'s'}if(masterAnalyser){const buf=new Uint8Array(masterAnalyser.fftSize);masterAnalyser.getByteTimeDomainData(buf);let power=0;for(const v of buf){const x=(v-128)/128;power+=x*x}const rms=Math.sqrt(power/buf.length);$('meter').style.height=Math.min(100,Math.round(rms*220))+'%'}else $('meter').style.height='0%';requestAnimationFrame(frame)}frame();
+window.signalDJGetMasterForRecording=async()=>{await init();if(!ctx||!master)throw Error('Master audio unavailable');return {audioContext:ctx,masterNode:master}};
 })();
 </script><aside id="signal-info-view" aria-live="polite"><div class="info-top"><strong>ⓘ SIGNAL DJ · INFO VIEW</strong><button type="button" id="signal-info-hide" aria-label="Hide Info View">×</button></div><p id="signal-info-description">Move your mouse over a control to learn what it does. Select controls to test the mixer.</p><div class="info-status">Hover · keyboard focus · touch</div></aside><script id="signal-info-view-script">
 (function(){
@@ -1063,15 +1064,14 @@ function frame(){for(const k of Object.keys(D)){const d=D[k],bar=$('chvu-'+k);if
   if(recorder&&recorder.state==='recording'){recorder.stop();return}
   try{
    if(!window.MediaRecorder)throw new Error('MediaRecorder unsupported in this browser');
-   if(typeof init!=='function'||typeof ctx==='undefined'||typeof master==='undefined')throw new Error('Mixer audio engine unavailable');
-   await init();
-   if(!master||!ctx)throw new Error('Load and initialize the mixer first');
-   recordStream=ctx.createMediaStreamDestination();master.connect(recordStream);
+   if(typeof window.signalDJGetMasterForRecording!=='function')throw new Error('Mixer audio engine unavailable');
+   const audio=await window.signalDJGetMasterForRecording();
+   recordStream=audio.audioContext.createMediaStreamDestination();audio.masterNode.connect(recordStream);
    recorded=[];
    const type=['audio/webm;codecs=opus','audio/webm'].find(t=>MediaRecorder.isTypeSupported(t))||'';
    recorder=new MediaRecorder(recordStream.stream,type?{mimeType:type}:undefined);
    recorder.ondataavailable=e=>{if(e.data&&e.data.size)recorded.push(e.data)};
-   recorder.onstop=()=>{try{master.disconnect(recordStream)}catch(e){}const blob=new Blob(recorded,{type:recorder.mimeType||'audio/webm'});if(blob.size){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='G-BMN-SIGNAL-DJ-set-'+new Date().toISOString().replace(/[:.]/g,'-')+'.webm';a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);recStatus.textContent='Recording saved: '+Math.round(blob.size/1024)+' KB';feedback.textContent='Saved local recording download.'}else recStatus.textContent='Recording produced no audio data';recButton.textContent='START RECORDING';recorder=null};
+   recorder.onstop=()=>{try{audio.masterNode.disconnect(recordStream)}catch(e){}const blob=new Blob(recorded,{type:recorder.mimeType||'audio/webm'});if(blob.size){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='G-BMN-SIGNAL-DJ-set-'+new Date().toISOString().replace(/[:.]/g,'-')+'.webm';a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);recStatus.textContent='Recording saved: '+Math.round(blob.size/1024)+' KB';feedback.textContent='Saved local recording download.'}else recStatus.textContent='Recording produced no audio data';recButton.textContent='START RECORDING';recorder=null};
    recorder.start(1000);recButton.textContent='STOP & SAVE';recStatus.textContent='Recording master output…';feedback.textContent='Recording locally. No broadcast started.';
   }catch(e){recStatus.textContent='Record failed: '+e.message;feedback.textContent='Recording unavailable.'}
  };
