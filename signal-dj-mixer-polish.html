@@ -617,7 +617,7 @@ async function init(){if(!ctx){ctx=new (window.AudioContext||window.webkitAudioC
 filter.connect(d.colorDry);d.colorDry.connect(d.gain);d.colorDry.connect(d.cueGain);
 filter.connect(d.colorFilter);d.colorFilter.connect(d.colorDist);d.colorDist.connect(d.colorWet);d.colorWet.connect(d.gain);d.colorWet.connect(d.cueGain);
 filter.connect(d.colorDelay);d.colorDelay.connect(d.colorDelayTone);d.colorDelayTone.connect(d.colorWet);d.colorDelayTone.connect(d.colorFeedback);d.colorFeedback.connect(d.colorDelay);
-d.colorNoiseGain.connect(d.gain);d.colorNoiseGain.connect(d.cueGain);
+d.colorNoiseGain.connect(d.gain);d.colorNoiseGain.connect(d.cueGain);ac.addEventListener("pause",()=>{if(d.colorNoiseGain&&ctx)d.colorNoiseGain.gain.setTargetAtTime(0,ctx.currentTime,.012)});ac.addEventListener("play",()=>{if(ctx)mix()});
 d.gain.connect(master);d.cueGain.connect(cueBus);d.analyser=ctx.createAnalyser();d.analyser.fftSize=512;d.gain.connect(d.analyser)}mix()}if(ctx.state==='suspended')await ctx.resume()}
 function colorCurve(amount){const n=1024,c=new Float32Array(n);for(let i=0;i<n;i++){const x=2*i/(n-1)-1;c[i]=(1+amount)*x/(1+amount*Math.abs(x))}return c}
 function updateColorFx(d,v,t){
@@ -660,7 +660,7 @@ function updateColorFx(d,v,t){
   }
   d.colorNoiseFilter.frequency.setTargetAtTime(250+param*6500,t,.02);
   d.colorNoiseFilter.Q.setTargetAtTime(1+intensity*6,t,.02);
-  smoothing(d.colorNoiseGain.gain,intensity*.11*(d.audio.paused?0:1)*Number($('level-'+Object.keys(D).find(k=>D[k]===d)).value)/100);
+  smoothing(d.colorNoiseGain.gain,intensity*.11*(d.audio.paused?0:1));
  }
 }
 function mix(){if(!ctx)return;const x=Number($('cross').value)/100,t=ctx.currentTime;master.gain.setTargetAtTime(Number($('master').value)/100,t,.015);for(const k of Object.keys(D)){const d=D[k],f=d.filters,g=k==='A'||k==='C'?Math.cos(x*Math.PI/2):Math.sin(x*Math.PI/2),trim=Number($('TRIM-'+k).value)/100,vol=Number($('level-'+k).value)/100;d.gain.gain.setTargetAtTime(g*trim*vol,t,.018);f[0].gain.setTargetAtTime(Number($('LOW-'+k).value),t,.015);f[1].gain.setTargetAtTime(Number($('MID-'+k).value),t,.015);f[2].gain.setTargetAtTime(Number($('HI-'+k).value),t,.015);let v=Number($('FILTER-'+k).value);updateColorFx(d,v,t);}}
