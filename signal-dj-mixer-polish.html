@@ -698,7 +698,7 @@ filter.connect(d.colorDry);d.colorDry.connect(d.gain);d.colorDry.connect(d.cueGa
 filter.connect(d.colorFilter);d.colorFilter.connect(d.colorDist);d.colorDist.connect(d.colorWet);d.colorWet.connect(d.gain);d.colorWet.connect(d.cueGain);
 filter.connect(d.colorDelay);d.colorDelay.connect(d.colorDelayTone);d.colorDelayTone.connect(d.colorWet);d.colorDelayTone.connect(d.colorFeedback);d.colorFeedback.connect(d.colorDelay);
 d.colorNoiseGain.connect(d.gain);d.colorNoiseGain.connect(d.cueGain);ac.addEventListener("pause",()=>{if(d.colorNoiseGain&&ctx)d.colorNoiseGain.gain.setTargetAtTime(0,ctx.currentTime,.012)});ac.addEventListener("play",()=>{if(ctx)mix()});
-d.gain.connect(master);d.beatFxSend=ctx.createGain();d.beatFxSend.gain.value=0;d.gain.connect(d.beatFxSend);d.beatFxSend.connect(beatFxDelay);d.cueGain.connect(cueBus);d.analyser=ctx.createAnalyser();d.analyser.fftSize=512;d.gain.connect(d.analyser)}mix();updateBeatFx()}if(ctx.state==='suspended')await ctx.resume()}
+d.gain.connect(master);d.beatFxSend=ctx.createGain();d.beatFxSend.gain.value=0;d.gain.connect(d.beatFxSend);d.beatFxLow=ctx.createBiquadFilter();d.beatFxLow.type='lowpass';d.beatFxLow.frequency.value=260;d.beatFxMidHP=ctx.createBiquadFilter();d.beatFxMidHP.type='highpass';d.beatFxMidHP.frequency.value=260;d.beatFxMidLP=ctx.createBiquadFilter();d.beatFxMidLP.type='lowpass';d.beatFxMidLP.frequency.value=4000;d.beatFxHigh=ctx.createBiquadFilter();d.beatFxHigh.type='highpass';d.beatFxHigh.frequency.value=4000;d.beatFxLowGain=ctx.createGain();d.beatFxMidGain=ctx.createGain();d.beatFxHighGain=ctx.createGain();d.beatFxSend.connect(d.beatFxLow).connect(d.beatFxLowGain).connect(beatFxDelay);d.beatFxSend.connect(d.beatFxMidHP).connect(d.beatFxMidLP).connect(d.beatFxMidGain).connect(beatFxDelay);d.beatFxSend.connect(d.beatFxHigh).connect(d.beatFxHighGain).connect(beatFxDelay);d.cueGain.connect(cueBus);d.analyser=ctx.createAnalyser();d.analyser.fftSize=512;d.gain.connect(d.analyser)}mix();updateBeatFx()}if(ctx.state==='suspended')await ctx.resume()}
 function colorCurve(amount){const n=1024,c=new Float32Array(n);for(let i=0;i<n;i++){const x=2*i/(n-1)-1;c[i]=(1+amount)*x/(1+amount*Math.abs(x))}return c}
 function updateColorFx(d,v,t){
  const intensity=colorFxEnabled?Math.min(1,Math.abs(v)/100):0,param=colorFxParameter;
@@ -755,7 +755,7 @@ function updateBeatFx(){
  beatFxFeedback.gain.setTargetAtTime(beatFxOn?(fx==='SPACE'?.63:fx==='DELAY'?.22:.42):0,now,.035);
  beatFxReturn.gain.setTargetAtTime(wet*.85,now,.025);
  beatFxTone.frequency.setTargetAtTime(fx==='SPACE'?6500:fx==='DELAY'?5800:3200,now,.025);
- for(const k of Object.keys(D)){const d=D[k];if(d.beatFxSend)d.beatFxSend.gain.setTargetAtTime(beatFxOn&&k===target.value?wet:0,now,.02)}
+ for(const k of Object.keys(D)){const d=D[k];if(d.beatFxSend){d.beatFxSend.gain.setTargetAtTime(beatFxOn&&k===target.value?wet:0,now,.02);for(const [band,node] of [['LOW',d.beatFxLowGain],['MID',d.beatFxMidGain],['HI',d.beatFxHighGain]])if(node)node.gain.setTargetAtTime(beatBands.has(band)?1:0,now,.025)}}
 }
 function attachRotaryControl(id,initial,onChange){
  const el=document.getElementById(id);if(!el)return;
@@ -788,7 +788,7 @@ document.getElementById('mic-toggle').onclick=async()=>{try{
 function setupBeatFx(){
  for(const id of ['beat-effect','beat-channel','beat-time','beat-depth'])document.getElementById(id).addEventListener('input',updateBeatFx);
  document.querySelectorAll('[data-beat-value]').forEach(b=>b.onclick=()=>{const val=Number(b.dataset.beatValue);const i=document.getElementById('beat-time');i.value=Math.max(1,Math.min(16,Math.round(val*4)));updateBeatFx();document.querySelectorAll('[data-beat-value]').forEach(x=>x.classList.toggle('is-active',x===b))});
- document.querySelectorAll('.sidefx .fx-freq button[data-band]').forEach(b=>b.onclick=()=>{const band=b.dataset.band;if(beatBands.has(band)&&beatBands.size>1)beatBands.delete(band);else beatBands.add(band);b.classList.toggle('is-active',beatBands.has(band));updateBeatFx()});
+ document.querySelectorAll('.sidefx .fx-freq button[data-band]').forEach(b=>{b.classList.add('is-active');b.setAttribute('aria-pressed','true');b.onclick=()=>{const band=b.dataset.band;if(beatBands.has(band)&&beatBands.size>1)beatBands.delete(band);else beatBands.add(band);b.classList.toggle('is-active',beatBands.has(band));b.setAttribute('aria-pressed',String(beatBands.has(band)));updateBeatFx()}});
  const toggle=document.getElementById('beat-fx-toggle');toggle.onclick=()=>{beatFxOn=!beatFxOn;toggle.setAttribute('aria-pressed',String(beatFxOn));toggle.classList.toggle('fx-engaged',beatFxOn);updateBeatFx()};
  document.getElementById('beat-less').onclick=()=>{const i=document.getElementById('beat-time');i.value=Math.max(1,Number(i.value)-1);updateBeatFx()};
  document.getElementById('beat-more').onclick=()=>{const i=document.getElementById('beat-time');i.value=Math.min(16,Number(i.value)+1);updateBeatFx()};
