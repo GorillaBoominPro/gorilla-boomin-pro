@@ -760,6 +760,32 @@ body.signal-booth-v2 .signal-cdjx-pad-dock{border-top:2px solid #3d4550;padding-
 body.signal-booth-v2 .signal-cdjx-pad-dock .signal-booth-stems{margin-top:7px}
 body.signal-booth-v2 .signal-cdjx-pad-dock .pad-bank{margin-top:6px}
 body.signal-booth-v2 .cdjx-note{font-size:9px;color:#7b8ea2}
+</style><style id="signal-cdjx-geometry-fix">
+/* Correct the old deck's absolute-position geometry after adding the LCD. */
+body.signal-booth-v2 .deckshell{height:clamp(865px,65vw,1020px)!important;min-height:865px!important;overflow:hidden}
+body.signal-booth-v2 .deckshell>.signal-cdjx-screen{position:absolute!important;top:1%!important;left:2%!important;width:96%!important;height:33%!important;z-index:8;overflow:hidden;margin:0!important}
+body.signal-booth-v2 .signal-cdjx-screen .deckwave{position:relative!important;top:auto!important;left:auto!important;width:100%!important;height:100px!important;max-height:12vh}
+body.signal-booth-v2 .signal-cdjx-screen .deck-wave-area{position:relative!important;margin:3px 0!important;height:auto!important;padding:3px!important;display:block!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-track{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.signal-booth-v2 .deckshell>.utility{top:34.3%!important;z-index:3}
+body.signal-booth-v2 .deckshell>.ref-tools{display:contents}
+body.signal-booth-v2 .deckshell .platterZone{top:44%!important;width:62%!important;left:19%!important;max-height:32%!important;z-index:2}
+body.signal-booth-v2 .deckshell .ref-left-stack{top:42%!important;height:32%!important}
+body.signal-booth-v2 .deckshell .ref-right-stack{top:42%!important;height:32%!important}
+body.signal-booth-v2 .deckshell .ref-right-stack .sync-label{top:76%!important}
+body.signal-booth-v2 .deckshell .ref-right-stack .sync-duo{top:87%!important}
+body.signal-booth-v2 .deckshell .ref-right-stack .master-tempo-label{top:115%!important}
+body.signal-booth-v2 .deckshell .ref-right-stack .master-tempo-led{top:125%!important}
+body.signal-booth-v2 .deckshell .transportRow{bottom:12%!important;height:18%!important;z-index:3}
+body.signal-booth-v2 .deckshell .transportRow .pitchrail{height:140%!important;max-height:220px}
+body.signal-booth-v2 .deckshell .signal-cdjx-pad-dock{position:absolute!important;left:2%;right:2%;bottom:1%!important;min-height:10%;max-height:11%;overflow:visible;margin:0;padding:4px 0;z-index:4}
+body.signal-booth-v2 .signal-cdjx-pad-dock .pad-bank{border-top:1px solid #53606f;margin:0!important;padding:5px 0 0!important}
+body.signal-booth-v2 .signal-cdjx-pad-dock .pads button{height:30px!important;aspect-ratio:auto!important}
+body.signal-booth-v2 .signal-cdjx-pad-dock .pad-modes{margin-bottom:3px}
+body.signal-booth-v2 .signal-cdjx-pad-dock .padinfo{margin-bottom:2px}
+body.signal-booth-v2 .signal-cdjx-pad-dock .signal-booth-stems:not([hidden]){position:relative;z-index:10;background:#11171d;box-shadow:0 -7px 22px #000}
+body.signal-booth-v2 .deck-sampler{display:none!important}
+@media(max-width:1250px){body.signal-booth-v2 .deckshell{height:900px!important}body.signal-booth-v2 .signal-cdjx-screen .deckwave{height:65px!important}}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
