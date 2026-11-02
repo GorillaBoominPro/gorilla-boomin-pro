@@ -808,7 +808,7 @@ d.audio.onplay=()=>{$('jog-'+k).classList.add('playing');$('play-'+k).textConten
 let scratch=null;const jog=$('jog-'+k);jog.style.touchAction='none';
 const angle=e=>{const b=jog.getBoundingClientRect();return Math.atan2(e.clientY-(b.top+b.height/2),e.clientX-(b.left+b.width/2))};
 const clampPos=position=>Math.max(0,Math.min((d.scratchBuffer?.duration||d.audio.duration||0)-.001,position));
-const scratchModule=()=>window.__signalScratchModule||(window.__signalScratchModule=ctx.audioWorklet.addModule('signal-scratch-worklet.js?v=3').catch(e=>{window.__signalScratchModule=null;throw e}));
+const scratchModule=()=>window.__signalScratchModule||(window.__signalScratchModule=ctx.audioWorklet.addModule('signal-scratch-worklet.js?v=4').catch(e=>{window.__signalScratchModule=null;throw e}));
 jog.onpointerdown=async e=>{
  if(!d.audio.src||e.button>0||scratch)return;
  const vinyl=$('vinyl-'+k).getAttribute('aria-pressed')==='true';
@@ -849,10 +849,15 @@ const release=e=>{
  if(!scratch||(e&&e.pointerId!==scratch.pointer))return;
  const old=scratch;scratch=null;d.scratchPosition=null;jog.classList.remove('scratching');
  if(!old.nudge){
-  old.node.port.postMessage({type:'stop'});
-  setTimeout(()=>{try{old.node.disconnect();old.node.port.close()}catch(e){}},90);
-  d.audio.currentTime=clampPos(old.position);
-  if(old.wasPlaying)d.audio.play().catch(()=>{});
+  const finish=position=>{
+   if(old.finished)return;old.finished=true;
+   try{old.node.port.postMessage({type:'stop'});old.node.disconnect();old.node.port.close()}catch(e){}
+   d.audio.currentTime=clampPos(Number.isFinite(position)?position:old.position);
+   if(old.wasPlaying)d.audio.play().catch(()=>{});
+  };
+  old.node.port.onmessage=({data:m})=>{if(m?.type==='released')finish(m.position)};
+  old.node.port.postMessage({type:'release'});
+  setTimeout(()=>finish(old.position),2200);
  }
  d.audio.playbackRate=Number($('speed-'+k).value)/100;
 };
