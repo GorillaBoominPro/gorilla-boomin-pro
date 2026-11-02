@@ -8,7 +8,8 @@ class SignalScratchProcessor extends AudioWorkletProcessor {
    if(m.type==='buffer'){this.channels=m.channels;this.sourceRate=m.rate||sampleRate;}
    if(m.type==='start'){this.position=m.position*this.sourceRate;this.requestedPosition=this.position;this.rate=0;this.target=0;this.level=0;this.enabled=true;this.lastMotion=currentTime;this.spinning=false;}
    if(m.type==='move'){this.lastMotion=currentTime;this.target=Math.max(-8,Math.min(8,m.rate));if(Number.isFinite(m.position))this.requestedPosition=Math.max(0,Math.min(this.length-1,m.position*this.sourceRate));}
-   if(m.type==='release'){this.spinning=Math.abs(this.rate)>1.2;this.decay=.99978;if(!this.spinning){this.enabled=false;this.target=0;this.port.postMessage({type:'released',position:this.position/this.sourceRate});}}\n   if(m.type==='stop'){this.target=0;this.enabled=false;this.spinning=false;}
+   if(m.type==='release'){this.spinning=Math.abs(this.rate)>1.2;this.decay=.99978;if(!this.spinning){this.enabled=false;this.target=0;this.port.postMessage({type:'released',position:this.position/this.sourceRate});}}
+   if(m.type==='stop'){this.target=0;this.enabled=false;this.spinning=false;}
   };
  }
  get length(){return this.channels[0]?.length||0}
