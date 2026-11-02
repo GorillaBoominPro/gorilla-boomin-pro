@@ -631,6 +631,27 @@ background:radial-gradient(circle at 50% 50%,#633f35 0 3px,transparent 3.4px) ce
 #signal-viz-popup{position:fixed;inset:0;z-index:9800;background:#05090fee;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
 #signal-viz-popup[hidden]{display:none}
 #signal-viz-canvas{width:min(96vw,1000px);height:min(70vh,520px);background:#060b12}
+</style><style id="signal-fullscreen-v2">
+/* Fullscreen 2.0: desktop-wide chassis, vertical use, legible compact labeling. */
+body.signal-immersive{margin:0;min-height:100dvh;overflow-x:auto}
+body.signal-immersive header{width:100%;max-width:none;padding:7px 10px;min-height:40px}
+body.signal-immersive header .caption{display:none}
+body.signal-immersive main{width:100%;max-width:none;padding:0 7px 12px}
+body.signal-immersive .console{width:100%;max-width:none;margin-top:5px;min-height:calc(100dvh - 145px);grid-template-columns:minmax(0,1.14fr) minmax(295px,.82fr) minmax(0,1.14fr)}
+body.signal-immersive .deckshell{height:clamp(745px,calc(100dvh - 185px),1000px)}
+body.signal-immersive .deckshell .pad-modes button,
+body.signal-immersive .deckshell .padinfo,
+body.signal-immersive .deckshell .padinfo .clear-small{font-size:9px}
+body.signal-immersive .deckshell .ref-right-stack label,
+body.signal-immersive .deckshell .slip-label,
+body.signal-immersive .deckshell .loop-cutter-label,
+body.signal-immersive .deckshell .direction-label{font-size:9px}
+body.signal-immersive .deckshell .transportRow .pitchrail label,
+body.signal-immersive .deckshell .transportRow .pitchrail output{font-size:10px}
+@media(min-width:1800px){body.signal-immersive .deckshell .jog .centerdisc b{font-size:26px}}
+@media(max-width:1320px){body.signal-immersive .console{grid-template-columns:minmax(0,1.14fr) minmax(295px,.82fr) minmax(0,1.14fr)}}
+@media(max-width:1050px){body.signal-immersive .console{min-width:1050px}body.signal-immersive{overflow-x:auto}}
+@media(max-width:640px){body.signal-immersive .console{min-width:0;display:flex;flex-direction:column}body.signal-immersive .deckshell{height:745px}}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
