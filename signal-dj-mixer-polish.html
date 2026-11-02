@@ -761,7 +761,54 @@ d.savedLoop=null;
 $('loop-'+k).onclick=()=>{if(!Number.isFinite(d.audio.duration))return;const bpm=Number($('manual-'+k).value)||128;const start=d.audio.currentTime;d.loop=[start,Math.min(d.audio.duration,start+240/bpm)];d.savedLoop=[...d.loop];status('Deck '+k+' 4-beat loop active')};$('loopoff-'+k).onclick=()=>{if(d.loop)d.savedLoop=[...d.loop];d.loop=null;status('Deck '+k+' loop exited')};
 d.audio.ontimeupdate=()=>{if(d.loop&&d.audio.currentTime>=d.loop[1]-.04)d.audio.currentTime=d.loop[0];$('clock-'+k).textContent=fmt(d.audio.currentTime)};
 d.audio.onplay=()=>{$('jog-'+k).classList.add('playing');$('play-'+k).textContent='Ⅱ'};d.audio.onpause=()=>{$('jog-'+k).classList.remove('playing');$('play-'+k).textContent='▶'};d.audio.onended=d.audio.onpause;
-let previous=null;const jog=$('jog-'+k);jog.onpointerdown=e=>{if(!d.audio.src)return;previous=e.clientY;jog.setPointerCapture(e.pointerId)};jog.onpointermove=e=>{if(previous===null)return;const dy=e.clientY-previous;previous=e.clientY;if(d.audio.paused)d.audio.currentTime=Math.max(0,Math.min(d.audio.duration||0,d.audio.currentTime-dy*.07));else d.audio.playbackRate=Math.max(.8,Math.min(1.2,Number($('speed-'+k).value)/100-dy*.004))};const release=()=>{previous=null;d.audio.playbackRate=Number($('speed-'+k).value)/100};jog.onpointerup=release;jog.onpointercancel=release;jog.onlostpointercapture=release;
+/* Vinyl jog: plays actual decoded track material in short forward/reverse grains. */
+let scratch=null;const jog=$('jog-'+k);jog.style.touchAction='none';
+const angle=e=>{const b=jog.getBoundingClientRect();return Math.atan2(e.clientY-(b.top+b.height/2),e.clientX-(b.left+b.width/2))};
+function scratchGrain(delta){
+ if(!ctx||!d.scratchBuffer||!d.filters?.[0])return;
+ const buffer=d.scratchBuffer,rate=buffer.sampleRate,seconds=Math.min(.17,Math.max(.035,Math.abs(delta)*.12)),length=Math.min(Math.floor(seconds*rate),buffer.length);
+ if(length<32)return;
+ const reverse=delta<0,at=Math.max(0,Math.min(buffer.duration-seconds,(scratch.position||0)-(reverse?seconds:0)));
+ const grain=ctx.createBuffer(buffer.numberOfChannels,length,rate);
+ for(let ch=0;ch<grain.numberOfChannels;ch++){
+  const input=buffer.getChannelData(ch),out=grain.getChannelData(ch),start=Math.floor(at*rate);
+  for(let n=0;n<length;n++)out[n]=input[Math.min(input.length-1,start+(reverse?length-1-n:n))];
+ }
+ const source=ctx.createBufferSource(),envelope=ctx.createGain(),now=ctx.currentTime;
+ source.buffer=grain;envelope.gain.setValueAtTime(0,now);
+ envelope.gain.linearRampToValueAtTime(.85,now+.004);
+ envelope.gain.setValueAtTime(.85,now+Math.max(.005,seconds-.012));
+ envelope.gain.linearRampToValueAtTime(0,now+seconds);
+ source.connect(envelope).connect(d.filters[0]);source.start(now);source.stop(now+seconds+.005);
+ source.onended=()=>{source.disconnect();envelope.disconnect()};
+}
+jog.onpointerdown=async e=>{
+ if(!d.audio.src||e.button>0)return;
+ if($('vinyl-'+k).getAttribute('aria-pressed')!=='true'){scratch={pointer:e.pointerId,last:angle(e),position:d.audio.currentTime,nudge:true};jog.setPointerCapture(e.pointerId);return}
+ try{await init()}catch(err){status('Audio initialization unavailable: '+err.message);return}
+ if(!d.scratchBuffer){status('Deck '+k+': scratch audio is preparing; try again after track analysis');return}
+ const wasPlaying=!d.audio.paused;d.audio.pause();
+ scratch={pointer:e.pointerId,last:angle(e),position:d.audio.currentTime,wasPlaying,lastGrain:0,nudge:false};
+ jog.setPointerCapture(e.pointerId);jog.classList.add('scratching');
+};
+jog.onpointermove=e=>{
+ if(!scratch||e.pointerId!==scratch.pointer)return;
+ const next=angle(e);let diff=next-scratch.last;
+ if(diff>Math.PI)diff-=2*Math.PI;if(diff< -Math.PI)diff+=2*Math.PI;
+ scratch.last=next;
+ const seconds=diff/(Math.PI*2)*1.8;
+ if(scratch.nudge){d.audio.currentTime=Math.max(0,Math.min(d.audio.duration||0,d.audio.currentTime+seconds));return}
+ scratch.position=Math.max(0,Math.min(d.scratchBuffer.duration-.001,scratch.position+seconds));
+ const now=performance.now();
+ if(Math.abs(diff)>.009&&now-scratch.lastGrain>35){scratch.lastGrain=now;scratchGrain(seconds)}
+};
+const release=e=>{
+ if(!scratch||(e&&e.pointerId!==scratch.pointer))return;
+ const old=scratch;scratch=null;jog.classList.remove('scratching');
+ if(!old.nudge){d.audio.currentTime=Math.max(0,Math.min(d.audio.duration||0,old.position));if(old.wasPlaying)d.audio.play().catch(()=>{})}
+ d.audio.playbackRate=Number($('speed-'+k).value)/100;
+};
+jog.onpointerup=release;jog.onpointercancel=release;jog.onlostpointercapture=release;
 $('in-'+k).onclick=()=>{if(!d.audio.src)return;d.loopIn=d.audio.currentTime;status('Deck '+k+' loop IN set')};
 $('out-'+k).onclick=()=>{if(!d.audio.src||d.loopIn==null)return;d.loop=[d.loopIn,Math.max(d.loopIn+.05,d.audio.currentTime)];d.savedLoop=[...d.loop];status('Deck '+k+' loop OUT set')};
 $('reloop-'+k).onclick=()=>{const target=d.loop||d.savedLoop;if(target){d.loop=[...target];d.audio.currentTime=d.loop[0];status('Deck '+k+' loop recalled')}else status('Set a loop first')};
@@ -994,7 +1041,7 @@ function estimateBPM(buffer){
  for(let bpm=70;bpm<=175;bpm++){const lag=Math.round(60*rate/bpm);let score=0;for(let i=lag;i<onset.length;i++)score+=onset[i]*onset[i-lag];if(score>bestScore){bestScore=score;best=bpm}}
  return best||null;
 }
-async function load(k,file){const d=D[k];d.currentFile=file;d.audio.pause();if(d.url)URL.revokeObjectURL(d.url);d.url=URL.createObjectURL(file);d.audio.src=d.url;d.audio.load();d.cues=Array(8).fill(null);d.loop=null;for(const b of $('pads-'+k).children)b.classList.remove('set');$('name-'+k).textContent=file.name;status('Deck '+k+': '+file.name);if(k==='A'||k==='B')$('label'+k).textContent=k+': '+file.name;if(k==='A'||k==='B')updateCentral();try{const ac=new (window.AudioContext||window.webkitAudioContext)();const decoded=await ac.decodeAudioData(await file.arrayBuffer());wave(k,decoded);capturePeaks(k,decoded);const guess=estimateBPM(decoded);if(guess&&D[k].url===d.url){$('manual-'+k).value=guess;$('manual-'+k).dispatchEvent(new Event('input'));status('Deck '+k+': estimated '+guess+' BPM — verify by ear and adjust if needed')}await ac.close()}catch(e){status('Track loaded; waveform unavailable for this format')}}
+async function load(k,file){const d=D[k];d.currentFile=file;d.scratchBuffer=null;d.audio.pause();if(d.url)URL.revokeObjectURL(d.url);d.url=URL.createObjectURL(file);d.audio.src=d.url;d.audio.load();d.cues=Array(8).fill(null);d.loop=null;for(const b of $('pads-'+k).children)b.classList.remove('set');$('name-'+k).textContent=file.name;status('Deck '+k+': '+file.name);if(k==='A'||k==='B')$('label'+k).textContent=k+': '+file.name;if(k==='A'||k==='B')updateCentral();try{const ac=new (window.AudioContext||window.webkitAudioContext)();const decoded=await ac.decodeAudioData(await file.arrayBuffer());if(D[k].url===d.url)d.scratchBuffer=decoded;wave(k,decoded);capturePeaks(k,decoded);const guess=estimateBPM(decoded);if(guess&&D[k].url===d.url){$('manual-'+k).value=guess;$('manual-'+k).dispatchEvent(new Event('input'));status('Deck '+k+': estimated '+guess+' BPM — verify by ear and adjust if needed')}await ac.close()}catch(e){status('Track loaded; waveform unavailable for this format')}}
 const trackMeta=new WeakMap();const analysisQueue=[];let analyzing=false;
 function addToLibrary(files){let count=0;for(const f of files){if(!f.type.startsWith('audio/')&&!/\.(mp3|wav|flac|aac|m4a|ogg|opus)$/i.test(f.name))continue;if(list.some(x=>x.name===f.name&&x.size===f.size&&x.lastModified===f.lastModified))continue;list.push(f);trackMeta.set(f,{artist:'Unknown',genre:'Unknown',bpm:null,state:'pending'});analysisQueue.push(f);count++}render();renderCentral();updateAnalysisCount();if(count)processAnalysis()}
 function updateAnalysisCount(){$('analysis-count').textContent=analysisQueue.length+' QUEUED · '+list.filter(f=>trackMeta.get(f)?.state==='done').length+'/'+list.length+' ANALYZED'}
