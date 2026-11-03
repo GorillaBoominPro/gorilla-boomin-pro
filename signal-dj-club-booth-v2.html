@@ -986,6 +986,12 @@ body.signal-booth-v2 .deckshell .platterZone{z-index:4!important}
 body.signal-booth-v2 .deckshell .signal-cdjx-pad-dock{z-index:12!important;bottom:1.3%!important;height:20%!important}
 body.signal-booth-v2 .deckshell .transportRow .pitchrail{z-index:12!important}
 @media(max-width:1100px){body.signal-booth-v2 .deckshell .cdjx-hardware-rail{height:19.5%!important}body.signal-booth-v2 .deckshell .roundPair button{width:46px!important;height:46px!important}}
+</style><style id="signal-direct-deck-load-v11">
+body.signal-booth-v2 .cdjx-direct-load{display:flex;align-items:center;gap:5px;margin:3px 0 5px;min-height:29px}
+body.signal-booth-v2 .cdjx-direct-load button{flex:1;min-width:0;background:linear-gradient(#c33250,#772035)!important;color:#fff!important;border:1px solid #ff7893!important;border-radius:4px;font-size:10px!important;font-weight:900!important;letter-spacing:.2px;padding:7px 4px!important;box-shadow:inset 0 1px 0 #ffc4cc55,0 2px 5px #0008;cursor:pointer}
+body.signal-booth-v2 .cdjx-direct-load .cdjx-deck-file-state{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#a9c2d7;font-size:9px}
+body.signal-booth-v2 .cdjx-direct-load button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+body.signal-booth-v2 .cdjx-direct-load button:hover{filter:brightness(1.15)}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -2263,6 +2269,34 @@ function install(){
  if(window.ResizeObserver){const ro=new ResizeObserver(()=>scheduleFit());ro.observe(toolbar);/* Avoid observing viewport height that fit() itself writes. */ }
  setView('fit');
  requestAnimationFrame(()=>requestAnimationFrame(scheduleFit));
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+})();
+</script><script id="signal-direct-deck-load-v11-script">
+(()=>{
+function install(){
+ for(const k of ['A','B']){
+  const monitor=document.querySelector('.deck-'+k+' .signal-cdjx-screen');
+  const input=document.getElementById('file-'+k);
+  if(!monitor||!input||monitor.querySelector('.cdjx-direct-load'))continue;
+  const section=document.createElement('div');section.className='cdjx-direct-load';
+  const button=document.createElement('button');button.type='button';button.textContent='↥ LOAD FROM DESKTOP · '+k;
+  button.setAttribute('aria-label','Choose an audio file from your computer for Deck '+k);
+  button.title='Load local audio directly onto Deck '+k+'. This replaces the current track on this deck.';
+  const state=document.createElement('span');state.className='cdjx-deck-file-state';state.textContent='CHOOSE MP3 / WAV / AUDIO';
+  section.append(button,state);
+  monitor.querySelector('.cdjx-screen-nav')?.insertAdjacentElement('afterend',section);
+  button.onclick=()=>{input.value='';input.click()};
+  input.addEventListener('change',()=>{
+   const file=input.files?.[0];if(!file)return;
+   state.textContent=file.name;state.title=file.name;
+  });
+  const filename=document.getElementById('name-'+k);
+  if(filename&&window.MutationObserver){const obs=new MutationObserver(()=>{
+   const name=filename.textContent.trim();
+   if(name&&name!=='NO TRACK'){state.textContent=name;state.title=name}
+  });obs.observe(filename,{subtree:true,childList:true,characterData:true})}
+ }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
