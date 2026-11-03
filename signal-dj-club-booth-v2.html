@@ -1130,6 +1130,40 @@ body.signal-booth-v2 .deckshell>.cdjx-face-cluster{height:24%!important;top:41%!
 body.signal-booth-v2 .deckshell>.cdjx-face-hotcues{top:38.3%!important}
 body.signal-booth-v2 .deckshell>.cdjx-face-hotcue-label{top:36.7%!important}
 body.signal-booth-v2 .deckshell .platterZone{top:44%!important}
+</style><style id="signal-cdjx-browse-module-v18">
+/* 3000X browse module: top paired keys, central push-turn encoder, bottom paired keys. */
+body.signal-booth-v2 .deckshell>.cdjx-side-wing.right{
+ display:flex!important;flex-direction:column!important;gap:0!important;
+ padding:5px 4px!important;overflow:visible!important;height:31.2%!important;
+ background:linear-gradient(90deg,#252a31,#0b1017 17%,#141a22 83%,#323840)!important;
+ border:2px solid #4b5662!important;
+}
+body.signal-booth-v2 .cdjx-side-wing.right>.cdjx-wing-label{font-size:7px!important;min-height:13px!important}
+body.signal-booth-v2 .cdjx-side-wing.right>.cdjx-wing-double{width:100%!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:2px!important}
+body.signal-booth-v2 .cdjx-side-wing.right>.cdjx-wing-double button{
+ min-height:41px!important;line-height:1.05!important;font-size:7px!important;padding:3px 1px!important;
+ background:linear-gradient(#3a3f45,#1a1f25)!important;border:1px solid #636a74!important;border-radius:8px 8px 2px 2px!important;color:#f0f3f8!important;
+}
+body.signal-booth-v2 .cdjx-side-wing.right>.cdjx-wing-double:last-child button{border-radius:2px 2px 8px 8px!important}
+body.signal-booth-v2 .cdjx-side-wing.right>.signal-cdjx-encoder{
+ width:100%!important;flex:1!important;display:flex!important;flex-direction:column!important;
+ align-items:center!important;justify-content:center!important;
+ margin:0!important;min-height:74px!important;height:auto!important;
+ background:radial-gradient(ellipse,#242c33 0%,#080d12 70%)!important;border:0!important;
+ padding:3px 0!important;gap:3px!important;
+}
+body.signal-booth-v2 .cdjx-side-wing.right .signal-cdjx-encoder .cdjx-encoder-label{font-size:7px!important;letter-spacing:0!important}
+body.signal-booth-v2 .cdjx-side-wing.right .signal-cdjx-encoder .cdjx-push-label{font-size:7px!important;color:#c6d4e3!important}
+body.signal-booth-v2 .cdjx-side-wing.right .signal-cdjx-encoder .cdjx-rotary{
+ width:min(90%,67px)!important;height:auto!important;aspect-ratio:1!important;border-radius:50%!important;
+ border:5px solid #a9b0b8!important;background:conic-gradient(#30343a 0deg,#b0b6be 40deg,#30363c 100deg,#1b1f25 160deg,#8e969f 210deg,#252a31 300deg,#30343a 360deg)!important;
+ box-shadow:0 0 0 5px #121820,0 0 0 7px #404952,0 5px 8px #000e!important;font-size:8px!important;
+}
+body.signal-booth-v2 .deckshell>.cdjx-vinyl-adjust{position:absolute!important;right:1%!important;top:34.5%!important;width:13.5%!important;height:6.3%!important;z-index:18!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:space-around!important;color:#d9e4ee!important;background:linear-gradient(#202831,#10151c);border:1px solid #414e5b;border-radius:4px}
+body.signal-booth-v2 .cdjx-vinyl-adjust label{font-size:7px;font-weight:800;line-height:1.1;text-align:center}
+body.signal-booth-v2 .cdjx-vinyl-adjust input{width:88%!important;accent-color:#b1b8c0}
+body.signal-booth-v2 .cdjx-vinyl-adjust small{font-size:6px;color:#94a5b5}
+body.signal-booth-v2 .cdjx-face-hotcues{width:68%!important}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -2485,7 +2519,7 @@ function init(){
   left.innerHTML='<div class="cdjx-wing-label">MEDIA SOURCE</div><div class="cdjx-usb-unit"><button type="button" class="cdjx-usb" data-c="usb1">USB 1</button><button type="button" class="cdjx-stop" data-c="stop1">■ STOP</button></div><div class="cdjx-usb-unit"><button type="button" class="cdjx-usb" data-c="usb2">USB 2</button><button type="button" class="cdjx-stop" data-c="stop2">■ STOP</button></div><div class="cdjx-wing-double"><button type="button" class="cdjx-quant" data-c="quant" title="Quantize: not implemented">QUANTIZE</button><button type="button" class="cdjx-slip" data-c="slip" title="Slip mode: not implemented">SLIP</button></div><div class="cdjx-wing-label">CUE / LOOP</div><div class="cdjx-wing-double"><button type="button" data-c="call">◀ CALL</button><button type="button" data-c="delete">DELETE</button></div><small class="cdjx-hint">USB selects files on Mac · QUANTIZE / SLIP not yet supported</small>';
   right.innerHTML='<div class="cdjx-wing-label">TRACK BROWSER</div><div class="cdjx-wing-double"><button type="button" data-c="back">BACK</button><button type="button" data-c="tag">TAG TRACK / REMOVE</button></div><div class="cdjx-wing-double"><button type="button" data-c="filter">TRACK FILTER / EDIT</button><button type="button" data-c="shortcut">SHORT CUT</button></div>';
   const encoder=shell.querySelector('.signal-cdjx-encoder');
-  if(encoder){encoder.querySelector('.cdjx-back')?.remove();right.insertBefore(encoder,right.querySelector('.cdjx-wing-double'))}
+  if(encoder){encoder.querySelector('.cdjx-back')?.remove();right.querySelector('.cdjx-wing-double')?.insertAdjacentElement('afterend',encoder)}
   shell.append(left,right);
   const browse=()=>window.signalCDJBrowser?.[k];
   const file=()=>{const input=document.getElementById('file-'+k);if(input){input.value='';input.click()}};
@@ -2592,5 +2626,20 @@ function init(){
  }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script><script id="signal-cdjx-vinyl-speed-placement-v18">
+(()=>{
+function build(){
+ for(const k of ['A','B']){
+  const deck=document.querySelector('.deckshell.deck-'+k);
+  if(!deck||deck.querySelector('.cdjx-vinyl-adjust'))continue;
+  const block=document.createElement('section');block.className='cdjx-vinyl-adjust';
+  block.innerHTML='<label>VINYL SPEED<br>ADJUST</label><input type="range" min="0" max="100" value="50" aria-label="Deck '+k+' vinyl release speed parameter"><small>ENGINE LIMIT</small>';
+  const slider=block.querySelector('input');slider.title='Visual parameter only: audio release-speed processing is not implemented yet';
+  slider.oninput=()=>{const original=document.getElementById('r-vspeed-'+k);if(original){original.value=slider.value;original.dispatchEvent(new Event('input',{bubbles:true}))}};
+  deck.append(block);
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',build,{once:true});else build();
 })();
 </script></body></html>
