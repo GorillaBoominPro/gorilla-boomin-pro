@@ -1274,6 +1274,45 @@ body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo input[type=range]::-m
  width:40px;height:21px;border:2px solid #76848f;border-radius:3px;background:#c5cdd5;
 }
 body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo input[type=range]:focus-visible{outline:2px solid white!important;outline-offset:2px}
+</style><style id="signal-cdjx-tempo-hardware-v20">
+/* CDJ-inspired full travel tempo fader. Existing playback-rate input remains the engine source of truth. */
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo{
+ top:70.4%!important;right:1.3%!important;bottom:.7%!important;width:13.7%!important;
+ background:transparent!important;border:0!important;box-shadow:none!important;
+ padding:0!important;overflow:visible!important;gap:0!important;
+ display:block!important;position:absolute!important;z-index:22!important;
+}
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo:before,
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo:after{display:none!important}
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo>label{display:none!important}
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo>output{display:none!important}
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo>input[type=range]{
+ position:absolute!important;inset:0!important;width:100%!important;max-width:none!important;
+ height:100%!important;min-height:0!important;opacity:0!important;z-index:6!important;
+ cursor:ns-resize!important;margin:0!important;touch-action:none!important;
+}
+body.signal-booth-v2 .cdjx-tempo-slot{position:absolute;inset:0 8% 0 21%;background:#10141a;
+ border:4px solid #272d34;border-radius:12px;
+ box-shadow:inset 0 0 0 2px #080b10,0 0 0 1px #4c535d,0 3px 7px #0009;pointer-events:none}
+body.signal-booth-v2 .cdjx-tempo-slot:before{content:'';position:absolute;left:50%;top:7%;bottom:7%;width:8px;transform:translateX(-50%);
+ background:linear-gradient(90deg,#0a0d11,#1a1e23 35%,#030508 46% 54%,#22272d 65%,#0a0d11);border:1px solid #030507;border-radius:2px;box-shadow:inset 0 0 3px black}
+body.signal-booth-v2 .cdjx-tempo-marks{position:absolute;left:0;top:8%;bottom:8%;width:20%;
+ background:repeating-linear-gradient(to bottom,#c3c8ceaa 0 2px,transparent 2px 13px);
+ mask-image:linear-gradient(to right,transparent 0 48%,black 48%);pointer-events:none}
+body.signal-booth-v2 .cdjx-tempo-label{position:absolute;left:-6%;width:31%;font-size:11px;color:#dce1e8;font-weight:900;text-align:center;pointer-events:none}
+body.signal-booth-v2 .cdjx-tempo-label.minus{top:6%}
+body.signal-booth-v2 .cdjx-tempo-label.zero{top:50%;transform:translateY(-50%);color:#f0f1f1}
+body.signal-booth-v2 .cdjx-tempo-label.plus{bottom:6%}
+body.signal-booth-v2 .cdjx-tempo-zero-tick{position:absolute;left:10%;width:15%;height:4px;top:50%;transform:translateY(-50%);background:white;box-shadow:0 0 3px #fff5;pointer-events:none}
+body.signal-booth-v2 .cdjx-tempo-handle{position:absolute;left:57%;top:50%;width:70%;height:39px;
+ transform:translate(-50%,-50%);background:linear-gradient(#171b21 0 12%,#697078 13% 30%,#171b20 31% 42%,#dddfe1 43% 48%,#4d5561 49% 59%,#161a20 60% 78%,#656b72 79% 86%,#181b20 87%);
+ border:2px solid #252d34;border-radius:5px;box-shadow:0 2px 7px #000c,inset 0 1px 2px #ffffff66;
+ pointer-events:none;z-index:5}
+body.signal-booth-v2 .cdjx-tempo-handle:after{content:'';position:absolute;left:6%;right:6%;top:50%;height:3px;background:#eff0f1;box-shadow:0 0 3px #fffa}
+body.signal-booth-v2 .cdjx-tempo-reset-wrap{position:absolute;right:16.1%;top:83.7%;width:15.7%;z-index:21;display:flex;flex-direction:column;gap:4px;align-items:center}
+body.signal-booth-v2 .cdjx-tempo-reset-wrap label{font-weight:800;font-size:8px;text-align:center;color:#cfd5df;line-height:1.1}
+body.signal-booth-v2 .cdjx-tempo-reset-wrap button{width:38px;height:38px;max-width:100%;border-radius:50%;border:4px solid #3d4651;background:radial-gradient(circle at 45% 40%,#747f88 0 15%,#2a3038 30%,#07090d 50%,#38404b 65%,#101319 78%);box-shadow:0 0 0 2px #10151c,0 3px 6px #000a;cursor:pointer}
+body.signal-booth-v2 .cdjx-tempo-reset-wrap button:focus-visible{outline:2px solid white;outline-offset:3px}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -2769,5 +2808,43 @@ function init(){
  }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script><script id="signal-cdjx-tempo-hardware-v20-script">
+(()=>{
+function install(){
+ for(const k of ['A','B']){
+  const shell=document.querySelector('.deckshell.deck-'+k);
+  const fader=shell?.querySelector('.pitchrail.cdjx-long-tempo');
+  const input=document.getElementById('speed-'+k);
+  if(!shell||!fader||!input||fader.querySelector('.cdjx-tempo-slot'))continue;
+  // A realistic visible slider skin; input and existing rate-change handler remain unchanged.
+  const make=(type,cls,txt)=>{const n=document.createElement(type);n.className=cls;if(txt)n.textContent=txt;return n};
+  fader.append(make('div','cdjx-tempo-slot'),make('div','cdjx-tempo-marks'),make('div','cdjx-tempo-label minus','−'),make('div','cdjx-tempo-label zero','0'),make('div','cdjx-tempo-label plus','+'),make('div','cdjx-tempo-zero-tick'));
+  const handle=make('div','cdjx-tempo-handle');fader.append(handle);
+  const reset=make('div','cdjx-tempo-reset-wrap');const lbl=make('label','','TEMPO RESET');const btn=make('button','','');btn.type='button';btn.title='Return Deck '+k+' to 0% tempo';btn.setAttribute('aria-label','Reset Deck '+k+' tempo to zero');
+  reset.append(lbl,btn);shell.append(reset);
+  btn.addEventListener('click',()=>document.getElementById('tempreset-'+k)?.click());
+  const redraw=()=>{
+   const min=Number(input.min)||80,max=Number(input.max)||120,val=Number(input.value)||100;
+   const p=Math.max(0,Math.min(1,(max-val)/(max-min)));
+   // Leave space for the handle at each end of the physical travel.
+   handle.style.top=(9+p*82)+'%';
+  };
+  input.addEventListener('input',redraw);
+  input.addEventListener('change',redraw);
+  // Use track-relative pointer positioning to avoid browser-specific vertical range styling.
+  const setAt=e=>{
+   const box=fader.getBoundingClientRect();const rel=Math.max(0,Math.min(1,(e.clientY-box.top-box.height*.09)/(box.height*.82)));
+   const min=Number(input.min),max=Number(input.max);
+   const next=Math.max(min,Math.min(max,Math.round((max-(max-min)*rel)*10)/10));
+   input.value=String(next);input.dispatchEvent(new Event('input',{bubbles:true}));redraw();
+  };
+  fader.addEventListener('pointerdown',e=>{if(e.target===input){e.preventDefault();fader.setPointerCapture?.(e.pointerId);setAt(e)}});
+  fader.addEventListener('pointermove',e=>{if(fader.hasPointerCapture?.(e.pointerId))setAt(e)});
+  fader.addEventListener('pointerup',e=>{if(fader.hasPointerCapture?.(e.pointerId))fader.releasePointerCapture?.(e.pointerId)});
+  redraw();
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
 </script></body></html>
