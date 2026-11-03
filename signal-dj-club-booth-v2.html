@@ -3096,13 +3096,18 @@ function install(){
   const naturalHeight=Math.max(consoleEl.scrollHeight,consoleEl.getBoundingClientRect().height);
   const top=viewport.getBoundingClientRect().top;
   const availableHeight=Math.max(320,(view==='fullscreen'?window.innerHeight-viewport.getBoundingClientRect().top:document.documentElement.clientHeight-top)-5);
-  const widthScale=Math.min(1,parentWidth/baseWidth);
-  const heightScale=Math.min(1,availableHeight/Math.max(1,naturalHeight));
-  const scale=Math.max(.25,Math.min(widthScale,heightScale)); // Fit complete decks; never crop the lower controls in Full Screen.
+  // Fit Booth is contain; Full Screen is width-first. A 1390x1100
+  // hardware console cannot cover a wide desktop *and* show all of its
+  // height without distortion, so Full Screen scrolls vertically as needed.
+  const widthScale=parentWidth/baseWidth;
+  const heightScale=availableHeight/Math.max(1,naturalHeight);
+  const scale=view==='fullscreen'
+    ? Math.max(.25,widthScale)
+    : Math.max(.25,Math.min(1,widthScale,heightScale));
   const leftSpace=Math.max(0,(parentWidth-baseWidth*scale)/2);
-  const topSpace=view==='fullscreen'?Math.max(0,(availableHeight-naturalHeight*scale)/2):0;
+  const topSpace=0;
   consoleEl.style.transform='translate('+leftSpace+'px,'+topSpace+'px) scale('+scale+')';
-  viewport.style.height=view==='fullscreen'?Math.ceil(availableHeight)+'px':Math.ceil(naturalHeight*scale+3)+'px';
+  viewport.style.height=Math.ceil(Math.max(view==='fullscreen'?availableHeight:0,naturalHeight*scale+3))+'px';
   toolbar.querySelector('.signal-view-note').textContent=(view==='fullscreen'?'FULL DESKTOP '+Math.round(scale*100)+'% · Complete decks visible':'Fit '+Math.round(scale*100)+'% · Full booth on screen');
  }
  function scheduleFit(){if(sizeScheduled)return;sizeScheduled=true;requestAnimationFrame(()=>{sizeScheduled=false;fit()})}
@@ -3761,6 +3766,21 @@ body.signal-booth-v2.signal-full-booth #signal-booth-viewport{
 }
 body.signal-booth-v2.signal-full-booth #signal-booth-viewport>.console{
  max-width:none!important;transform-origin:top left!important;
+}
+</style>
+<style id="signal-v46-fullscreen-width-first">
+/* Full Screen fills the monitor horizontally; keep fixed deck geometry.
+   When its proportional height exceeds the screen, scroll the stage rather
+   than shrinking it back to Fit Booth or clipping transport controls. */
+body.signal-booth-v2.signal-full-booth main{
+ overflow-x:hidden!important;overflow-y:auto!important;
+}
+body.signal-booth-v2.signal-full-booth #signal-booth-viewport{
+ height:auto;min-height:calc(100dvh - 48px);
+ overflow:visible!important;
+}
+body.signal-booth-v2.signal-full-booth #signal-view-controls{
+ position:sticky!important;top:0!important;
 }
 </style>
 </body></html>
