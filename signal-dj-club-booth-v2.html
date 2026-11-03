@@ -912,7 +912,25 @@ body.signal-booth-v2 .cdjx-browser-actions{display:flex;gap:5px;padding:5px;back
 body.signal-booth-v2 .cdjx-browser-actions button:last-child{background:#661d30;border-color:#ec536d;font-weight:700}
 body.signal-booth-v2 .cdjx-screen-nav button[aria-pressed=true]{background:#762537!important;border-color:#ff697e!important;color:white!important}
 body.signal-booth-v2 .cdjx-local-browser .cdjx-empty{padding:10px;color:#aebccd;font-size:10px}
-</style><style id="signal-cdjx-nav-six-columns">body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav{grid-template-columns:repeat(6,minmax(0,1fr))!important}body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav button{font-size:7px!important;white-space:nowrap;padding:1px!important}</style></head><body>
+</style><style id="signal-cdjx-nav-six-columns">body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav{grid-template-columns:repeat(6,minmax(0,1fr))!important}body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav button{font-size:7px!important;white-space:nowrap;padding:1px!important}</style><style id="signal-cdjx-hardware-rails-v7">
+/* Physical-style control banks use existing functional controls without moving their IDs. */
+body.signal-booth-v2 .deckshell .ref-tools{visibility:hidden!important;pointer-events:none!important}
+body.signal-booth-v2 .deckshell .cdjx-hardware-rail{position:absolute!important;top:41%!important;height:33%!important;width:17%!important;display:flex!important;flex-direction:column!important;gap:5px!important;z-index:15!important;background:linear-gradient(160deg,#171e27,#0c1016);border:1px solid #394757;border-radius:6px;padding:6px 4px!important;box-sizing:border-box!important;box-shadow:inset 0 1px 0 #69778a35,0 3px 9px #0008;overflow:auto}
+body.signal-booth-v2 .deckshell .cdjx-hardware-rail.left{left:1.5%!important}
+body.signal-booth-v2 .deckshell .cdjx-hardware-rail.right{right:1.5%!important}
+body.signal-booth-v2 .cdjx-hardware-rail .rail-title{color:#aabccb;font-size:8px;text-align:center;font-weight:bold;letter-spacing:.7px}
+body.signal-booth-v2 .cdjx-hardware-rail .rail-group{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;padding-bottom:5px;border-bottom:1px solid #384658}
+body.signal-booth-v2 .cdjx-hardware-rail .rail-group:last-child{border-bottom:none}
+body.signal-booth-v2 .cdjx-hardware-rail button{min-width:0;min-height:26px;line-height:1.15;padding:3px 1px;background:#263548;color:#eaf3fb;border:1px solid #64788d;border-radius:4px;font-weight:700;font-size:8px;white-space:normal;cursor:pointer}
+body.signal-booth-v2 .cdjx-hardware-rail button.wide{grid-column:1/-1}
+body.signal-booth-v2 .cdjx-hardware-rail button.red{background:#652432;border-color:#d44f67}
+body.signal-booth-v2 .cdjx-hardware-rail button.blue{background:#174e77;border-color:#58a9e2}
+body.signal-booth-v2 .cdjx-hardware-rail button[aria-pressed=true]{background:#e0a837;color:#07111e;border-color:#ffe191}
+body.signal-booth-v2 .cdjx-hardware-rail button:focus-visible{outline:2px solid #fff;outline-offset:1px}
+body.signal-booth-v2 .cdjx-hardware-rail label{display:block;grid-column:1/-1;color:#a9c4dd;font-size:7px;text-align:center}
+body.signal-booth-v2 .cdjx-hardware-rail input[type=range]{grid-column:1/-1;width:100%;margin:0;accent-color:#ed526e}
+@media(max-width:1100px){body.signal-booth-v2 .cdjx-hardware-rail button{font-size:7px!important}body.signal-booth-v2 .cdjx-hardware-rail{gap:2px!important;padding:3px!important}}
+</style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
     <img class="boot-logo" src="assets/media/GBMN_Original_Logo_Master.jpg" alt="Official G//BMN: GORILLA BOOMIN logo">
@@ -2085,5 +2103,47 @@ function init(){
  }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script><script id="signal-cdjx-hardware-rails-v7">
+(()=>{
+function build(){
+ for(const k of ['A','B']){
+  const host=document.querySelector('.deck-'+k+' .deckshell')||document.querySelector('.deck-'+k);
+  if(!host||host.querySelector('.cdjx-hardware-rail'))continue;
+  const make=(side)=>{const el=document.createElement('section');el.className='cdjx-hardware-rail '+side;el.setAttribute('aria-label','Deck '+k+' '+side+' physical controls');return el};
+  const left=make('left'),right=make('right');
+  const group=(rail,title)=>{const g=document.createElement('div');g.className='rail-group';const caption=document.createElement('div');caption.className='rail-title';caption.style.gridColumn='1/-1';caption.textContent=title;g.append(caption);rail.append(g);return g};
+  function control(g,label,real,variant,notice){
+    const btn=document.createElement('button');btn.type='button';btn.textContent=label;btn.className=variant||'';
+    btn.onclick=()=>{const original=document.getElementById(real+'-'+k);if(original)original.click();else if(notice)alert(notice);
+      if(real==='r-vinyl'||real==='vinyl')btn.setAttribute('aria-pressed',String(document.getElementById('vinyl-'+k)?.getAttribute('aria-pressed')==='true'));
+      if(real==='r-master')btn.setAttribute('aria-pressed','true');
+    };g.append(btn);return btn;
+  }
+  let g=group(left,'AUTO / MANUAL LOOP');
+  control(g,'IN / CUE','in');control(g,'OUT','out');
+  control(g,'4 / 8','r-loopcutter','wide');
+  g=group(left,'TRACK NAVIGATION');
+  control(g,'◀◀ START','r-trackprev');control(g,'LIBRARY ▶','r-tracknext');
+  control(g,'◀ SEEK','r-seekback');control(g,'SEEK ▶','r-seekforward');
+  g=group(left,'DIRECTION');
+  const reverse=control(g,'REV · N/A','reverse','red wide');
+  reverse.title='Reverse playback is not supported by the current audio engine.';
+  g=group(right,'JOG & VINYL');
+  const vinyl=control(g,'VINYL','vinyl','blue wide');vinyl.setAttribute('aria-pressed',String(document.getElementById('vinyl-'+k)?.getAttribute('aria-pressed')==='true'));
+  const slider=(g,label,originalId)=>{
+    const l=document.createElement('label');l.textContent=label;const input=document.createElement('input');input.type='range';input.min='0';input.max='100';input.value=document.getElementById(originalId+'-'+k)?.value||'50';input.setAttribute('aria-label',label);
+    input.addEventListener('input',()=>{const original=document.getElementById(originalId+'-'+k);if(!original)return;original.value=input.value;original.dispatchEvent(new Event('input',{bubbles:true}));original.dispatchEvent(new Event('change',{bubbles:true}))});g.append(l,input);
+  };
+  slider(g,'JOG ADJUST','r-jogadjust');
+  slider(g,'VINYL SPEED','r-vspeed');
+  g=group(right,'BEAT SYNC');
+  control(g,'SYNC','sync','blue');control(g,'MASTER','r-master');
+  g=group(right,'TEMPO');
+  control(g,'RESET','tempreset','wide');
+  host.append(left,right);
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',build,{once:true});else build();
 })();
 </script></body></html>
