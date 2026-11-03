@@ -5732,4 +5732,174 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-fader-zone
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
 })();
 </script>
+<style id="signal-v77-left-mixer-spacing-knob-scales">
+/* V77 — four requested corrections, mixer-only. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-mic,
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right{
+ display:flex!important;flex-direction:column!important;
+ justify-content:space-between!important;align-items:center!important;
+ min-height:875px!important;gap:0!important;
+ padding:9px 4px 12px!important;
+}
+.mixer #mixbody>.v70-utility-col>.v77-left-group{
+ display:flex!important;flex-direction:column!important;
+ width:100%!important;box-sizing:border-box!important;
+ align-items:center!important;justify-content:center!important;
+ flex:0 0 auto!important;gap:5px!important;min-width:0!important;
+}
+.mixer #mixbody>.v70-mic>.v77-left-group{gap:4px!important}
+.mixer #mixbody>.v70-mic .v70-spacer{display:none!important}
+.mixer #mixbody>.v70-mic>.v77-left-group:last-child{
+ margin-top:auto!important;
+ padding:8px 0 4px!important;
+ border-top:1px solid #5b6570!important;
+}
+.mixer #mixbody>.v70-utility-right>.v77-left-group{
+ gap:8px!important;
+ padding:5px 0 8px!important;
+}
+.mixer #mixbody>.v70-utility-right>.v77-left-group:first-child{padding-top:5px!important}
+.mixer #mixbody>.v70-utility-right>.v77-left-group:nth-child(2){
+ border-top:1px solid #45505b!important;border-bottom:1px solid #45505b!important;
+ padding:9px 0!important;
+}
+.mixer #mixbody>.v70-utility-right>.v77-left-group:nth-child(3){
+ border-bottom:1px solid #53606b!important;
+ padding-bottom:15px!important;
+}
+.mixer #mixbody>.v70-utility-right>.v77-left-group:last-child{
+ margin-top:auto!important;padding:10px 0 0!important;
+ gap:8px!important;
+}
+.mixer #mixbody>.v70-utility-right>.v77-left-group:last-child .v70-head{
+ border-top:0!important;margin:0!important;
+}
+.mixer #mixbody>.v70-utility-right .v70-port{
+ order:99!important;flex-shrink:0!important;align-self:center!important;
+ width:22px!important;height:22px!important;
+ margin:12px auto 2px!important;position:relative!important;
+ border:4px solid #bc9954!important;
+ box-shadow:0 0 0 2px #1e262f,inset 0 0 6px #000,0 2px 4px #000a!important;
+}
+.mixer #mixbody>.v70-utility-right .v70-phones-btn{
+ min-height:27px!important;font-size:7px!important;
+}
+.mixer #mixbody>.v70-utility-right .v77-jack-caption{
+ order:98!important;margin-top:8px!important;margin-bottom:0!important;
+ color:#ced6df!important;font:800 8px/1 Arial,sans-serif!important;
+}
+.mixer #mixbody>.v70-utility-right .v70-knob-unit{min-height:53px!important}
+.mixer #mixbody>.v70-utility-right .v70-toggle-line{gap:11px!important}
+.mixer #mixbody>.v70-mic>.v77-left-group .v70-knob-unit{margin:3px 0 5px!important}
+.mixer #mixbody>.v70-mic>.v77-left-group .v70-head{margin:4px 0!important}
+/* Hardware rotary scale: white perimeter tick marks plus existing live pointer. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .knob.rotary-control{
+ position:relative!important;overflow:visible!important;isolation:isolate!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .knob.rotary-control::before{
+ content:""!important;position:absolute!important;z-index:-1!important;
+ inset:-10px!important;border-radius:50%!important;
+ background:repeating-conic-gradient(from -138deg,rgba(247,251,255,.98) 0deg 1.6deg,transparent 1.8deg 17deg)!important;
+ -webkit-mask-image:radial-gradient(circle,transparent 0 65%,#000 67% 73%,transparent 76%)!important;
+ mask-image:radial-gradient(circle,transparent 0 65%,#000 67% 73%,transparent 76%)!important;
+ opacity:.96!important;pointer-events:none!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .knob.rotary-control::after{
+ content:""!important;position:absolute!important;z-index:2!important;
+ width:3px!important;height:12px!important;left:calc(50% - 1.5px)!important;top:4px!important;
+ background:#f8fcff!important;border-radius:2px!important;
+ box-shadow:0 0 2px #ffffffd9!important;
+ transform-origin:1.5px 13.5px!important;
+ transform:rotate(var(--rotary-angle,-135deg))!important;
+ pointer-events:none!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-color-zone .knob.rotary-control::before{
+ inset:-11px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-eq-box{
+ overflow:visible!important;padding-left:11px!important;padding-right:7px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-eq-box>.ch-vu{
+ left:0!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v77-eq-scale{
+ position:absolute!important;right:0!important;top:27px!important;bottom:6px!important;
+ display:flex!important;flex-direction:column!important;align-items:flex-end!important;
+ justify-content:space-between!important;pointer-events:none!important;z-index:3!important;
+ color:#d5e0e7!important;text-shadow:0 1px 2px #000!important;
+ font:800 6px/1 Arial,sans-serif!important;letter-spacing:-.2px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v77-eq-scale span:first-child{color:#ff9f90!important}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v77-eq-scale span:last-child{color:#8ce8b4!important}
+@media(max-width:1320px){
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .knob.rotary-control::before{
+ inset:-8px!important;
+ }
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v77-eq-scale{
+ font-size:5px!important;
+ }
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-eq-box{
+ padding-left:9px!important;padding-right:6px!important;
+ }
+}
+</style>
+<script id="signal-v77-left-mixer-spacing-knob-scales-script">
+(()=>{
+ function setup(){
+  const mix=document.getElementById('mixbody');
+  const mic=mix?.querySelector(':scope > .v70-mic');
+  const utility=mix?.querySelector(':scope > .v70-utility-right');
+  const channels=[...(mix?.querySelectorAll(':scope > .v73-channel')||[])];
+  if(!mic||!utility||channels.length!==4||mix.dataset.v77Ready)return;
+  mix.dataset.v77Ready='yes';
+  // Preserve each existing button, knob and its handlers while forming natural
+  // vertical hardware groups. Spacing, not dummy controls, fills both columns.
+  function groupAtHeadings(column,headings){
+   const original=[...column.children];
+   const groups=[];let current=null;
+   for(const node of original){
+    if(node.classList?.contains('v70-head')&&headings.includes(node.textContent.trim())){
+     current=document.createElement('div');
+     current.className='v77-left-group';
+     column.appendChild(current);groups.push(current);
+    }
+    if(!current){current=document.createElement('div');current.className='v77-left-group';column.appendChild(current);groups.push(current)}
+    if(!node.classList?.contains('v70-spacer'))current.appendChild(node);
+    else node.remove();
+   }
+   return groups;
+  }
+  groupAtHeadings(mic,['USB','MIC','TALKOVER','MIC FX','MIC REVERB','MIC ON / OFF']);
+  groupAtHeadings(utility,['MIC 1 PHANTOM','SOUND COLOR FX','HEADPHONES A']);
+  // Bluetooth and MIDI controls form the second grouped block, rather than
+  // getting crushed against the Sound Color FX controls above/below.
+  const rhsGroups=[...utility.querySelectorAll(':scope > .v77-left-group')];
+  const withDevices=rhsGroups.find(g=>g.querySelector(':scope > .v70-toggle-line'));
+  if(withDevices){
+   withDevices.classList.add('v77-devices-group');
+  }
+  // Position the PHONES A jack as the bottom-most physical element of column 2.
+  const port=utility.querySelector('.v70-port');
+  const phones=rhsGroups.find(g=>[...g.children].some(n=>n.classList?.contains('v70-head')&&n.textContent.trim()==='HEADPHONES A'));
+  if(phones&&port){
+   const caption=document.createElement('div');caption.className='v77-jack-caption';caption.textContent='PHONES A';
+   port.before(caption);
+   phones.appendChild(caption);phones.appendChild(port);
+  }
+  // All 4 EQ meters now carry numerical scales beside the unchanged live bars.
+  for(const channel of channels){
+   const box=channel.querySelector(':scope > .v73-eq-box');
+   if(!box||box.querySelector('.v77-eq-scale'))continue;
+   const scale=document.createElement('div');scale.className='v77-eq-scale';
+   scale.setAttribute('aria-hidden','true');
+   for(const n of ['+12','+6','0','-6','-12','-24']){
+    const mark=document.createElement('span');mark.textContent=n;scale.appendChild(mark);
+   }
+   box.appendChild(scale);
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});
+ else setup();
+})();
+</script>
 </body></html>
