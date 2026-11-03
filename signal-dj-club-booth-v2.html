@@ -6183,4 +6183,47 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right .v70-port
  }
 }
 </style>
+
+<style id="signal-v80-mic-two-parameter-calibration">
+/* V80: two MIC PARAMETER dials only — calibrated white tick rings, not solid borders. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-mic .v78-micfx-group>.v70-knob-unit,
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-mic .v78-reverb-group>.v70-knob-unit{
+ position:relative!important;
+ overflow:visible!important;
+ min-height:68px!important;
+ gap:8px!important;
+ margin:7px 0 3px!important;
+ padding:0!important;
+}
+/* The knob is 40px. A 57px engraved tick circle surrounds it without touching
+   the active pointer or changing the draggable rotary's original event handlers. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-mic .v78-micfx-group>.v70-knob-unit::after,
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-mic .v78-reverb-group>.v70-knob-unit::after{
+ content:""!important;
+ position:absolute!important;
+ width:57px!important;height:57px!important;
+ left:50%!important;top:11px!important;
+ transform:translateX(-50%)!important;
+ border-radius:50%!important;
+ background:repeating-conic-gradient(from -138deg,rgba(248,251,255,.98) 0deg 2deg,transparent 2.2deg 18deg)!important;
+ -webkit-mask-image:radial-gradient(circle,transparent 0 67%,#000 69% 73%,transparent 76%)!important;
+ mask-image:radial-gradient(circle,transparent 0 67%,#000 69% 73%,transparent 76%)!important;
+ pointer-events:none!important;
+ opacity:.98!important;z-index:1!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-mic>.v78-micfx-group{
+ padding:10px 0 13px!important;
+ gap:9px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-mic>.v78-reverb-group{
+ padding:12px 0 15px!important;
+ gap:12px!important;
+}
+@media(max-width:1320px){
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-mic .v78-micfx-group>.v70-knob-unit::after,
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-mic .v78-reverb-group>.v70-knob-unit::after{
+  width:53px!important;height:53px!important;top:11px!important;
+ }
+}
+</style>
 </body></html>
