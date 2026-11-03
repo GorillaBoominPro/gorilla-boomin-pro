@@ -4516,4 +4516,16 @@ body.signal-booth-v2.festival .deck>.v67-brand-footer{display:none!important}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',move,{once:true});else move();
 })();
 </script>
+<style id="signal-v69-four-channel-mixer-only">
+/* V69: remove only the mixer’s outer PHONES/MIC and BEAT FX columns
+   from the visible booth. Keep their elements in the DOM so audio/control
+   event wiring is not disturbed, and retain all four original channels. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody{
+ grid-template-columns:repeat(4,minmax(0,1fr))!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.mixer-utility-left,
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.sidefx{
+ display:none!important;
+}
+</style>
 </body></html>
