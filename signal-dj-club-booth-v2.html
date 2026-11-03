@@ -3632,4 +3632,35 @@ body.signal-booth-v2:not(.festival) .deckshell>.cdjx-face-hotcues button:focus-v
 .deckshell .utility button[id^="loop-"],
 .deckshell .utility button[id^="loopoff-"]{display:none!important;visibility:hidden!important}
 </style>
+
+<style id="signal-v38-jogfeel-clearance">
+/* Compact jog feel sits in the upper-right metal shoulder clear of the platter.
+   Identical positioning on deck A and deck B; leave all other controls untouched. */
+body.signal-booth-v2:not(.festival) .deckshell.deck-A>.signal-v33-jog,
+body.signal-booth-v2:not(.festival) .deckshell.deck-B>.signal-v33-jog{
+ top:41.2%!important;
+ left:82.3%!important;
+ width:10.2%!important;
+ gap:2px!important;
+ z-index:29!important;
+ font-size:clamp(7px,.65vw,10px)!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-dial{
+ width:clamp(32px,3.2vw,43px)!important;
+ height:clamp(32px,3.2vw,43px)!important;
+ border-radius:50%!important;
+ background:repeating-conic-gradient(from -120deg,#fafcff 0deg 2.4deg,transparent 2.4deg 22deg)!important;
+ filter:drop-shadow(0 0 1px #fff9)!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-knob{
+ width:clamp(24px,2.4vw,33px)!important;
+ height:clamp(24px,2.4vw,33px)!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-ends{
+ width:120%!important;
+ font-size:clamp(6px,.53vw,8px)!important;
+ color:#f9fbff!important;
+ text-shadow:0 1px 2px black!important;
+}
+</style>
 </body></html>
