@@ -1974,7 +1974,7 @@ jog.onpointermove=e=>{
  if(diff>Math.PI)diff-=2*Math.PI;if(diff< -Math.PI)diff+=2*Math.PI;
  const now=performance.now(),dt=Math.max(.008,Math.min(.1,(now-(scratch.lastTime||now-16))/1000));
  scratch.last=next;scratch.lastTime=now;
- const seconds=diff/(Math.PI*2)*1.8*(k==='B'?(window.signalJogFeelB??1):1);
+ const seconds=diff/(Math.PI*2)*1.8*((window.signalJogFeel??{})[k]??1);
  scratch.position=clampPos(scratch.position+seconds);
  if(scratch.nudge){d.audio.currentTime=scratch.position;return}
  d.scratchPosition=scratch.position;
@@ -3449,51 +3449,68 @@ function ensure(){
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ensure,{once:true});else ensure();
 })();
 </script>
-<!-- SIGNAL DJ V32 RIGHT DECK MEMORY AND JOG FEEL -->
-<style id="signal-v32-right-memory-jog-style">
-/* Club mode only; fixed to right deck B, without moving approved controls. */
-body.signal-booth-v2:not(.festival) .deckshell.deck-B>.signal-v32-memory{
- position:absolute;left:20%;top:44.1%;width:58%;height:8.1%;z-index:28;
- display:grid;grid-template-columns:1.45fr .8fr .8fr;gap:7px;align-items:end;
- padding:2px 4px;box-sizing:border-box;pointer-events:none;
+
+<!-- SIGNAL DJ V33 MATCHED COMPACT CUE MEMORY + JOG FEEL ON BOTH DECKS -->
+<style id="signal-v33-twin-jog-memory">
+/* Compact reference-matched hardware, directly below the existing A-H hot-cue row. */
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-memory{
+ position:absolute;top:42.1%;left:19%;width:63%;height:7.1%;
+ display:grid;grid-template-columns:1.5fr .8fr .9fr;align-items:start;gap:2px;
+ z-index:23;box-sizing:border-box;color:#e6e7e9;text-shadow:0 1px 2px #000;
+ font-family:Arial,sans-serif;pointer-events:none;
 }
-.signal-v32-memory .signal-v32-cell{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
-.signal-v32-memory .signal-v32-label{font:800 clamp(8px,.75vw,11px)/1.1 Arial,sans-serif;color:#e9edf0;text-shadow:0 2px 2px #000;text-align:center;white-space:nowrap}
-.signal-v32-memory .signal-v32-calls{display:flex;gap:8px}
-.signal-v32-memory button{pointer-events:auto;cursor:pointer;min-height:0!important;width:clamp(24px,2.5vw,35px);height:clamp(24px,2.5vw,35px);border-radius:50%;border:2px solid #424a55;color:#fff;background:radial-gradient(circle at 34% 25%,#5e6870,#131820 68%,#06080b);box-shadow:inset 0 2px 3px #ffffff22,0 3px 5px #000b;font-size:12px;font-weight:900;padding:0}
-.signal-v32-memory .signal-v32-delete{width:clamp(30px,3.4vw,44px);height:clamp(30px,3.4vw,44px);border:4px double #7b8187}
-.signal-v32-memory button:focus-visible,.signal-v32-jog input:focus-visible{outline:2px solid #fff;outline-offset:3px}
-body.signal-booth-v2:not(.festival) .deckshell.deck-B>.signal-v32-jog{
- position:absolute;top:52.2%;left:72.4%;width:11%;min-width:52px;z-index:29;
- display:flex;align-items:center;flex-direction:column;gap:3px;color:#edf1f3;
- font:800 clamp(8px,.75vw,11px)/1.1 Arial,sans-serif;text-align:center;text-shadow:0 1px 2px #000;
+.signal-v33-memory .v33-cell{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:5px;min-width:0}
+.signal-v33-memory .v33-label{font-size:clamp(7px,.65vw,10px);line-height:1.05;font-weight:800;text-align:center;white-space:nowrap;min-height:20px}
+.signal-v33-memory .v33-controls{display:flex;justify-content:center;gap:clamp(3px,.6vw,9px);align-items:center;width:100%}
+.signal-v33-memory button{pointer-events:auto;cursor:pointer;padding:0!important;min-height:0!important;
+ width:clamp(22px,2.3vw,30px);height:clamp(22px,2.3vw,30px);flex:none;
+ border-radius:50%;border:2px solid #31383f;color:white;font-size:10px;font-weight:900;
+ background:radial-gradient(circle at 35% 27%,#697078,#23272d 50%,#05070a 85%);
+ box-shadow:inset 0 1px 2px #ffffff30,0 2px 4px #000b}
+.signal-v33-memory .v33-delete{width:clamp(25px,2.6vw,34px);height:clamp(25px,2.6vw,34px);border:3px double #69717a}
+.signal-v33-memory button:focus-visible,.signal-v33-jog input:focus-visible{outline:2px solid #fff;outline-offset:2px}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog{
+ position:absolute;top:49.8%;left:65.5%;width:15.5%;z-index:25;box-sizing:border-box;
+ display:flex;flex-direction:column;align-items:center;gap:2px;
+ color:#edf0f2;font:800 clamp(7px,.7vw,10px)/1.05 Arial,sans-serif;
+ text-shadow:0 1px 2px #000;
 }
-.signal-v32-jog .signal-v32-knob{position:relative;display:block;width:clamp(32px,3.2vw,44px);height:clamp(32px,3.2vw,44px);
- border:3px solid #737e88;border-radius:50%;background:conic-gradient(from 35deg,#11161b,#858d97,#222931,#c0c6cd,#1a2028,#11161b);box-shadow:0 3px 7px #000b,inset 0 0 5px #000;transform:rotate(var(--jog-rot,0deg));pointer-events:none}
-.signal-v32-jog .signal-v32-knob:before{content:"";position:absolute;top:2px;left:calc(50% - 2px);width:4px;height:12px;border-radius:2px;background:#f4f5f6}
-.signal-v32-jog input{width:100%;height:16px;accent-color:#d8e0e5;cursor:pointer;margin:0}
-.signal-v32-jog .signal-v32-scale{display:flex;justify-content:space-between;gap:4px;width:100%;font-size:clamp(7px,.6vw,9px)}
-body.signal-booth-v2.festival .signal-v32-memory,body.signal-booth-v2.festival .signal-v32-jog{display:none!important}
+.signal-v33-jog .v33-knob{display:block;position:relative;border-radius:50%;
+ width:clamp(27px,2.8vw,38px);height:clamp(27px,2.8vw,38px);box-sizing:border-box;
+ border:2px solid #717981;transform:rotate(var(--angle,0deg));
+ background:conic-gradient(from 35deg,#292e35,#aeb4ba,#15191f,#666d76,#11151b,#989da6,#292e35);
+ box-shadow:inset 0 0 5px #000a,0 2px 4px #000c;pointer-events:none}
+.signal-v33-jog .v33-knob:after{content:"";position:absolute;top:2px;left:calc(50% - 1px);
+ width:2px;height:10px;background:white;border-radius:2px}
+.signal-v33-jog input{margin:0;height:10px;width:100%;max-width:75px;accent-color:#aeb6be;cursor:pointer}
+.signal-v33-jog .v33-ends{display:flex;justify-content:space-between;width:100%;font-size:clamp(6px,.6vw,8px)}
+body.signal-booth-v2.festival .signal-v33-memory,body.signal-booth-v2.festival .signal-v33-jog{display:none!important}
 </style>
-<script id="signal-v32-right-memory-jog-script">
+<script id="signal-v33-twin-jog-memory-script">
 (()=>{
  function install(){
-  const shell=document.querySelector('.deckshell.deck-B');
-  if(!shell||shell.querySelector('.signal-v32-memory'))return;
-  const row=document.createElement('section');row.className='signal-v32-memory';row.setAttribute('aria-label','Right deck cue loop call delete and memory');
-  row.innerHTML='<div class="signal-v32-cell"><span class="signal-v32-label">CUE/LOOP<br>CALL</span><div class="signal-v32-calls"><button type="button" data-action="previous" aria-label="Previous cue memory">◀</button><button type="button" data-action="next" aria-label="Next cue memory">▶</button></div></div><div class="signal-v32-cell"><span class="signal-v32-label">DELETE</span><button type="button" class="signal-v32-delete" data-action="delete" aria-label="Delete selected cue memory">●</button></div><div class="signal-v32-cell"><span class="signal-v32-label">MEMORY</span><button type="button" data-action="store" aria-label="Store cue memory">●</button></div>';
-  const memory=document.querySelector('.deck-B .signal-cdjx-screen .cdjx-extra-controls');
-  row.querySelectorAll('button[data-action]').forEach(button=>button.addEventListener('click',()=>{
-   const target=memory?.querySelector('[data-cdjx="'+button.dataset.action+'"]');
-   if(target)target.click();else{const status=document.getElementById('status');if(status)status.textContent='Deck B memory controls are not ready.'}
-  }));
-  const jog=document.createElement('section');jog.className='signal-v32-jog';jog.setAttribute('aria-label','Right deck jog feel');
-  jog.innerHTML='<span>JOG FEEL</span><span class="signal-v32-knob" aria-hidden="true"></span><input type="range" min="0" max="100" value="50" step="5" aria-label="Jog feel sensitivity light to heavy" title="Adjusts virtual jog seek and scratch sensitivity; cannot change physical wheel resistance"><div class="signal-v32-scale"><span>LIGHT</span><span>HEAVY</span></div>';
-  const slider=jog.querySelector('input'),knob=jog.querySelector('.signal-v32-knob');
-  const adjust=()=>{const v=Number(slider.value);window.signalJogFeelB=1.6-v*.012;knob.style.setProperty('--jog-rot',((v-50)*2.6)+'deg');slider.setAttribute('aria-valuetext',v<35?'Light jog response':v>65?'Heavy jog response':'Medium jog response')};
-  slider.addEventListener('input',adjust);adjust();
-  shell.append(row,jog);
+  window.signalJogFeel=window.signalJogFeel||{};
+  for(const k of ['A','B']){
+   const shell=document.querySelector('.deckshell.deck-'+k);
+   if(!shell||shell.querySelector('.signal-v33-memory'))continue;
+   const row=document.createElement('section');row.className='signal-v33-memory';
+   row.setAttribute('aria-label','Deck '+k+' cue loop call delete memory');
+   row.innerHTML='<div class="v33-cell"><span class="v33-label">CUE/LOOP<br>CALL</span><div class="v33-controls"><button type="button" data-cue-action="previous" title="Previous saved cue" aria-label="Previous saved cue">◀</button><button type="button" data-cue-action="next" title="Next saved cue" aria-label="Next saved cue">▶</button></div></div><div class="v33-cell"><span class="v33-label">DELETE</span><button type="button" class="v33-delete" data-cue-action="delete" aria-label="Delete selected saved cue">●</button></div><div class="v33-cell"><span class="v33-label">MEMORY</span><button type="button" data-cue-action="store" aria-label="Store current cue in memory">●</button></div>';
+   row.querySelectorAll('button[data-cue-action]').forEach(btn=>btn.addEventListener('click',()=>{
+    const ctl=document.querySelector('.deck-'+k+' .signal-cdjx-screen .cdjx-extra-controls [data-cdjx="'+btn.dataset.cueAction+'"]');
+    if(ctl)ctl.click();
+    else {const status=document.getElementById('status');if(status)status.textContent='Deck '+k+': cue memory unavailable until deck is ready';}
+   }));
+   const feel=document.createElement('section');feel.className='signal-v33-jog';
+   feel.setAttribute('aria-label','Deck '+k+' light to heavy jog feel');
+   feel.innerHTML='<span>JOG FEEL</span><span class="v33-knob" aria-hidden="true"></span><input type="range" min="0" max="100" value="50" step="5" aria-label="Jog sensitivity from light to heavy" title="Adjusts virtual jog movement, not physical wheel resistance"><div class="v33-ends"><span>LIGHT</span><span>HEAVY</span></div>';
+   const input=feel.querySelector('input'),knob=feel.querySelector('.v33-knob');
+   const set=()=>{let v=Number(input.value);window.signalJogFeel[k]=1.6-v*.012;knob.style.setProperty('--angle',((v-50)*2.6)+'deg');input.setAttribute('aria-valuetext',v<35?'Light':v>65?'Heavy':'Medium')};
+   input.addEventListener('input',set);set();
+   shell.append(row,feel);
+  }
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
-</script></body></html>
+</script>
+</body></html>
