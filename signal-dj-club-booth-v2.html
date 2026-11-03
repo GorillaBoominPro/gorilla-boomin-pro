@@ -3006,18 +3006,25 @@ function initLCD(){
       g.fillRect(x,mid-detail,1,2*detail);
       continue;
      }
-     // Frequency determines hue. Loud bass is amber, mids blue, air violet.
-     // Nested strokes expose the balance without hiding every band beneath amber.
+     // V96: saturated frequency-coded waveform with actual source separation.
+     // The old nested translucent-looking strokes washed into a pale core.
+     // Dominant frequency chooses the main hue; subsidiary energy appears as
+     // thin accents. Jog ring deck A is cyan, deck B amber, but both preserve
+     // LOW/MID/HIGH semantic colors.
      const bassRatio=energy/total,midRatio=mids/total,highRatio=hi/total;
-     g.fillStyle=highRatio>.29?'#8a76bc':'#447eb0';
-     g.fillRect(x,mid-amp,1,2*amp);
-     const middle=amp*Math.min(.94,.25+midRatio*1.65);
-     g.fillStyle='#61a6d4';g.fillRect(x,mid-middle,1,middle*2);
-     const core=amp*Math.min(.5,bassRatio*.78);
-     // Bass accent is proportional to LOW dominance; don't paint the entire
-     // central waveform yellow when mid/high energy is significant.
-     if(bassRatio>.23){g.fillStyle='#d8aa57';g.fillRect(x,mid-core,1,core*2)}
-     if(highRatio>.42){g.fillStyle='#b49be0';g.fillRect(x,mid-amp,1,Math.max(.8,amp*.24));g.fillRect(x,mid+amp-Math.max(.8,amp*.24),1,Math.max(.8,amp*.24))}
+     const isA=k==='A';
+     const dominant=bassRatio>=midRatio&&bassRatio>=highRatio?'low':midRatio>=highRatio?'mid':'high';
+     const color=dominant==='low'?(isA?'#ffa83f':'#ff8c29'):
+       dominant==='mid'?(isA?'#00c9ff':'#17a8ff'):
+       (isA?'#b66cff':'#d17bff');
+     const inner=dominant==='low'?'#ffcc72':
+       dominant==='mid'?(isA?'#54edff':'#60d6ff'):'#e1a0ff';
+     g.fillStyle=color;g.fillRect(x,mid-amp,1,amp*2);
+     const core=Math.min(amp,Math.max(.45,amp*(.25+Math.max(bassRatio,midRatio,highRatio)*.30)));
+     g.fillStyle=inner;g.fillRect(x,mid-core,1,core*2);
+     // Thin accent at transients, never an all-white overlaid waveform.
+     if(highRatio>.37){g.fillStyle=isA?'#cb7aff':'#e490ff';g.fillRect(x,mid-amp,1,Math.max(.7,amp*.16))}
+     if(bassRatio>.48){g.fillStyle='#ffb549';g.fillRect(x,mid-core*.45,1,core*.9)}
     }
     g.fillStyle='#a5b7c522';g.fillRect(0,Math.round(mid),w,1);
     const marks=[];
@@ -7313,6 +7320,30 @@ body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-status .v94-source{
 body.signal-booth-v2 .signal-cdjx-screen .cdjx-overview-wave{
  border:1px solid #607787!important;
  background:#070d15!important;
+}
+</style>
+
+<style id="signal-v96-lcd-color-contrast">
+/* Restrained deep-black performance LCD: vivid waveform pigments, no white bloom.
+   Only LCD interior color treatment; all locked deck and mixer hardware untouched. */
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-display,
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-main-wave{
+ background:#020408!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-overview-wave{
+ background:#050a10!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy{
+ background:#050b11!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy [data-band="low"] .v91-energy-fill{
+ background:#ffab37!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy [data-band="mid"] .v91-energy-fill{
+ background:#00bfff!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy [data-band="high"] .v91-energy-fill{
+ background:#be78ff!important;
 }
 </style>
 </body></html>
