@@ -3663,4 +3663,24 @@ body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-ends{
  text-shadow:0 1px 2px black!important;
 }
 </style>
+
+<style id="signal-v41-fullscreen-fit-consistency">
+/* V41: Full Screen must use the SAME chassis proportions as approved Fit Booth.
+   The Fit engine scales the whole console; immersive mode must not stretch
+   deck heights separately, which moves the platter relative to the Jog Feel dial. */
+body.signal-booth-v2.signal-fit-booth.signal-immersive:not(.festival) #signal-booth-viewport>.console{
+ grid-template-columns:minmax(310px,1fr) minmax(510px,1.28fr) minmax(310px,1fr)!important;
+ min-height:0!important;
+}
+body.signal-booth-v2.signal-fit-booth.signal-immersive:not(.festival) .deckshell.deck-A,
+body.signal-booth-v2.signal-fit-booth.signal-immersive:not(.festival) .deckshell.deck-B{
+ height:clamp(690px,57vw,815px)!important;
+}
+/* Use identical JOG FEEL geometry in both view modes, with clearances
+   relative to the deck itself rather than the fullscreen viewport. */
+body.signal-booth-v2.signal-fit-booth.signal-immersive:not(.festival) .deckshell.deck-A>.signal-v33-jog,
+body.signal-booth-v2.signal-fit-booth.signal-immersive:not(.festival) .deckshell.deck-B>.signal-v33-jog{
+ top:47.3%!important;left:70.8%!important;width:10.8%!important;
+}
+</style>
 </body></html>
