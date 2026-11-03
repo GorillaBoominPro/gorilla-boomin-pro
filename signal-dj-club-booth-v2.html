@@ -5235,4 +5235,209 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.channel.v73-channel{
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
+<style id="signal-v74-right-reference-realism">
+/* DJM-style right two strips. Existing audio controls are reused. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v71-master.v74-master,
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v71-beatfx.v74-fx{
+ background:linear-gradient(90deg,#14181d 0,#0b1015 44%,#181d23 100%)!important;
+ border-right:2px solid #727c85!important;box-shadow:inset 1px 0 #454f5866!important;
+ padding:7px 4px 13px!important;gap:4px!important;min-height:875px!important;
+}
+.mixer #mixbody>.v74-master .v71-heading,
+.mixer #mixbody>.v74-fx .v71-heading{
+ font:900 9px/1.1 Arial,sans-serif!important;letter-spacing:.35px!important;
+ color:#dfe6ed!important;margin:7px auto 3px!important;
+}
+.mixer #mixbody>.v74-master .v71-unit{gap:3px!important;margin:4px 0!important}
+.mixer #mixbody>.v74-master .v71-unit>small{font-size:8px!important}
+.mixer #mixbody>.v74-master .v71-knob,
+.mixer #mixbody>.v74-fx .v71-knob{
+ width:41px!important;height:41px!important;
+ background:radial-gradient(circle at 32% 22%,#a6afb6,#69717a 32%,#2a323a 58%,#11171d 80%)!important;
+ border:3px solid #606b75!important;
+ box-shadow:0 0 0 2px #1a2025,0 3px 5px #000b,inset 0 1px 3px #fff5!important;
+}
+.mixer #mixbody>.v74-master .v71-knob:after,
+.mixer #mixbody>.v74-fx .v71-knob:after{background:#f4f7fb!important;box-shadow:0 0 3px #fff7!important}
+.mixer #mixbody>.v74-master .v71-meter-pair{
+ height:239px!important;width:72px!important;gap:8px!important;
+ margin:7px auto 4px!important;padding:5px 2px!important;
+ position:relative!important;
+}
+.mixer #mixbody>.v74-master .v71-meter-col{
+ width:15px!important;border:1px solid #344048!important;
+ background:#020507!important;box-shadow:inset 0 0 5px #000!important;
+}
+.mixer #mixbody>.v74-master .v71-meter-lamps{gap:2px!important}
+.mixer #mixbody>.v74-master .v71-meter-lamps i{
+ border-radius:1px!important;box-shadow:inset 0 0 1px #000!important;
+}
+.mixer #mixbody>.v74-master .v74-meter-numbers{
+ position:absolute;left:50%;top:8px;bottom:8px;transform:translateX(-50%);
+ display:flex;flex-direction:column;justify-content:space-between;align-items:center;
+ color:#9baab4;font:700 6px/1 Arial,sans-serif;pointer-events:none;
+}
+.mixer #mixbody>.v74-master .v74-meter-numbers span:first-child{color:#d89d85}
+.mixer #mixbody>.v74-master .v71-reference-label{font-size:7px!important;letter-spacing:.15px!important}
+.mixer #mixbody>.v74-master .v74-booth{
+ width:100%;border-top:1px solid #4d5760;border-bottom:1px solid #4d5760;
+ padding:5px 0 7px;margin:6px 0 4px;
+}
+.mixer #mixbody>.v74-master .v74-booth .v71-unit{
+ min-height:55px!important;margin:2px 0!important;
+}
+.mixer #mixbody>.v74-master .v74-cue-block{
+ border-top:1px solid #48535e;width:100%;padding:5px 0 8px;margin-top:4px;
+}
+.mixer #mixbody>.v74-master .v71-pair button{
+ min-height:24px!important;background:linear-gradient(#573c20,#23190f)!important;
+ color:#f4c166!important;border-color:#a66c33!important;
+ font-size:7px!important;padding:2px 1px!important;
+ box-shadow:inset 0 1px 1px #ffce763b,0 2px 4px #000b!important;
+}
+.mixer #mixbody>.v74-master .v71-pair button[aria-pressed=true]{
+ background:linear-gradient(#e1ab42,#885418)!important;color:#10151a!important;
+}
+.mixer #mixbody>.v74-master .v74-hardware-switch{
+ width:64%!important;max-width:84px!important;height:23px!important;min-height:23px!important;
+ border:1px solid #56616c!important;background:linear-gradient(90deg,#13181d 0 31%,#9fa8b1 32% 52%,#20272e 53%)!important;
+ border-radius:2px!important;font-size:7px!important;color:#d1d6dc!important;
+}
+.mixer #mixbody>.v74-master .v71-divider{background:#6b7278!important}
+.mixer #mixbody>.v74-fx .v71-multi{
+ border-bottom:1px solid #626b73!important;padding:2px 0 9px!important;gap:6px!important;
+}
+.mixer #mixbody>.v74-fx .v71-multi .v71-pair{
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:4px!important;align-items:center!important;
+}
+.mixer #mixbody>.v74-fx .v71-multi .v71-unit{margin:1px auto!important;gap:3px!important}
+.mixer #mixbody>.v74-fx .v71-multi .v71-unit small{font-size:7px!important}
+.mixer #mixbody>.v74-fx .v71-multi button{
+ font-size:7px!important;min-height:27px!important;
+ border:1px solid #596573!important;background:linear-gradient(#34404c,#131b23)!important;
+}
+.mixer #mixbody>.v74-fx .v71-multi button[aria-pressed=true]{box-shadow:0 0 6px #338bf5!important}
+.mixer #mixbody>.v74-fx .v71-screen{
+ border:3px solid #2f3943!important;border-radius:1px!important;
+ box-shadow:inset 0 0 9px #000,0 2px 4px #000c!important;
+ min-height:117px!important;padding:5px 3px!important;
+ background:linear-gradient(#060b13,#040712)!important;
+ display:flex!important;flex-direction:column!important;justify-content:center!important;gap:3px!important;
+}
+.mixer #mixbody>.v74-fx .v71-screen .v71-fx-title{font-size:11px!important}
+.mixer #mixbody>.v74-fx .v74-screen-top{font:700 8px/1 Arial,sans-serif;color:#bbc6cf;display:flex;justify-content:space-between}
+.mixer #mixbody>.v74-fx .v74-screen-beats{font:800 10px/1.2 Arial,sans-serif;color:#edf3f8;background:#121822;border-top:1px solid #3c4652;border-bottom:1px solid #3c4652}
+.mixer #mixbody>.v74-fx .v71-purple{height:7px!important;margin:4px 2px!important;background:linear-gradient(90deg,#401070,#b54df8,#441274)!important;box-shadow:0 0 6px #9d3bff6b}
+.mixer #mixbody>.v74-fx .a9-xpad-beats{width:100%;padding:0 1px!important}
+.mixer #mixbody>.v74-fx .a9-xpad{
+ height:35px!important;min-height:35px!important;border:3px solid #252e3b!important;
+ background:linear-gradient(#111a27,#64768b 72%,#1a2636)!important;
+ border-radius:3px!important;box-shadow:inset 0 2px 6px #000b!important;
+}
+.mixer #mixbody>.v74-fx .a9-beat-step{width:100%!important;gap:3px!important;margin-top:2px!important}
+.mixer #mixbody>.v74-fx .a9-tap-row{width:100%!important;gap:3px!important;margin:4px 0!important}
+.mixer #mixbody>.v74-fx #beat-tap{
+ border-radius:50%!important;min-height:40px!important;width:40px!important;
+ border:3px solid #267b4d!important;background:radial-gradient(circle,#276d40,#0b2118)!important;
+ color:#74f39c!important;box-shadow:0 0 7px #25b464!important;
+}
+.mixer #mixbody>.v74-fx .fx-freq{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:3px!important}
+.mixer #mixbody>.v74-fx .fx-freq button{
+ min-width:0!important;min-height:24px!important;padding:2px!important;font-size:8px!important;
+ border:1px solid #246ac0!important;background:#0a2444!important;color:#96d5ff!important;
+}
+.mixer #mixbody>.v74-fx .fx-freq button.is-active{box-shadow:inset 0 0 6px #369afd,0 0 4px #258cfc!important}
+.mixer #mixbody>.v74-fx .v74-ch-grid{
+ display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ width:100%;gap:3px;margin:4px 0;
+}
+.mixer #mixbody>.v74-fx .v74-ch-grid button{
+ min-width:0;min-height:24px;border:1px solid #225d9b;background:#11253d;color:#b0d8fc;
+ padding:2px 0;font:800 8px/1 Arial,sans-serif;border-radius:2px;
+}
+.mixer #mixbody>.v74-fx .v74-ch-grid button[aria-pressed=true]{
+ background:#245c9d;color:white;box-shadow:inset 0 0 7px #7fbaff,0 0 5px #267bda;
+}
+.mixer #mixbody>.v74-fx .a9-selector-ring{margin:4px auto!important;min-height:44px!important}
+.mixer #mixbody>.v74-fx .a9-selector-ring select{font-size:9px!important}
+.mixer #mixbody>.v74-fx #beat-time,.mixer #mixbody>.v74-fx #beat-depth{width:85%!important}
+.mixer #mixbody>.v74-fx #beat-fx-toggle{
+ width:62px!important;height:62px!important;min-height:62px!important;
+ border:4px solid #42526c!important;background:radial-gradient(circle at 35% 30%,#a5deff,#428af6 50%,#16347c)!important;
+ box-shadow:inset 0 0 9px #e5f8ff,0 0 9px #387fff!important;
+}
+.mixer #mixbody>.v74-fx #beat-fx-toggle[aria-pressed=true]{box-shadow:0 0 15px #6ab6ff,inset 0 0 8px #fff!important}
+</style>
+<script id="signal-v74-right-reference-realism-script">
+(()=>{
+ function setup(){
+  const mix=document.getElementById('mixbody');
+  const master=mix?.querySelector(':scope > .v71-master');
+  const fx=mix?.querySelector(':scope > .v71-beatfx');
+  if(!master||!fx||master.dataset.v74Ready)return;
+  master.dataset.v74Ready='true';master.classList.add('v74-master');fx.classList.add('v74-fx');
+  const add=(parent,tag,cls,txt)=>{const node=document.createElement(tag);if(cls)node.className=cls;if(txt!==undefined)node.textContent=txt;parent.appendChild(node);return node};
+  // Add calibrated markings between the original meter bars; audio meter itself remains live.
+  const meter=master.querySelector('.v71-meter-pair');
+  if(meter){const scale=add(meter,'div','v74-meter-numbers');for(const d of ['CLIP','0','-3','-6','-9','-12','-18','-24'])add(scale,'span','',d)}
+  // Group the three existing hardware-style booth controls.
+  const level=Array.from(master.querySelectorAll(':scope > .v71-unit'));
+  const booth=add(master,'div','v74-booth');
+  for(const knob of level.filter(x=>['BOOTH EQ','LOW','BOOTH LEVEL'].includes(x.querySelector('small')?.textContent||'')))booth.appendChild(knob);
+  const meterLabel=master.querySelector('.v71-reference-label');
+  if(meterLabel)meterLabel.textContent='MASTER L / R';
+  const headings=Array.from(master.querySelectorAll(':scope > .v71-heading'));
+  for(const node of headings){
+   if(node.textContent?.trim()==='ISO CURVE'||node.textContent?.trim()==='CH FADER'||node.textContent?.trim()==='CROSSFADER'){
+    const button=node.nextElementSibling;
+    if(button?.tagName==='BUTTON')button.classList.add('v74-hardware-switch');
+   }
+  }
+  // Cue button groups in their own separated housing.
+  for(const title of ['MASTER CUE','HEADPHONES B']){
+   const heading=headings.find(x=>x.textContent?.trim()===title);
+   const pair=heading?.nextElementSibling;
+   if(heading&&pair?.classList.contains('v71-pair')){
+    const section=add(master,'div','v74-cue-block');
+    section.appendChild(heading);section.appendChild(pair);
+   }
+  }
+  // Keep *all* original audio Beat FX controls. Display follows their state.
+  const screen=fx.querySelector('.v71-screen');
+  if(screen){
+   screen.innerHTML='<div class="v74-screen-top"><span>QUANTIZE</span><span class="v74-live-bpm">128.0 BPM</span></div><div class="v71-fx-title">ECHO</div><div class="v74-screen-beats">1/2 &nbsp;&nbsp; 1 &nbsp;&nbsp; 2</div><div class="v71-purple"></div><div class="v71-reference-label">X-PAD · BEAT FX</div>';
+  }
+  const effect=fx.querySelector('#beat-effect'),channel=fx.querySelector('#beat-channel'),time=fx.querySelector('#beat-time'),depth=fx.querySelector('#beat-depth'),fxOn=fx.querySelector('#beat-fx-toggle');
+  // Working assignment buttons update the ORIGINAL Beat FX channel select.
+  if(channel){
+   const row=add(fx,'div','v74-ch-grid');
+   for(const [name,value] of [['1','A'],['2','B'],['3','C'],['4','D']]){
+    const b=add(row,'button','',name);b.type='button';
+    b.setAttribute('aria-label','Beat FX channel '+name);
+    b.onclick=()=>{channel.value=value;channel.dispatchEvent(new Event('input',{bubbles:true}));sync()};
+   }
+   const selector=channel.closest('.a9-selector-ring');
+   if(selector)selector.insertAdjacentElement('afterend',row);
+   function syncButtons(){for(const b of row.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.textContent===String(channel.selectedIndex+1)))}
+   channel.addEventListener('change',syncButtons);channel.addEventListener('input',syncButtons);syncButtons();
+  }
+  function sync(){
+   if(!screen)return;
+   const title=screen.querySelector('.v71-fx-title'),bpm=screen.querySelector('.v74-live-bpm');
+   const beats=screen.querySelector('.v74-screen-beats'),bar=screen.querySelector('.v71-purple');
+   if(title)title.textContent=effect?.value||'ECHO';
+   if(bpm){const source=document.querySelector('.lcd-bpm');const val=parseFloat(source?.textContent||'');bpm.textContent=(Number.isFinite(val)?val.toFixed(1):'128.0')+' BPM'}
+   if(beats)beats.textContent='BEAT '+(time?.value||'4')+'   •   DEPTH '+(depth?.value||'40')+'%';
+   if(bar)bar.style.opacity=fxOn?.getAttribute('aria-pressed')==='true'?'1':'.43';
+  }
+  for(const node of [effect,channel,time,depth]){node?.addEventListener('change',sync);node?.addEventListener('input',sync)}
+  fxOn?.addEventListener('click',()=>requestAnimationFrame(sync));
+  fx.querySelector('#beat-less')?.addEventListener('click',()=>requestAnimationFrame(sync));
+  fx.querySelector('#beat-more')?.addEventListener('click',()=>requestAnimationFrame(sync));
+  sync();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
+})();
+</script>
 </body></html>
