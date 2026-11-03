@@ -3073,24 +3073,20 @@ function install(){
  const viewport=document.createElement('div');viewport.id='signal-booth-viewport';
  consoleEl.parentNode.insertBefore(viewport,consoleEl);viewport.append(consoleEl);
  const toolbar=document.createElement('div');toolbar.id='signal-view-controls';toolbar.setAttribute('role','toolbar');toolbar.setAttribute('aria-label','SIGNAL DJ console view controls');
- toolbar.innerHTML='<span class="signal-view-brand">G//BMN: <em>SIGNAL DJ</em></span><button type="button" data-view="fit">⛶ FIT BOOTH</button><button type="button" data-view="detail">⊞ DETAIL VIEW</button><button type="button" data-view="fullscreen">⛶ FULLSCREEN</button><span class="signal-fullscreen-zoom" hidden><button type="button" data-zoom="out" aria-label="Make console smaller">−</button><button type="button" data-zoom="reset">SIZE 100%</button><button type="button" data-zoom="in" aria-label="Make console larger">+</button></span><button type="button" data-action="library">▤ LIBRARY</button><button type="button" data-action="settings">⚙ SETTINGS</button><button type="button" data-action="mode">FESTIVAL / LIVE</button><span class="signal-view-note" role="status">STAGE VIEW · FULL BOOTH</span>';
+ toolbar.innerHTML='<span class="signal-view-brand">G//BMN: <em>SIGNAL DJ</em></span><button type="button" data-view="fit">⛶ FIT BOOTH</button><button type="button" data-view="detail">⊞ DETAIL VIEW</button><button type="button" data-view="fullscreen">⛶ FULLSCREEN</button><button type="button" data-action="library">▤ LIBRARY</button><button type="button" data-action="settings">⚙ SETTINGS</button><button type="button" data-action="mode">FESTIVAL / LIVE</button><span class="signal-view-note" role="status">STAGE VIEW · FULL BOOTH</span>';
  viewport.before(toolbar);
  const fullButton=toolbar.querySelector('[data-view="fullscreen"]'),oldFull=document.getElementById('signal-fullview');
- let view='fit',sizeScheduled=false,fullZoom=1;
- const zoomBar=toolbar.querySelector('.signal-fullscreen-zoom');
- zoomBar.querySelector('[data-zoom="out"]').onclick=()=>{fullZoom=Math.max(.65,Math.round((fullZoom-.05)*100)/100);scheduleFit()};
- zoomBar.querySelector('[data-zoom="in"]').onclick=()=>{fullZoom=Math.min(1.5,Math.round((fullZoom+.05)*100)/100);scheduleFit()};
- zoomBar.querySelector('[data-zoom="reset"]').onclick=()=>{fullZoom=1;scheduleFit()};
+ let view='fit',sizeScheduled=false;
  const buttons=[...toolbar.querySelectorAll('[data-view]')];
  toolbar.querySelector('[data-action="library"]').onclick=()=>{const drawer=document.getElementById('signal-browser-drawer');if(drawer?.hidden)document.getElementById('signal-browser-toggle')?.click();else drawer.scrollIntoView({block:'nearest'})};
  toolbar.querySelector('[data-action="settings"]').onclick=()=>document.getElementById('signal-settings-open')?.click();
  toolbar.querySelector('[data-action="mode"]').onclick=e=>{const festival=document.body.classList.contains('festival');document.getElementById(festival?'booth-club':'booth-festival')?.click();e.currentTarget.textContent=festival?'FESTIVAL / LIVE':'CLUB STYLE'};
- const updateButtons=()=>{buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view||(b.dataset.view==='fullscreen'&&!!document.fullscreenElement))));fullButton.textContent=(view==='fullscreen'||document.fullscreenElement)?'⤡ EXIT FULLSCREEN':'⛶ FULLSCREEN'};
+ const updateButtons=()=>{buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view||(b.dataset.view==='fullscreen'&&!!document.fullscreenElement))));fullButton.textContent=document.fullscreenElement?'⤡ EXIT FULLSCREEN':'⛶ FULLSCREEN'};
  function fit(){
-  if(view!=='fit'&&view!=='fullscreen')return;
-  const parentWidth=view==='fullscreen'?Math.max(document.documentElement.clientWidth,window.innerWidth):viewport.clientWidth;
+  if(view!=='fit')return;
+  const parentWidth=viewport.clientWidth;
   // Minimum hardware width retains deck/mixer proportions and prevents media-query stacking.
-  const baseWidth=1390; // One fixed design canvas across Fit Booth and Full Screen; only uniform scale changes.
+  const baseWidth=Math.max(1390,parentWidth);
   consoleEl.style.width=baseWidth+'px';
   consoleEl.style.minWidth=baseWidth+'px';
   consoleEl.style.display='grid';
@@ -3099,23 +3095,18 @@ function install(){
   // Calculate real layout dimensions before applying the scale.
   const naturalHeight=Math.max(consoleEl.scrollHeight,consoleEl.getBoundingClientRect().height);
   const top=viewport.getBoundingClientRect().top;
-  const availableHeight=Math.max(320,(view==='fullscreen'?window.innerHeight-viewport.getBoundingClientRect().top:document.documentElement.clientHeight-top)-5);
-  // Both views share the same geometry. Fullscreen gets a visible zoom
-  // control instead of unpredictable width-first or height-overscan rules.
-  const widthScale=parentWidth/baseWidth;
-  const heightScale=availableHeight/Math.max(1,naturalHeight);
-  const safeScale=Math.max(.25,Math.min(widthScale,heightScale));
-  const scale=view==='fullscreen'?safeScale*fullZoom:safeScale;
+  const availableHeight=Math.max(320,document.documentElement.clientHeight-top-5);
+  const widthScale=Math.min(1,parentWidth/baseWidth);
+  const heightScale=Math.min(1,availableHeight/Math.max(1,naturalHeight));
+  const scale=Math.max(.25,Math.min(widthScale,heightScale));
   const leftSpace=Math.max(0,(parentWidth-baseWidth*scale)/2);
-  const topSpace=0;
-  consoleEl.style.transform='translate('+leftSpace+'px,'+topSpace+'px) scale('+scale+')';
-  viewport.style.height=Math.ceil(Math.max(view==='fullscreen'?availableHeight:0,naturalHeight*scale+3))+'px';
-  zoomBar.querySelector('[data-zoom="reset"]').textContent='SIZE '+Math.round(fullZoom*100)+'%';
-  toolbar.querySelector('.signal-view-note').textContent=(view==='fullscreen'?'FULL DESKTOP · SIZE '+Math.round(fullZoom*100)+'%':'Fit '+Math.round(scale*100)+'% · Full booth on screen');
+  consoleEl.style.transform='translateX('+leftSpace+'px) scale('+scale+')';
+  viewport.style.height=Math.ceil(naturalHeight*scale+3)+'px';
+  toolbar.querySelector('.signal-view-note').textContent='Fit '+Math.round(scale*100)+'% · Full booth on screen';
  }
  function scheduleFit(){if(sizeScheduled)return;sizeScheduled=true;requestAnimationFrame(()=>{sizeScheduled=false;fit()})}
  function setView(next){
-  view=next;zoomBar.hidden=next!=='fullscreen';document.body.classList.toggle('signal-fit-booth',next==='fit'||next==='fullscreen');document.body.classList.toggle('signal-detail-booth',next==='detail');document.body.classList.toggle('signal-full-booth',next==='fullscreen');
+  view=next;document.body.classList.toggle('signal-fit-booth',next==='fit');document.body.classList.toggle('signal-detail-booth',next==='detail');
   if(next==='detail'){
    consoleEl.style.transform='none';consoleEl.style.width='';consoleEl.style.minWidth='1390px';consoleEl.style.display='grid';consoleEl.style.gridTemplateColumns='minmax(310px,1fr) minmax(510px,1.28fr) minmax(310px,1fr)';
    viewport.style.height='';toolbar.querySelector('.signal-view-note').textContent='Detail · Scroll to access full-size controls';
@@ -3124,17 +3115,13 @@ function install(){
  }
  toolbar.querySelector('[data-view="fit"]').onclick=()=>setView('fit');
  toolbar.querySelector('[data-view="detail"]').onclick=()=>setView('detail');
- fullButton.onclick=async()=>{
-  if(view==='fullscreen'){
-   if(document.fullscreenElement){try{await document.exitFullscreen()}catch(e){}}
-   setView('fit');return;
-  }
-  setView('fullscreen');
-  if(!document.fullscreenElement&&document.documentElement.requestFullscreen){try{await document.documentElement.requestFullscreen()}catch(e){/* Expanded width mode works even if browser fullscreen is denied. */}}
-  scheduleFit();
+ fullButton.onclick=async()=>{if(document.fullscreenElement){try{await document.exitFullscreen()}catch(e){};return}
+  // The existing full-view button owns browser fullscreen and provides a fallback.
+  if(oldFull)oldFull.click();else if(document.documentElement.requestFullscreen){try{await document.documentElement.requestFullscreen()}catch(e){}}
+  setView('fit');scheduleFit();
  };
  window.addEventListener('resize',scheduleFit,{passive:true});
- document.addEventListener('fullscreenchange',()=>{document.body.classList.toggle('signal-view-fullscreen',!!document.fullscreenElement);if(!document.fullscreenElement&&view==='fullscreen')setView('fit');else {updateButtons();scheduleFit()}});
+ document.addEventListener('fullscreenchange',()=>{document.body.classList.toggle('signal-view-fullscreen',!!document.fullscreenElement);updateButtons();scheduleFit()});
  window.addEventListener('load',scheduleFit,{once:true});
  if(window.ResizeObserver){const ro=new ResizeObserver(()=>scheduleFit());ro.observe(toolbar);/* Avoid observing viewport height that fit() itself writes. */ }
  setView('fit');
@@ -3676,119 +3663,4 @@ body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-ends{
  text-shadow:0 1px 2px black!important;
 }
 </style>
-
-<style id="signal-v42-locked-deck-coordinate-system">
-/* Lock a shared 1390px console coordinate system in Fit Booth and Full Screen.
-   The viewport may scale the whole console, but no deck internals resize or drift. */
-body.signal-booth-v2.signal-fit-booth #signal-booth-viewport>.console{
- display:grid!important;
- grid-template-columns:minmax(310px,1fr) minmax(510px,1.28fr) minmax(310px,1fr)!important;
- min-height:0!important;
- transform-origin:top left!important;
-}
-/* V41 incorrectly shrank fullscreen decks to 690-815px while their controls
-   used percentages designed for the 1100px deck faceplate. Correct both modes. */
-body.signal-booth-v2.signal-fit-booth .deckshell.deck-A,
-body.signal-booth-v2.signal-fit-booth .deckshell.deck-B,
-body.signal-booth-v2.signal-fit-booth.signal-immersive .deckshell.deck-A,
-body.signal-booth-v2.signal-fit-booth.signal-immersive .deckshell.deck-B{
- height:1100px!important;min-height:1100px!important;max-height:1100px!important;
- box-sizing:border-box!important;
-}
-/* Anchor the small Jog Feel assembly to the same deck-relative coordinates.
-   The full console scales uniformly, not the knob separately. */
-body.signal-booth-v2:not(.festival) .deckshell.deck-A>.signal-v33-jog,
-body.signal-booth-v2:not(.festival) .deckshell.deck-B>.signal-v33-jog{
- top:47.3%!important;left:70.8%!important;width:10.8%!important;
-}
-</style>
-<style id="signal-v43-fullscreen-expansion">
-/* Full Screen = expanded width, Fit Booth = entire booth fits in view.
-   Both retain the same locked 1390px design canvas and relative control positions. */
-body.signal-booth-v2.signal-full-booth #signal-booth-viewport{overflow-x:hidden!important;overflow-y:visible!important}
-body.signal-booth-v2.signal-full-booth #signal-booth-viewport>.console{transform-origin:top left!important}
-body.signal-booth-v2.signal-full-booth{overflow-x:hidden!important;overflow-y:auto!important}
-body.signal-booth-v2.signal-full-booth #signal-view-controls{position:relative!important}
-</style>
-
-<style id="signal-v44-real-full-desktop">
-/* V44: Full Desktop owns the full physical browser viewport, not the webpage's
-   1920px max-width main container or a centered Fit Booth wrapper. */
-body.signal-booth-v2.signal-full-booth{
- margin:0!important;padding:0!important;
- width:100vw!important;max-width:none!important;
- height:100dvh!important;min-height:100dvh!important;
- overflow:hidden!important;
-}
-body.signal-booth-v2.signal-full-booth main{
- position:fixed!important;
- inset:0!important;
- margin:0!important;padding:0!important;
- width:100vw!important;max-width:none!important;
- height:100dvh!important;max-height:none!important;
- overflow-x:hidden!important;overflow-y:auto!important;
- background:#090d13!important;
- z-index:100!important;
- box-sizing:border-box!important;
- scrollbar-width:thin;
-}
-body.signal-booth-v2.signal-full-booth #signal-view-controls{
- position:sticky!important;top:0!important;
- left:0!important;width:100%!important;max-width:none!important;
- margin:0!important;box-sizing:border-box!important;
- z-index:120!important;
-}
-body.signal-booth-v2.signal-full-booth #signal-booth-viewport{
- position:relative!important;
- margin:0!important;padding:0!important;
- width:100vw!important;max-width:none!important;
- overflow-x:hidden!important;overflow-y:visible!important;
-}
-body.signal-booth-v2.signal-full-booth #signal-booth-viewport>.console{
- margin:0!important;transform-origin:top left!important;
-}
-/* Keep the real 1100px design deck and its controls, and scale
-   the entire fixed canvas uniformly so jog wheels remain circular. */
-body.signal-booth-v2.signal-full-booth .deckshell.deck-A,
-body.signal-booth-v2.signal-full-booth .deckshell.deck-B{
- height:1100px!important;min-height:1100px!important;max-height:1100px!important;
-}
-</style>
-
-<style id="signal-v45-fullscreen-safe-fit">
-/* V45 safe fullscreen: full desktop surface without clipping deck transport,
-   and a proportional booth scale so no jogs/buttons drift or become elliptical. */
-body.signal-booth-v2.signal-full-booth main{
- overflow:hidden!important;
-}
-body.signal-booth-v2.signal-full-booth #signal-booth-viewport{
- height:calc(100dvh - 48px);
- overflow:hidden!important;
- background:
-  linear-gradient(90deg,#101923 0%,#17232e 15%,#080d14 48%,#17232e 85%,#101923 100%)!important;
-}
-body.signal-booth-v2.signal-full-booth #signal-booth-viewport>.console{
- max-width:none!important;transform-origin:top left!important;
-}
-</style>
-<style id="signal-v46-fullscreen-width-first">
-/* Full Screen fills the monitor horizontally; keep fixed deck geometry.
-   When its proportional height exceeds the screen, scroll the stage rather
-   than shrinking it back to Fit Booth or clipping transport controls. */
-body.signal-booth-v2.signal-full-booth main{
- overflow-x:hidden!important;overflow-y:auto!important;
-}
-body.signal-booth-v2.signal-full-booth #signal-booth-viewport{
- height:auto;min-height:calc(100dvh - 48px);
- overflow:visible!important;
-}
-body.signal-booth-v2.signal-full-booth #signal-view-controls{
- position:sticky!important;top:0!important;
-}
-</style>
-<style id="signal-v48-zoom-controls">
-body.signal-booth-v2 .signal-fullscreen-zoom{display:inline-flex;align-items:center;gap:3px;margin:0 6px}
-body.signal-booth-v2 .signal-fullscreen-zoom[hidden]{display:none!important}
-body.signal-booth-v2 .signal-fullscreen-zoom button{min-height:27px;padding:4px 8px;color:#fff;background:#253448;border:1px solid #6b7c8d;border-radius:3px;font-weight:700}
-body.signal-booth-v2 .signal-fullscreen-zoom button:focus-visible{outline:2px solid #fff}
-</style></body></html>
+</body></html>
