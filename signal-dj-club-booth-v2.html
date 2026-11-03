@@ -1500,6 +1500,79 @@ body.signal-booth-v2:not(.festival) .deckshell.deck-B .platterZone{
  left:18%!important;
  width:64%!important;
 }
+</style><style id="signal-tempo-reset-restore-v25">
+/* V25: restore unmistakable CDJ-style TEMPO RESET on BOTH decks.
+   0-mark and control are kept in one vertical band, not over the jog or pads. */
+body.signal-booth-v2:not(.festival) .deckshell.deck-A .platterZone,
+body.signal-booth-v2:not(.festival) .deckshell.deck-B .platterZone{
+ top:47%!important;
+ left:18%!important;
+ width:64%!important;
+}
+body.signal-booth-v2 .deckshell>.cdjx-tempo-reset-wrap{
+ display:flex!important;
+ visibility:visible!important;
+ opacity:1!important;
+ position:absolute!important;
+ left:67.9%!important;
+ right:auto!important;
+ top:77.9%!important;
+ bottom:auto!important;
+ width:17.8%!important;
+ height:10.2%!important;
+ padding:0!important;
+ margin:0!important;
+ transform:none!important;
+ z-index:45!important;
+ pointer-events:auto!important;
+ flex-direction:column!important;
+ justify-content:center!important;
+ align-items:center!important;
+ gap:8px!important;
+ overflow:visible!important;
+ background:transparent!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-tempo-reset-wrap{
+ left:67.9%!important;
+ top:77.9%!important;
+ width:17.8%!important;
+}
+body.signal-booth-v2 .deckshell>.cdjx-tempo-reset-wrap label{
+ display:block!important;
+ width:100%!important;
+ min-height:20px!important;
+ margin:0!important;
+ font-size:10px!important;
+ line-height:1.03!important;
+ font-weight:900!important;
+ letter-spacing:.1px!important;
+ color:#f3f5f7!important;
+ text-align:center!important;
+ text-shadow:0 1px 2px #000!important;
+ white-space:normal!important;
+}
+body.signal-booth-v2 .deckshell>.cdjx-tempo-reset-wrap button{
+ display:block!important;
+ flex:0 0 44px!important;
+ width:44px!important;
+ height:44px!important;
+ min-width:44px!important;
+ min-height:44px!important;
+ padding:0!important;
+ border:5px solid #3c444d!important;
+ border-radius:50%!important;
+ background:radial-gradient(circle at 39% 34%,#3d434b 0%,#171b21 25%,#080a0e 48%,#10151b 64%,#414951 84%,#07090c 100%)!important;
+ box-shadow:0 0 0 3px #141920,0 4px 8px #000b,inset 0 2px 3px #727f8c55!important;
+ cursor:pointer!important;
+ pointer-events:auto!important;
+}
+body.signal-booth-v2 .deckshell>.cdjx-tempo-reset-wrap button:hover{filter:brightness(1.3)!important}
+body.signal-booth-v2 .deckshell>.cdjx-tempo-reset-wrap button:focus-visible{outline:3px solid white!important;outline-offset:4px!important}
+body.signal-booth-v2 .deckshell>.cdjx-tempo-reset-wrap button:active{transform:translateY(1px)!important}
+/* The 0-marker is distinct from reset rather than hidden under it. */
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo .cdjx-tempo-label.zero{
+ left:-17%!important;font-size:11px!important;
+}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
