@@ -1006,6 +1006,35 @@ body.signal-booth-v2 .cdjx-encoder .cdjx-import-key{border-color:#ee596f;color:#
 body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav button{font-size:7px!important;min-height:22px!important}
 body.signal-booth-v2 .signal-cdjx-screen .cdjx-direct-load button{font-size:8px!important}
 body.signal-booth-v2 .signal-cdjx-screen .cdjx-main-wave{height:76px!important}
+</style><style id="signal-cdjx-raised-display-v13">
+/* CDJ-style raised centered display with independent hardware wings.
+   Intentionally original SIGNAL graphics; software browser cannot replicate physical USB protocols. */
+body.signal-booth-v2 .deckshell{overflow:visible!important}
+body.signal-booth-v2 .deckshell>.signal-cdjx-screen{
+ position:absolute!important;top:-1.6%!important;left:15.5%!important;right:auto!important;width:69%!important;height:36.8%!important;
+ border:5px solid #57606b!important;border-radius:8px 8px 5px 5px!important;
+ box-shadow:0 -7px 14px #000b,inset 0 0 0 3px #080c13,0 6px 8px #000a!important;
+ z-index:21!important;overflow:hidden!important
+}
+body.signal-booth-v2 .deckshell>.cdjx-side-wing{position:absolute!important;top:3%!important;width:13%!important;height:29.5%!important;z-index:22!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:5px!important;padding:7px 3px!important;box-sizing:border-box!important;background:linear-gradient(140deg,#222831,#10151b);border:1px solid #4e5967;border-radius:6px;box-shadow:0 2px 7px #0009;overflow-y:auto;scrollbar-width:thin}
+body.signal-booth-v2 .deckshell>.cdjx-side-wing.left{left:1%!important}
+body.signal-booth-v2 .deckshell>.cdjx-side-wing.right{right:1%!important}
+body.signal-booth-v2 .cdjx-side-wing .cdjx-wing-label{font-weight:800;letter-spacing:.5px;text-align:center;font-size:8px;color:#9bafc3;line-height:1.25}
+body.signal-booth-v2 .cdjx-side-wing button{width:100%;min-height:27px;flex:none;background:linear-gradient(#2e3946,#141c25);color:#e2f1fc;border:1px solid #617184;border-radius:4px;font-weight:bold;font-size:8px;line-height:1.1;padding:3px 1px;overflow-wrap:anywhere}
+body.signal-booth-v2 .cdjx-side-wing button[aria-pressed=true]{background:#642137;border-color:#f86885}
+body.signal-booth-v2 .cdjx-side-wing button:focus-visible{outline:2px solid white;outline-offset:1px}
+body.signal-booth-v2 .cdjx-side-wing .cdjx-usb{background:linear-gradient(#313a45,#1a222e);border-left:3px solid #85b6df}
+body.signal-booth-v2 .cdjx-side-wing .cdjx-stop{min-height:18px;color:#ffb1ba;font-size:7px}
+body.signal-booth-v2 .cdjx-side-wing .cdjx-hint{font-size:7px;text-align:center;color:#a9b5c5;line-height:1.2}
+body.signal-booth-v2 .cdjx-side-wing.right .signal-cdjx-encoder{position:static!important;left:auto!important;right:auto!important;top:auto!important;width:100%!important;height:auto!important;min-height:130px!important;padding:5px 2px!important;box-shadow:none!important;border-width:1px!important;gap:4px!important;z-index:auto!important}
+body.signal-booth-v2 .cdjx-side-wing.right .signal-cdjx-encoder .cdjx-encoder-label{font-size:7px}
+body.signal-booth-v2 .cdjx-side-wing.right .cdjx-rotary{width:min(92%,54px)!important;height:auto!important}
+body.signal-booth-v2 .cdjx-side-wing.right .signal-cdjx-encoder .cdjx-up,
+body.signal-booth-v2 .cdjx-side-wing.right .signal-cdjx-encoder .cdjx-down,
+body.signal-booth-v2 .cdjx-side-wing.right .signal-cdjx-encoder .cdjx-tag-key,
+body.signal-booth-v2 .cdjx-side-wing.right .signal-cdjx-encoder .cdjx-import-key{display:none!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav button{font-size:7px!important}
+@media(max-width:1100px){body.signal-booth-v2 .deckshell>.cdjx-side-wing{gap:3px!important;padding:4px 2px!important}body.signal-booth-v2 .cdjx-side-wing button{min-height:23px!important;font-size:7px!important}}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -2346,5 +2375,42 @@ function install(){
  }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+})();
+</script><script id="signal-cdjx-raised-display-v13-script">
+(()=>{
+function init(){
+ for(const k of ['A','B']){
+  const shell=document.querySelector('.deck-'+k+' .deckshell');
+  const screen=shell?.querySelector('.signal-cdjx-screen');
+  if(!shell||!screen||shell.querySelector('.cdjx-side-wing'))continue;
+  const left=document.createElement('section'),right=document.createElement('section');
+  left.className='cdjx-side-wing left';right.className='cdjx-side-wing right';
+  left.setAttribute('aria-label','Deck '+k+' left source and transport hardware');
+  right.setAttribute('aria-label','Deck '+k+' right screen navigation hardware');
+  left.innerHTML='<div class="cdjx-wing-label">MEDIA SOURCE</div><button type="button" class="cdjx-usb" data-c="usb1">USB 1 / FILE</button><button type="button" class="cdjx-stop" data-c="stop1">■ STOP 1</button><button type="button" class="cdjx-usb" data-c="usb2">USB 2 / FILE</button><button type="button" class="cdjx-stop" data-c="stop2">■ STOP 2</button><button type="button" data-c="quant">QUANTIZE · N/A</button><button type="button" data-c="slip">SLIP · N/A</button><button type="button" data-c="call">◀ CUE CALL</button><button type="button" data-c="delete">DELETE CUE</button><small class="cdjx-hint">USB ports simulated by file picker</small>';
+  right.innerHTML='<div class="cdjx-wing-label">TRACK CONTROL</div><button type="button" data-c="back">BACK</button><button type="button" data-c="tag">TAG TRACK / REMOVE</button><button type="button" data-c="filter">TRACK FILTER / EDIT</button><button type="button" data-c="shortcut">SHORT CUT</button>';
+  const encoder=shell.querySelector('.signal-cdjx-encoder');
+  if(encoder){encoder.querySelector('.cdjx-back')?.remove();right.insertBefore(encoder,right.querySelector('[data-c="tag"]'))}
+  shell.append(left,right);
+  const browse=()=>window.signalCDJBrowser?.[k];
+  const file=()=>{const input=document.getElementById('file-'+k);if(input){input.value='';input.click()}};
+  function msg(t){const message='Deck '+k+': '+t;const status=document.getElementById('status');if(status)status.textContent=message;else console.info(message)}
+  const memory=screen.querySelector('.cdjx-extra-controls');
+  const choose=which=>{
+    if(which==='usb1'||which==='usb2')file();
+    else if(which==='stop1'||which==='stop2')msg('Virtual USB '+(which==='stop1'?'1':'2')+' has no physical connection to eject. No removal needed.');
+    else if(which==='quant')msg('Quantize is not implemented; BPM grids are estimates.');
+    else if(which==='slip')document.getElementById('slip-'+k)?.click();
+    else if(which==='call')memory?.querySelector('[data-cdjx="previous"]')?.click();
+    else if(which==='delete')memory?.querySelector('[data-cdjx="delete"]')?.click();
+    else if(which==='back')browse()?.back?.();
+    else if(which==='tag')browse()?.tag?.();
+    else if(which==='filter'){browse()?.open?.();const field=screen.querySelector('.cdjx-browser-tools input');field?.focus()}
+    else if(which==='shortcut'){browse()?.open?.();msg('Shortcut: browse, keyboard arrows to select, Enter to load.')}
+  };
+  for(const btn of [...left.querySelectorAll('button'),...right.querySelectorAll('button[data-c]')])btn.addEventListener('click',()=>choose(btn.dataset.c));
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script></body></html>
