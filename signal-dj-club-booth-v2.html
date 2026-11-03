@@ -3095,14 +3095,15 @@ function install(){
   // Calculate real layout dimensions before applying the scale.
   const naturalHeight=Math.max(consoleEl.scrollHeight,consoleEl.getBoundingClientRect().height);
   const top=viewport.getBoundingClientRect().top;
-  const availableHeight=Math.max(320,(view==='fullscreen'?window.innerHeight:document.documentElement.clientHeight-top)-5);
+  const availableHeight=Math.max(320,(view==='fullscreen'?window.innerHeight-viewport.getBoundingClientRect().top:document.documentElement.clientHeight-top)-5);
   const widthScale=Math.min(1,parentWidth/baseWidth);
   const heightScale=Math.min(1,availableHeight/Math.max(1,naturalHeight));
-  const scale=view==='fullscreen'?Math.max(.25,parentWidth/baseWidth):Math.max(.25,Math.min(widthScale,heightScale));
+  const scale=Math.max(.25,Math.min(widthScale,heightScale)); // Fit complete decks; never crop the lower controls in Full Screen.
   const leftSpace=Math.max(0,(parentWidth-baseWidth*scale)/2);
-  consoleEl.style.transform='translateX('+leftSpace+'px) scale('+scale+')';
-  viewport.style.height=Math.ceil(naturalHeight*scale+3)+'px';
-  toolbar.querySelector('.signal-view-note').textContent=(view==='fullscreen'?'FULL DESKTOP '+Math.round(scale*100)+'% · Full width, scroll for lower controls':'Fit '+Math.round(scale*100)+'% · Full booth on screen');
+  const topSpace=view==='fullscreen'?Math.max(0,(availableHeight-naturalHeight*scale)/2):0;
+  consoleEl.style.transform='translate('+leftSpace+'px,'+topSpace+'px) scale('+scale+')';
+  viewport.style.height=view==='fullscreen'?Math.ceil(availableHeight)+'px':Math.ceil(naturalHeight*scale+3)+'px';
+  toolbar.querySelector('.signal-view-note').textContent=(view==='fullscreen'?'FULL DESKTOP '+Math.round(scale*100)+'% · Complete decks visible':'Fit '+Math.round(scale*100)+'% · Full booth on screen');
  }
  function scheduleFit(){if(sizeScheduled)return;sizeScheduled=true;requestAnimationFrame(()=>{sizeScheduled=false;fit()})}
  function setView(next){
@@ -3743,6 +3744,23 @@ body.signal-booth-v2.signal-full-booth #signal-booth-viewport>.console{
 body.signal-booth-v2.signal-full-booth .deckshell.deck-A,
 body.signal-booth-v2.signal-full-booth .deckshell.deck-B{
  height:1100px!important;min-height:1100px!important;max-height:1100px!important;
+}
+</style>
+
+<style id="signal-v45-fullscreen-safe-fit">
+/* V45 safe fullscreen: full desktop surface without clipping deck transport,
+   and a proportional booth scale so no jogs/buttons drift or become elliptical. */
+body.signal-booth-v2.signal-full-booth main{
+ overflow:hidden!important;
+}
+body.signal-booth-v2.signal-full-booth #signal-booth-viewport{
+ height:calc(100dvh - 48px);
+ overflow:hidden!important;
+ background:
+  linear-gradient(90deg,#101923 0%,#17232e 15%,#080d14 48%,#17232e 85%,#101923 100%)!important;
+}
+body.signal-booth-v2.signal-full-booth #signal-booth-viewport>.console{
+ max-width:none!important;transform-origin:top left!important;
 }
 </style>
 </body></html>
