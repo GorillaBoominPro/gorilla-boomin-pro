@@ -6366,4 +6366,82 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel input.chFader{
  body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel input.chFader{height:219px!important;min-height:219px!important}
 }
 </style>
+
+<style id="signal-v85-hardware-fader-realism">
+/* V85: Real DJM-A9 style sliding hardware: CH1–4 and MAGVEL crossfader.
+   CSS only: do not replace range inputs, IDs, values or existing audio listeners. */
+/* Remove the broad plastic panel appearance: discrete fine horizontal travel scales
+   on both sides of the narrow, deep-black central vertical slot. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .fader-rail{
+ border:0!important;border-radius:0!important;
+ background:
+  repeating-linear-gradient(to bottom,transparent 0 18px,#d8dee3 18px 20px,transparent 20px 25px) left 2px top 10px/36% calc(100% - 20px) no-repeat,
+  repeating-linear-gradient(to bottom,transparent 0 18px,#d8dee3 18px 20px,transparent 20px 25px) right 2px top 10px/36% calc(100% - 20px) no-repeat,
+  linear-gradient(90deg,transparent 0 45%,#08090b 45% 55%,transparent 55% 100%)!important;
+ box-shadow:none!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .fader-rail::before{
+ width:9px!important;top:6px!important;bottom:6px!important;
+ border-radius:1px!important;
+ background:linear-gradient(90deg,#171a1d 0%,#030405 22%,#000 50%,#101317 84%,#20252a 100%)!important;
+ box-shadow:inset 1px 0 2px #000,1px 0 1px #707b8340!important;
+}
+/* Floating rectangular carbon-black slider cap with sharp silver horizontal stripe.
+   Maintain the native slider thumb for real drag / keyboard / audio response. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel input.chFader::-webkit-slider-thumb{
+ -webkit-appearance:none!important;appearance:none!important;
+ width:46px!important;height:29px!important;
+ margin-left:-20px!important;
+ border:1px solid #101317!important;border-radius:3px!important;
+ background:
+  linear-gradient(to bottom,transparent 0 41%,#eef4f8 41% 58%,transparent 58% 100%),
+  linear-gradient(to bottom,#45494c 0%,#252a30 16%,#080b0e 38%,#111519 60%,#4d545a 83%,#131619 100%)!important;
+ box-shadow:inset 0 2px 2px #a2a7aa66,inset 0 -3px 3px #000c,0 2px 5px #000d,0 0 0 1px #7d868e66!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel input.chFader::-moz-range-thumb{
+ width:46px!important;height:29px!important;
+ border:1px solid #101317!important;border-radius:3px!important;
+ background:
+  linear-gradient(to bottom,transparent 0 41%,#eef4f8 41% 58%,transparent 58% 100%),
+  linear-gradient(to bottom,#45494c,#171b20 30%,#080b0e 45%,#4d545a 85%,#131619)!important;
+ box-shadow:inset 0 2px 2px #a2a7aa66,inset 0 -3px 3px #000c,0 2px 5px #000d!important;
+}
+/* MAGVEL crossfader has narrow continuous horizontal slot, high-contrast vertical
+   scale strokes above/below it, and a solid dark sculpted silver-center cap. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v76-cross-dock>#cross{
+ border:0!important;border-radius:0!important;
+ height:45px!important;
+ background:
+  repeating-linear-gradient(to right,transparent 0 14px,#dde1e6 14px 16px,transparent 16px 21px) center top 1px/94% 16px no-repeat,
+  repeating-linear-gradient(to right,transparent 0 14px,#dde1e6 14px 16px,transparent 16px 21px) center bottom 1px/94% 16px no-repeat,
+  linear-gradient(to bottom,transparent 0 43%,#020304 43% 57%,transparent 57% 100%)!important;
+ box-shadow:none!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v76-cross-dock>#cross::-webkit-slider-thumb{
+ -webkit-appearance:none!important;appearance:none!important;
+ width:36px!important;height:53px!important;
+ margin-top:-22px!important;
+ border:1px solid #0e1216!important;border-radius:3px!important;
+ background:
+  linear-gradient(to right,transparent 0 44%,#f2f6f9 44% 56%,transparent 56% 100%),
+  linear-gradient(to right,#16191d 0%,#4f555b 15%,#13171a 32%,#050607 49%,#22282e 70%,#555c62 86%,#111418 100%)!important;
+ box-shadow:inset 1px 0 2px #c1c6c980,inset -2px 0 3px #000,0 3px 8px #000e!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v76-cross-dock>#cross::-moz-range-thumb{
+ width:36px!important;height:53px!important;
+ border:1px solid #0e1216!important;border-radius:3px!important;
+ background:
+  linear-gradient(to right,transparent 0 44%,#f2f6f9 44% 56%,transparent 56% 100%),
+  linear-gradient(to right,#16191d,#4f555b 15%,#13171a 32%,#050607 49%,#22282e 70%,#555c62 86%,#111418)!important;
+ box-shadow:inset 1px 0 2px #c1c6c980,inset -2px 0 3px #000,0 3px 8px #000e!important;
+}
+@media(max-width:1320px){
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel input.chFader::-webkit-slider-thumb{
+  width:40px!important;margin-left:-17px!important;
+ }
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel input.chFader::-moz-range-thumb{
+  width:40px!important;
+ }
+}
+</style>
 </body></html>
