@@ -6306,4 +6306,39 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v71-master .v71-unit{
  }
 }
 </style>
+
+<style id="signal-v83-full-circle-solid-white-knob-rings">
+/* V83 — true CLOSED 360 degree solid white meter rings, never C-shaped.
+   Maintain real pointer lines, event handlers and all approved panel geometry. */
+/* Channel COLOR 1–4: solid white, full uninterrupted circle */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-color-zone .knob.rotary-control::before{
+ background:#fff!important;
+ -webkit-mask-image:radial-gradient(circle,transparent 0 68%,#000 69% 74%,transparent 75%)!important;
+ mask-image:radial-gradient(circle,transparent 0 68%,#000 69% 74%,transparent 75%)!important;
+ opacity:1!important;
+}
+/* Column 1: BOTH MIC FX and MIC REVERB parameter knobs */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-mic .v78-micfx-group>.v70-knob-unit::after,
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-mic .v78-reverb-group>.v70-knob-unit::after{
+ background:#fff!important;
+ -webkit-mask-image:radial-gradient(circle,transparent 0 68%,#000 69% 74%,transparent 75%)!important;
+ mask-image:radial-gradient(circle,transparent 0 68%,#000 69% 74%,transparent 75%)!important;
+ opacity:1!important;
+}
+/* Column 2: increase contrast from faint grey tick marks to bright solid WHITE rings. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right .v70-knob-unit::before{
+ background:#fff!important;
+ -webkit-mask-image:radial-gradient(circle,transparent 0 68%,#000 69% 74%,transparent 75%)!important;
+ mask-image:radial-gradient(circle,transparent 0 68%,#000 69% 74%,transparent 75%)!important;
+ opacity:1!important;
+ filter:drop-shadow(0 0 1px #fff9)!important;
+}
+/* Column 7 MASTER: all rotaries full white circles, no removed arc */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v71-master .v71-knob::before{
+ background:#fff!important;
+ -webkit-mask-image:radial-gradient(circle,transparent 0 68%,#000 69% 74%,transparent 75%)!important;
+ mask-image:radial-gradient(circle,transparent 0 68%,#000 69% 74%,transparent 75%)!important;
+ opacity:1!important;
+}
+</style>
 </body></html>
