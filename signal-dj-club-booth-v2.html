@@ -5403,6 +5403,8 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v71-beatfx.v74-fx{
    if(heading&&pair?.classList.contains('v71-pair')){
     const section=add(master,'div','v74-cue-block');
     section.appendChild(heading);section.appendChild(pair);
+    const isoHeading=headings.find(x=>x.textContent?.trim()==='ISO CURVE');
+    if(isoHeading)master.insertBefore(section,isoHeading);
    }
   }
   // Keep *all* original audio Beat FX controls. Display follows their state.
