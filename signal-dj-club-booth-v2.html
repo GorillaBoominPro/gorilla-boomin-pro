@@ -4802,4 +4802,187 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.sidefx.v71-beatfx{
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
+<style id="signal-v72-left-reference-realism">
+/* V72: left utility pair, hardware reference refinement. Decks and four channels untouched. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-col{
+ background:linear-gradient(90deg,#101419 0%,#181c21 42%,#101419 100%)!important;
+ border-right:2px solid #727981!important;padding:9px 4px 12px!important;
+ gap:3px!important;min-height:850px!important;
+ box-shadow:inset 1px 0 0 #515a6266,inset -1px 0 3px #000b!important;
+}
+.mixer #mixbody .v70-utility-col .v70-head{
+ font:900 8px/1.1 Arial,sans-serif!important;letter-spacing:.15px!important;
+ color:#d6dce3!important;margin:5px 0 2px!important;
+}
+.mixer #mixbody .v70-utility-col .v72-mark{
+ font:900 7px/1.05 Arial,sans-serif!important;color:#8497a8!important;
+ letter-spacing:.25px;text-align:center;margin:0 0 2px;
+}
+.mixer #mixbody .v70-utility-col .v70-reference-label{
+ font:700 7px/1.2 Arial,sans-serif!important;color:#91a1b0!important;margin:2px 0;
+}
+.mixer #mixbody .v70-utility-col .v70-usb-row{margin:4px 0 15px!important;gap:5px!important}
+.mixer #mixbody .v70-utility-col .v70-usb-row button{
+ position:relative!important;height:43px!important;min-height:43px!important;
+ color:#a9b8c5!important;font-size:8px!important;padding:2px!important;
+ border:2px solid #3b444d!important;border-bottom:4px solid #15408d!important;
+ border-radius:2px!important;background:linear-gradient(#192128 0 11%,#3c4147 12% 69%,#070b12 70% 83%,#193b85 100%)!important;
+ box-shadow:inset 0 2px 5px #000d,0 2px 2px #000a!important;
+}
+.mixer #mixbody .v70-utility-col .v70-usb-row button[aria-pressed="true"]{
+ border-bottom-color:#3795ff!important;box-shadow:inset 0 1px 5px #000,0 1px 8px #2369ff!important;
+}
+.mixer #mixbody .v70-utility-col .v70-knob-unit{
+ min-height:56px!important;gap:3px!important;margin:3px 0 4px!important;
+}
+.mixer #mixbody .v70-utility-col .v70-knob-unit small{
+ color:#cbd1d7!important;font:800 8px/1.1 Arial,sans-serif!important;
+}
+.mixer #mixbody .v70-utility-col .v70-knob-unit .utility-knob{
+ width:40px!important;height:40px!important;
+ border:3px solid #59616b!important;
+ border-radius:50%!important;
+ background:radial-gradient(circle at 34% 25%,#a1a9b1,#555e68 44%,#252c33 63%,#101419 82%)!important;
+ box-shadow:0 1px 0 #abb3ba55,0 3px 5px #000b,inset 0 0 4px #0009!important;
+}
+.mixer #mixbody .v70-utility-col .v70-knob-unit .utility-knob::after{
+ background:#fff!important;box-shadow:0 0 2px #fff8!important;
+}
+.mixer #mixbody .v70-mic>.v70-head:first-child{margin-top:2px!important}
+.mixer #mixbody .v70-mic .v72-talk{
+ width:16px!important;height:16px!important;min-height:16px!important;border-radius:50%!important;
+ font-size:0!important;padding:0!important;margin:4px auto 10px!important;
+ border:2px solid #343a41!important;background:radial-gradient(circle,#663036,#280c0f)!important;
+ box-shadow:0 0 0 2px #12161b!important;
+}
+.mixer #mixbody .v70-mic .v72-talk[aria-pressed="true"]{
+ background:radial-gradient(circle,#ff656f,#b01626)!important;box-shadow:0 0 8px #f33!important;
+}
+.mixer #mixbody .v70-utility-col .v70-toggle-line{
+ gap:11px!important;margin:4px 0 7px!important;
+}
+.mixer #mixbody .v70-utility-col .v70-toggle-line button.v70-blue{
+ max-width:69px!important;width:72%!important;min-height:24px!important;height:24px!important;
+ color:#87c9ff!important;background:linear-gradient(#1a304b,#080c18)!important;
+ border:1px solid #2460ac!important;box-shadow:inset 0 -3px 0 #164caa,0 0 5px #215ec499!important;
+}
+.mixer #mixbody .v70-utility-col .v72-param-knob{
+ position:relative!important;width:40px!important;height:40px!important;
+ padding:0!important;border-radius:50%!important;
+ border:3px solid #6b7279!important;
+ background:radial-gradient(circle at 35% 25%,#989fa7,#535a63 42%,#20262e 70%,#0c1117 90%)!important;
+ box-shadow:0 0 0 1px #9da3a755,inset 0 0 3px #0009,0 3px 5px #000a!important;
+ cursor:ns-resize;touch-action:none;
+}
+.mixer #mixbody .v70-utility-col .v72-param-knob::before{
+ content:"";display:block;width:2px;height:15px;background:#eff5fc;position:absolute;
+ left:calc(50% - 1px);top:3px;transform:rotate(var(--v72-angle,0deg));transform-origin:1px 16px;
+}
+.mixer #mixbody .v70-utility-col .v72-param-hidden{display:none!important}
+.mixer #mixbody .v70-utility-col .v72-mic-fx-led{
+ width:16px;height:5px;border-radius:2px;background:#17283a;box-shadow:inset 0 1px 2px #000;
+ margin-top:9px;
+}
+.mixer #mixbody .v70-utility-col .v72-mic-fx-led.is-on{background:#3898ff;box-shadow:0 0 5px #2c7ef5}
+.mixer #mixbody .v70-mic #mic-toggle{
+ width:48px!important;height:34px!important;min-height:34px!important;max-width:60px!important;
+ border-radius:50%!important;border:3px solid #144d99!important;
+ background:radial-gradient(circle,#17538b 25%,#0a1b32 75%)!important;
+ color:#cde5ff!important;box-shadow:0 0 5px #1052bb!important;margin:auto!important;
+}
+.mixer #mixbody .v70-mic #mic-toggle.is-on{
+ background:radial-gradient(circle,#2e93d6,#0e3266)!important;box-shadow:0 0 12px #3a9dff!important;
+}
+.mixer #mixbody .v70-utility-right>.v70-head{padding:3px 0 2px!important;border-bottom:1px solid #525a64;width:100%}
+.mixer #mixbody .v70-utility-right .v72-color-lock{
+ width:94%!important;min-height:23px!important;font-size:8px!important;margin:3px auto 5px!important;
+}
+.mixer #mixbody .v70-utility-right .v72-phantom{
+ border-color:#af3647!important;color:#ff9b9e!important;
+ background:linear-gradient(#4a1f29,#1b0d12)!important;
+ width:48px!important;min-height:25px!important;
+}
+.mixer #mixbody .v70-utility-right .v72-phantom[aria-pressed="true"]{
+ box-shadow:0 0 8px #e44!important;background:linear-gradient(#b52235,#46111a)!important;
+}
+.mixer #mixbody .v70-utility-right .a9-left-color-buttons{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px!important;margin:5px 0 10px!important}
+.mixer #mixbody .v70-utility-right .a9-left-color-buttons button{
+ min-height:25px!important;height:25px!important;font-size:7px!important;
+ border:1px solid #7b8793!important;background:linear-gradient(#40454c,#141921)!important;
+}
+.mixer #mixbody .v70-utility-right .v70-phones-btn{
+ border:1px solid #8e6b34!important;color:#f6ca69!important;
+ background:linear-gradient(#41301d,#19130e)!important;
+}
+.mixer #mixbody .v70-utility-right .v70-port{
+ margin:6px auto 7px;width:22px;height:22px;border-color:#b79b54!important;
+ box-shadow:0 0 0 2px #2c343c,inset 0 0 4px #000!important;
+}
+.mixer #mixbody .v70-utility-right .v70-knob-unit .a9-endmarks{font-size:7px!important}
+.mixer #mixbody .v70-utility-right .v72-phones-badge{width:100%;border-top:1px solid #525a64;margin-top:8px;padding-top:9px}
+</style>
+<script id="signal-v72-left-reference-realism-script">
+(()=>{
+ function init(){
+  const mixer=document.getElementById('mixbody');
+  const mic=mixer?.querySelector('.v70-mic');
+  const rhs=mixer?.querySelector('.v70-utility-right');
+  if(!mic||!rhs||mic.dataset.v72Ready)return;
+  mic.dataset.v72Ready='yes';
+  const status=document.getElementById('status');
+  const notify=m=>{if(status)status.textContent=m};
+  // The hardware microphone has 3 main controls: LEVEL, HI and LOW.
+  // Remove V70's purely decorative MID control to match the actual photograph.
+  const fakeMid=mic.querySelector('.v70-mic-mid');
+  fakeMid?.closest('.v70-knob-unit')?.remove();
+  // Reuse the real browser microphone input EQ and on/off controls.
+  const talk=mic.querySelector('.v70-red');if(talk){talk.classList.add('v72-talk');talk.title='Talkover visual switch; automatic ducking not connected';talk.setAttribute('aria-label','Talkover')}
+  const switches=mic.querySelector('.v70-toggle-line');
+  const led=document.createElement('span');led.className='v72-mic-fx-led';switches?.insertAdjacentElement('afterend',led);
+  switches?.addEventListener('click',()=>requestAnimationFrame(()=>{led.classList.toggle('is-on',Array.from(switches.querySelectorAll('button')).some(b=>b.getAttribute('aria-pressed')==='true'))}));
+  // Replace two tiny horizontal faux knobs with accessible rotary hardware-style controls.
+  for(const [i,input] of Array.from(mic.querySelectorAll('.v70-knob-unit input[type="range"]')).entries()){
+   const parent=input.parentElement;
+   if(!parent)continue;
+   const visual=document.createElement('div');visual.className='v72-param-knob';
+   visual.tabIndex=0;visual.setAttribute('role','slider');visual.setAttribute('aria-label',i===0?'MIC FX parameter (visual only)':'MIC REVERB parameter (visual only)');
+   visual.setAttribute('aria-valuemin','0');visual.setAttribute('aria-valuemax','100');
+   input.classList.add('v72-param-hidden');
+   parent.insertBefore(visual,input);
+   let val=Number(input.value)||50,drag=null;
+   function set(v){val=Math.max(0,Math.min(100,Math.round(v)));input.value=String(val);input.dispatchEvent(new Event('input',{bubbles:true}));visual.setAttribute('aria-valuenow',String(val));visual.style.setProperty('--v72-angle',((val-50)*2.6)+'deg')}
+   visual.addEventListener('wheel',e=>{e.preventDefault();set(val+(e.deltaY<0?3:-3))},{passive:false});
+   visual.addEventListener('keydown',e=>{if(['ArrowUp','ArrowRight','ArrowDown','ArrowLeft','Home'].includes(e.key)){e.preventDefault();set(e.key==='Home'?50:val+(['ArrowUp','ArrowRight'].includes(e.key)?2:-2))}});
+   visual.addEventListener('pointerdown',e=>{drag={y:e.clientY,v:val};visual.setPointerCapture(e.pointerId)});
+   visual.addEventListener('pointermove',e=>{if(drag)set(drag.v+(drag.y-e.clientY)*.7)});
+   visual.addEventListener('pointerup',()=>drag=null);visual.addEventListener('pointercancel',()=>drag=null);set(val);
+  }
+  const first=rhs.querySelector('.v70-usb-row');
+  if(first){
+   const heading=first.previousElementSibling;
+   if(heading?.textContent?.trim()==='USB')heading.textContent='MIC 1 PHANTOM';
+   first.remove();
+   const phantom=document.createElement('button');phantom.className='v72-phantom';
+   phantom.type='button';phantom.textContent='+48V';phantom.setAttribute('aria-pressed','false');
+   phantom.title='Reference-only +48V indicator. A browser cannot provide microphone phantom power.';
+   phantom.onclick=()=>notify('+48V is controlled by the physical audio interface, not this browser. No phantom power has been switched.');
+   heading?.insertAdjacentElement('afterend',phantom);
+  }
+  const colorHeading=Array.from(rhs.querySelectorAll('.v70-head')).find(e=>e.textContent?.trim()==='SOUND COLOR FX');
+  if(colorHeading){
+   const lock=document.createElement('button');lock.type='button';lock.className='v72-color-lock';
+   lock.textContent='CENTER LOCK · OFF';lock.setAttribute('aria-pressed','false');
+   lock.title='Reference CENTER LOCK control; hardware center detent not available';
+   lock.onclick=()=>{const on=lock.getAttribute('aria-pressed')!=='true';lock.setAttribute('aria-pressed',String(on));lock.textContent='CENTER LOCK · '+(on?'ON':'OFF');notify('CENTER LOCK reference indication only')};
+   colorHeading.insertAdjacentElement('afterend',lock);
+  }
+  const phonesHeading=Array.from(rhs.querySelectorAll('.v70-head')).find(e=>e.textContent?.trim()==='HEADPHONES A');
+  phonesHeading?.classList.add('v72-phones-badge');
+  // Match two small headset cue buttons and keep linked real CH 1/2 cue functions.
+  for(const [i,b] of Array.from(rhs.querySelectorAll('.v70-phones-btn')).entries())b.textContent=i===0?'LINK CUE':'MONO SPLIT';
+  // The linked existing cue actions remain on those buttons; they do NOT switch hardware split mode.
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
 </body></html>
