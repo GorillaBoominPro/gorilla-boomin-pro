@@ -7178,4 +7178,63 @@ body.signal-booth-v2 .signal-cdjx-screen .v90-player-status{
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',repair,{once:true});else repair();
 })();
 </script>
+
+<style id="signal-v93-night-digital-readouts">
+/* V93 — brighter hardware-style ELAPSED / BPM / TEMPO digits on both LCDs.
+   Scope is the three existing data readouts only; other deck/mixer hardware untouched. */
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid{
+ display:grid!important;
+ grid-template-columns:1.18fr 1fr 1fr!important;
+ gap:4px!important;
+ margin:3px 0 4px!important;
+ flex:0 0 auto!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid>div{
+ display:flex!important;flex-direction:column!important;
+ justify-content:center!important;align-items:center!important;
+ min-height:43px!important;height:43px!important;
+ padding:3px 4px!important;box-sizing:border-box!important;
+ border:1px solid #65798a!important;border-radius:2px!important;
+ background:linear-gradient(180deg,#0d1a27,#03080f 75%)!important;
+ box-shadow:inset 0 1px 0 #93b8d02d,inset 0 -2px 7px #000!important;
+ overflow:hidden!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid small{
+ display:block!important;
+ font:800 8px/10px Arial,sans-serif!important;
+ letter-spacing:.8px!important;color:#b8cfe0!important;
+ text-shadow:0 0 3px #8ac6ed44!important;
+ margin:0!important;padding:0!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid b{
+ display:block!important;
+ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace!important;
+ font-weight:800!important;
+ font-size:clamp(17px,1.55vw,23px)!important;
+ line-height:25px!important;letter-spacing:0!important;
+ color:#f8fcff!important;
+ font-variant-numeric:tabular-nums lining-nums!important;
+ font-feature-settings:"tnum" 1!important;
+ white-space:nowrap!important;
+ text-shadow:0 0 4px #acdffe8c,0 0 10px #53a9f55c!important;
+ margin:1px 0 0!important;padding:0!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid .cdjx-bpm{
+ color:#ffffff!important;text-shadow:0 0 5px #e3f5ff,0 0 12px #8acbff8c!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid .cdjx-tempo{
+ color:#a9eaff!important;text-shadow:0 0 5px #6ad0ff96!important;
+}
+@media(max-width:1250px){
+ body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid>div{
+  height:37px!important;min-height:37px!important;padding:2px!important;
+ }
+ body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid small{
+  font-size:7px!important;line-height:8px!important;
+ }
+ body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid b{
+  font-size:17px!important;line-height:21px!important;
+ }
+}
+</style>
 </body></html>
