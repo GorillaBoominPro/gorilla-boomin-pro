@@ -4651,4 +4651,155 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.mixer-utility-left{display:
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
 })();
 </script>
+<style id="signal-v71-reference-right-utility-columns">
+/* Two right-hand mixer strips directly AFTER channel 4, matching hardware reference.
+   The four .channel elements and their playback handlers are unmodified. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody{
+ grid-template-columns:minmax(78px,.92fr) minmax(88px,1fr) repeat(4,minmax(54px,1fr)) minmax(83px,.96fr) minmax(120px,1.3fr)!important;
+ gap:2px!important;overflow-x:auto!important;align-items:stretch!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v71-master,
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.sidefx.v71-beatfx{
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ min-width:0!important;box-sizing:border-box!important;min-height:850px!important;
+ padding:8px 4px 12px!important;gap:6px!important;
+ border:0!important;border-right:2px solid #535b63!important;
+ background:linear-gradient(90deg,#12161b,#080d12 55%,#1e252b)!important;
+ color:#d9e0e8!important;text-align:center!important;
+}
+.mixer .v71-master .v71-heading,.mixer .v71-beatfx .v71-heading{
+ font:900 10px/1.2 Arial,sans-serif!important;color:#e6eaee!important;
+ letter-spacing:.2px!important;margin:5px auto 3px!important;
+}
+.mixer .v71-master .v71-unit{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;margin:3px 0}
+.mixer .v71-master .v71-unit>small{font:800 9px/1 Arial,sans-serif!important;color:#bec8d1!important}
+.mixer .v71-master .v71-knob,.mixer .v71-beatfx .v71-knob{
+ width:43px;height:43px;box-sizing:border-box;cursor:ns-resize;touch-action:none;
+ border-radius:50%;border:3px solid #434b53;
+ background:radial-gradient(circle at 35% 30%,#969da6 0%,#5b646c 28%,#242d36 59%,#090d12 74%);
+ box-shadow:inset 0 0 0 2px #202831,0 2px 5px #0009,0 0 0 1px #87929b;
+ display:flex;justify-content:center;
+}
+.mixer .v71-master .v71-knob::after,.mixer .v71-beatfx .v71-knob::after{
+ content:"";width:2px;height:15px;margin-top:4px;background:#eaf5fa;border-radius:2px;
+ transform:rotate(var(--v71-angle,0deg));transform-origin:1px 16px;
+}
+.mixer .v71-master .v71-meter-pair{display:flex;height:246px;width:56px;max-width:100%;justify-content:center;gap:7px;align-items:stretch;padding:5px 0}
+.mixer .v71-master .v71-meter-pair>.v71-meter-col{height:100%;width:13px;display:flex;flex-direction:column-reverse;gap:2px;background:#060809;padding:2px;border:1px solid #252d34;box-sizing:border-box}
+.mixer .v71-master .v71-meter-pair .v71-meter-lamps{width:100%;height:100%;display:flex;flex-direction:column-reverse;gap:2px}
+.mixer .v71-master .v71-meter-pair i{display:block;flex:1;background:#0a1713;border-radius:1px}
+.mixer .v71-master .v71-meter-pair i.on{background:#35d46e;box-shadow:0 0 5px #2eea70}
+.mixer .v71-master .v71-meter-pair i.on.hi{background:#f2c14b;box-shadow:0 0 5px #e3ae2e}
+.mixer .v71-master .v71-meter-pair i.on.peak{background:#e5444d;box-shadow:0 0 5px #fb3d53}
+.mixer .v71-master button,.mixer .v71-beatfx .v71-multi button{cursor:pointer!important;border:1px solid #65727d!important;color:#eaf0f5!important;font:800 8px/1.15 Arial,sans-serif!important;background:linear-gradient(#323943,#12181e)!important;border-radius:3px!important;min-height:26px!important;padding:3px 2px!important}
+.mixer .v71-master .v71-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px;width:100%}
+.mixer .v71-master .v71-pair button{background:linear-gradient(#6c4c2e,#2a1c14)!important;border-color:#b8874a!important}
+.mixer .v71-master .v71-pair button[aria-pressed="true"],.mixer .v71-beatfx .v71-multi button[aria-pressed="true"]{background:linear-gradient(#416b94,#193357)!important;box-shadow:inset 0 0 8px #56b5ff!important}
+.mixer .v71-master .v71-divider{width:95%;height:1px;background:#71777d;margin:6px 0}
+.mixer .v71-master .v71-reference-label,.mixer .v71-beatfx .v71-reference-label{font:700 8px/1.35 Arial,sans-serif;color:#9eacb9}
+.mixer .v71-beatfx .v71-multi{width:100%;display:flex;flex-direction:column;gap:4px;padding-bottom:4px;border-bottom:1px solid #626b73}
+.mixer .v71-beatfx .v71-pair{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.mixer .v71-beatfx .v71-mini{display:flex;flex-direction:column;align-items:center;gap:2px;margin:3px 0}
+.mixer .v71-beatfx .v71-mini .v71-knob{width:36px;height:36px}
+.mixer .v71-beatfx .v71-screen{
+ width:96%;max-width:100%;min-height:125px;box-sizing:border-box;
+ border:4px solid #2d3741;background:linear-gradient(145deg,#111922,#000509 70%);
+ padding:7px 3px;color:#f0f5fa;font:700 9px/1.5 Arial,sans-serif;
+}
+.mixer .v71-beatfx .v71-screen .v71-fx-title{font-size:12px;color:#fff;letter-spacing:1px}
+.mixer .v71-beatfx .v71-screen .v71-purple{height:8px;background:linear-gradient(90deg,#401072,#b243f0,#351071);margin:6px 3px}
+.mixer .v71-beatfx .v71-screen .v71-screen-bpm{color:#c3cad6;font-size:10px}
+.mixer .v71-beatfx .a9-xpad{min-height:32px!important;background:linear-gradient(#181f28,#596579,#161a22)!important}
+.mixer .v71-beatfx .fx-freq{display:flex;width:100%;gap:3px}
+.mixer .v71-beatfx .fx-freq button{flex:1;min-width:0;font-size:8px!important}
+.mixer .v71-beatfx .fx-on-button{width:57px!important;height:57px!important;border-radius:50%!important;margin:8px auto!important}
+.mixer .v71-beatfx .a9-selector-ring{width:100%!important;min-height:51px!important}
+.mixer .v71-beatfx #beat-effect,.mixer .v71-beatfx #beat-channel{max-width:100%!important}
+.mixer .v71-beatfx .a9-master-meter-hidden{display:none!important}
+@media(max-width:1320px){
+ body.signal-booth-v2:not(.festival) .mixer #mixbody{
+ grid-template-columns:70px 74px repeat(4,minmax(47px,1fr)) 77px 115px!important;
+ }
+}
+</style>
+<script id="signal-v71-reference-right-utility-columns-script">
+(()=>{
+ function init(){
+  const mix=document.getElementById('mixbody');
+  const fx=mix?.querySelector(':scope > .sidefx');
+  const channels=mix?.querySelectorAll(':scope > .channel');
+  if(!mix||!fx||channels.length!==4||mix.querySelector('.v71-master'))return;
+  const ch4=channels[3],master=document.createElement('aside');
+  master.className='v71-master';master.setAttribute('aria-label','MASTER and HEADPHONES B reference controls');
+  function add(p,tag,cls,html){const n=document.createElement(tag);if(cls)n.className=cls;if(html!==undefined)n.innerHTML=html;p.appendChild(n);return n}
+  function msg(t){const x=document.getElementById('status');if(x)x.textContent=t}
+  function btn(p,label,action){const b=add(p,'button','',label);b.type='button';if(action)b.onclick=action;return b}
+  function rotary(p,label,initial,onChange,detail){
+   const row=add(p,'div','v71-unit');add(row,'small','',label);
+   const knob=add(row,'div','v71-knob');knob.setAttribute('tabindex','0');knob.setAttribute('role','slider');knob.setAttribute('aria-label',label+(detail?' — '+detail:''));knob.setAttribute('aria-valuemin','0');knob.setAttribute('aria-valuemax','100');
+   let v=initial;let drag=null;
+   function set(n){v=Math.min(100,Math.max(0,Math.round(n)));knob.setAttribute('aria-valuenow',String(v));knob.style.setProperty('--v71-angle',((v-50)*2.7)+'deg');if(onChange)onChange(v)}
+   knob.addEventListener('wheel',e=>{e.preventDefault();set(v+(e.deltaY<0?3:-3))},{passive:false});
+   knob.addEventListener('keydown',e=>{const k=e.key;if(['ArrowUp','ArrowDown','ArrowRight','ArrowLeft','Home','End'].includes(k)){e.preventDefault();set(k==='Home'?0:k==='End'?100:v+(['ArrowUp','ArrowRight'].includes(k)?2:-2))}});
+   knob.addEventListener('pointerdown',e=>{drag={y:e.clientY,v};knob.setPointerCapture(e.pointerId)});
+   knob.addEventListener('pointermove',e=>{if(drag)set(drag.v+(drag.y-e.clientY)*.65)});
+   const end=()=>{drag=null};knob.addEventListener('pointerup',end);knob.addEventListener('pointercancel',end);
+   set(initial);return knob
+  }
+  add(master,'div','v71-heading','MASTER');
+  rotary(master,'LEVEL',65,v=>{const target=document.getElementById('master');if(target){target.value=v;target.dispatchEvent(new Event('input',{bubbles:true}))}},'controls the existing master output');
+  add(master,'div','v71-reference-label','L / R MASTER METER');
+  const meter=add(master,'div','v71-meter-pair');
+  const lampSets=[];
+  for(let c=0;c<2;c++){const col=add(meter,'div','v71-meter-col');const lamps=add(col,'div','v71-meter-lamps');const row=[];for(let n=0;n<16;n++)row.push(add(lamps,'i'));lampSets.push(row)}
+  function refreshMeter(){
+   const source=document.getElementById('meter'),v=Math.max(0,Math.min(100,parseFloat(source?.style.height)||0));
+   const active=Math.round(v*16/100);
+   for(const row of lampSets){row.forEach((led,i)=>{led.className=i<active?'on '+(i>=14?'peak':i>=11?'hi':''):''})}
+   requestAnimationFrame(refreshMeter)
+  }
+  requestAnimationFrame(refreshMeter);
+  rotary(master,'BOOTH EQ',50,()=>{},'reference control, no separate booth output');
+  rotary(master,'LOW',50,()=>{},'reference control, booth LOW EQ not routed');
+  rotary(master,'BOOTH LEVEL',50,()=>{},'reference control, separate booth output unavailable');
+  add(master,'div','v71-heading','MASTER CUE');
+  const mCue=add(master,'div','v71-pair');
+  for(const [label,k] of [['A','A'],['B','B']]){const b=btn(mCue,'CUE '+label,()=>{document.getElementById('mixcue-'+k)?.click();b.setAttribute('aria-pressed',document.getElementById('mixcue-'+k)?.getAttribute('aria-pressed')||'false')});b.setAttribute('aria-pressed','false')}
+  add(master,'div','v71-heading','HEADPHONES B');
+  const bCue=add(master,'div','v71-pair');
+  for(const [label,k] of [['A','A'],['B','B']]){const b=btn(bCue,'CUE '+label,()=>{document.getElementById('mixcue-'+k)?.click();b.setAttribute('aria-pressed',document.getElementById('mixcue-'+k)?.getAttribute('aria-pressed')||'false')});b.setAttribute('aria-pressed','false')}
+  rotary(master,'MIX',50,()=>{},'Headphones B independent mix hardware unavailable');
+  rotary(master,'LEVEL',50,()=>{},'Headphones B independent level hardware unavailable');
+  add(master,'div','v71-divider');
+  add(master,'div','v71-heading','ISO CURVE');
+  const iso=btn(master,'ISOLATOR / EQ',()=>{iso.setAttribute('aria-pressed',String(iso.getAttribute('aria-pressed')!=='true'));msg('ISO curve: visual switch only; original channel EQ preserved')});iso.setAttribute('aria-pressed','false');
+  add(master,'div','v71-heading','CH FADER');
+  const fade=btn(master,'CURVE ▰',()=>msg('Channel fader curve: hardware reference selector only'));
+  add(master,'div','v71-heading','CROSSFADER');
+  btn(master,'CURVE ⌒',()=>msg('Crossfader curve: reference control; use the existing crossfader for audio mixing'));
+  // Preserve the original Beat FX implementation and move its working column to the far right.
+  ch4.insertAdjacentElement('afterend',master);
+  fx.classList.add('v71-beatfx');
+  const multi=document.createElement('div');multi.className='v71-multi';
+  add(multi,'div','v71-heading','MULTI I/O');
+  const io=add(multi,'div','v71-pair');
+  rotary(io,'SEND CH',50,()=>{},'hardware multi I/O not connected');
+  const usb=btn(io,'USB',()=>msg('USB hardware routing requires a physical mixer'));usb.title='Hardware USB routing unavailable in web app';
+  const source=add(multi,'div','v71-pair');
+  const ret=btn(source,'RETURN',()=>msg('Multi I/O return hardware unavailable'));
+  const ins=btn(source,'INSERT',()=>{ins.setAttribute('aria-pressed',String(ins.getAttribute('aria-pressed')!=='true'));msg('INSERT: reference toggle only — no external processor connected')});ins.setAttribute('aria-pressed','false');
+  rotary(multi,'SEND LEVEL',50,()=>{},'hardware send unavailable');
+  add(multi,'div','v71-heading','BEAT FX');
+  fx.insertBefore(multi,fx.firstChild);
+  const screen=add(fx,'div','v71-screen');
+  screen.innerHTML='<span class="v71-screen-bpm">BEAT FX · 128.0 BPM</span><div class="v71-fx-title">ECHO</div><div>1/2 &nbsp;&nbsp; 1 &nbsp;&nbsp; 2</div><div class="v71-purple"></div><div class="v71-reference-label">X-PAD · AUDIO FX</div>';
+  fx.insertBefore(screen,multi.nextSibling);
+  const select=document.getElementById('beat-effect');
+  function sync(){const name=select?.value||'ECHO';const title=screen.querySelector('.v71-fx-title');if(title)title.textContent=name}
+  if(select){select.addEventListener('change',sync);select.addEventListener('input',sync)}sync();
+  fx.style.removeProperty('display');
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
 </body></html>
