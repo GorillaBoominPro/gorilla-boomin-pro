@@ -2998,11 +2998,13 @@ function initLCD(){
      if(isOverview){
       // Whole track: A cyan/blue, B amber/orange. Played side vivid,
       // remaining side dark, with a moving boundary and visible marker.
-      const played=at<=position,isA=k==='A';
-      g.fillStyle=isA?(played?'#008bc9':'#1c4266'):(played?'#ed8527':'#66401e');
+      const played=at<=position;
+      const p=window.signalLCDPalette?.get?.(k);
+      const o=p?.overview||(k==='A'?['#008bc9','#55daff','#1c4266','#487c9b']:['#ed8527','#ffc36e','#66401e','#926638']);
+      g.fillStyle=played?o[0]:o[2];
       g.fillRect(x,mid-amp,1,2*amp);
       const detail=Math.min(amp,Math.max(.55,(energy*.55+mids*.6+hi*.45)*mid*.5));
-      g.fillStyle=isA?(played?'#55daff':'#487c9b'):(played?'#ffc36e':'#926638');
+      g.fillStyle=played?o[1]:o[3];
       g.fillRect(x,mid-detail,1,2*detail);
       continue;
      }
@@ -3013,17 +3015,18 @@ function initLCD(){
      const bassRatio=energy/total,midRatio=mids/total,highRatio=hi/total;
      const isA=k==='A';
      const dominant=bassRatio>=midRatio&&bassRatio>=highRatio?'low':midRatio>=highRatio?'mid':'high';
-     const palette=isA?{
+     const preset=window.signalLCDPalette?.get?.(k);
+     const palette=preset?.bands||(isA?{
       low:['#078ca8','#25bcd6'],mid:['#048ce9','#24cfff'],high:['#6756d9','#b18bff']
      }:{
       low:['#db5d19','#ff862c'],mid:['#dc9521','#ffcc58'],high:['#b64584','#f27eb2']
-     };
+     });
      const pair=palette[dominant];
      g.fillStyle=pair[0];g.fillRect(x,mid-amp,1,amp*2);
      const core=Math.min(amp,Math.max(.45,amp*(.24+Math.max(bassRatio,midRatio,highRatio)*.28)));
      g.fillStyle=pair[1];g.fillRect(x,mid-core,1,core*2);
-     if(highRatio>.37){g.fillStyle=isA?'#8e74ef':'#c85ca4';g.fillRect(x,mid-amp,1,Math.max(.7,amp*.16))}
-     if(bassRatio>.48){g.fillStyle=isA?'#12b6bc':'#f07c27';g.fillRect(x,mid-core*.45,1,core*.9)}
+     if(highRatio>.37){g.fillStyle=palette.high[1];g.fillRect(x,mid-amp,1,Math.max(.7,amp*.16))}
+     if(bassRatio>.48){g.fillStyle=palette.low[1];g.fillRect(x,mid-core*.45,1,core*.9)}
     }
     g.fillStyle='#a5b7c522';g.fillRect(0,Math.round(mid),w,1);
     const marks=[];
@@ -7358,4 +7361,68 @@ body.signal-booth-v2 .deckshell.deck-B .signal-cdjx-screen .cdjx-overview-wave{
  border-color:#886036!important;
 }
 </style>
+
+<style id="signal-v98-waveform-palette-settings">
+/* Only Settings > Visualizers and the live LCD canvases are affected. */
+#signal-settings-panel .v98-palette-settings{display:flex;flex-direction:column;gap:10px;border-top:1px solid #536171;padding-top:13px;margin-top:7px}
+#signal-settings-panel .v98-palette-row{display:grid;grid-template-columns:85px minmax(0,1fr);align-items:center;gap:10px}
+#signal-settings-panel .v98-palette-row label{font-weight:800;color:#f0f5fa;font-size:12px}
+#signal-settings-panel .v98-palette-row select{width:100%;min-width:0;max-width:none}
+#signal-settings-panel .v98-palette-preview{display:flex;gap:6px;height:14px}
+#signal-settings-panel .v98-palette-preview span{flex:1;border-radius:2px;box-shadow:0 0 5px #0008}
+#signal-settings-panel .v98-palette-buttons{display:flex;gap:8px;flex-wrap:wrap}
+#signal-settings-panel .v98-palette-buttons button{flex:1;font-size:11px}
+#signal-settings-panel .v98-palette-note{color:#b9cbd9;font-size:11px}
+</style>
+<script id="signal-v98-waveform-palette-settings-script">
+(()=>{
+ const presets={
+  cyan:{label:'ELECTRIC CYAN',bands:{low:['#078ca8','#25bcd6'],mid:['#048ce9','#24cfff'],high:['#6756d9','#b18bff']},overview:['#008bc9','#55daff','#1c4266','#487c9b']},
+  orange:{label:'FIRE ORANGE',bands:{low:['#db5d19','#ff862c'],mid:['#dc9521','#ffcc58'],high:['#b64584','#f27eb2']},overview:['#ed8527','#ffc36e','#66401e','#926638']},
+  green:{label:'NEON GREEN',bands:{low:['#0c9864','#44f4a2'],mid:['#5aba26','#adff60'],high:['#45bda9','#a0ffe4']},overview:['#42c777','#acffc4','#1b5135','#5d9874']},
+  purple:{label:'UV PURPLE',bands:{low:['#553cbb','#9d7dff'],mid:['#8543d3','#c688ff'],high:['#c04dca','#ffa0ec']},overview:['#9866e8','#d7b3ff','#3b295f','#776091']},
+  red:{label:'SIGNAL RED',bands:{low:['#a91e38','#ff5865'],mid:['#e0483f','#ff927d'],high:['#ad4595','#f49dcb']},overview:['#ea435a','#ff9aa5','#572330','#8e5b65']},
+  white:{label:'ICE WHITE',bands:{low:['#718da2','#c0edff'],mid:['#acc2d1','#f7ffff'],high:['#7986af','#ccdcff']},overview:['#b5e8fa','#ffffff','#425867','#7f9eaa']}
+ };
+ const storageKey='signal.dj.lcd.waveform.palettes.v1';
+ const defaults={A:'cyan',B:'orange'};
+ let selected={...defaults};
+ try{const saved=JSON.parse(localStorage.getItem(storageKey)||'{}');for(const k of ['A','B'])if(presets[saved?.[k]])selected[k]=saved[k]}catch(e){}
+ function save(){try{localStorage.setItem(storageKey,JSON.stringify(selected));return true}catch(e){return false}}
+ window.signalLCDPalette={get:k=>presets[selected[k]||defaults[k]],current:k=>selected[k]||defaults[k],choices:Object.keys(presets)};
+ function setup(){
+  const section=document.querySelector('#signal-settings-panel .settings-grid > section:nth-child(8)');
+  if(!section||section.querySelector('.v98-palette-settings'))return;
+  const wrap=document.createElement('div');wrap.className='v98-palette-settings';
+  const title=document.createElement('h4');title.textContent='LCD WAVEFORM COLORS';
+  const explain=document.createElement('p');explain.textContent='Customize each LCD independently. The waveforms still reflect decoded audio; the overview still changes from played to remaining.';
+  wrap.append(title,explain);
+  const selects={};
+  for(const k of ['A','B']){
+   const row=document.createElement('div');row.className='v98-palette-row';
+   const label=document.createElement('label');label.textContent='DECK '+k;
+   const select=document.createElement('select');select.id='v98-palette-'+k;label.htmlFor=select.id;
+   for(const [id,p] of Object.entries(presets)){const option=new Option(p.label,id);select.add(option)}
+   select.value=selected[k];selects[k]=select;
+   const swatches=document.createElement('div');swatches.className='v98-palette-preview';swatches.style.gridColumn='2';
+   function preview(){
+    swatches.replaceChildren();
+    for(const color of [presets[selected[k]].bands.low[1],presets[selected[k]].bands.mid[1],presets[selected[k]].bands.high[1]]){
+     const item=document.createElement('span');item.style.backgroundColor=color;swatches.append(item);
+    }
+   }
+   select.addEventListener('change',()=>{selected[k]=select.value;preview();status.textContent=save()?'Saved. LCD colors update while playing.':'Applied for this session. Browser storage unavailable.'});
+   row.append(label,select,swatches);wrap.append(row);preview();
+  }
+  const buttons=document.createElement('div');buttons.className='v98-palette-buttons';
+  const reset=document.createElement('button');reset.type='button';reset.textContent='RESTORE CYAN / ORANGE DEFAULTS';
+  reset.onclick=()=>{selected={...defaults};for(const k of ['A','B'])selects[k].value=selected[k];wrap.querySelectorAll('.v98-palette-preview').forEach((el,i)=>{const p=presets[selected[['A','B'][i]]];el.replaceChildren(...['low','mid','high'].map(name=>{const span=document.createElement('span');span.style.backgroundColor=p.bands[name][1];return span}))});status.textContent=save()?'Factory colors restored and saved.':'Factory colors applied for this session.'};
+  buttons.append(reset);wrap.append(buttons);
+  const note=document.createElement('small');note.className='v98-palette-note';note.textContent='Saved in this browser on this device. Does not alter jog-ring colors or audio.';
+  const status=document.createElement('small');status.setAttribute('role','status');status.textContent='Deck A: Cyan · Deck B: Orange are the factory defaults.';
+  wrap.append(note,status);section.append(wrap);
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
+})();
+</script>
 </body></html>
