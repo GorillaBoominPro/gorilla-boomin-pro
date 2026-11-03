@@ -4990,4 +4990,249 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-col{
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
+<style id="signal-v73-four-channel-reference-realism">
+/* V73 — DJM-style channel geometry only. Uses EXISTING channel controls for audio.
+   No selectors or changes apply to deck shells or the outer four utility strips. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.channel.v73-channel{
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ gap:0!important;padding:9px 3px 13px!important;position:relative!important;
+ background:linear-gradient(90deg,#15191e,#0c1015 52%,#181c21)!important;
+ border-right:2px solid #72787f!important;box-sizing:border-box!important;
+ min-width:0!important;min-height:875px!important;
+}
+.mixer #mixbody>.v73-channel .v73-source-head{
+ width:100%;display:flex;flex-direction:column;align-items:center;
+ min-height:55px;gap:3px;margin:0 0 2px;
+}
+.mixer #mixbody>.v73-channel .v73-source-head .v73-source-caption{
+ color:#aab3bb;font:700 7px/1.1 Arial,sans-serif;letter-spacing:.1px;
+ text-align:center;white-space:normal;
+}
+.mixer #mixbody>.v73-channel .a9-source-select{
+ display:flex!important;flex-direction:column!important;justify-content:center!important;
+ align-items:center!important;gap:2px!important;min-height:41px!important;
+ width:100%!important;margin:0!important;padding:0!important;
+}
+.mixer #mixbody>.v73-channel .a9-source-select span{font:700 7px/1 Arial,sans-serif!important;color:#a6afb9!important}
+.mixer #mixbody>.v73-channel .a9-source-select span:nth-child(2){
+ width:70%!important;max-width:60px!important;min-width:0!important;
+ padding:3px 1px!important;box-sizing:border-box!important;display:block!important;
+ color:#f0f3f8!important;background:linear-gradient(#343b43,#171c22)!important;
+ border:1px solid #717d87!important;box-shadow:inset 0 1px 2px #000a!important;
+ font-size:7px!important;
+}
+.mixer #mixbody>.v73-channel .channel-number{
+ order:0!important;margin:3px 0 5px!important;padding:0!important;
+ color:#f1f4f6!important;font:900 21px/1 Arial,sans-serif!important;
+ text-shadow:0 2px 2px #000b!important;
+}
+.mixer #mixbody>.v73-channel .knobWrap:has(.rotary-control){
+ width:100%!important;box-sizing:border-box!important;
+ margin:0!important;padding:5px 2px 4px!important;min-height:75px!important;
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ gap:5px!important;justify-content:flex-start!important;
+ position:relative!important;border:0!important;
+}
+.mixer #mixbody>.v73-channel .knobWrap:has(#TRIM-A),
+.mixer #mixbody>.v73-channel .knobWrap:has(#TRIM-B),
+.mixer #mixbody>.v73-channel .knobWrap:has(#TRIM-C),
+.mixer #mixbody>.v73-channel .knobWrap:has(#TRIM-D){min-height:82px!important;padding-top:7px!important}
+.mixer #mixbody>.v73-channel .knobWrap:has(.rotary-control)>label{
+ font:900 9px/1.1 Arial,sans-serif!important;letter-spacing:.15px!important;
+ color:#e1e5e9!important;margin:0!important;text-align:center!important;
+}
+.mixer #mixbody>.v73-channel .knob.rotary-control{
+ width:42px!important;height:42px!important;min-width:42px!important;
+ border:3px solid #66717b!important;border-radius:50%!important;
+ background:radial-gradient(circle at 30% 23%,#a7b0b8,#5f6871 35%,#2e363f 57%,#12171d 80%)!important;
+ box-shadow:0 2px 4px #000b,inset 0 0 2px #fff4,0 0 0 2px #161c22!important;
+ cursor:ns-resize!important;touch-action:none!important;
+}
+.mixer #mixbody>.v73-channel .knob.rotary-control::after{
+ background:#edf3fb!important;box-shadow:0 0 2px #fff7!important;
+}
+.mixer #mixbody>.v73-channel .v73-eq-box{
+ width:100%;position:relative;box-sizing:border-box;
+ border-top:1px solid #3b434b;border-bottom:1px solid #4c535b;
+ padding:8px 0 4px 9px;margin:5px 0 6px;
+}
+.mixer #mixbody>.v73-channel .v73-eq-heading{
+ font:800 8px/1 Arial,sans-serif;color:#aeb8c0;text-align:center;
+ letter-spacing:.6px;margin:0 0 2px;
+}
+.mixer #mixbody>.v73-channel .v73-eq-box>.knobWrap:has(.rotary-control){
+ padding:6px 0 3px!important;min-height:77px!important;
+}
+.mixer #mixbody>.v73-channel .v73-eq-box>.ch-vu{
+ position:absolute!important;top:29px!important;left:0!important;
+ height:calc(100% - 35px)!important;width:9px!important;margin:0!important;
+ background:radial-gradient(circle,#1c7750 0 2px,transparent 2.7px) center bottom / 9px 10px repeat-y!important;
+ border:1px solid #313b41!important;box-shadow:inset 0 0 3px #000!important;
+ border-radius:0!important;
+}
+.mixer #mixbody>.v73-channel .v73-eq-box>.ch-vu i{
+ position:absolute!important;bottom:0!important;left:0!important;width:100%!important;
+ background:radial-gradient(circle,#43e684 0 2.5px,transparent 3px) center bottom / 9px 10px repeat-y!important;
+}
+.mixer #mixbody>.v73-channel .v73-eq-box>.ch-vu::after{
+ content:""!important;position:absolute!important;top:0;left:0;width:100%;height:24%;
+ background:radial-gradient(circle,#814c2c 0 2px,transparent 2.7px) center top / 9px 10px repeat-y!important;
+ pointer-events:none!important;
+}
+.mixer #mixbody>.v73-channel .v73-color-zone{
+ display:flex;flex-direction:column;align-items:center;gap:0;width:100%;
+ min-height:102px;border-bottom:1px solid #535b63;margin:0 0 4px;padding:3px 0 7px;
+}
+.mixer #mixbody>.v73-channel .v73-color-zone .knobWrap:has(.rotary-control){
+ min-height:82px!important;padding:4px 0 2px!important;
+}
+.mixer #mixbody>.v73-channel .v73-color-zone .knob.rotary-control{
+ width:49px!important;height:49px!important;min-width:49px!important;
+ border:4px solid #7b8790!important;
+ background:radial-gradient(circle at 27% 22%,#e0e6e9,#929ca5 29%,#48515c 47%,#252d35 73%,#101419)!important;
+}
+.mixer #mixbody>.v73-channel .v73-color-zone .v73-color-label{
+ color:#9da7b0;font:800 7px/1 Arial,sans-serif;
+}
+.mixer #mixbody>.v73-channel .v73-cue-zone{
+ width:100%;display:grid;grid-template-columns:1fr 1fr;column-gap:3px;
+ padding:7px 1px 4px;box-sizing:border-box;align-items:end;
+}
+.mixer #mixbody>.v73-channel .v73-cue-zone .v73-cue-slot{
+ display:flex;flex-direction:column;align-items:stretch;gap:4px;
+}
+.mixer #mixbody>.v73-channel .v73-cue-zone .v73-cue-slot small{
+ color:#adb6bd;font:800 8px/1 Arial,sans-serif;text-align:center;
+}
+.mixer #mixbody>.v73-channel .v73-cue-zone button{
+ min-height:28px!important;margin:0!important;padding:2px 1px!important;
+ width:100%!important;border-radius:3px!important;
+ font:900 8px/1 Arial,sans-serif!important;
+ box-sizing:border-box;cursor:pointer;
+ background:linear-gradient(#edb850,#b47016)!important;
+ color:#14181d!important;border:1px solid #edc46d!important;
+ box-shadow:inset 0 1px 1px #fff6,0 3px 3px #000b!important;
+}
+.mixer #mixbody>.v73-channel .v73-cue-zone button[aria-pressed="true"]{
+ background:linear-gradient(#fff2c1,#f8ca4c)!important;box-shadow:0 0 7px #f6b740!important;
+}
+.mixer #mixbody>.v73-channel .v73-beat-fx-indicator{
+ display:flex;align-items:center;justify-content:center;gap:4px;
+ margin:4px 0 11px;color:#a7b0ba;font:800 7px/1 Arial,sans-serif;
+}
+.mixer #mixbody>.v73-channel .v73-beat-fx-indicator::before{
+ content:"";display:inline-block;width:13px;height:5px;
+ background:#1465c0;box-shadow:inset 0 0 0 1px #23446b,0 0 4px #268afd;
+}
+.mixer #mixbody>.v73-channel .v73-fader-zone{
+ width:100%;display:flex;flex-direction:column;align-items:center;
+ gap:6px;margin:auto 0 0;min-height:272px;justify-content:flex-end;
+}
+.mixer #mixbody>.v73-channel .v73-fader-zone>.v73-fader-label{
+ color:#b5bec5;font:800 8px/1 Arial,sans-serif;letter-spacing:.1px;
+}
+.mixer #mixbody>.v73-channel .v73-fader-zone .knobWrap{
+ width:100%!important;display:flex;flex-direction:column;align-items:center!important;
+ margin:0!important;gap:6px!important;
+}
+.mixer #mixbody>.v73-channel .v73-fader-zone .knobWrap>label{
+ font-size:8px!important;color:#a9b3ba!important;
+}
+.mixer #mixbody>.v73-channel .fader-rail{
+ width:calc(100% - 4px)!important;max-width:68px!important;
+ height:217px!important;min-height:217px!important;
+ border:0!important;border-radius:1px!important;
+ margin:0 auto!important;padding:10px 0!important;box-sizing:border-box!important;
+ display:flex!important;justify-content:center!important;align-items:center!important;
+ background:repeating-linear-gradient(to bottom,transparent 0 13px,#b0b7bf 13px 14px,transparent 14px 21px) left 2px top 8px/11px calc(100% - 16px) no-repeat,
+ repeating-linear-gradient(to bottom,transparent 0 13px,#b0b7bf 13px 14px,transparent 14px 21px) right 2px top 8px/11px calc(100% - 16px) no-repeat,
+ linear-gradient(90deg,#171c21 0 44%,#050709 44% 56%,#151b21 56% 100%)!important;
+ box-shadow:inset 0 0 0 1px #323a43,inset 0 0 6px #000!important;
+}
+.mixer #mixbody>.v73-channel .fader-rail::before{
+ width:5px!important;top:10px!important;bottom:10px!important;
+}
+.mixer #mixbody>.v73-channel input.chFader{height:191px!important;width:38px!important}
+.mixer #mixbody>.v73-channel .channel-assign{
+ width:100%!important;margin:0!important;padding:11px 0 0!important;
+ border-top:0!important;gap:5px!important;
+}
+.mixer #mixbody>.v73-channel .channel-assign label{
+ font:800 7px/1.1 Arial,sans-serif!important;color:#aeb7be!important;
+}
+.mixer #mixbody>.v73-channel .assign-switch{
+ width:90%!important;max-width:90px!important;padding:4px 1px!important;
+ background:#11161c!important;color:#e2e8ee!important;
+ border:1px solid #626d77!important;font:800 8px/1 Arial,sans-serif!important;
+}
+@media(max-width:1320px){
+ .mixer #mixbody>.v73-channel{padding-left:1px!important;padding-right:1px!important}
+ .mixer #mixbody>.v73-channel .knob.rotary-control{width:35px!important;height:35px!important;min-width:35px!important}
+ .mixer #mixbody>.v73-channel .v73-color-zone .knob.rotary-control{width:40px!important;height:40px!important;min-width:40px!important}
+ .mixer #mixbody>.v73-channel .v73-eq-box{padding-left:8px!important}
+ .mixer #mixbody>.v73-channel .v73-cue-zone button{font-size:7px!important}
+}
+</style>
+<script id="signal-v73-four-channel-reference-realism-script">
+(()=>{
+ function init(){
+  const mix=document.getElementById('mixbody');
+  const channels=Array.from(mix?.querySelectorAll(':scope > .channel')||[]);
+  if(channels.length!==4||channels.some(ch=>ch.dataset.v73Ready))return;
+  channels.forEach((ch,index)=>{
+   ch.classList.add('v73-channel');ch.dataset.v73Ready='yes';
+   const number=ch.querySelector(':scope > .channel-number');
+   const source=ch.querySelector(':scope > .a9-source-select');
+   const meter=ch.querySelector(':scope > .ch-vu');
+   const knobs=Array.from(ch.querySelectorAll(':scope > .knobWrap:has(.rotary-control)'));
+   const cue=ch.querySelector(':scope > .mixer-cue');
+   const fader=ch.querySelector(':scope > .knobWrap:has(.chFader)');
+   if(!number||!source||!meter||knobs.length!==5||!cue||!fader)return;
+   const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text!==undefined)n.textContent=text;return n};
+   // Top: actual input markings above the channel number (source hardware not routed).
+   const top=make('div','v73-source-head');
+   top.appendChild(make('div','v73-source-caption','DIGITAL · LINE · PHONO'));
+   top.appendChild(source);
+   ch.insertBefore(top,number);
+   number.textContent=String(index+1);
+   const [trim,hi,mid,low,color]=knobs;
+   const eq=make('div','v73-eq-box');
+   eq.appendChild(make('div','v73-eq-heading','EQ / ISO'));
+   eq.appendChild(meter);
+   for(const node of [hi,mid,low])eq.appendChild(node);
+   trim.insertAdjacentElement('afterend',eq);
+   const colorZone=make('div','v73-color-zone');
+   colorZone.appendChild(color);
+   colorZone.appendChild(make('span','v73-color-label','LOW  ·  HI'));
+   eq.insertAdjacentElement('afterend',colorZone);
+   const cueZone=make('div','v73-cue-zone');
+   const a=make('div','v73-cue-slot');a.appendChild(make('small','','A'));cue.textContent='CUE';a.appendChild(cue);
+   const b=make('div','v73-cue-slot');b.appendChild(make('small','','B'));
+   // Reference B button has independent hardware cue routing absent in this browser app.
+   const second=make('button','v73-secondary-cue','CUE');second.type='button';
+   second.setAttribute('aria-label','Channel '+(index+1)+' secondary B reference cue');
+   second.setAttribute('aria-pressed','false');
+   second.title='Hardware-style secondary cue. Independent Cue B path is not currently implemented.';
+   second.onclick=()=>{const status=document.getElementById('status');if(status)status.textContent='Secondary Cue B is a hardware reference. Use this channel’s primary CUE for audio monitoring.'};
+   b.appendChild(second);cueZone.appendChild(a);cueZone.appendChild(b);
+   colorZone.insertAdjacentElement('afterend',cueZone);
+   cueZone.insertAdjacentElement('afterend',make('div','v73-beat-fx-indicator','BEAT FX'));
+   const faderZone=make('div','v73-fader-zone');
+   faderZone.appendChild(make('div','v73-fader-label','CH FADER'));
+   faderZone.appendChild(fader);
+   ch.appendChild(faderZone);
+  });
+  // Meter geometry is now within the EQ block (rather than floating on the channel).
+  // The original analyser-driven meter element and updates are preserved.
+  const recalc=()=>{
+   for(const ch of channels){
+    const meter=ch.querySelector('.v73-eq-box > .ch-vu');
+    if(meter){meter.style.removeProperty('--eq-meter-top');meter.style.removeProperty('--eq-meter-height')}
+   }
+  };
+  requestAnimationFrame(recalc);
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
 </body></html>
