@@ -1804,6 +1804,42 @@ body.signal-booth-v2 .deckshell>.signal-model-nameplate{
 }
 body.signal-booth-v2 .deckshell>.signal-model-nameplate .brand-slashes{color:#f32948!important}
 body.signal-booth-v2 .deckshell>.signal-model-nameplate .model-number{color:#f2f4f5!important}
+</style><style id="signal-model-nameplate-visible-v31">
+/* Dedicated raised metal strip so model branding stays visible in Fit Booth and Full View. */
+body.signal-booth-v2 .deckshell.deck-A>.signal-model-nameplate,
+body.signal-booth-v2 .deckshell.deck-B>.signal-model-nameplate{
+ display:flex!important;
+ visibility:visible!important;
+ opacity:1!important;
+ position:absolute!important;
+ left:24%!important;
+ right:17%!important;
+ bottom:1.4%!important;
+ top:auto!important;
+ width:auto!important;
+ height:31px!important;
+ padding:2px 7px!important;
+ margin:0!important;
+ align-items:center!important;
+ justify-content:center!important;
+ border:1px solid #596471!important;
+ border-radius:3px!important;
+ background:linear-gradient(180deg,#303a45,#141c26 44%,#0c1219 100%)!important;
+ box-shadow:inset 0 1px 0 #b9c5d655,0 2px 6px #000b!important;
+ color:#f5f7f9!important;
+ font-size:clamp(11px,1vw,15px)!important;
+ line-height:1!important;
+ font-weight:900!important;
+ letter-spacing:.45px!important;
+ white-space:nowrap!important;
+ text-align:center!important;
+ overflow:visible!important;
+ z-index:70!important;
+ pointer-events:none!important;
+ box-sizing:border-box!important;
+}
+body.signal-booth-v2 .deckshell>.signal-model-nameplate .brand-slashes{color:#ff304f!important}
+body.signal-booth-v2 .deckshell>.signal-model-nameplate .model-number{color:#ffffff!important}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -3397,5 +3433,19 @@ function setup(){
  }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
+})();
+</script><script id="signal-model-nameplate-visible-v31-script">
+(()=>{
+function ensure(){
+ for(const k of ['A','B']){
+  const shell=document.querySelector('.deckshell.deck-'+k);
+  if(!shell)continue;
+  let plaque=shell.querySelector(':scope > .signal-model-nameplate');
+  if(!plaque){plaque=document.createElement('div');plaque.className='signal-model-nameplate';shell.appendChild(plaque)}
+  plaque.setAttribute('aria-label','G//BMN: SIGNAL DJ 3000-V');
+  plaque.innerHTML='G<span class="brand-slashes">//</span>BMN: &nbsp; SIGNAL DJ &nbsp; <span class="model-number">3000-V</span>';
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ensure,{once:true});else ensure();
 })();
 </script></body></html>
