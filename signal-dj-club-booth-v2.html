@@ -3451,42 +3451,48 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </script>
 
 <!-- SIGNAL DJ V33 MATCHED COMPACT CUE MEMORY + JOG FEEL ON BOTH DECKS -->
-<style id="signal-v33-twin-jog-memory">
-/* Compact reference-matched hardware, directly below the existing A-H hot-cue row. */
+<style id="signal-v34-reference-control-layout">
+/* V34: the same compact reference-style four-button group on BOTH Club decks. */
 body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-memory{
- position:absolute;top:42.1%;left:19%;width:63%;height:7.1%;
- display:grid;grid-template-columns:1.5fr .8fr .9fr;align-items:start;gap:2px;
- z-index:23;box-sizing:border-box;color:#e6e7e9;text-shadow:0 1px 2px #000;
- font-family:Arial,sans-serif;pointer-events:none;
+ position:absolute!important;top:41.95%!important;left:18.5%!important;width:63%!important;height:6.9%!important;
+ display:grid!important;grid-template-columns:1.5fr .9fr .9fr!important;gap:2px!important;
+ align-items:start!important;z-index:25!important;pointer-events:none;
+ color:#e8e8e8;text-shadow:0 1px 2px #000;font-family:Arial,Helvetica,sans-serif;
 }
-.signal-v33-memory .v33-cell{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:5px;min-width:0}
-.signal-v33-memory .v33-label{font-size:clamp(7px,.65vw,10px);line-height:1.05;font-weight:800;text-align:center;white-space:nowrap;min-height:20px}
-.signal-v33-memory .v33-controls{display:flex;justify-content:center;gap:clamp(3px,.6vw,9px);align-items:center;width:100%}
-.signal-v33-memory button{pointer-events:auto;cursor:pointer;padding:0!important;min-height:0!important;
- width:clamp(22px,2.3vw,30px);height:clamp(22px,2.3vw,30px);flex:none;
- border-radius:50%;border:2px solid #31383f;color:white;font-size:10px;font-weight:900;
- background:radial-gradient(circle at 35% 27%,#697078,#23272d 50%,#05070a 85%);
- box-shadow:inset 0 1px 2px #ffffff30,0 2px 4px #000b}
-.signal-v33-memory .v33-delete{width:clamp(25px,2.6vw,34px);height:clamp(25px,2.6vw,34px);border:3px double #69717a}
-.signal-v33-memory button:focus-visible,.signal-v33-jog input:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.signal-v33-memory .v33-cell{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.signal-v33-memory .v33-label{font-size:clamp(8px,.78vw,11px);line-height:1.07;font-weight:800;min-height:22px;white-space:nowrap;text-align:center}
+.signal-v33-memory .v33-controls{display:flex;align-items:center;justify-content:center;gap:clamp(12px,1.4vw,20px);width:100%;position:relative}
+.signal-v33-memory .v33-controls:after{content:"";height:2px;background:#a2a8ad;width:12px;position:absolute;left:calc(50% - 6px);top:calc(50% - 1px);z-index:-1}
+.signal-v33-memory button{pointer-events:auto;cursor:pointer;flex:none;box-sizing:border-box;
+ width:clamp(23px,2.65vw,35px);height:clamp(23px,2.65vw,35px);min-height:0!important;padding:0!important;
+ border-radius:50%;border:3px solid #14171b;color:#f2f2f2;font-size:clamp(9px,.85vw,12px);font-weight:900;
+ background:radial-gradient(circle at 38% 30%,#626971 0,#272c33 34%,#080a0d 76%);
+ box-shadow:inset 0 2px 3px #ffffff2c,0 0 0 1px #505761,0 2px 4px #000a}
+.signal-v33-memory button:active{transform:translateY(1px)}
+.signal-v33-memory .v33-delete{width:clamp(27px,3.0vw,40px);height:clamp(27px,3.0vw,40px);
+ border:5px double #606870;box-shadow:inset 0 1px 4px #000,0 0 0 2px #121519,0 0 0 3px #434a51,0 2px 4px #000c;
+ color:transparent}
+.signal-v33-memory .v33-store{color:transparent}
 body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog{
- position:absolute;top:49.8%;left:65.5%;width:15.5%;z-index:25;box-sizing:border-box;
- display:flex;flex-direction:column;align-items:center;gap:2px;
- color:#edf0f2;font:800 clamp(7px,.7vw,10px)/1.05 Arial,sans-serif;
- text-shadow:0 1px 2px #000;
+ position:absolute!important;top:49.0%!important;left:50%!important;width:15%!important;
+ display:flex!important;flex-direction:column!important;align-items:center!important;gap:4px!important;
+ z-index:27!important;box-sizing:border-box;color:#eceff1;
+ font:800 clamp(8px,.8vw,12px)/1.1 Arial,Helvetica,sans-serif;
+ text-shadow:0 2px 2px #000;
 }
-.signal-v33-jog .v33-knob{display:block;position:relative;border-radius:50%;
- width:clamp(27px,2.8vw,38px);height:clamp(27px,2.8vw,38px);box-sizing:border-box;
- border:2px solid #717981;transform:rotate(var(--angle,0deg));
- background:conic-gradient(from 35deg,#292e35,#aeb4ba,#15191f,#666d76,#11151b,#989da6,#292e35);
- box-shadow:inset 0 0 5px #000a,0 2px 4px #000c;pointer-events:none}
-.signal-v33-jog .v33-knob:after{content:"";position:absolute;top:2px;left:calc(50% - 1px);
- width:2px;height:10px;background:white;border-radius:2px}
-.signal-v33-jog input{margin:0;height:10px;width:100%;max-width:75px;accent-color:#aeb6be;cursor:pointer}
-.signal-v33-jog .v33-ends{display:flex;justify-content:space-between;width:100%;font-size:clamp(6px,.6vw,8px)}
+.signal-v33-jog .v33-dial{position:relative;width:clamp(40px,4.2vw,56px);height:clamp(40px,4.2vw,56px);
+ display:grid;place-items:center;background:repeating-conic-gradient(from -125deg,#7b838a 0 2deg,transparent 2deg 22deg);border-radius:50%}
+.signal-v33-jog .v33-knob{position:relative;display:block;cursor:ew-resize;
+ width:clamp(29px,3.15vw,41px);height:clamp(29px,3.15vw,41px);min-height:0!important;padding:0!important;
+ box-sizing:border-box;border-radius:50%;border:2px solid #646b72;
+ background:conic-gradient(from -35deg,#161a20,#6c737a,#c0c4c8,#2b3138,#0b0e13,#4c535b,#161a20);
+ box-shadow:inset 0 0 6px #0007,0 2px 5px #000c;transform:rotate(var(--angle,0deg));pointer-events:auto}
+.signal-v33-jog .v33-knob:before{content:"";position:absolute;top:2px;left:calc(50% - 1.5px);width:3px;height:12px;border-radius:2px;background:white}
+.signal-v33-jog .v33-knob:focus-visible,.signal-v33-memory button:focus-visible{outline:2px solid white;outline-offset:3px}
+.signal-v33-jog .v33-ends{display:flex;justify-content:space-between;gap:3px;width:100%;font-size:clamp(7px,.63vw,9px)}
 body.signal-booth-v2.festival .signal-v33-memory,body.signal-booth-v2.festival .signal-v33-jog{display:none!important}
 </style>
-<script id="signal-v33-twin-jog-memory-script">
+<script id="signal-v34-matching-both-decks-script">
 (()=>{
  function install(){
   window.signalJogFeel=window.signalJogFeel||{};
@@ -3494,20 +3500,23 @@ body.signal-booth-v2.festival .signal-v33-memory,body.signal-booth-v2.festival .
    const shell=document.querySelector('.deckshell.deck-'+k);
    if(!shell||shell.querySelector('.signal-v33-memory'))continue;
    const row=document.createElement('section');row.className='signal-v33-memory';
-   row.setAttribute('aria-label','Deck '+k+' cue loop call delete memory');
-   row.innerHTML='<div class="v33-cell"><span class="v33-label">CUE/LOOP<br>CALL</span><div class="v33-controls"><button type="button" data-cue-action="previous" title="Previous saved cue" aria-label="Previous saved cue">◀</button><button type="button" data-cue-action="next" title="Next saved cue" aria-label="Next saved cue">▶</button></div></div><div class="v33-cell"><span class="v33-label">DELETE</span><button type="button" class="v33-delete" data-cue-action="delete" aria-label="Delete selected saved cue">●</button></div><div class="v33-cell"><span class="v33-label">MEMORY</span><button type="button" data-cue-action="store" aria-label="Store current cue in memory">●</button></div>';
+   row.setAttribute('aria-label','Deck '+k+' cue loop call, delete and memory');
+   row.innerHTML='<div class="v33-cell"><span class="v33-label">CUE/LOOP<br>CALL</span><div class="v33-controls"><button type="button" data-cue-action="previous" title="Previous saved cue" aria-label="Previous saved cue">◀</button><button type="button" data-cue-action="next" title="Next saved cue" aria-label="Next saved cue">▶</button></div></div><div class="v33-cell"><span class="v33-label">DELETE</span><button type="button" class="v33-delete" data-cue-action="delete" aria-label="Delete selected cue">●</button></div><div class="v33-cell"><span class="v33-label">MEMORY</span><button type="button" class="v33-store" data-cue-action="store" aria-label="Store cue memory">●</button></div>';
    row.querySelectorAll('button[data-cue-action]').forEach(btn=>btn.addEventListener('click',()=>{
-    const ctl=document.querySelector('.deck-'+k+' .signal-cdjx-screen .cdjx-extra-controls [data-cdjx="'+btn.dataset.cueAction+'"]');
-    if(ctl)ctl.click();
-    else {const status=document.getElementById('status');if(status)status.textContent='Deck '+k+': cue memory unavailable until deck is ready';}
+    const target=document.querySelector('.deck-'+k+' .signal-cdjx-screen .cdjx-extra-controls [data-cdjx="'+btn.dataset.cueAction+'"]');
+    if(target)target.click();else {const status=document.getElementById('status');if(status)status.textContent='Deck '+k+': memory controls not ready'}
    }));
    const feel=document.createElement('section');feel.className='signal-v33-jog';
-   feel.setAttribute('aria-label','Deck '+k+' light to heavy jog feel');
-   feel.innerHTML='<span>JOG FEEL</span><span class="v33-knob" aria-hidden="true"></span><input type="range" min="0" max="100" value="50" step="5" aria-label="Jog sensitivity from light to heavy" title="Adjusts virtual jog movement, not physical wheel resistance"><div class="v33-ends"><span>LIGHT</span><span>HEAVY</span></div>';
-   const input=feel.querySelector('input'),knob=feel.querySelector('.v33-knob');
-   const set=()=>{let v=Number(input.value);window.signalJogFeel[k]=1.6-v*.012;knob.style.setProperty('--angle',((v-50)*2.6)+'deg');input.setAttribute('aria-valuetext',v<35?'Light':v>65?'Heavy':'Medium')};
-   input.addEventListener('input',set);set();
-   shell.append(row,feel);
+   feel.setAttribute('aria-label','Deck '+k+' jog feel light to heavy');
+   feel.innerHTML='<span>JOG FEEL</span><div class="v33-dial"><button type="button" class="v33-knob" role="slider" aria-label="Jog feel light to heavy" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" title="Drag horizontally, scroll or use arrow keys to adjust virtual jog sensitivity"></button></div><div class="v33-ends"><span>LIGHT</span><span>HEAVY</span></div>';
+   const knob=feel.querySelector('.v33-knob');let value=50,startX=null,startValue=50;
+   const set=v=>{value=Math.max(0,Math.min(100,Math.round(v/5)*5));window.signalJogFeel[k]=1.6-value*.012;knob.style.setProperty('--angle',((value-50)*2.6)+'deg');knob.setAttribute('aria-valuenow',String(value));knob.setAttribute('aria-valuetext',value<35?'Light':value>65?'Heavy':'Medium')};
+   knob.addEventListener('pointerdown',e=>{startX=e.clientX;startValue=value;knob.setPointerCapture(e.pointerId);e.preventDefault()});
+   knob.addEventListener('pointermove',e=>{if(startX!==null)set(startValue+(e.clientX-startX)*.75)});
+   const end=()=>{startX=null};knob.addEventListener('pointerup',end);knob.addEventListener('pointercancel',end);knob.addEventListener('lostpointercapture',end);
+   knob.addEventListener('wheel',e=>{e.preventDefault();set(value+(e.deltaY<0?5:-5))},{passive:false});
+   knob.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowDown','ArrowRight','ArrowUp'].includes(e.key)){e.preventDefault();set(value+(['ArrowRight','ArrowUp'].includes(e.key)?5:-5))}});
+   set(50);shell.append(row,feel);
   }
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
