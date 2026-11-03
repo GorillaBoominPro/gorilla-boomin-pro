@@ -5593,4 +5593,143 @@ body.signal-booth-v2:not(.festival) .mixer .crossSection>#cross{
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',addFinish,{once:true});else addFinish();
 })();
 </script>
+<style id="signal-v76-mixer-geometry">
+/* V76: one integrated 8-column mixer. No deck styling or channel audio handlers changed. */
+body.signal-booth-v2:not(.festival) .mixer{
+ padding:7px 6px 8px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody{
+ display:grid!important;
+ grid-template-columns:minmax(77px,.95fr) minmax(83px,1fr) repeat(4,minmax(55px,1fr)) minmax(80px,.97fr) minmax(112px,1.26fr)!important;
+ grid-template-rows:minmax(875px,auto) 93px!important;
+ align-items:stretch!important;
+ gap:1px!important;
+ padding:3px!important;
+ overflow-x:auto!important;
+ overflow-y:visible!important;
+ border-bottom:2px solid #6c7883!important;
+ background:linear-gradient(#101419,#06090c)!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-mic{grid-column:1!important;grid-row:1!important}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right{grid-column:2!important;grid-row:1!important}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel:nth-of-type(1){grid-column:auto}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v71-master{grid-column:7!important;grid-row:1!important}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v71-beatfx{grid-column:8!important;grid-row:1!important}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel{
+ grid-row:1!important;
+ padding:8px 2px 10px!important;
+ min-height:875px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel:nth-child(n){grid-row:1!important}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel[data-v76-col="3"]{grid-column:3!important}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel[data-v76-col="4"]{grid-column:4!important}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel[data-v76-col="5"]{grid-column:5!important}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel[data-v76-col="6"]{grid-column:6!important}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-col,
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v74-master,
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v74-fx{min-height:875px!important}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v76-cross-dock{
+ grid-column:3 / 7!important;
+ grid-row:2!important;
+ display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;
+ gap:4px!important;min-width:0!important;
+ padding:6px 12px 8px!important;
+ box-sizing:border-box!important;
+ background:linear-gradient(180deg,#10161b,#1d252d 52%,#0b1117)!important;
+ border:1px solid #56636f!important;border-top:2px solid #7d8995!important;
+ box-shadow:inset 0 2px 4px #0008,inset 0 -1px 2px #0009!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v76-cross-dock>label{
+ color:#d8dee5!important;font:900 9px/1.1 Arial,sans-serif!important;
+ letter-spacing:.35px!important;white-space:nowrap!important;text-align:center!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v76-cross-dock .v76-cross-markers{
+ width:min(96%,360px);display:flex;justify-content:space-between;
+ color:#b9c4cc;font:900 9px/1 Arial,sans-serif!important;
+ letter-spacing:.2px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v76-cross-dock>#cross{
+ appearance:none!important;-webkit-appearance:none!important;
+ display:block!important;position:relative!important;
+ width:min(96%,360px)!important;height:33px!important;margin:0 auto!important;
+ border:1px solid #3b4650!important;border-radius:2px!important;
+ background:
+ repeating-linear-gradient(to right,transparent 0 11px,#8b949d 11px 12px,transparent 12px 20px) center/100% 26px no-repeat,
+ linear-gradient(#20282f 0 44%,#020507 44% 56%,#202831 56%)!important;
+ box-shadow:inset 0 2px 5px #000d,0 0 0 1px #8796a339!important;
+ cursor:ew-resize!important;accent-color:#d4e1ea!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v76-cross-dock>#cross::-webkit-slider-thumb{
+ appearance:none!important;-webkit-appearance:none!important;
+ width:25px!important;height:32px!important;border-radius:2px!important;
+ border:2px solid #6f7a83!important;
+ background:linear-gradient(90deg,#727b86,#e7ecf0 25%,#c2ccd2 46%,#2a343e 49% 54%,#e6edf2 59%,#858f98)!important;
+ box-shadow:0 3px 6px #000d!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v76-cross-dock>#cross::-moz-range-thumb{
+ width:25px!important;height:32px!important;border-radius:2px!important;
+ border:2px solid #6f7a83!important;background:linear-gradient(90deg,#78838e,#e5ebee 30%,#313942 50%,#e5ebee 65%,#78838e)!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v76-cross-side{
+ grid-row:2!important;min-width:0;
+ background:linear-gradient(180deg,#11171d,#0e1318 60%,#070b10)!important;
+ border-top:2px solid #68737e!important;
+ border-bottom:1px solid #29353e!important;
+ pointer-events:none!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v76-cross-side.left{grid-column:1 / 3!important}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v76-cross-side.right{grid-column:7 / 9!important}
+body.signal-booth-v2:not(.festival) .mixer .crossSection{
+ border-top:0!important;padding:6px 10px 8px!important;
+ background:linear-gradient(#10151b,#080d12)!important;
+ gap:5px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer .crossSection>.controls{
+ display:flex!important;flex-wrap:wrap!important;align-items:center!important;
+ justify-content:center!important;gap:8px!important;margin:2px auto!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-eq-box{
+ padding-left:8px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-cue-zone button{
+ min-height:25px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-fader-zone{
+ justify-content:flex-end!important;
+}
+@media(max-width:1320px){
+ body.signal-booth-v2:not(.festival) .mixer #mixbody{
+ grid-template-columns:70px 76px repeat(4,minmax(47px,1fr)) 78px 112px!important;
+ }
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v76-cross-dock{padding-left:4px!important;padding-right:4px!important}
+}
+</style>
+<script id="signal-v76-mixer-geometry-script">
+(()=>{
+ function setup(){
+  const mix=document.getElementById('mixbody'),cross=document.getElementById('cross');
+  const foot=document.querySelector('.mixer .crossSection');
+  if(!mix||!cross||!foot||mix.dataset.v76Ready)return;
+  const channels=[...mix.querySelectorAll(':scope > .v73-channel')];
+  if(channels.length!==4)return;
+  mix.dataset.v76Ready='yes';
+  channels.forEach((ch,i)=>ch.setAttribute('data-v76-col',String(i+3)));
+  // Move the ORIGINAL, working input; its element identity and event listeners remain intact.
+  const label=Array.from(foot.children).find(e=>e.tagName==='LABEL'&&e.textContent.includes('CROSSFADER'));
+  const dock=document.createElement('div');
+  dock.className='v76-cross-dock';
+  if(label)dock.appendChild(label);
+  dock.appendChild(cross);
+  const marks=document.createElement('div');
+  marks.className='v76-cross-markers';
+  marks.innerHTML='<span>◀ A</span><span>THRU</span><span>B ▶</span>';
+  dock.appendChild(marks);
+  const left=document.createElement('div'),right=document.createElement('div');
+  left.className='v76-cross-side left';right.className='v76-cross-side right';
+  left.setAttribute('aria-hidden','true');right.setAttribute('aria-hidden','true');
+  mix.append(left,dock,right);
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
+})();
+</script>
 </body></html>
