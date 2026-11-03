@@ -3508,6 +3508,51 @@ body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-knob{
 }
 body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-knob:before{height:8px!important}
 body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-ends{font-size:clamp(6px,.5vw,8px)!important;gap:1px!important}
+
+/* V36: ALL NEW HARDWARE CONTROLS LIVE UNDER F/G/H ON THE RIGHT OF EACH DECK.
+   The existing A-H pads and all other approved deck controls stay unchanged. */
+body.signal-booth-v2:not(.festival) .deckshell.deck-A>.signal-v33-memory,
+body.signal-booth-v2:not(.festival) .deckshell.deck-B>.signal-v33-memory{
+ top:41.65%!important;left:56.3%!important;width:27.4%!important;height:7.2%!important;
+ grid-template-columns:1.32fr .85fr .85fr!important;gap:1px!important;
+ z-index:30!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-memory .v33-cell{
+ gap:3px!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-memory .v33-label{
+ font-size:clamp(6px,.60vw,8px)!important;min-height:18px!important;line-height:1.05!important;
+ letter-spacing:-.15px!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-memory .v33-controls{
+ gap:clamp(3px,.34vw,6px)!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-memory .v33-controls:after{
+ width:6px!important;left:calc(50% - 3px)!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-memory button{
+ width:clamp(15px,1.55vw,22px)!important;height:clamp(15px,1.55vw,22px)!important;
+ font-size:clamp(7px,.65vw,9px)!important;border-width:2px!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-memory button.v33-delete{
+ width:clamp(18px,1.8vw,25px)!important;height:clamp(18px,1.8vw,25px)!important;
+ border:3px double #646b73!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell.deck-A>.signal-v33-jog,
+body.signal-booth-v2:not(.festival) .deckshell.deck-B>.signal-v33-jog{
+ top:48.2%!important;left:71.3%!important;width:11%!important;
+ gap:1px!important;z-index:30!important;
+ font-size:clamp(6px,.59vw,8px)!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-dial{
+ width:clamp(27px,2.45vw,34px)!important;height:clamp(27px,2.45vw,34px)!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-knob{
+ width:clamp(21px,1.94vw,27px)!important;height:clamp(21px,1.94vw,27px)!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-ends{
+ font-size:clamp(5px,.45vw,7px)!important;
+}
 </style>
 <script id="signal-v34-matching-both-decks-script">
 (()=>{
