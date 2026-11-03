@@ -6341,4 +6341,29 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v71-master .v71-knob::befor
  opacity:1!important;
 }
 </style>
+
+<style id="signal-v84-lengthen-channel-faders-upward">
+/* V84: Channels 1–4 only. Extend each live channel fader UP into the empty
+   space while keeping the bottom crossfader assignment anchored in place. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-fader-zone{
+ min-height:310px!important;
+ margin:auto 0 0!important;
+ justify-content:flex-end!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .fader-rail{
+ height:255px!important;
+ min-height:255px!important;
+ max-height:none!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel input.chFader{
+ height:229px!important;
+ min-height:229px!important;
+}
+/* Preserve matched proportions in compact width layouts. */
+@media(max-width:1320px){
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-fader-zone{min-height:300px!important}
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .fader-rail{height:245px!important;min-height:245px!important}
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel input.chFader{height:219px!important;min-height:219px!important}
+}
+</style>
 </body></html>
