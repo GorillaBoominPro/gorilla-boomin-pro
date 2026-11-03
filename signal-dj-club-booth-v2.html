@@ -2967,6 +2967,13 @@ function initLCD(){
     }
     const duration=Math.max(.001,buffer.duration||1),span=isOverview?duration:10;
     const base=isOverview?0:position-span/2;
+    // Whole-track progress: played area receives a distinct cyan-blue background,
+    // upcoming section remains neutral/dark; move together with actual playhead.
+    if(isOverview){
+     const progressX=Math.min(w,Math.max(0,position/duration*w));
+     g.fillStyle='#0a2840';g.fillRect(0,0,progressX,h);
+     g.fillStyle='#11151c';g.fillRect(progressX,0,w-progressX,h);
+    }
     const bpm=Number(document.getElementById('manual-'+k)?.value);
     // A restrained, thin beat-grid. Timing is based on the user's BPM setting,
     // not claimed as an automatically analyzed downbeat map.
@@ -2995,8 +3002,10 @@ function initLCD(){
      g.fillRect(x,mid-amp,1,2*amp);
      const middle=amp*Math.min(.94,.25+midRatio*1.65);
      g.fillStyle='#61a6d4';g.fillRect(x,mid-middle,1,middle*2);
-     const core=amp*Math.min(.80,.1+bassRatio*1.26);
-     g.fillStyle='#d8aa57';g.fillRect(x,mid-core,1,core*2);
+     const core=amp*Math.min(.5,bassRatio*.78);
+     // Bass accent is proportional to LOW dominance; don't paint the entire
+     // central waveform yellow when mid/high energy is significant.
+     if(bassRatio>.23){g.fillStyle='#d8aa57';g.fillRect(x,mid-core,1,core*2)}
      if(highRatio>.42){g.fillStyle='#b49be0';g.fillRect(x,mid-amp,1,Math.max(.8,amp*.24));g.fillRect(x,mid+amp-Math.max(.8,amp*.24),1,Math.max(.8,amp*.24))}
     }
     g.fillStyle='#a5b7c522';g.fillRect(0,Math.round(mid),w,1);
@@ -7237,4 +7246,51 @@ body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid .cdjx-tempo{
  }
 }
 </style>
-</body></html>
+
+<style id="signal-v94-distinct-digital-colors">
+/* Three independent night-readable numerics, not uniform white. */
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid .cdjx-time{
+ color:#7de2ff!important;
+ text-shadow:0 0 3px #c6f5ff,0 0 12px #31aefa99!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid .cdjx-bpm{
+ color:#adffb0!important;
+ text-shadow:0 0 3px #edffeb,0 0 12px #55ee8099!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid .cdjx-tempo{
+ color:#ffd077!important;
+ text-shadow:0 0 3px #fff0c7,0 0 12px #ffb44299!important;
+}
+/* Compact real metadata without inventing a detected musical key. */
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-status .v94-duration{
+ font:700 8px/1 ui-monospace,monospace!important;color:#c5d7e4!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-status .v94-source{
+ font:700 7px/1 Arial,sans-serif!important;color:#9cb1c4!important;
+}
+</style>
+<script id="signal-v94-track-data">
+(()=>{
+ function initialize(){
+  for(const k of ['A','B']){
+   const screen=document.querySelector('.deck-'+k+' .signal-cdjx-screen');
+   const audio=document.getElementById('audio-'+k);
+   const status=screen?.querySelector('.cdjx-live-status');
+   if(!status||!audio||screen.dataset.v94Ready)continue;
+   screen.dataset.v94Ready='true';
+   const source=document.createElement('span');source.className='v94-source';
+   const length=document.createElement('span');length.className='v94-duration';
+   status.append(source,length);
+   function time(n){return Number.isFinite(n)&&n>=0?String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0'):'--:--'}
+   function update(){
+    source.textContent=audio.currentSrc?'LOCAL AUDIO':'NO TRACK';
+    length.textContent=audio.currentSrc?'TOTAL '+time(audio.duration):'TOTAL --:--';
+   }
+   audio.addEventListener('loadedmetadata',update);
+   audio.addEventListener('emptied',update);
+   update();
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initialize,{once:true});else initialize();
+})();
+</script></body></html>
