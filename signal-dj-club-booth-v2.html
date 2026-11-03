@@ -4259,4 +4259,118 @@ body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
+<style id="signal-v58-jog-lcd-fit-and-motion">
+/* Jog LCD: keep the BPM, wave and elapsed time unobstructed.
+   The existing display-mode/artwork controls remain available via one
+   compact disclosure inside the jog screen, independent of booth scaling. */
+body.signal-booth-v2 .deckshell .jog .centerdisc{
+ position:absolute!important;
+}
+body.signal-booth-v2 .deckshell .jog .centerdisc>.v58-display-toggle{
+ position:absolute!important;z-index:21!important;
+ bottom:3.5%!important;left:50%!important;top:auto!important;right:auto!important;
+ transform:translateX(-50%)!important;
+ border:1px solid #5e7c8e!important;border-radius:4px!important;
+ background:linear-gradient(#273a4a,#101a26)!important;
+ color:#dcecf6!important;box-shadow:0 1px 3px #0009!important;
+ font:800 clamp(7px,.55vw,9px)/1 Arial,sans-serif!important;
+ padding:3px 6px!important;min-height:0!important;
+ white-space:nowrap!important;pointer-events:auto!important;cursor:pointer!important;
+}
+body.signal-booth-v2 .deckshell .jog .centerdisc>.v58-display-toggle:focus-visible{
+ outline:2px solid white!important;outline-offset:2px!important;
+}
+body.signal-booth-v2 .deckshell .jog .centerdisc>.jog-screen-options{
+ position:absolute!important;inset:auto!important;
+ bottom:16%!important;left:5%!important;right:5%!important;
+ width:90%!important;min-height:0!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ flex-wrap:wrap!important;gap:3px!important;
+ padding:6px 4px!important;z-index:22!important;
+ border:1px solid #63869a!important;border-radius:5px!important;
+ background:#08131dec!important;box-shadow:0 3px 10px #000d!important;
+ pointer-events:auto!important;
+}
+body.signal-booth-v2 .deckshell .jog .centerdisc>.jog-screen-options:not(.v58-open){
+ display:none!important;
+}
+body.signal-booth-v2 .deckshell .jog .centerdisc>.jog-screen-options select,
+body.signal-booth-v2 .deckshell .jog .centerdisc>.jog-screen-options button,
+body.signal-booth-v2 .deckshell .jog .centerdisc>.jog-screen-options label{
+ font:800 clamp(7px,.53vw,9px)/1 Arial,sans-serif!important;
+ padding:3px!important;min-height:18px!important;cursor:pointer!important;
+}
+body.signal-booth-v2 .deckshell .jog .centerdisc[data-mode="lcd"]>.lcd-deck{
+ font-size:clamp(9px,.81vw,12px)!important;
+}
+body.signal-booth-v2 .deckshell .jog .centerdisc[data-mode="lcd"]>.lcd-bpm{
+ font-size:clamp(20px,2.05vw,32px)!important;
+}
+body.signal-booth-v2 .deckshell .jog .centerdisc[data-mode="lcd"]>.lcd-time{
+ font-size:clamp(12px,1.15vw,18px)!important;
+}
+body.signal-booth-v2 .deckshell .jog .centerdisc[data-mode="lcd"]>.lcd-wave{
+ height:clamp(12px,1.4vw,20px)!important;
+ max-height:14%!important;width:79%!important;
+ margin:2px 0!important;align-items:center!important;overflow:hidden!important;
+}
+body.signal-booth-v2 .deckshell .jog .centerdisc[data-mode="lcd"]>.lcd-wave i{
+ transform-origin:center!important;
+ animation:v58-jog-wave-idle 2.9s ease-in-out infinite alternate;
+ animation-delay:calc(var(--v58-i,0) * -0.19s);
+ will-change:transform;opacity:.84;
+}
+body.signal-booth-v2 .deckshell .jog.playing .centerdisc[data-mode="lcd"]>.lcd-wave i{
+ animation-name:v58-jog-wave-playing;animation-duration:.68s;
+ opacity:1;
+}
+@keyframes v58-jog-wave-idle{
+ 0%{transform:scaleY(.36)}
+ 48%{transform:scaleY(.78)}
+ 100%{transform:scaleY(.49)}
+}
+@keyframes v58-jog-wave-playing{
+ 0%{transform:scaleY(.35)}
+ 45%{transform:scaleY(1)}
+ 100%{transform:scaleY(.53)}
+}
+@media (prefers-reduced-motion:reduce){
+ body.signal-booth-v2 .deckshell .jog .centerdisc .lcd-wave i{
+  animation:none!important;will-change:auto!important;
+ }
+}
+</style>
+<script id="signal-v58-jog-lcd-fit-and-motion-script">
+(()=>{
+ function init(){
+  for(const k of ['A','B']){
+   const shell=document.querySelector('.deckshell.deck-'+k);
+   const disc=shell?.querySelector('.jog .centerdisc');
+   const options=shell?.querySelector(':scope > .jog-screen-options');
+   if(!disc||!options||disc.querySelector('.v58-display-toggle'))continue;
+   disc.appendChild(options);
+   const toggle=document.createElement('button');
+   toggle.type='button';toggle.className='v58-display-toggle';
+   toggle.textContent='DISPLAY ▾';toggle.setAttribute('aria-expanded','false');
+   toggle.setAttribute('aria-label','Jog display mode and artwork options');
+   options.id=options.id||'signal-jog-options-'+k;
+   toggle.setAttribute('aria-controls',options.id);
+   disc.appendChild(toggle);
+   function setOpen(open){
+    options.classList.toggle('v58-open',open);
+    toggle.setAttribute('aria-expanded',String(open));
+    toggle.textContent=open?'DISPLAY ▴':'DISPLAY ▾';
+   }
+   setOpen(false);
+   toggle.addEventListener('click',()=>setOpen(!options.classList.contains('v58-open')));
+   options.querySelector('select')?.addEventListener('change',()=>setOpen(false));
+   options.querySelector('button')?.addEventListener('click',()=>setOpen(false));
+   options.querySelector('input[type="file"]')?.addEventListener('change',()=>setOpen(false));
+   const bars=[...disc.querySelectorAll('.lcd-wave i')];
+   bars.forEach((bar,i)=>bar.style.setProperty('--v58-i',String(i)));
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
 </body></html>
