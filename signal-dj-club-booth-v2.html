@@ -3192,7 +3192,7 @@ function init(){
   left.className='cdjx-side-wing left';right.className='cdjx-side-wing right';
   left.setAttribute('aria-label','Deck '+k+' left source and transport hardware');
   right.setAttribute('aria-label','Deck '+k+' right screen navigation hardware');
-  left.innerHTML='<div class="cdjx-wing-label">MEDIA SOURCE</div><div class="cdjx-usb-unit"><button type="button" class="cdjx-usb" data-c="usb1">USB 1</button><button type="button" class="cdjx-stop" data-c="stop1">■ STOP</button></div><div class="cdjx-usb-unit"><button type="button" class="cdjx-usb" data-c="usb2">USB 2</button><button type="button" class="cdjx-stop" data-c="stop2">■ STOP</button></div><div class="cdjx-wing-double"><button type="button" class="cdjx-quant" data-c="quant" title="Quantize: not implemented">QUANTIZE</button><button type="button" class="cdjx-slip" data-c="slip" title="Slip mode: not implemented">SLIP</button></div><div class="cdjx-wing-label">CUE / LOOP</div><div class="cdjx-wing-double"><button type="button" data-c="call">◀ CALL</button><button type="button" data-c="delete">DELETE</button></div><small class="cdjx-hint">USB selects files on Mac · QUANTIZE / SLIP not yet supported</small>';
+  left.innerHTML='<div class="v54-usb-unit"><div class="v54-usb-heading">USB 1 <small>5V ⎓ 1A</small></div><button type="button" class="v54-usb-port v54-usb-a" data-c="usb1" aria-label="Choose local music for USB 1"><span class="v54-port-hole"></span></button><div class="v54-stop-row"><span>− STOP</span><button type="button" class="v54-stop" data-c="stop1" aria-label="USB 1 stop indicator"></button></div></div><div class="v54-usb-unit"><div class="v54-usb-heading">USB 2 <small>5V ⎓ 1.5A</small></div><button type="button" class="v54-usb-port v54-usb-c" data-c="usb2" aria-label="Choose local music for USB 2"><span class="v54-port-hole"></span></button><div class="v54-stop-row"><span>− STOP</span><button type="button" class="v54-stop" data-c="stop2" aria-label="USB 2 stop indicator"></button></div></div><div class="v54-mode-stack"><button type="button" class="v54-lit v54-quant" data-c="quant" title="Quantize: not implemented">QUANTIZE</button><button type="button" class="v54-lit v54-slip" data-c="slip" title="Slip mode">SLIP</button></div><div class="v54-call-caption">• CALL / <u>DELETE</u></div><button type="button" class="v54-call-hardware" data-c="call" aria-label="Call previous memory cue"><span></span></button><button type="button" class="v54-delete-access" data-c="delete" aria-label="Delete saved cue" title="Delete saved cue">DELETE</button>';
   right.innerHTML='<div class="cdjx-wing-label">TRACK BROWSER</div><div class="cdjx-wing-double"><button type="button" data-c="back">BACK</button><button type="button" data-c="tag">TAG TRACK / REMOVE</button></div><div class="cdjx-wing-double"><button type="button" data-c="filter">TRACK FILTER / EDIT</button><button type="button" data-c="shortcut">SHORT CUT</button></div>';
   const encoder=shell.querySelector('.signal-cdjx-encoder');
   if(encoder){encoder.querySelector('.cdjx-back')?.remove();right.querySelector('.cdjx-wing-double')?.insertAdjacentElement('afterend',encoder)}
@@ -3832,4 +3832,135 @@ body.signal-booth-v2 .deckshell>.signal-v53-zero .digit{flex:0 0 auto}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
 </script>
+<style id="signal-v54-reference-left-hardware">
+/* V54: original-inspired LCD-left hardware only. Deck geometry, LCD, mixer,
+   pitch controls, jog, pad bank and right-side controls remain untouched. */
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-side-wing.left{
+ background:linear-gradient(106deg,#242527,#181a1d 58%,#282a2c)!important;
+ border:0!important;box-shadow:inset -2px 0 2px #0505066b!important;
+ border-radius:3px!important;padding:5px 5px!important;
+ gap:6px!important;overflow:hidden!important;align-items:center!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-side-wing.left .v54-usb-unit{
+ display:flex;align-items:center;flex-direction:column;width:94%;gap:2px;
+ padding:1px 0 3px;border:0;
+}
+body.signal-booth-v2:not(.festival) .cdjx-side-wing.left .v54-usb-heading{
+ color:#e3e5e8;font:800 clamp(7px,.62vw,10px)/1.1 Arial,sans-serif;
+ text-align:center;text-shadow:0 1px 2px #000;
+}
+body.signal-booth-v2:not(.festival) .cdjx-side-wing.left .v54-usb-heading small{
+ display:block;font:700 clamp(6px,.5vw,8px)/1.2 Arial,sans-serif;color:#b8bec5;
+}
+body.signal-booth-v2:not(.festival) .cdjx-side-wing.left button.v54-usb-port{
+ position:relative;display:flex;align-items:center;justify-content:center;
+ width:80%!important;height:clamp(29px,2.85vw,43px)!important;min-height:0!important;
+ padding:0!important;border:3px solid #45484c!important;border-radius:4px!important;
+ background:linear-gradient(#23262a,#080a0d 30%,#0d0e11 84%,#303338)!important;
+ box-shadow:0 0 0 1px #07080a,0 2px 4px #000a,inset 0 0 0 2px #131619!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-side-wing.left .v54-port-hole{
+ width:58%;height:36%;border:2px solid #8b9299;border-radius:1px;
+ background:linear-gradient(#08090b,#23272c);box-shadow:inset 0 1px 3px #000;
+}
+body.signal-booth-v2:not(.festival) .cdjx-side-wing.left .v54-usb-c .v54-port-hole{
+ height:24%;width:42%;border-radius:12px;
+}
+body.signal-booth-v2:not(.festival) .cdjx-side-wing.left .v54-stop-row{
+ display:flex;gap:3px;flex-direction:column;align-items:center;color:#b4b9be;
+ font:bold clamp(6px,.48vw,8px)/1 Arial,sans-serif;
+}
+body.signal-booth-v2:not(.festival) .cdjx-side-wing.left button.v54-stop{
+ width:clamp(19px,2.2vw,30px)!important;height:7px!important;min-height:7px!important;
+ padding:0!important;border:1px solid #090a0b!important;border-radius:2px!important;
+ background:linear-gradient(#09090b,#33363a)!important;box-shadow:inset 0 1px 1px #666!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-side-wing.left .v54-mode-stack{
+ width:83%;display:grid;grid-template-columns:1fr;justify-items:center;gap:7px;
+ margin-top:2px;
+}
+body.signal-booth-v2:not(.festival) .cdjx-side-wing.left button.v54-lit{
+ width:78%!important;min-height:clamp(17px,1.4vw,24px)!important;
+ height:clamp(17px,1.4vw,24px)!important;padding:1px!important;
+ border:3px solid #121315!important;border-radius:2px!important;
+ background:linear-gradient(#383b40,#161719 48%,#090a0c)!important;
+ box-shadow:0 0 0 1px #6c7076,0 2px 3px #000b,inset 0 1px #afb3bb70!important;
+ color:#f2474f!important;font:800 clamp(6px,.52vw,9px)/1 Arial,sans-serif!important;
+ text-shadow:0 0 4px #e82135b5!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-side-wing.left .v54-call-caption{
+ font:800 clamp(6px,.52vw,8px)/1 Arial,sans-serif;color:#e6e9ed;
+ white-space:nowrap;text-align:center;margin-top:1px;
+}
+body.signal-booth-v2:not(.festival) .cdjx-side-wing.left button.v54-call-hardware{
+ display:grid!important;place-items:center!important;width:72%!important;
+ min-height:clamp(24px,2.2vw,34px)!important;padding:0!important;
+ border:3px solid #353a40!important;border-radius:3px!important;
+ background:linear-gradient(130deg,#222528,#08090c 68%)!important;
+ box-shadow:0 0 0 1px #5c6269,inset 0 0 0 2px #050607!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-side-wing.left .v54-call-hardware span{
+ width:38%;aspect-ratio:1;background:conic-gradient(#858c94,#13171c,#a0a8b2,#111417,#8a9199);
+ border-radius:3px;box-shadow:0 1px 2px #000;
+}
+body.signal-booth-v2:not(.festival) .cdjx-side-wing.left button.v54-delete-access{
+ position:absolute;width:26px!important;height:13px!important;min-height:13px!important;
+ bottom:2px;right:2px;padding:0!important;font-size:5px!important;opacity:.65!important;
+ border:0!important;background:transparent!important;color:#b9c2ca!important;
+}
+/* Existing loop controls remain wired to their original audio handlers. */
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-face-cluster.left{
+ background:transparent!important;border:0!important;box-shadow:none!important;
+ overflow:hidden!important;left:.6%!important;width:19.4%!important;
+ top:41.8%!important;height:21%!important;padding:2px!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group{
+ border:0!important;gap:3px!important;overflow:visible!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1),
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2){
+ display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ column-gap:3px!important;padding:1px 0 4px!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>strong,
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>strong{
+ grid-column:1/-1!important;font:800 clamp(7px,.55vw,9px)/1.1 Arial,sans-serif!important;
+ text-align:center!important;color:#e3e6ea!important;white-space:nowrap!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button.round{
+ width:clamp(26px,2.5vw,42px)!important;height:clamp(26px,2.5vw,42px)!important;
+ min-height:0!important;border-radius:50%!important;justify-self:center!important;
+ font-size:clamp(6px,.5vw,8px)!important;color:#f0eeee!important;
+ border:4px solid #d89e24!important;
+ background:radial-gradient(circle at 43% 37%,#292b2e 0 38%,#080a0c 64%,#1b1e22 80%)!important;
+ box-shadow:0 0 0 2px #1d2227,inset 0 2px 3px #111,0 2px 3px #000a!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button.wide{
+ grid-column:3!important;grid-row:2!important;
+ width:clamp(25px,2.4vw,39px)!important;height:clamp(25px,2.4vw,39px)!important;
+ min-height:0!important;justify-self:center!important;border-radius:50%!important;
+ padding:0!important;font-size:0!important;
+ border:4px solid #45494e!important;
+ background:radial-gradient(circle at center,#f0aa24 0 16%,#24272b 20%,#0a0c0f 65%,#373d43 84%)!important;
+ box-shadow:0 0 0 2px #16191d,inset 0 1px 3px #555!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button.wide::after{
+ content:"RELOOP/EXIT";position:absolute;bottom:100%;left:50%;transform:translateX(-50%);
+ font:700 7px Arial,sans-serif;color:#e3e5e8;white-space:nowrap;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>button.round{
+ width:clamp(25px,2.3vw,35px)!important;height:clamp(25px,2.3vw,35px)!important;
+ min-height:0!important;justify-self:center!important;border-radius:50%!important;
+ background:radial-gradient(circle at 35% 26%,#44494e,#090b0d 65%)!important;
+ border:3px solid #2b2f34!important;color:#f1b42e!important;
+ font:900 clamp(10px,1.1vw,16px)/1 Arial,sans-serif!important;
+ box-shadow:0 0 0 1px #697078,0 2px 4px #000b!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>button.round:nth-of-type(1)::after{
+ content:"1/2X";display:block;font:700 6px Arial,sans-serif;color:#ddd;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>button.round:nth-of-type(2)::after{
+ content:"2X";display:block;font:700 6px Arial,sans-serif;color:#ddd;
+}
+</style>
 </body></html>
