@@ -5385,6 +5385,8 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v71-beatfx.v74-fx{
   const level=Array.from(master.querySelectorAll(':scope > .v71-unit'));
   const booth=add(master,'div','v74-booth');
   for(const knob of level.filter(x=>['BOOTH EQ','LOW','BOOTH LEVEL'].includes(x.querySelector('small')?.textContent||'')))booth.appendChild(knob);
+  const firstCue=Array.from(master.querySelectorAll(':scope > .v71-heading')).find(x=>x.textContent?.trim()==='MASTER CUE');
+  if(firstCue)master.insertBefore(booth,firstCue);
   const meterLabel=master.querySelector('.v71-reference-label');
   if(meterLabel)meterLabel.textContent='MASTER L / R';
   const headings=Array.from(master.querySelectorAll(':scope > .v71-heading'));
