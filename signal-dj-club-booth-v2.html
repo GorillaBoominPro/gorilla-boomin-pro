@@ -2995,6 +2995,17 @@ function initLCD(){
      const mids=bands?.mid[idx]||0,hi=bands?.high[idx]||0;
      const total=energy+mids+hi+.00001;
      const amp=Math.min(mid*.91,Math.max(.6,(energy*.85+mids*.95+hi*.75)*mid*(isOverview?.64:.84)));
+     if(isOverview){
+      // The overview is a progress instrument, not a second full-color scope.
+      // Past = luminous cyan waveform; future = muted warm waveform.
+      const played=at<=position;
+      g.fillStyle=played?'#218bc4':'#785530';
+      g.fillRect(x,mid-amp,1,2*amp);
+      const detail=Math.min(amp,Math.max(.55,(energy*.55+mids*.6+hi*.45)*mid*.5));
+      g.fillStyle=played?'#8be6ff':'#d4a66a';
+      g.fillRect(x,mid-detail,1,2*detail);
+      continue;
+     }
      // Frequency determines hue. Loud bass is amber, mids blue, air violet.
      // Nested strokes expose the balance without hiding every band beneath amber.
      const bassRatio=energy/total,midRatio=mids/total,highRatio=hi/total;
@@ -3023,8 +3034,12 @@ function initLCD(){
      if(!isOverview){g.font='9px system-ui,sans-serif';g.textAlign='center';g.fillText(mark.label,x,21)}
     }
     if(isOverview){
-     const xp=Math.min(w-2,Math.max(0,position/duration*w));
-     g.fillStyle='#f1f1efbd';g.fillRect(Math.round(xp),0,2,h);
+     const xp=Math.min(w-4,Math.max(2,position/duration*w));
+     // Distinct visible cursor with dark outline and small arrow head.
+     g.fillStyle='#04070b';g.fillRect(Math.round(xp)-2,0,6,h);
+     g.fillStyle='#f8fdff';g.fillRect(Math.round(xp)-1,0,3,h);
+     g.fillStyle='#ff5266';g.beginPath();
+     g.moveTo(xp-6,0);g.lineTo(xp+6,0);g.lineTo(xp,7);g.closePath();g.fill();
     }else{
      g.fillStyle='#d14849';g.beginPath();g.moveTo(w/2-4,0);g.lineTo(w/2+4,0);g.lineTo(w/2,8);g.fill();
      g.fillStyle='#e5e7e8';g.fillRect(w/2,8,1,h-16);
@@ -7293,4 +7308,11 @@ body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-status .v94-source{
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initialize,{once:true});else initialize();
 })();
-</script></body></html>
+</script><style id="signal-v95-overview-progress-contrast">
+/* Only the miniature whole-track overview receives prominent progress treatment. */
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-overview-wave{
+ border:1px solid #607787!important;
+ background:#070d15!important;
+}
+</style>
+</body></html>
