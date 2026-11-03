@@ -3624,4 +3624,12 @@ body.signal-booth-v2:not(.festival) .deckshell>.cdjx-face-hotcues button.is-set{
 body.signal-booth-v2:not(.festival) .deckshell>.cdjx-face-hotcues button:focus-visible{
  outline:2px solid white!important;outline-offset:2px!important;
 }
-</style></body></html>
+</style>
+<style id="signal-v37-hide-utility-loop-buttons">
+/* V37: remove redundant LOOP 4B / EXIT LOOP buttons from the visible
+   upper utility strip on both decks. Keep underlying loop handlers available
+   for existing loop controls, hot cues and shortcuts. */
+.deckshell .utility button[id^="loop-"],
+.deckshell .utility button[id^="loopoff-"]{display:none!important;visibility:hidden!important}
+</style>
+</body></html>
