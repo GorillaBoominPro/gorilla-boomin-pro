@@ -2971,8 +2971,8 @@ function initLCD(){
     // upcoming section remains neutral/dark; move together with actual playhead.
     if(isOverview){
      const progressX=Math.min(w,Math.max(0,position/duration*w));
-     g.fillStyle='#0a2840';g.fillRect(0,0,progressX,h);
-     g.fillStyle='#11151c';g.fillRect(progressX,0,w-progressX,h);
+     g.fillStyle=k==='A'?'#082a46':'#38200d';g.fillRect(0,0,progressX,h);
+     g.fillStyle=k==='A'?'#07131f':'#19110c';g.fillRect(progressX,0,w-progressX,h);
     }
     const bpm=Number(document.getElementById('manual-'+k)?.value);
     // A restrained, thin beat-grid. Timing is based on the user's BPM setting,
@@ -2996,35 +2996,34 @@ function initLCD(){
      const total=energy+mids+hi+.00001;
      const amp=Math.min(mid*.91,Math.max(.6,(energy*.85+mids*.95+hi*.75)*mid*(isOverview?.64:.84)));
      if(isOverview){
-      // The overview is a progress instrument, not a second full-color scope.
-      // Past = luminous cyan waveform; future = muted warm waveform.
-      const played=at<=position;
-      g.fillStyle=played?'#218bc4':'#785530';
+      // Whole track: A cyan/blue, B amber/orange. Played side vivid,
+      // remaining side dark, with a moving boundary and visible marker.
+      const played=at<=position,isA=k==='A';
+      g.fillStyle=isA?(played?'#008bc9':'#1c4266'):(played?'#ed8527':'#66401e');
       g.fillRect(x,mid-amp,1,2*amp);
       const detail=Math.min(amp,Math.max(.55,(energy*.55+mids*.6+hi*.45)*mid*.5));
-      g.fillStyle=played?'#8be6ff':'#d4a66a';
+      g.fillStyle=isA?(played?'#55daff':'#487c9b'):(played?'#ffc36e':'#926638');
       g.fillRect(x,mid-detail,1,2*detail);
       continue;
      }
-     // V96: saturated frequency-coded waveform with actual source separation.
-     // The old nested translucent-looking strokes washed into a pale core.
-     // Dominant frequency chooses the main hue; subsidiary energy appears as
-     // thin accents. Jog ring deck A is cyan, deck B amber, but both preserve
-     // LOW/MID/HIGH semantic colors.
+     // V97: each LCD matches its jog-ring identity. Band dominance still
+     // changes hue and reflects ACTUAL decoded audio, not decorative patterns:
+     // A bass teal / mids cyan / highs violet; B bass deep orange /
+     // mids gold / highs magenta. No shared yellow center on both decks.
      const bassRatio=energy/total,midRatio=mids/total,highRatio=hi/total;
      const isA=k==='A';
      const dominant=bassRatio>=midRatio&&bassRatio>=highRatio?'low':midRatio>=highRatio?'mid':'high';
-     const color=dominant==='low'?(isA?'#ffa83f':'#ff8c29'):
-       dominant==='mid'?(isA?'#00c9ff':'#17a8ff'):
-       (isA?'#b66cff':'#d17bff');
-     const inner=dominant==='low'?'#ffcc72':
-       dominant==='mid'?(isA?'#54edff':'#60d6ff'):'#e1a0ff';
-     g.fillStyle=color;g.fillRect(x,mid-amp,1,amp*2);
-     const core=Math.min(amp,Math.max(.45,amp*(.25+Math.max(bassRatio,midRatio,highRatio)*.30)));
-     g.fillStyle=inner;g.fillRect(x,mid-core,1,core*2);
-     // Thin accent at transients, never an all-white overlaid waveform.
-     if(highRatio>.37){g.fillStyle=isA?'#cb7aff':'#e490ff';g.fillRect(x,mid-amp,1,Math.max(.7,amp*.16))}
-     if(bassRatio>.48){g.fillStyle='#ffb549';g.fillRect(x,mid-core*.45,1,core*.9)}
+     const palette=isA?{
+      low:['#078ca8','#25bcd6'],mid:['#048ce9','#24cfff'],high:['#6756d9','#b18bff']
+     }:{
+      low:['#db5d19','#ff862c'],mid:['#dc9521','#ffcc58'],high:['#b64584','#f27eb2']
+     };
+     const pair=palette[dominant];
+     g.fillStyle=pair[0];g.fillRect(x,mid-amp,1,amp*2);
+     const core=Math.min(amp,Math.max(.45,amp*(.24+Math.max(bassRatio,midRatio,highRatio)*.28)));
+     g.fillStyle=pair[1];g.fillRect(x,mid-core,1,core*2);
+     if(highRatio>.37){g.fillStyle=isA?'#8e74ef':'#c85ca4';g.fillRect(x,mid-amp,1,Math.max(.7,amp*.16))}
+     if(bassRatio>.48){g.fillStyle=isA?'#12b6bc':'#f07c27';g.fillRect(x,mid-core*.45,1,core*.9)}
     }
     g.fillStyle='#a5b7c522';g.fillRect(0,Math.round(mid),w,1);
     const marks=[];
@@ -7344,6 +7343,19 @@ body.signal-booth-v2 .signal-cdjx-screen .v91-energy [data-band="mid"] .v91-ener
 }
 body.signal-booth-v2 .signal-cdjx-screen .v91-energy [data-band="high"] .v91-energy-fill{
  background:#be78ff!important;
+}
+</style>
+
+<style id="signal-v97-deck-specific-lcd-colors">
+/* V97: color identity confined to A/B LCD. V85 faders, deck structure,
+   approved controls and fullscreen dimensions remain exactly as before. */
+body.signal-booth-v2 .deckshell.deck-A .signal-cdjx-screen .cdjx-main-wave,
+body.signal-booth-v2 .deckshell.deck-A .signal-cdjx-screen .cdjx-overview-wave{
+ border-color:#286184!important;
+}
+body.signal-booth-v2 .deckshell.deck-B .signal-cdjx-screen .cdjx-main-wave,
+body.signal-booth-v2 .deckshell.deck-B .signal-cdjx-screen .cdjx-overview-wave{
+ border-color:#886036!important;
 }
 </style>
 </body></html>
