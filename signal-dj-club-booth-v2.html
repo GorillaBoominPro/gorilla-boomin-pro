@@ -2986,14 +2986,18 @@ function initLCD(){
      const idx=Math.max(0,Math.min(peaks.length-1,Math.floor(at/duration*peaks.length)));
      const energy=bands?.low[idx]||0;
      const mids=bands?.mid[idx]||0,hi=bands?.high[idx]||0;
-     const amp=Math.min(mid*.90,Math.max(.7,(energy*.95+mids*.82+hi*.65)*mid*(isOverview?.64:.78)));
-     const bass=Math.min(amp,energy*mid*(isOverview?.68:.9));
-     const midsize=Math.min(amp,mids*mid*(isOverview?.73:.95));
-     const hiss=Math.min(amp,hi*mid*(isOverview?.68:.9));
-     g.fillStyle='#765e93';g.fillRect(x,mid-amp,1,amp*2);
-     g.fillStyle='#57a5dc';g.fillRect(x,mid-midsize,1,midsize*2);
-     g.fillStyle='#db9d40';g.fillRect(x,mid-bass,1,bass*2);
-     if(hiss>1){g.fillStyle='#bec8f2';g.fillRect(x,mid-hiss*.47,1,hiss*.94)}
+     const total=energy+mids+hi+.00001;
+     const amp=Math.min(mid*.91,Math.max(.6,(energy*.85+mids*.95+hi*.75)*mid*(isOverview?.64:.84)));
+     // Frequency determines hue. Loud bass is amber, mids blue, air violet.
+     // Nested strokes expose the balance without hiding every band beneath amber.
+     const bassRatio=energy/total,midRatio=mids/total,highRatio=hi/total;
+     g.fillStyle=highRatio>.29?'#8a76bc':'#447eb0';
+     g.fillRect(x,mid-amp,1,2*amp);
+     const middle=amp*Math.min(.94,.25+midRatio*1.65);
+     g.fillStyle='#61a6d4';g.fillRect(x,mid-middle,1,middle*2);
+     const core=amp*Math.min(.80,.1+bassRatio*1.26);
+     g.fillStyle='#d8aa57';g.fillRect(x,mid-core,1,core*2);
+     if(highRatio>.42){g.fillStyle='#b49be0';g.fillRect(x,mid-amp,1,Math.max(.8,amp*.24));g.fillRect(x,mid+amp-Math.max(.8,amp*.24),1,Math.max(.8,amp*.24))}
     }
     g.fillStyle='#a5b7c522';g.fillRect(0,Math.round(mid),w,1);
     const marks=[];
@@ -7052,6 +7056,126 @@ body.signal-booth-v2 .signal-cdjx-screen .v90-player-status{
   }
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
+})();
+</script>
+
+<style id="signal-v92-lcd-structure">
+/* V92 actual LCD relayout. Owns only content inside existing player display.
+   Never changes screen bezel, jogs, faders, mixer, Fit Booth or Fullscreen. */
+body.signal-booth-v2 .deckshell>.signal-cdjx-screen{
+ display:flex!important;flex-direction:column!important;
+ overflow:hidden!important;min-height:0!important;
+ padding:5px 6px!important;gap:2px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-monitor-tag{
+ flex:0 0 auto!important;font-size:7px!important;line-height:10px!important;margin:0!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav{
+ flex:0 0 auto!important;margin:0 0 2px!important;gap:2px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav button{
+ min-height:19px!important;height:19px!important;font-size:7px!important;padding:1px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-display{
+ flex:1 1 auto!important;min-height:0!important;
+ display:flex!important;flex-direction:column!important;
+ margin:1px 0!important;padding:3px!important;gap:2px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-header{
+ flex:0 0 auto!important;min-height:16px!important;padding:2px 4px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-status{
+ flex:0 0 auto!important;padding:2px!important;font-size:7px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-main-wave{
+ flex:1 1 auto!important;min-height:55px!important;height:98px!important;
+ max-height:none!important;margin:0!important;box-sizing:border-box!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-overview-wave{
+ flex:0 0 19px!important;min-height:19px!important;height:19px!important;
+ margin:0!important;box-sizing:border-box!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-display>small{
+ flex:0 0 auto!important;margin:0!important;
+ font-size:6px!important;line-height:8px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid{
+ flex:0 0 auto!important;gap:2px!important;margin:2px 0!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid>div{
+ min-height:27px!important;padding:2px 1px!important;box-sizing:border-box!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid small{
+ font-size:7px!important;line-height:8px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid b{
+ font-size:12px!important;line-height:13px!important;margin:1px 0 0!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls{
+ flex:0 0 auto!important;display:grid!important;
+ grid-template-columns:1fr 1fr!important;grid-template-rows:8px 19px 18px!important;
+ gap:2px!important;min-height:0!important;max-height:none!important;
+ padding:2px!important;margin:1px 0!important;overflow:hidden!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls>label{
+ grid-column:1/-1!important;font-size:6px!important;line-height:8px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls>button{
+ height:19px!important;min-height:19px!important;line-height:17px!important;
+ padding:0 2px!important;font-size:7px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-memory{
+ grid-column:1/-1!important;min-height:18px!important;height:18px!important;
+ gap:3px!important;grid-template-columns:auto minmax(0,1fr) 20px 20px auto!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-memory button{
+ min-height:17px!important;height:17px!important;min-width:19px!important;
+ padding:0 2px!important;font-size:7px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy{
+ display:flex!important;visibility:visible!important;opacity:1!important;
+ flex:0 0 43px!important;min-height:43px!important;max-height:43px!important;
+ width:100%!important;margin:2px 0!important;padding:4px 6px!important;gap:3px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy-caption{font-size:7px!important;line-height:8px!important}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy-bands{gap:5px!important}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy-band{gap:2px!important}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy-track{height:5px!important}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy-note{display:none!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-bottom{
+ display:none!important; /* duplicate library/status actions live in navigation already */
+}
+body.signal-booth-v2 .signal-cdjx-screen .v90-player-status{
+ flex:0 0 15px!important;height:15px!important;min-height:15px!important;
+ margin:0!important;padding:2px 4px!important;box-sizing:border-box!important;
+ font-size:7px!important;
+}
+@media(max-width:1250px){
+ body.signal-booth-v2 .signal-cdjx-screen .cdjx-main-wave{height:58px!important;min-height:38px!important}
+ body.signal-booth-v2 .signal-cdjx-screen .v91-energy{
+  flex-basis:36px!important;height:36px!important;min-height:36px!important;max-height:36px!important;
+ }
+}
+</style>
+<script id="signal-v92-lcd-structure-script">
+(()=>{
+ function repair(){
+  for(const k of ['A','B']){
+   const screen=document.querySelector('.deck-'+k+' .signal-cdjx-screen');
+   if(!screen)continue;
+   let energy=screen.querySelector('.v91-energy');
+   // V91 only inserted the panel if the V90 strip already existed; fix it unconditionally.
+   if(!energy){
+    energy=document.createElement('div');energy.className='v91-energy';
+    energy.setAttribute('aria-label','Audio frequency energy meters');
+    energy.innerHTML='<span class="v91-energy-caption">FREQUENCY ENERGY · LIVE AUDIO</span><div class="v91-energy-bands"><div class="v91-energy-band" data-band="low"><span class="v91-energy-label">LOW · BASS</span><div class="v91-energy-track"><span class="v91-energy-fill"></span></div></div><div class="v91-energy-band" data-band="mid"><span class="v91-energy-label">MID · BODY</span><div class="v91-energy-track"><span class="v91-energy-fill"></span></div></div><div class="v91-energy-band" data-band="high"><span class="v91-energy-label">HIGH · DETAIL</span><div class="v91-energy-track"><span class="v91-energy-fill"></span></div></div></div>';
+   }
+   const status=screen.querySelector('.v90-player-status');
+   if(status){status.before(energy)}else screen.append(energy);
+   screen.dataset.v92Ready='true';
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',repair,{once:true});else repair();
 })();
 </script>
 </body></html>
