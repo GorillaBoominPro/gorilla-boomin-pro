@@ -6110,4 +6110,77 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-mic{
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
 })();
 </script>
+
+<style id="signal-v79-column-two-spacing-and-white-dial-markers">
+/* V79 — COLUMN TWO ONLY. Preserve microphone strip, channels 1–4, decks and live controls. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right{
+ padding:23px 5px 14px!important;
+ justify-content:space-between!important;
+ gap:9px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right>.v77-left-group{
+ gap:12px!important;
+ padding:9px 0 13px!important;
+ flex:0 0 auto!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right>.v77-left-group:first-child{
+ padding-top:9px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right>.v77-left-group:nth-child(2){
+ padding:14px 0!important;
+ gap:13px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right>.v77-left-group:nth-child(3){
+ padding:14px 0 18px!important;
+ gap:12px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right>.v77-left-group:last-child{
+ margin-top:auto!important;
+ padding:13px 0 1px!important;
+ gap:12px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right .v70-toggle-line{
+ gap:13px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right .v70-knob-unit{
+ position:relative!important;
+ min-height:65px!important;
+ gap:7px!important;
+ margin:5px 0 9px!important;
+ overflow:visible!important;
+}
+/* Fine white calibration ticks around each of the three active Column 2 rotary dials.
+   The original knob pointer and pointer rotation remain untouched. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right .v70-knob-unit::before{
+ content:""!important;
+ position:absolute!important;
+ top:12px!important;left:50%!important;
+ width:59px!important;height:59px!important;
+ transform:translateX(-50%)!important;
+ border-radius:50%!important;
+ background:repeating-conic-gradient(from -138deg,#f2f7fc 0deg 2deg,transparent 2.2deg 19deg)!important;
+ -webkit-mask-image:radial-gradient(circle,transparent 0 69%,#000 71% 75%,transparent 77%)!important;
+ mask-image:radial-gradient(circle,transparent 0 69%,#000 71% 75%,transparent 77%)!important;
+ pointer-events:none!important;
+ opacity:.94!important;
+}
+/* Keep headphone socket at the very bottom, even with increased breathing room. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right .v70-port{
+ margin:12px auto 2px!important;
+}
+@media(max-width:1320px){
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right{
+ padding:17px 3px 11px!important;gap:5px!important;
+ }
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right>.v77-left-group{
+ gap:8px!important;padding:7px 0 9px!important;
+ }
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right .v70-knob-unit{
+ min-height:59px!important;gap:4px!important;margin:3px 0 6px!important;
+ }
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-right .v70-knob-unit::before{
+ width:54px!important;height:54px!important;top:11px!important;
+ }
+}
+</style>
 </body></html>
