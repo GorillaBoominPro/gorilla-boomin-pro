@@ -3707,4 +3707,20 @@ body.signal-booth-v2:not(.festival) .signal-v33-memory .v33-cell{
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
 </script>
+<style id="signal-v51-hotcue-label-clearance">
+/* A-H labels sit in the upper-left of each hardware pad; color bars stay below.
+   Both decks only. Do not alter button geometry, positions, colors or handlers. */
+body.signal-booth-v2:not(.festival) .deckshell.deck-A>.cdjx-face-hotcues button,
+body.signal-booth-v2:not(.festival) .deckshell.deck-B>.cdjx-face-hotcues button{
+ align-items:flex-start!important;
+ padding-top:2px!important;
+ font-size:clamp(8px,.66vw,10px)!important;
+ line-height:1!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell.deck-A>.cdjx-face-hotcues button::after,
+body.signal-booth-v2:not(.festival) .deckshell.deck-B>.cdjx-face-hotcues button::after{
+ bottom:10%!important;
+ height:2px!important;
+}
+</style>
 </body></html>
