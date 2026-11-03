@@ -938,6 +938,20 @@ body.signal-booth-v2 .deckshell .cdjx-hardware-rail.right{right:1.2%!important}
 body.signal-booth-v2 .deckshell .cdjx-hardware-rail .rail-group{gap:3px!important;padding-bottom:3px!important}
 body.signal-booth-v2 .deckshell .cdjx-hardware-rail button{min-height:23px!important}
 body.signal-booth-v2 .deckshell .cdjx-hardware-rail .rail-title{line-height:1.2}
+</style><style id="signal-view-modes-v8">
+/* Viewport controls preserve the complete functional console as one surface. */
+#signal-view-controls{position:sticky;top:0;z-index:110;display:flex;align-items:center;flex-wrap:wrap;justify-content:center;gap:7px;padding:7px 10px;margin:0 auto;max-width:1920px;background:#0d1723f5;border:1px solid #476179;box-shadow:0 4px 14px #0009}
+#signal-view-controls button{padding:7px 12px;border:1px solid #607990;background:#1d2938;color:#eef5ff;border-radius:4px;font-size:11px;font-weight:bold}
+#signal-view-controls button[aria-pressed=true]{background:#642638;border-color:#f25c76}
+#signal-view-controls .signal-view-note{font-size:10px;color:#bbcede}
+#signal-booth-viewport{position:relative;width:100%;min-width:0;overflow:visible;margin:0 auto}
+body.signal-booth-v2.signal-fit-booth #signal-booth-viewport{overflow:hidden!important}
+body.signal-booth-v2.signal-fit-booth #signal-booth-viewport>.console{transform-origin:top left!important;margin-top:0!important}
+body.signal-booth-v2.signal-detail-booth #signal-booth-viewport{overflow-x:auto!important;overflow-y:visible!important}
+body.signal-booth-v2.signal-detail-booth #signal-booth-viewport>.console{transform:none!important;min-width:1390px!important;margin-top:0!important}
+body.signal-booth-v2 #signal-view-controls button:focus-visible{outline:2px solid white}
+body.signal-booth-v2.signal-view-fullscreen #signal-view-controls{background:#101b2a}
+@media(max-width:780px){body.signal-booth-v2.signal-detail-booth #signal-booth-viewport>.console{display:grid!important;grid-template-columns:minmax(310px,1fr) minmax(510px,1.28fr) minmax(310px,1fr)!important}}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -2153,5 +2167,64 @@ function build(){
  }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',build,{once:true});else build();
+})();
+</script><script id="signal-view-modes-v8-script">
+(()=>{
+function install(){
+ const consoleEl=document.querySelector('main .console'),main=document.querySelector('main');
+ if(!consoleEl||!main||document.getElementById('signal-view-controls'))return;
+ const viewport=document.createElement('div');viewport.id='signal-booth-viewport';
+ consoleEl.parentNode.insertBefore(viewport,consoleEl);viewport.append(consoleEl);
+ const toolbar=document.createElement('div');toolbar.id='signal-view-controls';toolbar.setAttribute('role','toolbar');toolbar.setAttribute('aria-label','SIGNAL DJ console view controls');
+ toolbar.innerHTML='<button type="button" data-view="fit">⛶ FIT BOOTH</button><button type="button" data-view="detail">⊞ DETAIL VIEW</button><button type="button" data-view="fullscreen">⛶ FULLSCREEN</button><span class="signal-view-note" role="status">Fit keeps the full booth visible · Detail allows scrolling</span>';
+ viewport.before(toolbar);
+ const fullButton=toolbar.querySelector('[data-view="fullscreen"]'),oldFull=document.getElementById('signal-fullview');
+ let view='fit',sizeScheduled=false;
+ const buttons=[...toolbar.querySelectorAll('button')];
+ const updateButtons=()=>{buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view||(b.dataset.view==='fullscreen'&&!!document.fullscreenElement))));fullButton.textContent=document.fullscreenElement?'⤡ EXIT FULLSCREEN':'⛶ FULLSCREEN'};
+ function fit(){
+  if(view!=='fit')return;
+  const parentWidth=viewport.clientWidth;
+  // Minimum hardware width retains deck/mixer proportions and prevents media-query stacking.
+  const baseWidth=Math.max(1390,parentWidth);
+  consoleEl.style.width=baseWidth+'px';
+  consoleEl.style.minWidth=baseWidth+'px';
+  consoleEl.style.display='grid';
+  consoleEl.style.gridTemplateColumns='minmax(310px,1fr) minmax(510px,1.28fr) minmax(310px,1fr)';
+  consoleEl.style.transform='none';
+  // Calculate real layout dimensions before applying the scale.
+  const naturalHeight=Math.max(consoleEl.scrollHeight,consoleEl.getBoundingClientRect().height);
+  const top=viewport.getBoundingClientRect().top;
+  const availableHeight=Math.max(320,window.innerHeight-top-9);
+  const widthScale=Math.min(1,parentWidth/baseWidth);
+  const heightScale=Math.min(1,availableHeight/Math.max(1,naturalHeight));
+  const scale=Math.max(.25,Math.min(widthScale,heightScale));
+  consoleEl.style.transform='scale('+scale+')';
+  viewport.style.height=Math.ceil(naturalHeight*scale+3)+'px';
+  toolbar.querySelector('.signal-view-note').textContent='Fit '+Math.round(scale*100)+'% · Full booth on screen';
+ }
+ function scheduleFit(){if(sizeScheduled)return;sizeScheduled=true;requestAnimationFrame(()=>{sizeScheduled=false;fit()})}
+ function setView(next){
+  view=next;document.body.classList.toggle('signal-fit-booth',next==='fit');document.body.classList.toggle('signal-detail-booth',next==='detail');
+  if(next==='detail'){
+   consoleEl.style.transform='none';consoleEl.style.width='';consoleEl.style.minWidth='1390px';consoleEl.style.display='grid';consoleEl.style.gridTemplateColumns='minmax(310px,1fr) minmax(510px,1.28fr) minmax(310px,1fr)';
+   viewport.style.height='';toolbar.querySelector('.signal-view-note').textContent='Detail · Scroll to access full-size controls';
+  }else scheduleFit();
+  updateButtons();
+ }
+ toolbar.querySelector('[data-view="fit"]').onclick=()=>setView('fit');
+ toolbar.querySelector('[data-view="detail"]').onclick=()=>setView('detail');
+ fullButton.onclick=async()=>{if(document.fullscreenElement){try{await document.exitFullscreen()}catch(e){};return}
+  // The existing full-view button owns browser fullscreen and provides a fallback.
+  if(oldFull)oldFull.click();else if(document.documentElement.requestFullscreen){try{await document.documentElement.requestFullscreen()}catch(e){}}
+  setView('fit');scheduleFit();
+ };
+ window.addEventListener('resize',scheduleFit,{passive:true});
+ document.addEventListener('fullscreenchange',()=>{document.body.classList.toggle('signal-view-fullscreen',!!document.fullscreenElement);updateButtons();scheduleFit()});
+ window.addEventListener('load',scheduleFit,{once:true});
+ if(window.ResizeObserver){const ro=new ResizeObserver(()=>scheduleFit());ro.observe(toolbar);ro.observe(viewport);/* height-only fit updates do not rewrite the console geometry */ }
+ setView('fit');
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
 </script></body></html>
