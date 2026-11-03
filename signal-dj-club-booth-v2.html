@@ -3086,7 +3086,7 @@ function install(){
   if(view!=='fit')return;
   const parentWidth=viewport.clientWidth;
   // Minimum hardware width retains deck/mixer proportions and prevents media-query stacking.
-  const baseWidth=Math.max(1390,parentWidth);
+  const baseWidth=1390; // One fixed design canvas across Fit Booth and Full Screen; only uniform scale changes.
   consoleEl.style.width=baseWidth+'px';
   consoleEl.style.minWidth=baseWidth+'px';
   consoleEl.style.display='grid';
@@ -3664,22 +3664,28 @@ body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-ends{
 }
 </style>
 
-<style id="signal-v41-fullscreen-fit-consistency">
-/* V41: Full Screen must use the SAME chassis proportions as approved Fit Booth.
-   The Fit engine scales the whole console; immersive mode must not stretch
-   deck heights separately, which moves the platter relative to the Jog Feel dial. */
-body.signal-booth-v2.signal-fit-booth.signal-immersive:not(.festival) #signal-booth-viewport>.console{
+<style id="signal-v42-locked-deck-coordinate-system">
+/* Lock a shared 1390px console coordinate system in Fit Booth and Full Screen.
+   The viewport may scale the whole console, but no deck internals resize or drift. */
+body.signal-booth-v2.signal-fit-booth #signal-booth-viewport>.console{
+ display:grid!important;
  grid-template-columns:minmax(310px,1fr) minmax(510px,1.28fr) minmax(310px,1fr)!important;
  min-height:0!important;
+ transform-origin:top left!important;
 }
-body.signal-booth-v2.signal-fit-booth.signal-immersive:not(.festival) .deckshell.deck-A,
-body.signal-booth-v2.signal-fit-booth.signal-immersive:not(.festival) .deckshell.deck-B{
- height:clamp(690px,57vw,815px)!important;
+/* V41 incorrectly shrank fullscreen decks to 690-815px while their controls
+   used percentages designed for the 1100px deck faceplate. Correct both modes. */
+body.signal-booth-v2.signal-fit-booth .deckshell.deck-A,
+body.signal-booth-v2.signal-fit-booth .deckshell.deck-B,
+body.signal-booth-v2.signal-fit-booth.signal-immersive .deckshell.deck-A,
+body.signal-booth-v2.signal-fit-booth.signal-immersive .deckshell.deck-B{
+ height:1100px!important;min-height:1100px!important;max-height:1100px!important;
+ box-sizing:border-box!important;
 }
-/* Use identical JOG FEEL geometry in both view modes, with clearances
-   relative to the deck itself rather than the fullscreen viewport. */
-body.signal-booth-v2.signal-fit-booth.signal-immersive:not(.festival) .deckshell.deck-A>.signal-v33-jog,
-body.signal-booth-v2.signal-fit-booth.signal-immersive:not(.festival) .deckshell.deck-B>.signal-v33-jog{
+/* Anchor the small Jog Feel assembly to the same deck-relative coordinates.
+   The full console scales uniformly, not the knob separately. */
+body.signal-booth-v2:not(.festival) .deckshell.deck-A>.signal-v33-jog,
+body.signal-booth-v2:not(.festival) .deckshell.deck-B>.signal-v33-jog{
  top:47.3%!important;left:70.8%!important;width:10.8%!important;
 }
 </style>
