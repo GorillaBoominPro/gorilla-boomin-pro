@@ -4349,14 +4349,23 @@ body.signal-booth-v2 .deckshell .jog.playing .centerdisc[data-mode="lcd"]>.lcd-w
    const disc=shell?.querySelector('.jog .centerdisc');
    const options=shell?.querySelector(':scope > .jog-screen-options');
    if(!disc||!options||disc.querySelector('.v58-display-toggle'))continue;
-   disc.appendChild(options);
+   // Keep all interactive display controls OUTSIDE the jog event target.
+   const dock=document.createElement('div');
+   dock.className='v63-display-dock';
+   dock.setAttribute('aria-label','Deck '+k+' display controls');
+   shell.appendChild(dock);
+   dock.appendChild(options);
    const toggle=document.createElement('button');
    toggle.type='button';toggle.className='v58-display-toggle';
    toggle.textContent='DISPLAY ▾';toggle.setAttribute('aria-expanded','false');
    toggle.setAttribute('aria-label','Jog display mode and artwork options');
    options.id=options.id||'signal-jog-options-'+k;
    toggle.setAttribute('aria-controls',options.id);
-   disc.appendChild(toggle);
+   dock.appendChild(toggle);
+   // Shield deck and jog pointer handlers from any display menu interaction.
+   for(const eventName of ['pointerdown','pointerup','mousedown','mouseup','touchstart','touchend','click','dblclick']){
+    dock.addEventListener(eventName,event=>event.stopPropagation());
+   }
    function setOpen(open){
     options.classList.toggle('v58-open',open);
     toggle.setAttribute('aria-expanded',String(open));
@@ -4374,4 +4383,45 @@ body.signal-booth-v2 .deckshell .jog.playing .centerdisc[data-mode="lcd"]>.lcd-w
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
-</body></html>
+<style id="signal-v63-external-display-dock">
+/* Static, independent deck control: nowhere inside the moving jog or center LCD.
+   Bottom-center position sits above the existing brand plaque in club views. */
+body.signal-booth-v2:not(.festival) .deckshell>.v63-display-dock{
+ position:absolute!important;left:51%!important;top:89.8%!important;
+ transform:translateX(-50%)!important;z-index:90!important;
+ width:auto!important;display:flex!important;align-items:center!important;
+ justify-content:center!important;pointer-events:auto!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.v63-display-dock>.v58-display-toggle{
+ position:relative!important;inset:auto!important;transform:none!important;
+ margin:0!important;z-index:2!important;
+ border:1px solid #697b88!important;border-radius:4px!important;
+ background:linear-gradient(#344454,#101923)!important;color:#ecf3fa!important;
+ box-shadow:0 2px 5px #000a!important;
+ font:800 10px/1 Arial,sans-serif!important;padding:5px 10px!important;
+ cursor:pointer!important;pointer-events:auto!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.v63-display-dock>.v58-display-toggle:focus-visible{
+ outline:2px solid white!important;outline-offset:2px!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.v63-display-dock>.jog-screen-options{
+ position:absolute!important;left:50%!important;right:auto!important;
+ bottom:calc(100% + 6px)!important;top:auto!important;
+ transform:translateX(-50%)!important;inset-block-start:auto!important;
+ width:max-content!important;max-width:240px!important;min-height:0!important;
+ display:flex!important;gap:4px!important;flex-wrap:wrap!important;
+ align-items:center!important;justify-content:center!important;
+ padding:6px!important;z-index:3!important;
+ border:1px solid #63869a!important;border-radius:5px!important;
+ background:#08131df5!important;box-shadow:0 3px 10px #000d!important;
+ pointer-events:auto!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.v63-display-dock>.jog-screen-options:not(.v58-open){display:none!important}
+body.signal-booth-v2:not(.festival) .deckshell>.v63-display-dock>.jog-screen-options select,
+body.signal-booth-v2:not(.festival) .deckshell>.v63-display-dock>.jog-screen-options button,
+body.signal-booth-v2:not(.festival) .deckshell>.v63-display-dock>.jog-screen-options label{
+ font:800 9px/1 Arial,sans-serif!important;padding:4px!important;
+ min-height:22px!important;cursor:pointer!important;
+}
+body.signal-booth-v2.festival .deckshell>.v63-display-dock{display:none!important}
+</style></body></html>
