@@ -3234,7 +3234,7 @@ function init(){
   }
   function group(host,label){const item=document.createElement('div');item.className='group';const title=document.createElement('strong');title.textContent=label;item.append(title);host.append(item);return item}
   const top=document.createElement('div');top.className='cdjx-face-hotcues';top.setAttribute('aria-label','Deck '+k+' hardware hot cue A through H');
-  const caption=document.createElement('div');caption.className='cdjx-face-hotcue-label';caption.textContent='HOT CUE · A–H';
+  const caption=document.createElement('div');caption.className='cdjx-face-hotcue-label';caption.textContent='HOT CUE';
   const pads=document.getElementById('pads-'+k);
   const colors=['#fa5f6e','#5ebcef','#c8dc51','#d2a7dd','#4ee4a2','#e6b14e','#477de7','#e5df82'];
   for(let i=0;i<8;i++){
@@ -3584,4 +3584,44 @@ body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-ends{
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
 </script>
-</body></html>
+
+<style id="signal-v36-hotcue-hardware">
+/* V36: reference-style A-H hardware pads, retained at their approved coordinates on both decks.
+   White/silver horizontal rails frame the HOT CUE legend. */
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-face-hotcue-label{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ gap:9px!important;white-space:nowrap!important;
+ color:#eef0f1!important;font:800 clamp(8px,.7vw,11px)/1 Arial,sans-serif!important;
+ letter-spacing:.05em!important;text-shadow:0 1px 2px #000b!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-face-hotcue-label:before,
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-face-hotcue-label:after{
+ content:""!important;display:block!important;flex:1 1 0!important;height:2px!important;
+ background:linear-gradient(180deg,#f3f4f4,#8f9aa4)!important;
+ box-shadow:0 1px 1px #000b!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-face-hotcues button{
+ position:relative!important;overflow:hidden!important;box-sizing:border-box!important;
+ display:flex!important;align-items:flex-start!important;justify-content:flex-start!important;
+ padding:clamp(3px,.45vw,7px) clamp(4px,.55vw,8px)!important;
+ border:2px solid #080a0d!important;border-radius:4px!important;
+ background:linear-gradient(160deg,#292b2f 0%,#15171b 53%,#0b0d10 100%)!important;
+ color:var(--cue-color,#c4d3e1)!important;
+ text-align:left!important;font:800 clamp(9px,.78vw,12px)/1 Arial,sans-serif!important;
+ box-shadow:inset 0 1px 1px #a4aab021,0 0 0 1px #50545a,0 2px 3px #000b!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-face-hotcues button:after{
+ content:""!important;position:absolute!important;left:15%!important;right:15%!important;
+ bottom:16%!important;height:clamp(2px,.24vw,4px)!important;
+ border-radius:2px!important;background:var(--cue-color,#d9dde0)!important;
+ box-shadow:0 0 3px color-mix(in srgb,var(--cue-color,#cdd),transparent 55%)!important;
+ pointer-events:none!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-face-hotcues button.is-set{
+ background:linear-gradient(160deg,#363e43 0%,#202b30 55%,#0c1218 100%)!important;
+ box-shadow:inset 0 1px 2px #ffffff3a,0 0 0 1px #777e86,0 0 6px var(--cue-color,#ccc)!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-face-hotcues button:focus-visible{
+ outline:2px solid white!important;outline-offset:2px!important;
+}
+</style></body></html>
