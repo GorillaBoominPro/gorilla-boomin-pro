@@ -3084,7 +3084,7 @@ function install(){
  const updateButtons=()=>{buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view||(b.dataset.view==='fullscreen'&&!!document.fullscreenElement))));fullButton.textContent=(view==='fullscreen'||document.fullscreenElement)?'⤡ EXIT FULLSCREEN':'⛶ FULLSCREEN'};
  function fit(){
   if(view!=='fit'&&view!=='fullscreen')return;
-  const parentWidth=viewport.clientWidth;
+  const parentWidth=view==='fullscreen'?Math.max(document.documentElement.clientWidth,window.innerWidth):viewport.clientWidth;
   // Minimum hardware width retains deck/mixer proportions and prevents media-query stacking.
   const baseWidth=1390; // One fixed design canvas across Fit Booth and Full Screen; only uniform scale changes.
   consoleEl.style.width=baseWidth+'px';
@@ -3095,14 +3095,14 @@ function install(){
   // Calculate real layout dimensions before applying the scale.
   const naturalHeight=Math.max(consoleEl.scrollHeight,consoleEl.getBoundingClientRect().height);
   const top=viewport.getBoundingClientRect().top;
-  const availableHeight=Math.max(320,document.documentElement.clientHeight-top-5);
+  const availableHeight=Math.max(320,(view==='fullscreen'?window.innerHeight:document.documentElement.clientHeight-top)-5);
   const widthScale=Math.min(1,parentWidth/baseWidth);
   const heightScale=Math.min(1,availableHeight/Math.max(1,naturalHeight));
   const scale=view==='fullscreen'?Math.max(.25,parentWidth/baseWidth):Math.max(.25,Math.min(widthScale,heightScale));
   const leftSpace=Math.max(0,(parentWidth-baseWidth*scale)/2);
   consoleEl.style.transform='translateX('+leftSpace+'px) scale('+scale+')';
   viewport.style.height=Math.ceil(naturalHeight*scale+3)+'px';
-  toolbar.querySelector('.signal-view-note').textContent=(view==='fullscreen'?'Full Screen '+Math.round(scale*100)+'% · Scroll for lower controls':'Fit '+Math.round(scale*100)+'% · Full booth on screen');
+  toolbar.querySelector('.signal-view-note').textContent=(view==='fullscreen'?'FULL DESKTOP '+Math.round(scale*100)+'% · Full width, scroll for lower controls':'Fit '+Math.round(scale*100)+'% · Full booth on screen');
  }
  function scheduleFit(){if(sizeScheduled)return;sizeScheduled=true;requestAnimationFrame(()=>{sizeScheduled=false;fit()})}
  function setView(next){
@@ -3700,5 +3700,49 @@ body.signal-booth-v2.signal-full-booth #signal-booth-viewport{overflow-x:hidden!
 body.signal-booth-v2.signal-full-booth #signal-booth-viewport>.console{transform-origin:top left!important}
 body.signal-booth-v2.signal-full-booth{overflow-x:hidden!important;overflow-y:auto!important}
 body.signal-booth-v2.signal-full-booth #signal-view-controls{position:relative!important}
+</style>
+
+<style id="signal-v44-real-full-desktop">
+/* V44: Full Desktop owns the full physical browser viewport, not the webpage's
+   1920px max-width main container or a centered Fit Booth wrapper. */
+body.signal-booth-v2.signal-full-booth{
+ margin:0!important;padding:0!important;
+ width:100vw!important;max-width:none!important;
+ height:100dvh!important;min-height:100dvh!important;
+ overflow:hidden!important;
+}
+body.signal-booth-v2.signal-full-booth main{
+ position:fixed!important;
+ inset:0!important;
+ margin:0!important;padding:0!important;
+ width:100vw!important;max-width:none!important;
+ height:100dvh!important;max-height:none!important;
+ overflow-x:hidden!important;overflow-y:auto!important;
+ background:#090d13!important;
+ z-index:100!important;
+ box-sizing:border-box!important;
+ scrollbar-width:thin;
+}
+body.signal-booth-v2.signal-full-booth #signal-view-controls{
+ position:sticky!important;top:0!important;
+ left:0!important;width:100%!important;max-width:none!important;
+ margin:0!important;box-sizing:border-box!important;
+ z-index:120!important;
+}
+body.signal-booth-v2.signal-full-booth #signal-booth-viewport{
+ position:relative!important;
+ margin:0!important;padding:0!important;
+ width:100vw!important;max-width:none!important;
+ overflow-x:hidden!important;overflow-y:visible!important;
+}
+body.signal-booth-v2.signal-full-booth #signal-booth-viewport>.console{
+ margin:0!important;transform-origin:top left!important;
+}
+/* Keep the real 1100px design deck and its controls, and scale
+   the entire fixed canvas uniformly so jog wheels remain circular. */
+body.signal-booth-v2.signal-full-booth .deckshell.deck-A,
+body.signal-booth-v2.signal-full-booth .deckshell.deck-B{
+ height:1100px!important;min-height:1100px!important;max-height:1100px!important;
+}
 </style>
 </body></html>
