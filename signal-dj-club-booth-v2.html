@@ -866,6 +866,31 @@ body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls{margin:4px 0!impor
 body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls button{min-height:22px!important;padding:3px!important}
 body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-bottom{padding:3px!important}
 @media(max-width:1250px){body.signal-booth-v2 .cdjx-main-wave{height:68px}}
+</style><style id="signal-cdjx-lcd-pro-v4">
+/* SIGNAL professional-player LCD: original visual treatment, hardware-familiar hierarchy. */
+body.signal-booth-v2 .signal-cdjx-screen{padding:6px!important;border-color:#39424f!important;box-shadow:inset 0 0 0 2px #050709,0 2px 12px #000!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-monitor-tag{font-size:8px;letter-spacing:.75px;margin-bottom:3px}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav{grid-template-columns:repeat(5,minmax(0,1fr))!important;margin:0 0 3px!important;gap:3px!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav button{min-height:23px!important;padding:2px!important;font-size:8px!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav button[aria-pressed=true]{border-color:#ec5067!important;background:#4b1726!important}
+body.signal-booth-v2 .cdjx-live-display{margin:3px 0!important;padding:5px!important}
+body.signal-booth-v2 .cdjx-live-header{font-size:10px;min-height:21px}
+body.signal-booth-v2 .cdjx-live-status{display:flex;gap:7px;justify-content:space-between;align-items:center;color:#abc6da;font-size:8px;padding:3px 1px}
+body.signal-booth-v2 .cdjx-live-status strong{color:#e9f2fb}
+body.signal-booth-v2 .cdjx-main-wave{height:79px!important;margin:3px 0!important}
+body.signal-booth-v2 .cdjx-overview-wave{height:21px!important}
+body.signal-booth-v2 .cdjx-live-display>small{font-size:8px!important;margin:2px!important}
+body.signal-booth-v2 .cdjx-live-key{font-size:8px}
+body.signal-booth-v2 .cdjx-extra-controls{grid-template-columns:repeat(2,minmax(0,1fr));max-height:58px!important}
+body.signal-booth-v2 .cdjx-extra-controls label{font-size:7px}
+body.signal-booth-v2 .cdjx-extra-controls .cdjx-memory{font-size:8px}
+body.signal-booth-v2 .cdjx-screen-bottom{font-size:8px!important}
+body.signal-booth-v2 .cdjx-screen-bottom button{font-size:8px!important;padding:3px!important}
+body.signal-booth-v2 .cdjx-screen-grid{gap:3px!important}
+body.signal-booth-v2 .cdjx-screen-grid b{font-variant-numeric:tabular-nums}
+body.signal-booth-v2 .cdjx-screen-grid .cdjx-remaining{font-size:10px;color:#afd9f7}
+body.signal-booth-v2 .cdjx-screen-grid .cdjx-time{color:#fff}
+body.signal-booth-v2 .cdjx-screen-grid .cdjx-bpm{color:#ffdf8c}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -1925,7 +1950,7 @@ function initLCD(){
   const monitor=document.querySelector('.deck-'+k+' .signal-cdjx-screen');
   if(!monitor||monitor.querySelector('.cdjx-live-display'))continue;
   const live=document.createElement('section');live.className='cdjx-live-display';
-  live.innerHTML='<div class="cdjx-live-header"><strong class="cdjx-live-name">NO TRACK LOADED</strong><span class="cdjx-live-key">KEY —</span></div><canvas class="cdjx-main-wave" width="640" height="112" aria-label="Live scrolling track waveform"></canvas><canvas class="cdjx-overview-wave" width="640" height="36" aria-label="Whole-track overview waveform"></canvas><small>BEAT GRID · AUDIO ANALYSIS PREVIEW</small>';
+  live.innerHTML='<div class="cdjx-live-header"><strong class="cdjx-live-name">NO TRACK LOADED</strong><span class="cdjx-live-key">KEY —</span></div><div class="cdjx-live-status"><span>DECK '+k+'</span><span class="cdjx-remaining">REMAIN --:--</span><strong>LIVE WAVEFORM</strong></div><canvas class="cdjx-main-wave" width="640" height="112" aria-label="Live scrolling track waveform"></canvas><canvas class="cdjx-overview-wave" width="640" height="36" aria-label="Whole-track overview waveform"></canvas><small>BEAT GRID · AUDIO ANALYSIS PREVIEW</small>';
   monitor.querySelector('.cdjx-track')?.insertAdjacentElement('afterend',live);
   const canvas=live.querySelector('.cdjx-main-wave'),overview=live.querySelector('.cdjx-overview-wave');
   let cachedBuffer=null,peaks=null,readAt=0;
@@ -1938,6 +1963,7 @@ function initLCD(){
    const deck=api?.getDecks?.()?.[k],audio=deck?.audio,buffer=deck?.scratchBuffer,name=document.getElementById('name-'+k);
    const title=audio?.src?(name?.textContent||'LOADED TRACK'):'NO TRACK LOADED';
    live.querySelector('.cdjx-live-name').textContent=title.replace(/\s*[✦◆•]\s*\d+(?:\.\d+)?\s*BPM.*$/i,'').trim();
+   const rem=Math.max(0,(audio?.duration||0)-(audio?.currentTime||0));const rs=Number.isFinite(rem)?'-'+String(Math.floor(rem/60)).padStart(2,'0')+':'+String(Math.floor(rem%60)).padStart(2,'0'):'--:--';live.querySelector('.cdjx-remaining').textContent='REMAIN '+(audio?.src?rs:'--:--');
    if(buffer&&buffer!==cachedBuffer)prepare(buffer);
    if(!buffer&&cachedBuffer){cachedBuffer=null;peaks=null}
    const position=deck?.scratchPosition??audio?.currentTime??0;
@@ -1946,9 +1972,9 @@ function initLCD(){
     if(!peaks||!buffer){g.fillStyle='#8299af';g.font='12px sans-serif';g.textAlign='center';g.fillText(audio?.src?'PREPARING AUDIO WAVEFORM':'LOAD TRACK TO SEE WAVEFORM',w/2,h/2);return}
     const duration=buffer.duration||1,span=isOverview?duration:12,half=h/2,base=isOverview?0:position-span/2;
     for(let x=0;x<w;x+=2){const at=base+x/w*span;if(at<0||at>duration)continue;const idx=Math.max(0,Math.min(peaks.length-1,Math.floor(at/duration*peaks.length))),amp=Math.max(1,peaks[idx]*half*.94);
-     g.fillStyle=at<position?'#f1b64b':'#46a6f5';g.fillRect(x,half-amp,2,amp*2);
+     const beatHue=Math.floor(at*3)%3;g.fillStyle=at<position?(beatHue===0?'#f7d15e':'#ed9d38'):(beatHue===0?'#73e4ef':beatHue===1?'#469cf2':'#886de9');g.fillRect(x,half-amp,2,amp*2);
     }
-    g.fillStyle='#fff';if(isOverview){g.fillRect(Math.min(w-2,position/duration*w),0,2,h)}else{g.fillRect(w/2-1,0,2,h);g.strokeStyle='#53627460';g.beginPath();g.moveTo(0,half);g.lineTo(w,half);g.stroke()}
+    if(!isOverview){const bpm=Math.max(40,Number(document.getElementById('manual-'+k)?.value)||128),beat=60/bpm;g.lineWidth=1;for(let n=Math.floor(base/beat);n<=Math.ceil((base+span)/beat);n++){const x=(n*beat-base)/span*w;if(x<0||x>w)continue;g.strokeStyle=n%4===0?'#f4db8a72':'#789ab433';g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke()}}g.fillStyle='#fff';if(isOverview){g.fillRect(Math.min(w-2,position/duration*w),0,2,h)}else{g.fillRect(w/2-1,0,2,h);g.strokeStyle='#53627460';g.beginPath();g.moveTo(0,half);g.lineTo(w,half);g.stroke()}
    }
    render(canvas,false);render(overview,true);
   }
