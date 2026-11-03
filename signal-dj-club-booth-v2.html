@@ -6801,4 +6801,144 @@ body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-bottom button{
  }
 }
 </style>
+
+<style id="signal-v90-lcd-performance-layout">
+/* V90: only LCD content; preserve the deck enclosure, mixer, V85 faders
+   and the physical controls. Compact utilitarian performance hierarchy. */
+body.signal-booth-v2 .deckshell>.signal-cdjx-screen{
+ display:flex!important;flex-direction:column!important;
+ box-sizing:border-box!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-monitor-tag{
+ flex:0 0 auto!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav{
+ flex:0 0 auto!important;margin-bottom:4px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-display{
+ flex:0 0 auto!important;margin:3px 0!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-main-wave{
+ height:104px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-overview-wave{
+ height:22px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid{
+ flex:0 0 auto!important;margin:4px 0 3px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid>div{
+ padding:3px 2px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls{
+ display:grid!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:2px 4px!important;
+ flex:0 0 auto!important;
+ overflow:visible!important;
+ max-height:none!important;
+ padding:3px 4px!important;
+ margin:2px 0!important;
+ border:1px solid #28323d!important;
+ border-radius:1px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls>label{
+ grid-column:1/-1!important;
+ font-size:7px!important;
+ line-height:1.1!important;
+ letter-spacing:.3px!important;
+ padding:0!important;margin:0!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls>button{
+ min-height:20px!important;height:20px!important;
+ padding:1px 3px!important;
+ border-radius:1px!important;
+ font-size:8px!important;
+ line-height:1!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-memory{
+ grid-column:1/-1!important;
+ display:grid!important;
+ grid-template-columns:auto minmax(0,1fr) 25px 25px auto!important;
+ align-items:center!important;gap:4px!important;
+ min-height:20px!important;font-size:7px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-memory>button{
+ width:auto!important;min-width:23px!important;
+ min-height:20px!important;height:20px!important;
+ padding:1px 3px!important;
+ font-size:7px!important;line-height:1!important;
+ border-radius:1px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-memory>.cdjx-memory-readout{
+ min-width:0!important;overflow:hidden!important;
+ white-space:nowrap!important;text-overflow:ellipsis!important;
+ font-size:7px!important;color:#aab9c6!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-bottom{
+ padding:3px 2px!important;margin:2px 0!important;
+ flex:0 0 auto!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v90-player-status{
+ display:flex!important;justify-content:space-between!important;
+ align-items:center!important;gap:7px!important;
+ margin-top:auto!important;
+ padding:5px 4px 2px!important;
+ border-top:1px solid #35404a!important;
+ color:#97a8b6!important;
+ background:linear-gradient(180deg,#0c1219,#070b11)!important;
+ font:700 8px/1.1 Arial,sans-serif!important;
+ letter-spacing:.25px!important;
+ white-space:nowrap!important;
+ flex:0 0 auto!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v90-player-status span{
+ overflow:hidden!important;text-overflow:ellipsis!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v90-player-status .v90-state{
+ color:#c0d3e0!important;
+}
+@media(max-width:1250px){
+ body.signal-booth-v2 .signal-cdjx-screen .cdjx-main-wave{height:70px!important}
+ body.signal-booth-v2 .signal-cdjx-screen .cdjx-overview-wave{height:17px!important}
+ body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls{gap:1px 3px!important}
+ body.signal-booth-v2 .signal-cdjx-screen .v90-player-status{font-size:7px!important;padding-top:3px!important}
+}
+</style>
+<script id="signal-v90-lcd-performance-layout-script">
+(()=>{
+ function setup(){
+  for(const k of ['A','B']){
+   const monitor=document.querySelector('.deck-'+k+' .signal-cdjx-screen');
+   const audio=document.getElementById('audio-'+k);
+   if(!monitor||!audio||monitor.dataset.v90Ready)continue;
+   monitor.dataset.v90Ready='1';
+   const strip=document.createElement('div');
+   strip.className='v90-player-status';
+   strip.setAttribute('aria-label','Deck '+k+' playback and cue status');
+   strip.innerHTML='<span class="v90-state">READY</span><span class="v90-duration">--:-- / --:--</span><span class="v90-cues">CUES 0</span>';
+   monitor.appendChild(strip);
+   const state=strip.querySelector('.v90-state');
+   const duration=strip.querySelector('.v90-duration');
+   const cues=strip.querySelector('.v90-cues');
+   function fmt(sec){
+    if(!Number.isFinite(sec)||sec<0)return '--:--';
+    return String(Math.floor(sec/60)).padStart(2,'0')+':'+String(Math.floor(sec%60)).padStart(2,'0');
+   }
+   function update(){
+    const loaded=!!audio.currentSrc;
+    state.textContent=!loaded?'READY':audio.ended?'ENDED':audio.paused?'PAUSED':'PLAYING';
+    duration.textContent=loaded?fmt(audio.currentTime)+' / '+fmt(audio.duration):'--:-- / --:--';
+    const list=monitor.signalCueMemories||[];
+    cues.textContent='MEM '+list.length;
+   }
+   for(const event of ['loadedmetadata','timeupdate','play','pause','ended','emptied','seeking'])audio.addEventListener(event,update);
+   const controls=monitor.querySelector('.cdjx-extra-controls');
+   controls?.addEventListener('click',()=>requestAnimationFrame(update));
+   update();
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
+})();
+</script>
 </body></html>
