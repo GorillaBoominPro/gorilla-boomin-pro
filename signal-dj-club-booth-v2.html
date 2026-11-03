@@ -2971,8 +2971,14 @@ function initLCD(){
     // upcoming section remains neutral/dark; move together with actual playhead.
     if(isOverview){
      const progressX=Math.min(w,Math.max(0,position/duration*w));
-     g.fillStyle=k==='A'?'#082a46':'#38200d';g.fillRect(0,0,progressX,h);
-     g.fillStyle=k==='A'?'#07131f':'#19110c';g.fillRect(progressX,0,w-progressX,h);
+     // Played region is a clear, tinted strip; unplayed region is neutral charcoal.
+     // Use the selected deck palette for the playback trail, not a matching
+     // low-contrast tint on both sides of the pointer.
+     const selected=window.signalLCDPalette?.get?.(k);
+     const playedBg=selected?.overview?.[0]|| (k==='A'?'#008bc9':'#ed8527');
+     g.fillStyle='#080c13';g.fillRect(0,0,w,h);
+     g.fillStyle=playedBg;g.globalAlpha=.27;g.fillRect(0,0,progressX,h);
+     g.globalAlpha=1;
     }
     const bpm=Number(document.getElementById('manual-'+k)?.value);
     // A restrained, thin beat-grid. Timing is based on the user's BPM setting,
@@ -3001,10 +3007,12 @@ function initLCD(){
       const played=at<=position;
       const p=window.signalLCDPalette?.get?.(k);
       const o=p?.overview||(k==='A'?['#008bc9','#55daff','#1c4266','#487c9b']:['#ed8527','#ffc36e','#66401e','#926638']);
-      g.fillStyle=played?o[0]:o[2];
+      // Bright full palette on PLAYED side, clearly grey/dim on REMAINING side.
+      // This also works with custom purple/green/red/white palettes.
+      g.fillStyle=played?o[0]:'#465569';
       g.fillRect(x,mid-amp,1,2*amp);
       const detail=Math.min(amp,Math.max(.55,(energy*.55+mids*.6+hi*.45)*mid*.5));
-      g.fillStyle=played?o[1]:o[3];
+      g.fillStyle=played?o[1]:'#738496';
       g.fillRect(x,mid-detail,1,2*detail);
       continue;
      }
@@ -3045,7 +3053,7 @@ function initLCD(){
     if(isOverview){
      const xp=Math.min(w-4,Math.max(2,position/duration*w));
      // Distinct visible cursor with dark outline and small arrow head.
-     g.fillStyle='#04070b';g.fillRect(Math.round(xp)-2,0,6,h);
+     g.fillStyle='#04070b';g.fillRect(Math.round(xp)-3,0,7,h);
      g.fillStyle='#f8fdff';g.fillRect(Math.round(xp)-1,0,3,h);
      g.fillStyle='#ff5266';g.beginPath();
      g.moveTo(xp-6,0);g.lineTo(xp+6,0);g.lineTo(xp,7);g.closePath();g.fill();
@@ -7425,4 +7433,13 @@ body.signal-booth-v2 .deckshell.deck-B .signal-cdjx-screen .cdjx-overview-wave{
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
 })();
 </script>
+
+<style id="signal-v99-overview-played-contrast">
+/* Make the moving playback color boundary obvious on BOTH small LCD overviews.
+   Does not change the full-size waveform, custom palettes or physical hardware. */
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-overview-wave{
+ border:1px solid #697b8b!important;
+ box-shadow:inset 0 0 0 1px #050a0f!important;
+}
+</style>
 </body></html>
