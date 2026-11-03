@@ -3491,6 +3491,23 @@ body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog{
 .signal-v33-jog .v33-knob:focus-visible,.signal-v33-memory button:focus-visible{outline:2px solid white;outline-offset:3px}
 .signal-v33-jog .v33-ends{display:flex;justify-content:space-between;gap:3px;width:100%;font-size:clamp(7px,.63vw,9px)}
 body.signal-booth-v2.festival .signal-v33-memory,body.signal-booth-v2.festival .signal-v33-jog{display:none!important}
+
+/* V35: position JOG FEEL in the free metal shoulder, OUTSIDE the platter.
+   Matched on deck A and B; preserve A-H, cue call, delete, memory and wheel positions. */
+body.signal-booth-v2:not(.festival) .deckshell.deck-A>.signal-v33-jog,
+body.signal-booth-v2:not(.festival) .deckshell.deck-B>.signal-v33-jog{
+ top:48.1%!important;left:81.5%!important;width:10.5%!important;
+ gap:2px!important;z-index:29!important;
+ font-size:clamp(7px,.65vw,10px)!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-dial{
+ width:clamp(29px,3vw,40px)!important;height:clamp(29px,3vw,40px)!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-knob{
+ width:clamp(23px,2.35vw,32px)!important;height:clamp(23px,2.35vw,32px)!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-knob:before{height:8px!important}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v33-jog .v33-ends{font-size:clamp(6px,.5vw,8px)!important;gap:1px!important}
 </style>
 <script id="signal-v34-matching-both-decks-script">
 (()=>{
