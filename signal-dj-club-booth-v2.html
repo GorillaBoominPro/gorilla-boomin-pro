@@ -4140,4 +4140,123 @@ body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(6)>
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button.wide::after{
  content:none!important;display:none!important;
 }
-</style></body></html>
+</style><style id="signal-v57-reference-loop-rows">
+/* Reference-matched white rail segments, two genuinely separate adjust plaques,
+   and plain numeric loop buttons. Scoped only to the lower-left club hardware. */
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1),
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2){
+ width:159%!important;max-width:none!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1){
+ grid-template-rows:12px clamp(24px,2.5vw,34px) 16px!important;
+ column-gap:6px!important;row-gap:4px!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button:nth-of-type(-n+2)::after{
+ content:none!important;display:none!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .v57-adjust-label{
+ position:absolute;z-index:3;top:0;left:0;
+ color:#252729;background:#d5d7da;border:1px solid #aeb1b6;border-radius:2px;
+ padding:2px 3px;white-space:nowrap;text-align:center;
+ font:800 clamp(5px,.43vw,7px)/1 Arial,sans-serif;
+ box-shadow:0 1px 2px #0008;pointer-events:none;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .v57-rail{
+ position:absolute!important;z-index:0!important;height:2px!important;
+ background:linear-gradient(#eef0f2,#a2aab3)!important;
+ box-shadow:0 0 2px #dce5ee88!important;pointer-events:none!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .v57-end-label{
+ position:absolute!important;z-index:2!important;
+ color:#e7e8eb!important;font:800 clamp(6px,.55vw,9px)/1 Arial,sans-serif!important;
+ white-space:nowrap!important;pointer-events:none!important;
+ text-shadow:0 1px 2px #000!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2){
+ grid-template-columns:1fr 1fr 1.2fr!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>strong{
+ white-space:nowrap!important;align-self:center!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>button.round{
+ font-size:0!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>button.round::before{
+ content:attr(data-v57-number)!important;position:absolute!important;
+ top:50%;left:50%;transform:translate(-50%,-50%)!important;
+ color:#efbe39;font:900 clamp(12px,1vw,16px)/1 Arial,sans-serif!important;
+ pointer-events:none!important;
+}
+</style>
+<script id="signal-v57-reference-loop-rows-script">
+(()=>{
+ function init(){
+  const decks=['A','B'].map(k=>{
+   const shell=document.querySelector('.deckshell.deck-'+k);
+   const panel=shell?.querySelector(':scope > .cdjx-face-cluster.left');
+   const rows=panel?.querySelectorAll(':scope > .group');
+   if(!shell||!rows||rows.length<2)return null;
+   const top=rows[0],beat=rows[1];
+   const loopButtons=[...top.querySelectorAll(':scope > button')];
+   const beatButtons=[...beat.querySelectorAll(':scope > button')];
+   if(loopButtons.length!==3||beatButtons.length!==2)return null;
+   function add(parent,cls,text){
+    const n=document.createElement('span');n.className=cls;
+    if(text)n.textContent=text;n.setAttribute('aria-hidden','true');parent.append(n);return n;
+   }
+   const topLines=[add(top,'v57-rail'),add(top,'v57-rail'),add(top,'v57-rail')];
+   const adjust=[add(top,'v57-adjust-label','IN ADJUST'),add(top,'v57-adjust-label','OUT ADJUST')];
+   const loopLabel=add(top,'v57-end-label','LOOP');
+   const beatLines=[add(beat,'v57-rail'),add(beat,'v57-rail')];
+   beatButtons.forEach((button,i)=>button.dataset.v57Number=String(i===0?4:8));
+   return {top,beat,loopButtons,beatButtons,topLines,adjust,loopLabel,beatLines};
+  }).filter(Boolean);
+  function draw(){
+   const active=!document.body.classList.contains('festival');
+   for(const item of decks){
+    const {top,beat,loopButtons,beatButtons,topLines,adjust,loopLabel,beatLines}=item;
+    [...topLines,...beatLines,...adjust,loopLabel].forEach(n=>n.hidden=!active);
+    if(!active)continue;
+    const box=(parent,el)=>{
+     const p=parent.getBoundingClientRect(),r=el.getBoundingClientRect();
+     const f=parent.offsetWidth/Math.max(1,p.width);
+     return {left:(r.left-p.left)*f,right:(r.right-p.left)*f,center:(r.left+r.width/2-p.left)*f,y:(r.top+r.height/2-p.top)*f,bottom:(r.bottom-p.top)*f};
+    };
+    const seg=(line,x1,x2,y)=>{
+     line.style.left=Math.min(x1,x2)+'px';line.style.width=Math.max(0,Math.abs(x2-x1))+'px';
+     line.style.top=(y-1)+'px';
+     line.hidden=x2-x1<3;
+    };
+    const a=loopButtons.map(b=>box(top,b));
+    const gap=3;
+    seg(topLines[0],a[0].right+gap,a[1].left-gap,a[0].y);
+    seg(topLines[1],a[1].right+gap,a[2].left-gap,a[1].y);
+    const labelX=Math.max(a[2].right+22,top.offsetWidth+6);
+    loopLabel.style.left=labelX+'px';loopLabel.style.top=(a[2].y-5)+'px';
+    seg(topLines[2],a[2].right+gap,labelX-5,a[2].y);
+    adjust.forEach((label,i)=>{
+     const midpoint=a[i].center;
+     label.style.top=(a[i].bottom+4)+'px';
+     label.style.left=midpoint+'px';
+     label.style.transform='translateX(-50%)';
+    });
+    const b=beatButtons.map(btn=>box(beat,btn));
+    const title=beat.querySelector(':scope > strong');
+    if(title){
+     const t=box(beat,title);
+     seg(beatLines[0],b[0].right+3,b[1].left-3,b[0].y);
+     seg(beatLines[1],b[1].right+3,t.left-4,b[1].y);
+    }
+   }
+  }
+  let scheduled=false;
+  function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;draw()})}
+  schedule();window.addEventListener('resize',schedule,{passive:true});
+  window.addEventListener('load',schedule,{once:true});
+  document.querySelectorAll('#signal-view-controls button,#booth-club,#booth-festival').forEach(b=>b.addEventListener('click',schedule));
+  if(window.ResizeObserver){const ro=new ResizeObserver(schedule);decks.forEach(({top,beat})=>{ro.observe(top);ro.observe(beat)})}
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+</body></html>
