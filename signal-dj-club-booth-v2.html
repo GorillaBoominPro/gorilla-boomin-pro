@@ -1203,6 +1203,77 @@ body.signal-booth-v2 .cdjx-authentic-right .cdjx-master-tempo-lamp{height:29px!i
 body.signal-booth-v2 .cdjx-authentic-right .cdjx-master-tempo-lamp span{width:9px;height:9px;background:#eb3d3c;box-shadow:0 0 5px #e43c3b;border-radius:50%}
 body.signal-booth-v2 .cdjx-authentic-right .cdjx-master-tempo small{font-size:6px;color:#9dabbb}
 body.signal-booth-v2 .cdjx-authentic-right button:focus-visible{outline:2px solid #fff!important;outline-offset:1px}
+</style><style id="signal-pad-tempo-layout-v19">
+/* Move bottom pad dock down and left; provide long dedicated physical tempo lane to the right.
+   Keep the native #speed-A/B input and its existing playback-rate wiring. */
+body.signal-booth-v2 .deckshell>.signal-cdjx-pad-dock{
+ position:absolute!important;
+ top:auto!important;bottom:.35%!important;left:1.2%!important;right:17.8%!important;
+ width:auto!important;height:21.0%!important;min-height:0!important;max-height:none!important;
+ padding:5px 7px 2px!important;margin:0!important;box-sizing:border-box!important;
+ z-index:14!important;overflow:visible!important;
+}
+body.signal-booth-v2 .deckshell>.signal-cdjx-pad-dock .pad-bank{height:100%!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;padding:0!important;margin:0!important;min-height:0!important}
+body.signal-booth-v2 .deckshell>.signal-cdjx-pad-dock .pad-modes{flex:none!important;margin-bottom:4px!important;gap:3px!important}
+body.signal-booth-v2 .deckshell>.signal-cdjx-pad-dock .pad-modes button{min-height:26px!important;font-size:8px!important}
+body.signal-booth-v2 .deckshell>.signal-cdjx-pad-dock .padinfo{flex:none!important;height:16px!important;min-height:16px!important;margin:0 0 4px!important;font-size:8px!important}
+body.signal-booth-v2 .deckshell>.signal-cdjx-pad-dock .pads{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:repeat(2,minmax(0,1fr))!important;flex:1!important;min-height:105px!important;gap:6px!important;margin:0!important}
+body.signal-booth-v2 .deckshell>.signal-cdjx-pad-dock .pads button{height:100%!important;min-height:48px!important;max-height:none!important;padding:1px!important;box-sizing:border-box!important}
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo{
+ position:absolute!important;left:auto!important;right:1.25%!important;top:64.7%!important;
+ bottom:.35%!important;height:auto!important;max-height:none!important;
+ width:15.5%!important;min-width:0!important;z-index:18!important;
+ padding:7px 4px 8px!important;display:flex!important;flex-direction:column!important;
+ align-items:center!important;justify-content:space-between!important;gap:5px!important;
+ border:2px solid #596471!important;border-radius:5px!important;
+ background:linear-gradient(90deg,#202832 0%,#0d131a 25%,#18212a 50%,#0d131a 75%,#303945 100%)!important;
+ box-shadow:inset 0 0 0 1px #06090c,0 3px 9px #0008!important;pointer-events:auto!important;
+}
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo:before{
+ content:'';pointer-events:none;position:absolute;top:36px;bottom:32px;left:50%;
+ width:9px;transform:translateX(-50%);
+ background:linear-gradient(90deg,#65707a,#15191e 37%,#070a0e 42% 58%,#15191e 63%,#606c76);
+ border:1px solid #8291a2;border-radius:2px;
+ box-shadow:0 0 0 5px #101820,inset 0 0 4px #000;
+}
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo:after{
+ content:'';pointer-events:none;position:absolute;top:40px;bottom:36px;right:10%;
+ width:7px;
+ background:repeating-linear-gradient(to bottom,#bac3cc99 0 1px,transparent 1px 12px);
+}
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo>label{
+ color:#eaf1f7!important;font-size:9px!important;font-weight:800!important;letter-spacing:.8px!important;
+ text-align:center!important;z-index:3!important;
+}
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo>output{
+ position:relative!important;z-index:3!important;color:#eff4f9!important;
+ font-size:10px!important;font-variant-numeric:tabular-nums!important;
+ background:#080d14;border:1px solid #4c5d6d;border-radius:2px;padding:2px 5px;
+}
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo input[type=range]{
+ appearance:none!important;-webkit-appearance:none!important;
+ writing-mode:vertical-lr!important;direction:rtl!important;
+ height:calc(100% - 76px)!important;min-height:180px!important;
+ width:100%!important;max-width:48px!important;flex:1!important;
+ margin:0!important;padding:0!important;z-index:4!important;
+ border:0!important;background:transparent!important;accent-color:#dce3ea!important;
+ cursor:ns-resize!important;touch-action:none;
+}
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo input[type=range]::-webkit-slider-runnable-track{
+ width:12px!important;background:linear-gradient(90deg,#424d58,#070b11 42% 58%,#596775)!important;
+ border:1px solid #6e7b86;border-radius:3px;box-shadow:inset 0 0 3px #000;
+}
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo input[type=range]::-webkit-slider-thumb{
+ -webkit-appearance:none!important;appearance:none!important;
+ width:40px!important;height:21px!important;border:2px solid #76848f!important;
+ border-radius:3px!important;
+ background:linear-gradient(to bottom,#f4f5f6 0%,#b5c0c9 33%,#505a65 43%,#303a43 50%,#dadfe3 59%,#c0c7cf 100%)!important;
+ box-shadow:0 2px 6px #000e,inset 0 0 0 1px #e5edf3!important;
+}
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo input[type=range]::-moz-range-thumb{
+ width:40px;height:21px;border:2px solid #76848f;border-radius:3px;background:#c5cdd5;
+}
+body.signal-booth-v2 .deckshell>.pitchrail.cdjx-long-tempo input[type=range]:focus-visible{outline:2px solid white!important;outline-offset:2px}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -2684,4 +2755,19 @@ function init(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
-</script><script id="signal-cdjx-vinyl-speed-placement-v18">(()=>{const remove=()=>document.querySelectorAll('.cdjx-vinyl-adjust').forEach(el=>el.remove());if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',remove,{once:true});else remove()})();</script></body></html>
+</script><script id="signal-cdjx-vinyl-speed-placement-v18">(()=>{const remove=()=>document.querySelectorAll('.cdjx-vinyl-adjust').forEach(el=>el.remove());if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',remove,{once:true});else remove()})();</script><script id="signal-pad-tempo-layout-v19-script">
+(()=>{
+function init(){
+ for(const k of ['A','B']){
+  const shell=document.querySelector('.deckshell.deck-'+k),fader=document.querySelector('#speed-'+k)?.closest('.pitchrail');
+  if(!shell||!fader||fader.classList.contains('cdjx-long-tempo'))continue;
+  // Reparent the existing physical tempo input, not a second dummy fader:
+  // its unchanged ID, input event handler and playback-rate control stay active.
+  fader.classList.add('cdjx-long-tempo');
+  fader.setAttribute('aria-label','Deck '+k+' long tempo fader');
+  shell.append(fader);
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script></body></html>
