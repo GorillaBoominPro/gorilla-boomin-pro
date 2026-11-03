@@ -3723,4 +3723,58 @@ body.signal-booth-v2:not(.festival) .deckshell.deck-B>.cdjx-face-hotcues button:
  height:2px!important;
 }
 </style>
+<style id="signal-v52-tempo-reset-zero-alignment">
+/* Club Deck A/B only: bring TEMPO RESET toward the 0 marker.
+   This does not change the tempo fader, input events, or any deck scaling. */
+body.signal-booth-v2:not(.festival) .deckshell.deck-A>.cdjx-tempo-reset-wrap,
+body.signal-booth-v2:not(.festival) .deckshell.deck-B>.cdjx-tempo-reset-wrap{
+ left:76%!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v52-zero-line{
+ position:absolute;height:2px;z-index:27;pointer-events:none;
+ background:linear-gradient(to bottom,#fff,#afb6be);
+ box-shadow:0 0 2px #dce5ee88;
+}
+</style>
+<script id="signal-v52-tempo-reset-zero-alignment-script">
+(()=>{
+ function setup(){
+  const items=['A','B'].map(k=>{
+   const shell=document.querySelector('.deckshell.deck-'+k);
+   if(!shell)return null;
+   const wrap=shell.querySelector(':scope > .cdjx-tempo-reset-wrap');
+   const button=wrap?.querySelector('button');
+   const zero=shell.querySelector(':scope > .pitchrail.cdjx-long-tempo .cdjx-tempo-label.zero');
+   if(!wrap||!button||!zero)return null;
+   const line=document.createElement('span');line.className='signal-v52-zero-line';
+   line.setAttribute('aria-hidden','true');shell.append(line);
+   return {shell,wrap,button,zero,line};
+  }).filter(Boolean);
+  function layout(){
+   for(const {shell,wrap,button,zero,line} of items){
+    if(document.body.classList.contains('festival')){line.hidden=true;wrap.style.removeProperty('transform');continue;}
+    wrap.style.setProperty('transform','none','important');
+    const sr=shell.getBoundingClientRect(),br=button.getBoundingClientRect(),zr=zero.getBoundingClientRect();
+    if(!sr.width||!br.width||!zr.width)continue;
+    const factor=shell.offsetWidth/sr.width;
+    const dy=(zr.top+zr.height/2)-(br.top+br.height/2);
+    wrap.style.setProperty('transform','translateY('+(dy*factor)+'px)','important');
+    // Draw the dash right up to the existing 0 label; do not duplicate the label.
+    const x1=(br.right-sr.left)*factor+4;
+    const x2=(zr.left-sr.left)*factor-4;
+    line.hidden=x2<=x1;
+    line.style.left=x1+'px';line.style.top=((zr.top+zr.height/2-sr.top)*factor-1)+'px';
+    line.style.width=Math.max(0,x2-x1)+'px';
+   }
+  }
+  let queued=false;
+  function schedule(){if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;layout()})}
+  schedule();window.addEventListener('resize',schedule,{passive:true});
+  window.addEventListener('load',schedule,{once:true});
+  document.querySelectorAll('#signal-view-controls button,[id^="booth-"]').forEach(el=>el.addEventListener('click',schedule));
+  if(window.ResizeObserver){const ob=new ResizeObserver(schedule);items.forEach(({shell})=>ob.observe(shell))}
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
+})();
+</script>
 </body></html>
