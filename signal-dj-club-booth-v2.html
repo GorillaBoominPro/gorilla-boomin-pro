@@ -6226,4 +6226,34 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-mic>.v78-reverb-group{
  }
 }
 </style>
+
+<style id="signal-v81-four-channel-color-ring-meters">
+/* V81: Dedicated visible white calibration ring around COLOR rotary on CH 1–4 ONLY.
+   Leave rotary pointer (::after), sound handlers, other EQ knobs and mixer geometry intact. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-color-zone{
+ overflow:visible!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-color-zone .knobWrap:has(.rotary-control){
+ position:relative!important;overflow:visible!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-color-zone .knob.rotary-control{
+ position:relative!important;overflow:visible!important;isolation:isolate!important;
+}
+/* Ring-meter tick scale: crisp white engraved strokes, not a thick white solid border. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-color-zone .knob.rotary-control::before{
+ content:""!important;display:block!important;
+ position:absolute!important;z-index:0!important;
+ inset:-13px!important;border-radius:50%!important;
+ background:repeating-conic-gradient(from -135deg,#f8fbff 0deg 2.3deg,transparent 2.5deg 15deg)!important;
+ -webkit-mask-image:radial-gradient(circle,transparent 0 66%,#000 68% 73%,transparent 76%)!important;
+ mask-image:radial-gradient(circle,transparent 0 66%,#000 68% 73%,transparent 76%)!important;
+ opacity:1!important;pointer-events:none!important;
+ filter:drop-shadow(0 0 1px #ffffffaa)!important;
+}
+@media(max-width:1320px){
+ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v73-color-zone .knob.rotary-control::before{
+  inset:-10px!important;
+ }
+}
+</style>
 </body></html>
