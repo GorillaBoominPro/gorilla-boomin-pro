@@ -2908,9 +2908,20 @@ function initLCD(){
   const canvas=live.querySelector('.cdjx-main-wave'),overview=live.querySelector('.cdjx-overview-wave');
   let cachedBuffer=null,peaks=null,readAt=0;
   function prepare(buffer){
-   cachedBuffer=buffer;const raw=buffer.getChannelData(0),count=3500,step=Math.max(1,Math.floor(raw.length/count));
+   cachedBuffer=buffer;const raw=buffer.getChannelData(0);
+   // High-resolution peak pyramid: ~95 envelopes per audio second, rather than
+   // 3,500 for a whole song (which produced the square, toy-like blocks).
+   const count=Math.max(12000,Math.min(95000,Math.ceil(buffer.duration*95)));
+   const step=Math.max(1,raw.length/count);
    peaks=new Float32Array(count);
-   for(let i=0;i<count;i++){let peak=0;const start=i*step,end=Math.min(raw.length,start+step),inc=Math.max(1,Math.floor(step/34));for(let j=start;j<end;j+=inc)peak=Math.max(peak,Math.abs(raw[j]));peaks[i]=peak}
+   for(let i=0;i<count;i++){
+    const start=Math.floor(i*step),end=Math.min(raw.length,Math.floor((i+1)*step));
+    let peak=0,energy=0,samples=0;
+    const inc=Math.max(1,Math.floor((end-start)/28));
+    for(let j=start;j<end;j+=inc){const a=Math.abs(raw[j]);peak=Math.max(peak,a);energy+=a*a;samples++}
+    const rms=Math.sqrt(energy/Math.max(1,samples));
+    peaks[i]=Math.min(1,peak*.65+rms*.35);
+   }
   }
   function draw(){
    const deck=api?.getDecks?.()?.[k],audio=deck?.audio,buffer=deck?.scratchBuffer,name=document.getElementById('name-'+k);
@@ -2921,78 +2932,65 @@ function initLCD(){
    if(!buffer&&cachedBuffer){cachedBuffer=null;peaks=null}
    const position=deck?.scratchPosition??audio?.currentTime??0;
    function render(c,isOverview){
-    const g=c.getContext('2d'),w=c.width,h=c.height;
-    g.clearRect(0,0,w,h);
-    const bg=g.createLinearGradient(0,0,0,h);
-    bg.addColorStop(0,'#070d17');bg.addColorStop(.5,'#02060c');bg.addColorStop(1,'#07101b');
-    g.fillStyle=bg;g.fillRect(0,0,w,h);
-    const mid=h/2;
+    const g=c.getContext('2d'),w=c.width,h=c.height,mid=h/2;
+    g.fillStyle='#05070a';g.fillRect(0,0,w,h);
     if(!peaks||!buffer){
-     g.fillStyle='#8caac4';g.font='600 12px sans-serif';g.textAlign='center';
-     g.fillText(audio?.src?'ANALYZING TRACK AUDIO…':'LOAD A TRACK TO VIEW WAVEFORM',w/2,mid+4);
-     return;
+     g.fillStyle='#75818b';g.font='11px system-ui,sans-serif';g.textAlign='center';
+     g.fillText(audio?.src?'ANALYZING AUDIO…':'LOAD TRACK',w/2,mid+3);return;
     }
-    const duration=Math.max(.001,buffer.duration||1);
-    const span=isOverview?duration:12;
+    const duration=Math.max(.001,buffer.duration||1),span=isOverview?duration:10;
     const base=isOverview?0:position-span/2;
-    // Subtle beat/time lattice, derived from the user-adjustable BPM setting.
     const bpm=Number(document.getElementById('manual-'+k)?.value);
+    // A restrained, thin beat-grid. Timing is based on the user's BPM setting,
+    // not claimed as an automatically analyzed downbeat map.
     if(!isOverview&&Number.isFinite(bpm)&&bpm>=40&&bpm<=240){
      const beat=60/bpm;
-     const begin=Math.floor(base/beat),finish=Math.ceil((base+span)/beat);
-     for(let n=begin;n<=finish;n++){
-      const x=(n*beat-base)/span*w;
-      if(x<0||x>w)continue;
-      g.strokeStyle=n%4===0?'#d9e6f13b':'#b9cadd18';
-      g.lineWidth=n%4===0?1.1:.65;
-      g.beginPath();g.moveTo(Math.round(x)+.5,0);g.lineTo(Math.round(x)+.5,h);g.stroke();
+     for(let n=Math.floor(base/beat);n<=Math.ceil((base+span)/beat);n++){
+      const x=(n*beat-base)/span*w;if(x<0||x>w)continue;
+      g.fillStyle=n%4===0?'#cbd2db24':'#abb7c210';
+      g.fillRect(Math.round(x),0,1,h);
      }
     }
-    // The actual decoded audio peaks drive BOTH displays; finer columns produce
-    // a continuous club-grade waveform, rather than a repeating decorative pattern.
-    const gradPast=g.createLinearGradient(0,0,0,h);
-    gradPast.addColorStop(0,'#a56625');gradPast.addColorStop(.34,'#efb64f');
-    gradPast.addColorStop(.5,'#fff0b2');gradPast.addColorStop(.66,'#f6bc57');gradPast.addColorStop(1,'#9b5124');
-    const gradFuture=g.createLinearGradient(0,0,0,h);
-    gradFuture.addColorStop(0,'#53398e');gradFuture.addColorStop(.30,'#357edc');
-    gradFuture.addColorStop(.5,'#a9eafc');gradFuture.addColorStop(.70,'#4789e9');gradFuture.addColorStop(1,'#563c9f');
-    const gap=isOverview?1.65:1.15;
-    for(let x=0;x<w;x+=gap){
-     const at=base+x/w*span;
+    const outerPast='#bd873f',innerPast='#e2c77c';
+    const outerAhead='#3175ba',innerAhead='#7eafcf';
+    // Draw actual high-resolution envelope with thin strokes. Separate faint
+    // low-level center body and transient peaks without exaggerated glow.
+    for(let x=0;x<w;x++){
+     const at=base+(x+.5)/w*span;
      if(at<0||at>duration)continue;
-     const idx=Math.min(peaks.length-1,Math.max(0,Math.floor(at/duration*peaks.length)));
-     const p0=peaks[idx]||0,p1=peaks[Math.min(peaks.length-1,idx+1)]||0;
-     const amp=Math.max(1,(p0*.78+p1*.22)*mid*(isOverview?.89:.97));
-     g.fillStyle=at<position?gradPast:gradFuture;
-     g.fillRect(x,mid-amp,isOverview?1.65:1.3,2*amp);
+     const idx=Math.max(0,Math.min(peaks.length-1,Math.floor(at/duration*peaks.length)));
+     const p=peaks[idx]||0;
+     const prev=peaks[Math.max(0,idx-1)]||p,next=peaks[Math.min(peaks.length-1,idx+1)]||p;
+     const sm=(prev+p*2+next)/4;
+     const amp=Math.max(.7,sm*mid*(isOverview?.88:.86));
+     const core=Math.max(.5,Math.min(amp,Math.sqrt(sm)*mid*(isOverview?.43:.36)));
+     const done=at<=position;
+     g.fillStyle=done?outerPast:outerAhead;
+     g.fillRect(x,mid-amp,1,amp*2);
+     g.fillStyle=done?innerPast:innerAhead;
+     g.fillRect(x,mid-core,1,core*2);
     }
-    g.strokeStyle='#c1d3e454';g.lineWidth=.8;
-    g.beginPath();g.moveTo(0,mid+.5);g.lineTo(w,mid+.5);g.stroke();
+    g.fillStyle='#a5b7c522';g.fillRect(0,Math.round(mid),w,1);
     const marks=[];
     if(Array.isArray(deck?.cues))deck.cues.forEach((time,index)=>{
-     if(Number.isFinite(time)&&time>=0)marks.push({time,label:String(index+1),color:['#f15d67','#4eb8ff','#8feb70','#d993e9'][index%4]});
+     if(Number.isFinite(time)&&time>=0)marks.push({time,label:String(index+1),color:['#e65c72','#499ac8','#91bd70','#ac83be'][index%4]});
     });
     (monitor.signalCueMemories||[]).forEach((time,index)=>{
-     if(Number.isFinite(time)&&time>=0)marks.push({time,label:'M'+(index+1),color:'#f5bb51'});
+     if(Number.isFinite(time)&&time>=0)marks.push({time,label:'M'+(index+1),color:'#e1ae57'});
     });
-    if(Number.isFinite(deck?.mainCue)&&deck.mainCue>=0)marks.push({time:deck.mainCue,label:'C',color:'#ffffff'});
+    if(Number.isFinite(deck?.mainCue)&&deck.mainCue>=0)marks.push({time:deck.mainCue,label:'C',color:'#e0e5ea'});
     for(const mark of marks){
-     const x=(mark.time-base)/span*w;
-     if(x<0||x>w)continue;
-     g.fillStyle=mark.color;
-     g.fillRect(x-1,0,isOverview?2:3,isOverview?Math.max(5,h*.45):11);
-     if(!isOverview){g.font='bold 9px sans-serif';g.textAlign='center';g.fillText(mark.label,x,21)}
+     const x=(mark.time-base)/span*w;if(x<0||x>w)continue;
+     g.fillStyle=mark.color;g.fillRect(Math.round(x),0,isOverview?2:2,isOverview?h:10);
+     if(!isOverview){g.font='9px system-ui,sans-serif';g.textAlign='center';g.fillText(mark.label,x,21)}
     }
     if(isOverview){
-     const fraction=Math.min(1,Math.max(0,position/duration));
-     g.fillStyle='#ffffff20';g.fillRect(0,0,fraction*w,h);
-     g.fillStyle='#f7faff';g.fillRect(Math.min(w-2,Math.max(0,fraction*w-1)),0,2,h);
+     const xp=Math.min(w-2,Math.max(0,position/duration*w));
+     g.fillStyle='#f1f1efbd';g.fillRect(Math.round(xp),0,2,h);
     }else{
-     g.fillStyle='#ff4d57';
-     g.beginPath();g.moveTo(w/2-6,0);g.lineTo(w/2+6,0);g.lineTo(w/2,10);g.closePath();g.fill();
-     g.strokeStyle='#ffffff';g.lineWidth=1.5;
-     g.beginPath();g.moveTo(w/2,10);g.lineTo(w/2,h-10);g.stroke();
-     g.fillStyle='#eaf7ff';g.beginPath();g.moveTo(w/2-5,h);g.lineTo(w/2+5,h);g.lineTo(w/2,h-9);g.closePath();g.fill();
+     g.fillStyle='#d14849';g.beginPath();g.moveTo(w/2-4,0);g.lineTo(w/2+4,0);g.lineTo(w/2,8);g.fill();
+     g.fillStyle='#e5e7e8';g.fillRect(w/2,8,1,h-16);
+     g.beginPath();g.moveTo(w/2-4,h);g.lineTo(w/2+4,h);g.lineTo(w/2,h-7);g.fill();
     }
    }
    render(canvas,false);render(overview,true);
@@ -6618,4 +6616,91 @@ body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-bottom{
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
 })();
 </script>
+
+<style id="signal-v89-studio-lcd-correction">
+/* V89: disciplined CDJ-style instrument screen; no deck geometry changes. */
+body.signal-booth-v2 .signal-cdjx-screen{
+ background:#080a0d!important;border-color:#454b53!important;
+ box-shadow:inset 0 0 0 2px #050608,0 3px 8px #000b!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-monitor-tag{
+ color:#aab6c1!important;font-weight:800!important;font-size:7px!important;
+ letter-spacing:.5px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav button{
+ background:linear-gradient(#20252c,#12161c)!important;
+ border:1px solid #5a636e!important;border-radius:2px!important;
+ box-shadow:inset 0 1px 0 #bdc6d125!important;
+ color:#d9e0e7!important;font-size:7px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav button[aria-pressed=true]{
+ border-color:#627fa1!important;color:#bdd9f1!important;
+ background:linear-gradient(#273847,#121d29)!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-display{
+ background:#030508!important;border:1px solid #2a3038!important;
+ padding:3px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-header{
+ background:#13161b!important;min-height:19px!important;padding:2px 4px!important;
+ border-color:#343b43!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-name{
+ font-size:9px!important;font-weight:700!important;color:#e0e4e8!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-key{
+ color:#aab6bf!important;font-size:8px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-status{
+ background:#090c11!important;color:#9daab6!important;
+ padding:2px 3px!important;font-size:7px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-status strong{
+ color:#9daab6!important;font-weight:600!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-main-wave{
+ background:#05070a!important;border:1px solid #242b32!important;
+ height:90px!important;margin:2px 0!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-overview-wave{
+ background:#05070a!important;height:18px!important;
+ border:1px solid #2c343c!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-display>small{
+ color:#798997!important;font-size:7px!important;font-weight:500!important;
+ letter-spacing:0!important;margin:2px 0!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid{
+ gap:2px!important;margin:3px 0!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid>div{
+ background:#0b1016!important;border:1px solid #303b47!important;
+ box-shadow:none!important;border-radius:1px!important;padding:3px 2px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid small{
+ font-size:7px!important;color:#8297a8!important;letter-spacing:.2px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid b{
+ color:#e3e8ed!important;font-size:12px!important;font-weight:700!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls{
+ background:#090e15!important;border-color:#2b3742!important;
+ max-height:52px!important;padding:2px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls button{
+ background:#15202b!important;border:1px solid #425568!important;
+ color:#c9d8e4!important;border-radius:2px!important;
+ font-size:8px!important;min-height:20px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-bottom{
+ color:#84929f!important;font-size:7px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-bottom button{
+ background:#18222d!important;color:#c3d0dd!important;
+ border:1px solid #435668!important;border-radius:2px!important;
+}
+@media(max-width:1250px){
+ body.signal-booth-v2 .signal-cdjx-screen .cdjx-main-wave{height:68px!important}
+}
+</style>
 </body></html>
