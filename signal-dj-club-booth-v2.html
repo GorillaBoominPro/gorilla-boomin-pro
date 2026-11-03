@@ -838,6 +838,17 @@ body.signal-booth-v2 .signal-cdjx-screen .deck-wave-area .deck-color{display:non
 body.signal-booth-v2 .signal-cdjx-screen .deck-wave-area{overflow:hidden!important}
 body.signal-booth-v2 .signal-cdjx-screen .deck-wave-area:before{content:''!important;display:none!important}
 body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid{margin-top:8px!important}
+</style><style id="signal-cdjx-control-phase2">
+body.signal-booth-v2 .cdjx-extra-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin:5px 0;padding:6px;background:#0b1018;border:1px solid #3f5364;border-radius:4px}
+body.signal-booth-v2 .cdjx-extra-controls button{background:#1a2633;border:1px solid #576d82;color:#e4effa;font-size:9px;font-weight:700;padding:5px 3px;min-height:26px;border-radius:3px}
+body.signal-booth-v2 .cdjx-extra-controls button[aria-pressed=true]{border-color:#e74d65;color:#fff;background:#5a2734}
+body.signal-booth-v2 .cdjx-extra-controls label{grid-column:1/-1;font-size:8px;letter-spacing:1px;color:#8da9be}
+body.signal-booth-v2 .cdjx-extra-controls .cdjx-memory{grid-column:1/-1;display:flex;justify-content:space-between;gap:5px;align-items:center;color:#bcd4e5;font-size:9px;min-width:0}
+body.signal-booth-v2 .cdjx-extra-controls .cdjx-memory span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body.signal-booth-v2 .cdjx-extra-controls .cdjx-memory button{flex:none}
+body.signal-booth-v2 .cdjx-screen-nav button:focus-visible,body.signal-booth-v2 .cdjx-extra-controls button:focus-visible{outline:2px solid #fff}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls{max-height:75px;overflow:auto}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid{margin-top:3px!important}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -1863,5 +1874,30 @@ for(const k of ['A','B']){
 }
 };
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',build,{once:true});else build();
+})();
+</script><script id="signal-cdjx-working-controls-phase2">
+(()=>{
+function start(){
+ for(const k of ['A','B']){
+  const deck=document.querySelector('.deck-'+k),monitor=deck?.querySelector('.signal-cdjx-screen'),audio=document.getElementById('audio-'+k);
+  if(!monitor||!audio||monitor.querySelector('.cdjx-extra-controls'))continue;
+  const controls=document.createElement('section');controls.className='cdjx-extra-controls';controls.setAttribute('aria-label','Deck '+k+' media player controls');
+  controls.innerHTML='<label>PLAYER '+k+' · BEAT JUMP / MEMORY</label><button data-cdjx="back">◀ 4 BEATS</button><button data-cdjx="forward">4 BEATS ▶</button><div class="cdjx-memory"><button data-cdjx="store">MEMORY +</button><span class="cdjx-memory-readout">NO SAVED CUE</span><button data-cdjx="previous">◀</button><button data-cdjx="next">▶</button><button data-cdjx="delete">DELETE</button></div>';
+  monitor.querySelector('.cdjx-screen-bottom')?.insertAdjacentElement('beforebegin',controls);
+  const memories=[],readout=controls.querySelector('.cdjx-memory-readout');let selected=-1;
+  const display=()=>{readout.textContent=selected<0?'NO SAVED CUE':'MEMORY '+(selected+1)+' / '+memories.length+' · '+Math.floor(memories[selected]/60)+':'+String(Math.floor(memories[selected]%60)).padStart(2,'0')};
+  const seek=dir=>{if(!audio.src||!Number.isFinite(audio.duration))return;const bpm=Math.max(40,Number(document.getElementById('manual-'+k)?.value)||128);audio.currentTime=Math.max(0,Math.min(audio.duration,audio.currentTime+dir*240/bpm))};
+  const guard=()=>{if(audio.src)return true;readout.textContent='LOAD A TRACK FIRST';return false};
+  controls.querySelector('[data-cdjx="back"]').onclick=()=>seek(-1);
+  controls.querySelector('[data-cdjx="forward"]').onclick=()=>seek(1);
+  controls.querySelector('[data-cdjx="store"]').onclick=()=>{if(!guard())return;memories.push(audio.currentTime);memories.sort((a,b)=>a-b);selected=memories.indexOf(audio.currentTime);display()};
+  controls.querySelector('[data-cdjx="previous"]').onclick=()=>{if(!guard()||!memories.length)return;selected=selected<0?0:Math.max(0,selected-1);audio.currentTime=memories[selected];display()};
+  controls.querySelector('[data-cdjx="next"]').onclick=()=>{if(!guard()||!memories.length)return;selected=selected<0?0:Math.min(memories.length-1,selected+1);audio.currentTime=memories[selected];display()};
+  controls.querySelector('[data-cdjx="delete"]').onclick=()=>{if(selected<0)return;memories.splice(selected,1);selected=memories.length?Math.min(selected,memories.length-1):-1;display()};
+  document.getElementById('file-'+k)?.addEventListener('change',()=>{memories.length=0;selected=-1;display()});
+  display();
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
 </script></body></html>
