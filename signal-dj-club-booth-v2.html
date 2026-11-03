@@ -6703,4 +6703,102 @@ body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-bottom button{
  body.signal-booth-v2 .signal-cdjx-screen .cdjx-main-wave{height:68px!important}
 }
 </style>
+
+<style id="signal-v90-lcd-dense-performance-layout">
+/* V90: use the EXISTING LCD panel height; no deck shell or mixer size changes.
+   Preserve original interactive beat jump, cue memory and browser elements. */
+body.signal-booth-v2 .deckshell>.signal-cdjx-screen{
+ display:flex!important;flex-direction:column!important;
+ box-sizing:border-box!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-monitor-tag,
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav,
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid,
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls{
+ flex-shrink:0!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-display{
+ flex:1 1 auto!important;min-height:0!important;
+ display:flex!important;flex-direction:column!important;
+ overflow:hidden!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-header,
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-status,
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-live-display>small{
+ flex-shrink:0!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-main-wave{
+ flex:1 1 auto!important;min-height:83px!important;height:100%!important;
+ max-height:none!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-overview-wave{
+ flex:0 0 20px!important;height:20px!important;
+}
+/* Compact performance rows: no oversized software buttons. */
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls{
+ display:grid!important;
+ grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+ grid-template-rows:11px 22px 24px!important;
+ gap:2px 4px!important;margin:2px 0!important;
+ padding:3px 4px!important;
+ max-height:none!important;overflow:hidden!important;
+ background:#090c10!important;border:1px solid #30383f!important;
+ border-radius:1px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls>label{
+ grid-column:1/-1!important;font-size:7px!important;
+ letter-spacing:.2px!important;line-height:10px!important;
+ color:#929fab!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls>button{
+ min-height:0!important;height:22px!important;
+ padding:1px 3px!important;font-size:8px!important;
+ border:1px solid #455461!important;border-radius:2px!important;
+ background:#131a22!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls .cdjx-memory{
+ display:grid!important;grid-template-columns:auto minmax(0,1fr) 22px 22px auto!important;
+ gap:3px!important;align-items:center!important;min-height:24px!important;
+ grid-column:1/-1!important;
+ border-top:1px solid #2c3641!important;padding-top:3px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls .cdjx-memory button{
+ min-width:0!important;height:21px!important;min-height:21px!important;
+ padding:1px 3px!important;font-size:7px!important;
+ border-radius:2px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls .cdjx-memory span{
+ font-size:7px!important;color:#9daebd!important;
+ text-align:center!important;min-width:0!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid{
+ margin:3px 0 2px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-bottom{
+ display:flex!important;align-items:center!important;
+ justify-content:space-between!important;
+ flex:0 0 auto!important;
+ margin:2px 0 0!important;
+ padding:2px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-bottom button{
+ padding:2px 5px!important;min-height:19px!important;
+ font-size:7px!important;
+}
+/* Respect the much smaller display area on narrower physical deck sizes. */
+@media(max-width:1250px){
+ body.signal-booth-v2 .signal-cdjx-screen .cdjx-main-wave{
+  min-height:55px!important;
+ }
+ body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls{
+  grid-template-rows:10px 20px 22px!important;padding:2px!important;
+ }
+ body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls>button{
+  height:20px!important;
+ }
+ body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls .cdjx-memory button{
+  height:19px!important;min-height:19px!important;
+ }
+}
+</style>
 </body></html>
