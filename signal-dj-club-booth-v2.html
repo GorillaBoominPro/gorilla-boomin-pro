@@ -1793,6 +1793,17 @@ body.signal-booth-v2:not(.festival) .deckshell .transportRow .roundPair{
  top:auto!important;
  bottom:0!important;
 }
+</style><style id="signal-cdjx-model-nameplate-v30">
+body.signal-booth-v2 .deckshell>.signal-model-nameplate{
+ position:absolute!important;left:24%!important;right:19%!important;bottom:.28%!important;
+ width:auto!important;height:22px!important;z-index:31!important;pointer-events:none!important;
+ display:flex!important;justify-content:center!important;align-items:center!important;
+ white-space:nowrap!important;font-family:Arial,Helvetica,sans-serif!important;
+ font-size:clamp(9px,.82vw,13px)!important;letter-spacing:.65px!important;font-weight:900!important;
+ color:#d6dce2!important;text-shadow:0 1px 2px #000,0 0 5px #0009!important;
+}
+body.signal-booth-v2 .deckshell>.signal-model-nameplate .brand-slashes{color:#f32948!important}
+body.signal-booth-v2 .deckshell>.signal-model-nameplate .model-number{color:#f2f4f5!important}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -3372,5 +3383,19 @@ function apply(){
  }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
+})();
+</script><script id="signal-cdjx-model-nameplate-v30-script">
+(()=>{
+function setup(){
+ for(const k of ['A','B']){
+  const shell=document.querySelector('.deckshell.deck-'+k);
+  if(!shell||shell.querySelector('.signal-model-nameplate'))continue;
+  const tag=document.createElement('div');tag.className='signal-model-nameplate';
+  tag.setAttribute('aria-label','G//BMN: SIGNAL DJ 3000-V');
+  tag.innerHTML='G<span class="brand-slashes">//</span>BMN: &nbsp; SIGNAL DJ &nbsp; <span class="model-number">3000-V</span>';
+  shell.append(tag);
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
 })();
 </script></body></html>
