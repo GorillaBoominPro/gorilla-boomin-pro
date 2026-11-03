@@ -849,6 +849,23 @@ body.signal-booth-v2 .cdjx-extra-controls .cdjx-memory button{flex:none}
 body.signal-booth-v2 .cdjx-screen-nav button:focus-visible,body.signal-booth-v2 .cdjx-extra-controls button:focus-visible{outline:2px solid #fff}
 body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls{max-height:75px;overflow:auto}
 body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid{margin-top:3px!important}
+</style><style id="signal-waveform-first-lcd">
+body.signal-booth-v2 .signal-cdjx-screen{background:#05090f!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-track,body.signal-booth-v2 .signal-cdjx-screen .cdjx-wave-slot{display:none!important}
+body.signal-booth-v2 .cdjx-live-display{background:#02060c;border:1px solid #304358;border-radius:3px;padding:5px;margin-top:5px;min-width:0}
+body.signal-booth-v2 .cdjx-live-header{display:flex;gap:6px;justify-content:space-between;align-items:center;font-size:10px;color:#eff5fb;min-width:0}
+body.signal-booth-v2 .cdjx-live-name{display:block;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body.signal-booth-v2 .cdjx-live-key{flex:none;color:#b0c6d7;font-size:9px}
+body.signal-booth-v2 .cdjx-main-wave{display:block;width:100%;height:88px;margin:4px 0;background:#050c16;border:1px solid #26394e}
+body.signal-booth-v2 .cdjx-overview-wave{display:block;width:100%;height:20px;background:#040a12;border:1px solid #253747}
+body.signal-booth-v2 .cdjx-live-display small{display:block;font-size:8px;color:#8ba4b7;margin:3px 0}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid b{font-size:13px}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid div{padding:3px 2px}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-grid small{font-size:7px}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls{margin:4px 0!important;padding:4px!important;gap:3px!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-extra-controls button{min-height:22px!important;padding:3px!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-bottom{padding:3px!important}
+@media(max-width:1250px){body.signal-booth-v2 .cdjx-main-wave{height:68px}}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -1899,5 +1916,45 @@ function start(){
  }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
+</script><script id="signal-cdjx-lcd-waveform-v3">
+(()=>{
+function initLCD(){
+ const api=window.signalDJControl;
+ for(const k of ['A','B']){
+  const monitor=document.querySelector('.deck-'+k+' .signal-cdjx-screen');
+  if(!monitor||monitor.querySelector('.cdjx-live-display'))continue;
+  const live=document.createElement('section');live.className='cdjx-live-display';
+  live.innerHTML='<div class="cdjx-live-header"><strong class="cdjx-live-name">NO TRACK LOADED</strong><span class="cdjx-live-key">KEY —</span></div><canvas class="cdjx-main-wave" width="640" height="112" aria-label="Live scrolling track waveform"></canvas><canvas class="cdjx-overview-wave" width="640" height="36" aria-label="Whole-track overview waveform"></canvas><small>BEAT GRID · AUDIO ANALYSIS PREVIEW</small>';
+  monitor.querySelector('.cdjx-track')?.insertAdjacentElement('afterend',live);
+  const canvas=live.querySelector('.cdjx-main-wave'),overview=live.querySelector('.cdjx-overview-wave');
+  let cachedBuffer=null,peaks=null,readAt=0;
+  function prepare(buffer){
+   cachedBuffer=buffer;const raw=buffer.getChannelData(0),count=3500,step=Math.max(1,Math.floor(raw.length/count));
+   peaks=new Float32Array(count);
+   for(let i=0;i<count;i++){let peak=0;const start=i*step,end=Math.min(raw.length,start+step),inc=Math.max(1,Math.floor(step/34));for(let j=start;j<end;j+=inc)peak=Math.max(peak,Math.abs(raw[j]));peaks[i]=peak}
+  }
+  function draw(){
+   const deck=api?.getDecks?.()?.[k],audio=deck?.audio,buffer=deck?.scratchBuffer,name=document.getElementById('name-'+k);
+   const title=audio?.src?(name?.textContent||'LOADED TRACK'):'NO TRACK LOADED';
+   live.querySelector('.cdjx-live-name').textContent=title.replace(/\s*[✦◆•]\s*\d+(?:\.\d+)?\s*BPM.*$/i,'').trim();
+   if(buffer&&buffer!==cachedBuffer)prepare(buffer);
+   if(!buffer&&cachedBuffer){cachedBuffer=null;peaks=null}
+   const position=deck?.scratchPosition??audio?.currentTime??0;
+   function render(c,isOverview){
+    const g=c.getContext('2d'),w=c.width,h=c.height;g.fillStyle='#040a12';g.fillRect(0,0,w,h);
+    if(!peaks||!buffer){g.fillStyle='#8299af';g.font='12px sans-serif';g.textAlign='center';g.fillText(audio?.src?'PREPARING AUDIO WAVEFORM':'LOAD TRACK TO SEE WAVEFORM',w/2,h/2);return}
+    const duration=buffer.duration||1,span=isOverview?duration:12,half=h/2,base=isOverview?0:position-span/2;
+    for(let x=0;x<w;x+=2){const at=base+x/w*span;if(at<0||at>duration)continue;const idx=Math.max(0,Math.min(peaks.length-1,Math.floor(at/duration*peaks.length))),amp=Math.max(1,peaks[idx]*half*.94);
+     g.fillStyle=at<position?'#f1b64b':'#46a6f5';g.fillRect(x,half-amp,2,amp*2);
+    }
+    g.fillStyle='#fff';if(isOverview){g.fillRect(Math.min(w-2,position/duration*w),0,2,h)}else{g.fillRect(w/2-1,0,2,h);g.strokeStyle='#53627460';g.beginPath();g.moveTo(0,half);g.lineTo(w,half);g.stroke()}
+   }
+   render(canvas,false);render(overview,true);
+  }
+  const loop=()=>{if(!monitor.isConnected)return;draw();setTimeout(()=>requestAnimationFrame(loop),75)};loop();
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initLCD,{once:true});else initLCD();
 })();
 </script></body></html>
