@@ -2906,22 +2906,49 @@ function initLCD(){
   live.innerHTML='<div class="cdjx-live-header"><strong class="cdjx-live-name">NO TRACK LOADED</strong><span class="cdjx-live-key">KEY —</span></div><div class="cdjx-live-status"><span>DECK '+k+'</span><span class="cdjx-remaining">REMAIN --:--</span><strong>LIVE WAVEFORM</strong></div><canvas class="cdjx-main-wave" width="640" height="112" aria-label="Live scrolling track waveform"></canvas><canvas class="cdjx-overview-wave" width="640" height="36" aria-label="Whole-track overview waveform"></canvas><small>BEAT GRID · AUDIO ANALYSIS PREVIEW</small>';
   monitor.querySelector('.cdjx-track')?.insertAdjacentElement('afterend',live);
   const canvas=live.querySelector('.cdjx-main-wave'),overview=live.querySelector('.cdjx-overview-wave');
-  let cachedBuffer=null,peaks=null,readAt=0;
+  let cachedBuffer=null,peaks=null,bands=null,readAt=0;
   function prepare(buffer){
-   cachedBuffer=buffer;const raw=buffer.getChannelData(0);
-   // High-resolution peak pyramid: ~95 envelopes per audio second, rather than
-   // 3,500 for a whole song (which produced the square, toy-like blocks).
-   const count=Math.max(12000,Math.min(95000,Math.ceil(buffer.duration*95)));
-   const step=Math.max(1,raw.length/count);
+   cachedBuffer=buffer;
+   const raw=buffer.getChannelData(0),rate=buffer.sampleRate;
+   const count=Math.max(8000,Math.min(85000,Math.ceil(buffer.duration*100)));
    peaks=new Float32Array(count);
-   for(let i=0;i<count;i++){
-    const start=Math.floor(i*step),end=Math.min(raw.length,Math.floor((i+1)*step));
-    let peak=0,energy=0,samples=0;
-    const inc=Math.max(1,Math.floor((end-start)/28));
-    for(let j=start;j<end;j+=inc){const a=Math.abs(raw[j]);peak=Math.max(peak,a);energy+=a*a;samples++}
-    const rms=Math.sqrt(energy/Math.max(1,samples));
-    peaks[i]=Math.min(1,peak*.65+rms*.35);
+   const low=new Float32Array(count),mid=new Float32Array(count),high=new Float32Array(count);
+   // Downsample to ~8 kHz for lightweight real spectral envelope extraction.
+   // Two one-pole low-pass filters split the sampled waveform at ~180 Hz and ~2.3 kHz.
+   const stride=Math.max(1,Math.floor(rate/8000)),sampleRate=rate/stride;
+   const aL=1-Math.exp(-2*Math.PI*180/sampleRate);
+   const aH=1-Math.exp(-2*Math.PI*2300/sampleRate);
+   let lp=0,hp=0;
+   const nSamples=Math.ceil(raw.length/stride);
+   const sumLow=new Float64Array(count),sumMid=new Float64Array(count),sumHigh=new Float64Array(count);
+   const hits=new Uint32Array(count);
+   for(let n=0;n<nSamples;n++){
+    const sample=raw[Math.min(raw.length-1,n*stride)]||0;
+    lp+=aL*(sample-lp);
+    hp+=aH*(sample-hp);
+    const l=lp,m=hp-lp,h=sample-hp;
+    const i=Math.min(count-1,Math.floor(n/nSamples*count));
+    sumLow[i]+=l*l;sumMid[i]+=m*m;sumHigh[i]+=h*h;
+    hits[i]++;
+    const amp=Math.abs(sample);if(amp>peaks[i])peaks[i]=amp;
    }
+   let max=0;
+   for(let i=0;i<count;i++){
+    const q=Math.max(1,hits[i]);
+    low[i]=Math.sqrt(sumLow[i]/q);
+    mid[i]=Math.sqrt(sumMid[i]/q);
+    high[i]=Math.sqrt(sumHigh[i]/q);
+    max=Math.max(max,low[i],mid[i],high[i]);
+   }
+   // Shared normalization retains relative spectral energy between bands.
+   const gain=max?1/max:1;
+   for(let i=0;i<count;i++){
+    low[i]=Math.min(1,low[i]*gain);
+    mid[i]=Math.min(1,mid[i]*gain);
+    high[i]=Math.min(1,high[i]*gain);
+    peaks[i]=Math.min(1,peaks[i]);
+   }
+   bands={low,mid,high};
   }
   function draw(){
    const deck=api?.getDecks?.()?.[k],audio=deck?.audio,buffer=deck?.scratchBuffer,name=document.getElementById('name-'+k);
@@ -2929,7 +2956,7 @@ function initLCD(){
    live.querySelector('.cdjx-live-name').textContent=title.replace(/\s*[✦◆•]\s*\d+(?:\.\d+)?\s*BPM.*$/i,'').trim();
    const rem=Math.max(0,(audio?.duration||0)-(audio?.currentTime||0));const rs=Number.isFinite(rem)?'-'+String(Math.floor(rem/60)).padStart(2,'0')+':'+String(Math.floor(rem%60)).padStart(2,'0'):'--:--';live.querySelector('.cdjx-remaining').textContent='REMAIN '+(audio?.src?rs:'--:--');
    if(buffer&&buffer!==cachedBuffer)prepare(buffer);
-   if(!buffer&&cachedBuffer){cachedBuffer=null;peaks=null}
+   if(!buffer&&cachedBuffer){cachedBuffer=null;peaks=null;bands=null}
    const position=deck?.scratchPosition??audio?.currentTime??0;
    function render(c,isOverview){
     const g=c.getContext('2d'),w=c.width,h=c.height,mid=h/2;
@@ -2951,24 +2978,22 @@ function initLCD(){
       g.fillRect(Math.round(x),0,1,h);
      }
     }
-    const outerPast='#bd873f',innerPast='#e2c77c';
-    const outerAhead='#3175ba',innerAhead='#7eafcf';
-    // Draw actual high-resolution envelope with thin strokes. Separate faint
-    // low-level center body and transient peaks without exaggerated glow.
+    // Frequency-heat rendering: LOW amber, MID blue, HIGH violet/light.
+    // Width and magnitude come from the decoded audio; no invented vocals/stems.
     for(let x=0;x<w;x++){
      const at=base+(x+.5)/w*span;
      if(at<0||at>duration)continue;
      const idx=Math.max(0,Math.min(peaks.length-1,Math.floor(at/duration*peaks.length)));
-     const p=peaks[idx]||0;
-     const prev=peaks[Math.max(0,idx-1)]||p,next=peaks[Math.min(peaks.length-1,idx+1)]||p;
-     const sm=(prev+p*2+next)/4;
-     const amp=Math.max(.7,sm*mid*(isOverview?.88:.86));
-     const core=Math.max(.5,Math.min(amp,Math.sqrt(sm)*mid*(isOverview?.43:.36)));
-     const done=at<=position;
-     g.fillStyle=done?outerPast:outerAhead;
-     g.fillRect(x,mid-amp,1,amp*2);
-     g.fillStyle=done?innerPast:innerAhead;
-     g.fillRect(x,mid-core,1,core*2);
+     const energy=bands?.low[idx]||0;
+     const mids=bands?.mid[idx]||0,hi=bands?.high[idx]||0;
+     const amp=Math.min(mid*.90,Math.max(.7,(energy*.95+mids*.82+hi*.65)*mid*(isOverview?.64:.78)));
+     const bass=Math.min(amp,energy*mid*(isOverview?.68:.9));
+     const midsize=Math.min(amp,mids*mid*(isOverview?.73:.95));
+     const hiss=Math.min(amp,hi*mid*(isOverview?.68:.9));
+     g.fillStyle='#765e93';g.fillRect(x,mid-amp,1,amp*2);
+     g.fillStyle='#57a5dc';g.fillRect(x,mid-midsize,1,midsize*2);
+     g.fillStyle='#db9d40';g.fillRect(x,mid-bass,1,bass*2);
+     if(hiss>1){g.fillStyle='#bec8f2';g.fillRect(x,mid-hiss*.47,1,hiss*.94)}
     }
     g.fillStyle='#a5b7c522';g.fillRect(0,Math.round(mid),w,1);
     const marks=[];
@@ -2992,6 +3017,18 @@ function initLCD(){
      g.fillStyle='#e5e7e8';g.fillRect(w/2,8,1,h-16);
      g.beginPath();g.moveTo(w/2-4,h);g.lineTo(w/2+4,h);g.lineTo(w/2,h-7);g.fill();
     }
+   }
+   // Live, honest band indicators. Frequency energy is a visual guide,
+   // not vocal isolation or stem analysis.
+   const heat=monitor.querySelector('.v91-energy');
+   if(heat){
+    const idx=Math.max(0,Math.min((bands?.low.length||1)-1,Math.floor(position/Math.max(.001,buffer?.duration||1)*(bands?.low.length||1))));
+    for(const name of ['low','mid','high']){
+     const node=heat.querySelector('[data-band="'+name+'"] .v91-energy-fill');
+     if(node)node.style.width=Math.round(Math.min(100,Math.max(0,(bands?.[name]?.[idx]||0)*100)))+'%';
+    }
+    const status=heat.querySelector('.v91-energy-caption');
+    if(status)status.textContent=bands?'SPECTRAL ENERGY · TRACK AUDIO':'AWAITING AUDIO ANALYSIS';
    }
    render(canvas,false);render(overview,true);
   }
@@ -6936,6 +6973,82 @@ body.signal-booth-v2 .signal-cdjx-screen .v90-player-status .v90-state{
    const controls=monitor.querySelector('.cdjx-extra-controls');
    controls?.addEventListener('click',()=>requestAnimationFrame(update));
    update();
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
+})();
+</script>
+
+<style id="signal-v91-frequency-lcd">
+/* V91 LCD only: real low/mid/high audio envelopes and useful lower-area controls.
+   Fixed hardware LCD bounds, decks, locked faders and fullscreen logic unchanged. */
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-main-wave{
+ height:112px!important;border-color:#303942!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-overview-wave{
+ height:24px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy{
+ flex:1 1 auto!important;min-height:48px!important;
+ max-height:83px!important;
+ display:flex!important;flex-direction:column!important;
+ justify-content:space-evenly!important;
+ gap:4px!important;
+ background:#080c12!important;border:1px solid #28323c!important;
+ margin:5px 0 3px!important;padding:6px 8px!important;
+ box-sizing:border-box!important;overflow:hidden!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy-caption{
+ display:block!important;font:800 7px/1 Arial,sans-serif!important;
+ color:#9daab8!important;letter-spacing:.65px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy-bands{
+ display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ gap:8px!important;width:100%!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy-band{
+ min-width:0!important;display:flex!important;flex-direction:column!important;
+ gap:4px!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy-label{
+ font:800 7px/1 Arial,sans-serif!important;color:#b9c6d1!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy-track{
+ height:6px!important;background:#17222d!important;
+ border:1px solid #303b44!important;overflow:hidden!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy-fill{
+ display:block!important;width:0;height:100%!important;transition:width .1s linear!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen [data-band="low"] .v91-energy-fill{background:#df9f43!important}
+body.signal-booth-v2 .signal-cdjx-screen [data-band="mid"] .v91-energy-fill{background:#54a8df!important}
+body.signal-booth-v2 .signal-cdjx-screen [data-band="high"] .v91-energy-fill{background:#b1a4e2!important}
+body.signal-booth-v2 .signal-cdjx-screen .v91-energy-note{
+ font:500 7px/1.1 Arial,sans-serif!important;color:#7f95a7!important;
+ overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;
+}
+body.signal-booth-v2 .signal-cdjx-screen .v90-player-status{
+ margin-top:0!important;
+}
+@media(max-width:1250px){
+ body.signal-booth-v2 .signal-cdjx-screen .cdjx-main-wave{height:68px!important}
+ body.signal-booth-v2 .signal-cdjx-screen .cdjx-overview-wave{height:17px!important}
+ body.signal-booth-v2 .signal-cdjx-screen .v91-energy{
+  min-height:34px!important;max-height:55px!important;padding:3px 5px!important;gap:2px!important;
+ }
+ body.signal-booth-v2 .signal-cdjx-screen .v91-energy-note{display:none!important}
+}
+</style>
+<script id="signal-v91-frequency-lcd-script">
+(()=>{
+ function setup(){
+  for(const k of ['A','B']){
+   const screen=document.querySelector('.deck-'+k+' .signal-cdjx-screen');
+   if(!screen||screen.querySelector('.v91-energy'))continue;
+   const panel=document.createElement('div');panel.className='v91-energy';
+   panel.setAttribute('aria-label','Estimated spectral energy based on actual decoded audio');
+   panel.innerHTML='<span class="v91-energy-caption">SPECTRAL ENERGY · TRACK AUDIO</span><div class="v91-energy-bands"><div class="v91-energy-band" data-band="low"><span class="v91-energy-label">LOW · BASS</span><div class="v91-energy-track"><span class="v91-energy-fill"></span></div></div><div class="v91-energy-band" data-band="mid"><span class="v91-energy-label">MID · BODY</span><div class="v91-energy-track"><span class="v91-energy-fill"></span></div></div><div class="v91-energy-band" data-band="high"><span class="v91-energy-label">HIGH · DETAIL</span><div class="v91-energy-track"><span class="v91-energy-fill"></span></div></div></div><span class="v91-energy-note">Energy guide · not vocal or stem detection</span>';
+   screen.querySelector('.v90-player-status')?.before(panel);
   }
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
