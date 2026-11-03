@@ -3096,13 +3096,13 @@ function install(){
   const naturalHeight=Math.max(consoleEl.scrollHeight,consoleEl.getBoundingClientRect().height);
   const top=viewport.getBoundingClientRect().top;
   const availableHeight=Math.max(320,(view==='fullscreen'?window.innerHeight-viewport.getBoundingClientRect().top:document.documentElement.clientHeight-top)-5);
-  // Fit Booth is contain; Full Screen is width-first. A 1390x1100
-  // hardware console cannot cover a wide desktop *and* show all of its
-  // height without distortion, so Full Screen scrolls vertically as needed.
+  // Fit Booth fully contains the hardware. Full Screen uses a bounded
+  // 4% height overscan at most: never blindly scale to widescreen width
+  // (which makes the 1100px-tall decks enormous on 16:9 monitors).
   const widthScale=parentWidth/baseWidth;
   const heightScale=availableHeight/Math.max(1,naturalHeight);
   const scale=view==='fullscreen'
-    ? Math.max(.25,widthScale)
+    ? Math.max(.25,Math.min(widthScale,heightScale*1.04))
     : Math.max(.25,Math.min(1,widthScale,heightScale));
   const leftSpace=Math.max(0,(parentWidth-baseWidth*scale)/2);
   const topSpace=0;
