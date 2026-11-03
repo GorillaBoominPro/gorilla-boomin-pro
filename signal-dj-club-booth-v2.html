@@ -4387,7 +4387,7 @@ body.signal-booth-v2 .deckshell .jog.playing .centerdisc[data-mode="lcd"]>.lcd-w
 /* Static, independent deck control: nowhere inside the moving jog or center LCD.
    Bottom-center position sits above the existing brand plaque in club views. */
 body.signal-booth-v2:not(.festival) .deckshell>.v63-display-dock{
- position:absolute!important;left:51%!important;top:94.3%!important;
+ position:absolute!important;left:76%!important;top:78%!important;
  transform:translateX(-50%)!important;z-index:90!important;
  width:auto!important;display:flex!important;align-items:center!important;
  justify-content:center!important;pointer-events:auto!important;
@@ -4424,4 +4424,48 @@ body.signal-booth-v2:not(.festival) .deckshell>.v63-display-dock>.jog-screen-opt
  min-height:22px!important;cursor:pointer!important;
 }
 body.signal-booth-v2.festival .deckshell>.v63-display-dock{display:none!important}
-</style></body></html>
+</style><style id="signal-v65-display-under-tempo-reset">
+/* The DISPLAY control is anchored by script below the actual TEMPO RESET
+   control on each club deck, not to the jog or the nameplate. */
+body.signal-booth-v2:not(.festival) .deckshell>.v63-display-dock{
+ transform:translateX(-50%)!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.v63-display-dock>.jog-screen-options{
+ bottom:auto!important;top:calc(100% + 6px)!important;
+ inset-block-start:auto!important;
+}
+</style>
+<script id="signal-v65-display-under-tempo-reset-script">
+(()=>{
+ function init(){
+  const items=['A','B'].map(k=>{
+   const shell=document.querySelector('.deckshell.deck-'+k);
+   const reset=shell?.querySelector(':scope > .cdjx-tempo-reset-wrap button');
+   const dock=shell?.querySelector(':scope > .v63-display-dock');
+   return shell&&reset&&dock?{shell,reset,dock}:null;
+  }).filter(Boolean);
+  function place(){
+   for(const {shell,reset,dock} of items){
+    const sr=shell.getBoundingClientRect();
+    const rr=reset.getBoundingClientRect();
+    if(!sr.width||!rr.width)continue;
+    const factor=shell.offsetWidth/sr.width;
+    // Center directly beneath the real reset button, with a clear 16px gap.
+    const x=(rr.left+rr.width/2-sr.left)*factor;
+    const y=(rr.bottom-sr.top)*factor+16;
+    dock.style.setProperty('left',x+'px','important');
+    dock.style.setProperty('top',y+'px','important');
+   }
+  }
+  let pending=false;
+  function schedule(){if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;place()})}
+  schedule();
+  window.addEventListener('load',schedule,{once:true});
+  window.addEventListener('resize',schedule,{passive:true});
+  document.querySelectorAll('#signal-view-controls button').forEach(b=>b.addEventListener('click',schedule));
+  if(window.ResizeObserver){const ob=new ResizeObserver(schedule);items.forEach(({shell})=>ob.observe(shell))}
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+</body></html>
