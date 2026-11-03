@@ -1584,6 +1584,83 @@ body.signal-booth-v2:not(.festival) .deckshell.deck-A .transportRow,
 body.signal-booth-v2:not(.festival) .deckshell.deck-B .transportRow{
  top:75%!important;
 }
+</style><style id="signal-cdjx-transport-tempo-v27">
+/* V27: on CLUB decks, restore tempo range + red master-tempo lamp above fader;
+   lower large CUE / PLAY to bottom-left. No mixer or Festival edits. */
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-face-cluster.right.cdjx-authentic-right{
+ top:35.6%!important;height:24%!important;max-height:none!important;
+ overflow:visible!important;justify-content:flex-start!important;gap:5px!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-tempo-head{
+ position:absolute!important;top:60.1%!important;right:1.15%!important;
+ width:14.3%!important;height:10.8%!important;z-index:24!important;
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ justify-content:space-around!important;gap:2px!important;
+ background:linear-gradient(140deg,#1c242d,#10151b)!important;
+ border:1px solid #4b5866!important;border-radius:4px!important;
+ box-sizing:border-box!important;padding:3px 2px!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-tempo-head .cdjx-tempo-selector,
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-tempo-head .cdjx-master-tempo{
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ width:100%!important;gap:1px!important;flex:none!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-tempo-head strong{
+ display:block!important;font-size:8px!important;line-height:1!important;
+ color:#f4f5f7!important;text-align:center!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-tempo-head small{
+ display:block!important;font-size:7px!important;line-height:1!important;
+ color:#e5e9ef!important;white-space:nowrap!important;text-align:center!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-tempo-head .cdjx-tempo-knob{
+ width:28px!important;height:28px!important;min-height:28px!important;
+ border:2px solid #68717c!important;border-radius:50%!important;
+ background:conic-gradient(#303843,#bbc3ca,#1c2229,#888f97,#303843)!important;
+ padding:0!important;cursor:pointer!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-tempo-head .cdjx-tempo-active{
+ display:none!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-tempo-head .cdjx-master-tempo small{
+ display:none!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-tempo-head .cdjx-master-tempo-lamp{
+ display:grid!important;place-items:center!important;
+ width:30px!important;height:30px!important;min-height:30px!important;
+ border:3px solid #707985!important;border-radius:50%!important;
+ background:radial-gradient(circle,#343b45,#0a0d11 70%)!important;cursor:pointer!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell>.cdjx-tempo-head .cdjx-master-tempo-lamp span{
+ display:block!important;width:11px!important;height:11px!important;
+ background:#f34a47!important;border-radius:50%!important;
+ box-shadow:0 0 7px #e43d3d!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell .transportRow{
+ top:81.8%!important;left:1.5%!important;width:17.3%!important;
+ height:17%!important;bottom:auto!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell .transportRow .roundPair{
+ top:0!important;bottom:auto!important;gap:12px!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell .roundPair button{
+ width:clamp(57px,5.2vw,76px)!important;
+ height:clamp(57px,5.2vw,76px)!important;
+ min-width:0!important;max-width:none!important;
+ border-width:5px!important;border-radius:50%!important;
+ background:conic-gradient(#454b52,#a9b0b8,#292e35,#090c10,#7a848d,#343a42)!important;
+ box-shadow:0 0 0 3px #10171e,0 4px 9px #000d,inset 0 0 0 3px #131a23!important;
+ color:#fff!important;font-size:13px!important;font-weight:900!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell .roundPair .cue{
+ border-color:#ffb12e!important;text-shadow:0 1px 2px #000!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell .roundPair .play{
+ border-color:#31e582!important;font-size:22px!important;
+}
+body.signal-booth-v2:not(.festival) .deckshell .roundPair button:focus-visible{
+ outline:3px solid white!important;outline-offset:3px!important;
+}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -3132,5 +3209,25 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  document.getElementById('booth-festival')?.addEventListener('click',update);
 },{once:true});
 else {update();document.getElementById('booth-club')?.addEventListener('click',update);document.getElementById('booth-festival')?.addEventListener('click',update)}
+})();
+</script><script id="signal-cdjx-transport-tempo-v27-script">
+(()=>{
+function setup(){
+ for(const k of ['A','B']){
+  const shell=document.querySelector('.deckshell.deck-'+k);
+  const right=shell?.querySelector('.cdjx-face-cluster.right.cdjx-authentic-right');
+  if(!shell||!right||shell.querySelector('.cdjx-tempo-head'))continue;
+  const tempo=right.querySelector('.cdjx-tempo-selector');
+  const master=right.querySelector('.cdjx-master-tempo');
+  if(!tempo||!master)continue;
+  const box=document.createElement('section');
+  box.className='cdjx-tempo-head';
+  box.setAttribute('aria-label','Deck '+k+' tempo range and master tempo controls');
+  box.append(tempo,master);
+  shell.append(box);
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});
+else setup();
 })();
 </script></body></html>
