@@ -4450,9 +4450,9 @@ body.signal-booth-v2:not(.festival) .deckshell>.v63-display-dock>.jog-screen-opt
     const rr=reset.getBoundingClientRect();
     if(!sr.width||!rr.width)continue;
     const factor=shell.offsetWidth/sr.width;
-    // Center directly beneath the real reset button, with a clear 16px gap.
-    const x=(rr.left+rr.width/2-sr.left)*factor;
-    const y=(rr.bottom-sr.top)*factor+16;
+    // V67: centered in the former nameplate location, below the jog wheel.
+    const x=shell.offsetWidth/2;
+    const y=shell.offsetHeight-33;
     dock.style.setProperty('left',x+'px','important');
     dock.style.setProperty('top',y+'px','important');
    }
@@ -4466,6 +4466,54 @@ body.signal-booth-v2:not(.festival) .deckshell>.v63-display-dock>.jog-screen-opt
   if(window.ResizeObserver){const ob=new ResizeObserver(schedule);items.forEach(({shell})=>ob.observe(shell))}
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+<style id="signal-v67-brand-footer-display-swap">
+/* Brandplate lives in the next lower deck strip, not over the playable faceplate. */
+body.signal-booth-v2:not(.festival) .deck>.v67-brand-footer{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ box-sizing:border-box!important;min-height:39px!important;padding:6px 12px 5px!important;
+ width:100%!important;margin-top:2px!important;
+ background:linear-gradient(180deg,#212832,#11171e 45%,#090d13)!important;
+ border:1px solid #414c58!important;border-top:2px solid #687681!important;
+ box-shadow:inset 0 1px 3px #0009!important;
+}
+body.signal-booth-v2:not(.festival) .deck>.v67-brand-footer>.signal-model-nameplate{
+ display:flex!important;visibility:visible!important;opacity:1!important;
+ position:relative!important;top:auto!important;bottom:auto!important;
+ left:auto!important;right:auto!important;transform:none!important;
+ height:23px!important;min-width:0!important;width:42%!important;
+ max-width:260px!important;padding:1px 5px!important;margin:0!important;
+ align-items:center!important;justify-content:center!important;
+ border:1px solid #596471!important;border-radius:3px!important;
+ background:linear-gradient(180deg,#303a45,#141c26 44%,#0c1219)!important;
+ box-shadow:inset 0 1px 0 #b9c5d655,0 2px 6px #000b!important;
+ color:#f5f7f9!important;font:900 clamp(8px,.78vw,11px)/1 Arial,sans-serif!important;
+ letter-spacing:.22px!important;white-space:nowrap!important;pointer-events:none!important;
+ box-sizing:border-box!important;
+}
+body.signal-booth-v2:not(.festival) .deck>.v67-brand-footer>.signal-model-nameplate .brand-slashes{color:#ff304f!important}
+body.signal-booth-v2:not(.festival) .deck>.v67-brand-footer>.signal-model-nameplate .model-number{color:#fff!important}
+/* DISPLAY takes the former centered nameplate area; its menu opens upward. */
+body.signal-booth-v2:not(.festival) .deckshell>.v63-display-dock>.jog-screen-options{
+ top:auto!important;bottom:calc(100% + 6px)!important;
+}
+body.signal-booth-v2.festival .deck>.v67-brand-footer{display:none!important}
+</style>
+<script id="signal-v67-brand-footer-script">
+(()=>{
+ function move(){
+  for(const k of ['A','B']){
+   const shell=document.querySelector('.deckshell.deck-'+k);
+   const deck=shell?.closest('section.deck');
+   const plate=shell?.querySelector(':scope > .signal-model-nameplate');
+   if(!shell||!deck||!plate)continue;
+   let footer=deck.querySelector(':scope > .v67-brand-footer');
+   if(!footer){footer=document.createElement('div');footer.className='v67-brand-footer';shell.insertAdjacentElement('afterend',footer);}
+   if(plate.parentElement!==footer)footer.appendChild(plate);
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',move,{once:true});else move();
 })();
 </script>
 </body></html>
