@@ -3964,139 +3964,180 @@ body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>
 }
 </style>
 <style id="signal-v55-left-lower-hardware">
-/* Lower-left hardware: genuine controls are retained with their existing
-   click handlers; the effects below only change their appearance/placement. */
+/* V56 precision refinement, replacing V55's oversized left hardware rules.
+   All buttons keep their existing element identities and working event handlers.
+   The controls occupy only the reserved lane, entirely left of the HOT CUE row
+   and jog platter. No changes to other deck modules or modes. */
 body.signal-booth-v2:not(.festival) .deckshell>.cdjx-face-cluster.left{
- left:.6%!important;top:39.9%!important;width:17.3%!important;height:34.8%!important;
- background:transparent!important;border:0!important;box-shadow:none!important;
- padding:2px 2px!important;overflow:visible!important;gap:5px!important;
+ position:absolute!important;top:40.7%!important;left:.65%!important;
+ width:15.05%!important;height:32.6%!important;min-width:0!important;
+ box-sizing:border-box!important;padding:1px 2px!important;
  display:flex!important;flex-direction:column!important;
+ gap:clamp(3px,.36vw,6px)!important;
+ background:transparent!important;border:0!important;box-shadow:none!important;
+ overflow:visible!important;scrollbar-width:none!important;z-index:16!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group{
- position:relative!important;flex:0 0 auto!important;border:0!important;
- padding:0!important;margin:0!important;min-width:0!important;gap:3px!important;
+ box-sizing:border-box!important;position:relative!important;
+ width:100%!important;min-width:0!important;flex:0 0 auto!important;
+ margin:0!important;padding:0!important;border:0!important;
+ gap:2px!important;overflow:visible!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group>strong{
- color:#e9ebed!important;font:bold clamp(6px,.59vw,9px)/1 Arial,sans-serif!important;
- text-shadow:0 1px 2px #000!important;letter-spacing:0!important;
- text-align:center!important;white-space:normal!important;
+ margin:0!important;padding:0!important;min-width:0!important;
+ color:#e9ebef!important;text-shadow:0 1px 2px #000!important;
+ font:800 clamp(6px,.52vw,8px)/1.05 Arial,sans-serif!important;
+ letter-spacing:0!important;text-align:center!important;
 }
+/* Loop row: three compact hardware rings, labels deliberately tucked inside
+   their own columns rather than crossing into adjacent hot-cue pads. */
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1){
  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
- row-gap:3px!important;column-gap:2px!important;min-height:73px!important;
+ grid-template-rows:10px clamp(24px,2.5vw,34px) 13px!important;
+ column-gap:3px!important;row-gap:4px!important;align-items:center!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>strong{
- grid-column:1/-1!important;font-size:0!important;height:10px!important;
+ grid-column:1/-1!important;grid-row:1!important;font-size:0!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button{
- position:relative!important;grid-row:2!important;z-index:2!important;
+ display:block!important;position:relative!important;
+ grid-row:2!important;max-width:100%!important;justify-self:center!important;
+ align-self:center!important;padding:0!important;font-size:0!important;
+ min-height:0!important;line-height:1!important;z-index:2!important;
+}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button.round,
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button.wide{
+ width:clamp(23px,2.5vw,34px)!important;
+ height:clamp(23px,2.5vw,34px)!important;
+ min-width:0!important;aspect-ratio:1;border-radius:50%!important;
+ box-shadow:0 0 0 1px #090a0b,0 2px 4px #000b,inset 0 2px 3px #000a!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button.round{
- width:clamp(28px,2.7vw,45px)!important;height:clamp(28px,2.7vw,45px)!important;
- min-height:28px!important;font-size:0!important;border-radius:50%!important;
- border:4px solid #e9ac26!important;
- background:radial-gradient(circle at 40% 30%,#414349 0%,#22252a 45%,#090b0d 72%)!important;
- box-shadow:0 0 0 2px #2b2d30,0 0 0 3px #080a0d,inset 0 2px 5px #000a,0 2px 3px #000b!important;
+ border:3px solid #e3a62e!important;
+ background:radial-gradient(circle at 37% 29%,#373b41 0%,#161a20 47%,#07090b 76%)!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button.wide{
- grid-row:2!important;grid-column:3!important;
- width:clamp(28px,2.7vw,45px)!important;height:clamp(28px,2.7vw,45px)!important;
- min-height:28px!important;font-size:0!important;
- border-radius:50%!important;border:4px solid #34383d!important;
- background:radial-gradient(circle,#f8bd30 0 14%,#111418 19% 44%,#363a41 61%,#090b0e 78%)!important;
- box-shadow:0 0 0 2px #090c10,0 2px 4px #000b,inset 0 2px 4px #6a6d74!important;
+ grid-column:3!important;grid-row:2!important;
+ border:3px solid #44494f!important;
+ background:radial-gradient(circle at 50% 50%,#f4b529 0 15%,#111418 18% 43%,#2a3037 54%,#06080a 80%)!important;
 }
-body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button.round::before,
-body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button.wide::before{
- position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
- white-space:nowrap;color:#e2e4e6;font:800 clamp(6px,.6vw,9px)/1 Arial,sans-serif;
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button::before{
+ position:absolute!important;left:50%!important;bottom:calc(100% + 3px)!important;
+ transform:translateX(-50%)!important;white-space:nowrap!important;
+ color:#f1f2f4!important;text-shadow:0 1px 2px #000!important;
+ font:800 clamp(5px,.45vw,7px)/1 Arial,sans-serif!important;
 }
-body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button:nth-of-type(1)::before{content:"IN/CUE"}
-body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button:nth-of-type(2)::before{content:"OUT"}
-body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button:nth-of-type(3)::before{content:"RELOOP/EXIT"}
-body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button:nth-of-type(1)::after,
-body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button:nth-of-type(2)::after{
- position:absolute;top:calc(100% + 7px);left:50%;transform:translateX(-50%);
- white-space:nowrap;color:#e6e8eb;background:#6d7175;border:1px solid #c1c4c6;
- padding:1px 2px;border-radius:1px;font:800 6px/1 Arial,sans-serif;
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button:nth-of-type(1)::before{content:"IN/CUE"!important}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button:nth-of-type(2)::before{content:"OUT"!important}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button:nth-of-type(3)::before{content:"RELOOP/EXIT"!important;font-size:clamp(5px,.43vw,7px)!important}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button:nth-of-type(-n+2)::after{
+ position:absolute!important;top:calc(100% + 3px)!important;left:50%!important;
+ transform:translateX(-50%)!important;white-space:nowrap!important;
+ font:800 clamp(5px,.42vw,7px)/1 Arial,sans-serif!important;
+ color:#222!important;background:#c9cccf!important;border:1px solid #93989e!important;
+ border-radius:1px!important;padding:1px 2px!important;
 }
-body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button:nth-of-type(1)::after{content:"IN ADJUST"}
-body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button:nth-of-type(2)::after{content:"OUT ADJUST"}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button:nth-of-type(1)::after{content:"IN ADJUST"!important}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button:nth-of-type(2)::after{content:"OUT ADJUST"!important}
+/* Beat loop: small inset round buttons and small independent labels. */
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2){
- display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
- align-items:center!important;min-height:56px!important;margin-top:2px!important;
+ display:grid!important;grid-template-columns:1fr 1fr 1.14fr!important;
+ grid-template-rows:30px 12px!important;align-items:center!important;
+ min-height:0!important;margin-top:3px!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>strong{
- grid-column:3!important;grid-row:1!important;white-space:nowrap!important;
- font-size:clamp(6px,.54vw,9px)!important;
+ grid-column:3!important;grid-row:1!important;white-space:normal!important;
+ font-size:clamp(6px,.49vw,8px)!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>button.round{
- position:relative!important;grid-row:1!important;
- width:clamp(26px,2.45vw,37px)!important;height:clamp(26px,2.45vw,37px)!important;
- min-height:26px!important;border-radius:50%!important;
- border:3px solid #262a30!important;font:900 clamp(11px,1vw,16px)/1 Arial,sans-serif!important;
- background:radial-gradient(circle at 30% 20%,#454b52,#090b0d 65%)!important;
- box-shadow:0 0 0 1px #71777c,0 2px 3px #000b!important;color:#fac342!important;
+ grid-row:1!important;position:relative!important;justify-self:center!important;
+ width:clamp(23px,2.2vw,30px)!important;
+ height:clamp(23px,2.2vw,30px)!important;min-height:0!important;
+ padding:0!important;border-radius:50%!important;border:3px solid #242930!important;
+ color:#f0b936!important;
+ font:900 clamp(11px,.9vw,14px)/1 Arial,sans-serif!important;
+ background:radial-gradient(circle at 35% 27%,#42464c,#07090c 70%)!important;
+ box-shadow:0 0 0 1px #686e75,0 2px 4px #000a!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>button.round::after{
- position:absolute!important;top:calc(100% + 5px);left:50%;transform:translateX(-50%);
- background:#c8cbd0!important;color:#26292c!important;border-radius:1px!important;
- font:800 7px/1 Arial,sans-serif!important;padding:2px 3px!important;white-space:nowrap;
+ position:absolute!important;top:calc(100% + 3px)!important;
+ left:50%!important;transform:translateX(-50%)!important;
+ padding:1px 3px!important;border-radius:1px!important;
+ background:#cdd0d4!important;color:#303236!important;
+ font:bold 6px/1 Arial,sans-serif!important;white-space:nowrap!important;
 }
-body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>button:nth-of-type(1)::after{content:"1/2X"}
-body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>button:nth-of-type(2)::after{content:"2X"}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>button:nth-of-type(1)::after{content:"1/2X"!important}
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(2)>button:nth-of-type(2)::after{content:"2X"!important}
+/* Beat jump: two low-profile square transport keys with centered text. */
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(3){
- display:grid!important;grid-template-columns:1fr auto 1fr!important;align-items:center!important;
- min-height:43px!important;margin-top:5px!important;
+ display:grid!important;grid-template-columns:1fr 29px 1fr!important;
+ align-items:center!important;min-height:32px!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(3)>strong{
- grid-column:2!important;grid-row:1!important;width:29px!important;
- font-size:clamp(6px,.55vw,9px)!important;line-height:1!important;
+ grid-column:2!important;grid-row:1!important;width:auto!important;
+ font-size:clamp(6px,.52vw,8px)!important;line-height:1.05!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(3)>button{
- grid-row:1!important;width:100%!important;min-height:32px!important;
- border:3px solid #141619!important;border-radius:4px!important;
- color:#e8e9ed!important;font:900 16px Arial,sans-serif!important;
- background:linear-gradient(130deg,#2f3136,#111317 63%,#303238)!important;
- box-shadow:0 0 0 1px #62666c,0 2px 3px #000c,inset 0 1px 1px #fff3!important;
+ grid-row:1!important;min-height:0!important;height:29px!important;
+ width:95%!important;min-width:0!important;
+ padding:0!important;border:2px solid #15171a!important;
+ border-radius:3px!important;color:#eee!important;
+ font:900 14px Arial,sans-serif!important;
+ background:linear-gradient(140deg,#35383d,#0e1014 62%,#282b30)!important;
+ box-shadow:0 0 0 1px #565b61,0 2px 3px #000b,inset 0 1px #ffffff33!important;
 }
+/* Direction: smaller physical slide switch. Only a visual mode reference;
+   unsupported slip reverse is not presented as a working feature. */
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(4){
  display:flex!important;align-items:center!important;justify-content:center!important;
- min-height:53px!important;margin-top:5px!important;
+ margin-top:3px!important;min-height:42px!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(4)>strong{display:none!important}
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(4)>button{
- position:relative!important;width:88%!important;min-height:45px!important;
- border:3px solid #303438!important;border-radius:5px!important;
- background:linear-gradient(90deg,#0b0d10 0 48%,#24282e 49% 100%)!important;
- color:transparent!important;opacity:1!important;box-shadow:0 0 0 1px #666b71,inset 0 0 0 2px #101214!important;
+ position:relative!important;width:83%!important;height:40px!important;
+ min-height:0!important;padding:0!important;color:transparent!important;
+ border:2px solid #30343a!important;border-radius:4px!important;opacity:1!important;
+ background:linear-gradient(90deg,#0b0d0f 0 49%,#26292f 50% 100%)!important;
+ box-shadow:0 0 0 1px #666a6f,inset 0 0 0 2px #14161a!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(4)>button::before{
- content:"";position:absolute;width:36%;height:14px;left:8%;top:50%;transform:translateY(-50%);
- background:linear-gradient(#585e65,#171a1e,#4d5259);border:2px solid #343941;border-radius:3px;
- box-shadow:0 2px 3px #000b;
+ content:""!important;position:absolute!important;left:8%!important;top:50%!important;
+ transform:translateY(-50%)!important;width:35%!important;height:13px!important;
+ background:linear-gradient(#5a6067,#191b21,#52575e)!important;
+ border:2px solid #30353a!important;border-radius:2px!important;
+ box-shadow:0 2px 2px #000a!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(4)>button::after{
- content:"SLIP REV\A FWD\A REV";white-space:pre;position:absolute;right:5%;top:3px;
- color:#eceef2;text-align:center;font:800 7px/1.5 Arial,sans-serif;
- text-shadow:0 1px #000;
+ content:"SLIP REV\A FWD\A REV"!important;white-space:pre!important;
+ position:absolute!important;right:4%!important;top:3px!important;
+ font:800 clamp(6px,.46vw,8px)/1.45 Arial,sans-serif!important;
+ text-align:center!important;color:#efeff1!important;text-shadow:0 1px #000!important;
 }
+/* Search: four smaller brushed-silver discs seated in dark twin housings. */
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(5),
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(6){
- display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
- justify-items:center!important;align-items:center!important;gap:4px!important;
- min-height:53px!important;margin-top:4px!important;
+ display:grid!important;grid-template-columns:1fr 1fr!important;
+ grid-template-rows:11px 32px!important;
+ justify-items:center!important;align-items:center!important;
+ min-height:0!important;gap:2px!important;margin-top:2px!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(5)>strong,
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(6)>strong{
- grid-column:1/-1!important;grid-row:1!important;font-size:clamp(7px,.62vw,10px)!important;
+ grid-column:1/-1!important;grid-row:1!important;
+ font-size:clamp(6px,.52vw,8px)!important;white-space:nowrap!important;
 }
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(5)>button,
 body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(6)>button{
- grid-row:2!important;width:clamp(26px,2.45vw,37px)!important;height:clamp(26px,2.45vw,37px)!important;
- min-height:26px!important;padding:0!important;border:3px solid #343940!important;
- border-radius:50%!important;background:conic-gradient(#777e88,#1b2026,#9199a2,#191d22,#666e78,#202429,#777e88)!important;
- color:#f2f5f7!important;font:900 13px Arial,sans-serif!important;
- text-shadow:0 1px 3px #000!important;box-shadow:0 0 0 2px #14181c,0 2px 4px #000b!important;
+ grid-row:2!important;width:clamp(23px,2.25vw,31px)!important;
+ height:clamp(23px,2.25vw,31px)!important;min-height:0!important;
+ padding:0!important;border:3px solid #2a2f35!important;border-radius:50%!important;
+ font:900 12px/1 Arial,sans-serif!important;color:#f3f5f7!important;
+ background:conic-gradient(from 20deg,#a2a7ae,#252a31,#858c94,#1a2027,#b0b4b9,#343b43,#a2a7ae)!important;
+ text-shadow:0 1px 3px #000!important;
+ box-shadow:0 0 0 2px #12161a,0 2px 3px #000a,inset 0 1px 1px #fff5!important;
+}
+/* Remove old generic full-width :after label floating over adjacent controls. */
+body.signal-booth-v2:not(.festival) .cdjx-face-cluster.left .group:nth-child(1)>button.wide::after{
+ content:none!important;display:none!important;
 }
 </style></body></html>
