@@ -894,6 +894,24 @@ body.signal-booth-v2 .cdjx-screen-grid .cdjx-bpm{color:#ffdf8c}
 </style><style id="signal-cdjx-markers-v5">
 body.signal-booth-v2 .cdjx-live-display>small{color:#d5bb8d!important}
 body.signal-booth-v2 .cdjx-main-wave,body.signal-booth-v2 .cdjx-overview-wave{image-rendering:auto}
+</style><style id="signal-cdjx-browser-v6">
+body.signal-booth-v2 .signal-cdjx-screen{position:relative!important}
+body.signal-booth-v2 .cdjx-local-browser{position:absolute;inset:34px 5px 5px;z-index:50;background:#07101b;display:flex;flex-direction:column;border:1px solid #68809a;box-shadow:0 5px 18px #000c;min-height:0;color:#eaf5ff}
+body.signal-booth-v2 .cdjx-local-browser[hidden]{display:none!important}
+body.signal-booth-v2 .cdjx-browser-top{display:flex;align-items:center;justify-content:space-between;gap:5px;padding:5px 7px;background:#172738;font-size:10px}
+body.signal-booth-v2 .cdjx-browser-top button{background:#253a51;color:white;border:1px solid #6b8296;border-radius:3px;font-size:10px}
+body.signal-booth-v2 .cdjx-browser-tools{display:flex;gap:4px;padding:5px}
+body.signal-booth-v2 .cdjx-browser-tools input{flex:1;min-width:0;background:#070e19;color:white;border:1px solid #4e6884;border-radius:3px;padding:5px;font-size:10px}
+body.signal-booth-v2 .cdjx-browser-tools button,body.signal-booth-v2 .cdjx-browser-actions button{background:#202e40;color:#e6f5ff;border:1px solid #4d6884;border-radius:3px;padding:4px;font-size:9px}
+body.signal-booth-v2 .cdjx-browser-list{overflow-y:auto;flex:1;min-height:38px}
+body.signal-booth-v2 .cdjx-browser-row{display:flex;align-items:center;gap:5px;padding:5px;border-bottom:1px solid #293d50;font-size:10px;cursor:pointer}
+body.signal-booth-v2 .cdjx-browser-row.selected{background:#28435e;outline:1px solid #86b9e4;outline-offset:-1px}
+body.signal-booth-v2 .cdjx-browser-row span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body.signal-booth-v2 .cdjx-browser-row small{font-size:8px;color:#a7c3da}
+body.signal-booth-v2 .cdjx-browser-actions{display:flex;gap:5px;padding:5px;background:#101b29}
+body.signal-booth-v2 .cdjx-browser-actions button:last-child{background:#661d30;border-color:#ec536d;font-weight:700}
+body.signal-booth-v2 .cdjx-screen-nav button[aria-pressed=true]{background:#762537!important;border-color:#ff697e!important;color:white!important}
+body.signal-booth-v2 .cdjx-local-browser .cdjx-empty{padding:10px;color:#aebccd;font-size:10px}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -1994,5 +2012,78 @@ function initLCD(){
  }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initLCD,{once:true});else initLCD();
+})();
+</script><script id="signal-cdjx-nav-v6">
+(()=>{
+function init(){
+ const api=window.signalDJControl;
+ if(!api?.getLibrary||!api?.loadTrack)return;
+ for(const k of ['A','B']){
+  const monitor=document.querySelector('.deck-'+k+' .signal-cdjx-screen');
+  if(!monitor||monitor.querySelector('.cdjx-local-browser'))continue;
+  const nav=monitor.querySelector('.cdjx-screen-nav');if(!nav)continue;
+  // Replace legacy nav buttons so each press has one intentional action.
+  for(const oldButton of [...nav.querySelectorAll('button')]){
+   const fresh=oldButton.cloneNode(true);oldButton.replaceWith(fresh);
+  }
+  const panel=document.createElement('div');panel.className='cdjx-local-browser';panel.hidden=true;
+  panel.setAttribute('role','region');panel.setAttribute('aria-label','Deck '+k+' LCD music browser');
+  panel.innerHTML='<div class="cdjx-browser-top"><b class="cdjx-panel-heading">TRACKS</b><button type="button" class="cdjx-close">✕</button></div><div class="cdjx-browser-tools"><input type="search" placeholder="Find imported tracks" aria-label="Search imported tracks"><button type="button" class="cdjx-import">IMPORT</button></div><div class="cdjx-browser-list" role="listbox" tabindex="0" aria-label="Tracks for Deck '+k+'"></div><div class="cdjx-browser-actions"><button type="button" class="cdjx-full-library">FULL LIBRARY</button><button type="button" class="cdjx-tag">TAG TRACK</button><button type="button" class="cdjx-load">LOAD TO '+k+'</button></div>';
+  monitor.append(panel);
+  const search=panel.querySelector('input'),list=panel.querySelector('.cdjx-browser-list'),heading=panel.querySelector('.cdjx-panel-heading');
+  const tagged=new Set(),views=['browse','search','info','wave','menu'],buttons=[...nav.querySelectorAll('button')];
+  let mode='browse',selection=0,visible=[];
+  const uid=f=>f.name+'::'+f.size+'::'+f.lastModified;
+  const tracks=()=>api.getLibrary()||[];
+  function draw(){
+   const source=tracks();
+   const q=search.value.toLowerCase();
+   visible=source.map((x,index)=>({...x,index})).filter(x=>(mode!=='tags'||tagged.has(uid(x.file)))&&x.name.toLowerCase().includes(q));
+   selection=Math.max(0,Math.min(selection,visible.length-1));
+   list.replaceChildren();
+   for(const [i,item] of visible.entries()){
+    const row=document.createElement('div');row.className='cdjx-browser-row'+(i===selection?' selected':'');row.setAttribute('role','option');row.setAttribute('aria-selected',String(i===selection));
+    const label=document.createElement('span');label.textContent=item.name;const meta=document.createElement('small');meta.textContent=tagged.has(uid(item.file))?'★ TAGGED':'';
+    row.append(label,meta);row.onclick=()=>{selection=i;draw()};row.ondblclick=()=>load();list.append(row);
+   }
+   if(!visible.length){const empty=document.createElement('div');empty.className='cdjx-empty';empty.textContent=source.length?'No tracks match this view.':'Import audio into your library first.';list.append(empty)}
+   const action=panel.querySelector('.cdjx-tag');action.disabled=!visible.length;action.textContent=visible.length&&tagged.has(uid(visible[selection].file))?'REMOVE TAG':'TAG TRACK';
+   panel.querySelector('.cdjx-load').disabled=!visible.length;
+  }
+  function load(){const item=visible[selection];if(!item)return;api.loadTrack(k,item.index);hide()}
+  function hide(){panel.hidden=true;buttons.forEach(b=>b.setAttribute('aria-pressed','false'))}
+  function show(next){
+   mode=next;panel.hidden=false;selection=0;search.value='';heading.textContent=next==='tags'?'TAG LIST':next==='playlist'?'PLAYLISTS':next==='source'?'SOURCE / IMPORT':next==='search'?'SEARCH':next==='menu'?'SCREEN MENU':'TRACK BROWSER';
+   buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.action===next)));
+   draw();
+   if(next==='search')search.focus();
+  }
+  panel.querySelector('.cdjx-close').onclick=hide;
+  panel.querySelector('.cdjx-load').onclick=load;
+  panel.querySelector('.cdjx-tag').onclick=()=>{const item=visible[selection];if(!item)return;const id=uid(item.file);if(tagged.has(id))tagged.delete(id);else tagged.add(id);draw()};
+  panel.querySelector('.cdjx-import').onclick=()=>document.getElementById('sbd-import')?.click();
+  panel.querySelector('.cdjx-full-library').onclick=()=>{const drawer=document.getElementById('signal-browser-drawer');if(drawer?.hidden)document.getElementById('signal-browser-toggle')?.click();hide()};
+  search.oninput=()=>{selection=0;draw()};
+  list.onkeydown=e=>{if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();selection=Math.max(0,Math.min(visible.length-1,selection+(e.key==='ArrowDown'?1:-1)));draw();list.querySelector('.selected')?.scrollIntoView({block:'nearest'})}else if(e.key==='Enter'){e.preventDefault();load()}else if(e.key==='Escape')hide()};
+  // Hardware-familiar tabs: SOURCE = import, BROWSE / SEARCH = local track selection,
+  // TAG LIST = per-session quick tags, PLAYLIST = existing crate-based full library,
+  // MENU = existing settings. Unsupported vendor proprietary functions are not simulated.
+  nav.replaceChildren();
+  for(const [label,action] of [['SOURCE','source'],['BROWSE','browse'],['TAG LIST','tags'],['PLAYLIST','playlist'],['SEARCH','search'],['MENU','menu']]){
+   const button=document.createElement('button');button.type='button';button.textContent=label;button.dataset.action=action;button.setAttribute('aria-pressed','false');
+   button.onclick=()=>{
+    if(action==='menu'){hide();document.getElementById('signal-settings-open')?.click();return}
+    if(action==='playlist'){hide();const drawer=document.getElementById('signal-browser-drawer');if(drawer?.hidden)document.getElementById('signal-browser-toggle')?.click();return}
+    if(!panel.hidden&&mode===action){hide();return}
+    show(action);if(action==='source')panel.querySelector('.cdjx-import').focus();
+   };nav.append(button);
+  }
+  const previous=monitor.querySelectorAll('[data-action="browse"]');
+  previous.forEach(button=>{if(button.closest('.cdjx-screen-nav'))return;const fresh=button.cloneNode(true);button.replaceWith(fresh);fresh.addEventListener('click',()=>show('browse'))});
+  document.getElementById('sbd-import')?.addEventListener('change',()=>setTimeout(()=>{if(!panel.hidden)draw()},400));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden)hide()});
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script></body></html>
