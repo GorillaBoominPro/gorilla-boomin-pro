@@ -5902,4 +5902,212 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v73-channel .v77-eq-scale s
  else setup();
 })();
 </script>
+<style id="signal-v78-mic-column-reference">
+/* V78: MIC strip only; reference spacing, four knobs, connected FX buttons and bottom MIC status. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-mic{
+ justify-content:space-between!important;
+ gap:0!important;padding:10px 5px 13px!important;
+}
+.mixer #mixbody>.v70-mic>.v77-left-group{
+ width:100%!important;box-sizing:border-box!important;
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ flex:0 0 auto!important;gap:5px!important;padding:3px 0!important;
+}
+.mixer #mixbody>.v70-mic>.v77-left-group:first-child{
+ gap:4px!important;padding:2px 0 9px!important;
+}
+.mixer #mixbody>.v70-mic>.v78-mic-knob-group{
+ gap:5px!important;padding:6px 0 8px!important;
+}
+.mixer #mixbody>.v70-mic>.v78-mic-knob-group .v70-head{
+ margin:0 0 2px!important;font-size:9px!important;
+}
+.mixer #mixbody>.v70-mic>.v78-mic-knob-group>.v70-knob-unit{
+ margin:1px 0 3px!important;padding:0!important;
+ min-height:54px!important;gap:3px!important;
+ width:100%!important;align-items:center!important;
+}
+.mixer #mixbody>.v70-mic>.v78-mic-knob-group>.v70-knob-unit small{
+ color:#e0e7ee!important;font:800 8px/1 Arial,sans-serif!important;
+}
+.mixer #mixbody>.v70-mic .v78-mic-second{
+ display:flex!important;flex-direction:column!important;
+ justify-content:center!important;align-items:center!important;gap:3px!important;
+}
+.mixer #mixbody>.v70-mic .v78-mic-second .v78-mic-second-cap{
+ width:40px!important;height:40px!important;box-sizing:border-box!important;
+ border-radius:50%!important;border:3px solid #606c77!important;
+ background:radial-gradient(circle at 34% 23%,#abb2b7,#58626d 43%,#27323a 65%,#0b1117 88%)!important;
+ position:relative!important;cursor:ns-resize!important;touch-action:none!important;
+ box-shadow:inset 0 1px 2px #dce6ec4a,0 3px 5px #000a!important;
+}
+.mixer #mixbody>.v70-mic .v78-mic-second .v78-mic-second-cap::after{
+ content:""!important;position:absolute!important;
+ width:3px!important;height:12px!important;background:#f4f8fc!important;
+ border-radius:2px!important;left:calc(50% - 1.5px)!important;top:3px!important;
+ transform-origin:1.5px 14px!important;
+ transform:rotate(var(--v78-pointer,0deg))!important;pointer-events:none!important;
+}
+.mixer #mixbody>.v70-mic .v78-mic-second .v78-mic-second-cap:focus-visible{
+ outline:2px solid #6ec9ff!important;outline-offset:3px!important;
+}
+.mixer #mixbody>.v70-mic .v78-mic-second small{font-size:8px!important}
+.mixer #mixbody>.v70-mic .v78-mic-knob-group .utility-knob{
+ border:3px solid #5f6872!important;box-shadow:inset 0 1px 3px #ffffff45,0 2px 5px #000c!important;
+}
+/* Original rotary caps use delicate calibration dots; NO thick continuous white outer ring. */
+.mixer #mixbody>.v70-mic .v78-mic-knob-group .v70-knob-unit,
+.mixer #mixbody>.v70-mic .v78-mic-second{position:relative!important}
+.mixer #mixbody>.v70-mic .v78-mic-knob-group .v70-knob-unit::after,
+.mixer #mixbody>.v70-mic .v78-mic-second::after{
+ content:""!important;display:block!important;position:absolute!important;
+ width:51px!important;height:51px!important;top:10px!important;left:50%!important;
+ transform:translateX(-50%)!important;border-radius:50%!important;
+ background:repeating-conic-gradient(from -125deg,#d3dce4 0deg 2.3deg,transparent 2.5deg 22deg)!important;
+ mask-image:radial-gradient(circle,transparent 0 67%,#000 69% 73%,transparent 76%)!important;
+ -webkit-mask-image:radial-gradient(circle,transparent 0 67%,#000 69% 73%,transparent 76%)!important;
+ opacity:.85!important;pointer-events:none!important;
+}
+.mixer #mixbody>.v70-mic>.v78-talkover-group{
+ padding:5px 0!important;gap:4px!important;
+}
+.mixer #mixbody>.v70-mic>.v78-micfx-group{
+ padding:8px 0 10px!important;gap:7px!important;
+}
+.mixer #mixbody>.v70-mic .v78-micfx-group .v70-toggle-line{
+ position:relative!important;display:flex!important;
+ flex-direction:column!important;align-items:center!important;
+ gap:12px!important;padding:5px 0!important;
+ margin:0!important;width:100%!important;isolation:isolate!important;
+}
+/* The visible silver connector links ECHO — PITCH — MEGAPHONE vertically. */
+.mixer #mixbody>.v70-mic .v78-micfx-group .v70-toggle-line::before{
+ content:""!important;position:absolute!important;z-index:0!important;
+ top:14px!important;bottom:14px!important;left:50%!important;width:2px!important;
+ transform:translateX(-50%)!important;
+ background:linear-gradient(#6f7b89,#bdc5cd 35%,#a1afbc 67%,#667788)!important;
+ box-shadow:0 0 2px #d5e7f96b!important;pointer-events:none!important;
+}
+.mixer #mixbody>.v70-mic .v78-micfx-group .v70-toggle-line button{
+ position:relative!important;z-index:1!important;
+ width:73%!important;max-width:66px!important;
+ min-height:25px!important;box-shadow:inset 0 -2px 0 #164fa6,0 1px 4px #0009!important;
+}
+.mixer #mixbody>.v70-mic>.v78-micfx-group>.v70-knob-unit{
+ margin:4px 0 0!important;min-height:63px!important;gap:6px!important;
+}
+.mixer #mixbody>.v70-mic>.v78-reverb-group{
+ border-top:1px solid #48525d!important;
+ padding:10px 0 12px!important;gap:11px!important;
+}
+.mixer #mixbody>.v70-mic>.v78-reverb-group>.v70-head{
+ margin:0 0 2px!important;font-size:9px!important;
+}
+.mixer #mixbody>.v70-mic>.v78-reverb-group>button.v70-blue{
+ min-height:30px!important;width:65%!important;max-width:68px!important;
+ margin:0 auto!important;
+}
+.mixer #mixbody>.v70-mic>.v78-reverb-group>.v70-knob-unit{
+ margin:8px 0 0!important;gap:6px!important;min-height:62px!important;
+}
+.mixer #mixbody>.v70-mic>.v78-bottom-group{
+ margin-top:auto!important;padding:10px 0 4px!important;
+ border-top:1px solid #5b6570!important;gap:9px!important;
+}
+.mixer #mixbody>.v70-mic>.v78-bottom-group .v78-beat-light{
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ gap:7px!important;color:#dbe3eb!important;
+ font:900 8px/1 Arial,sans-serif!important;
+}
+.mixer #mixbody>.v70-mic>.v78-bottom-group .v78-beat-led{
+ display:block!important;width:23px!important;height:8px!important;
+ border:2px solid #111923!important;border-radius:2px!important;
+ background:linear-gradient(#41b3ff,#1758c5)!important;
+ box-shadow:inset 0 0 2px #d9f4ff,0 0 6px #1976d2!important;
+}
+.mixer #mixbody>.v70-mic>.v78-bottom-group>.v70-head{
+ margin:8px 0 0!important;font-size:10px!important;
+}
+.mixer #mixbody>.v70-mic>.v78-bottom-group>.v78-push-talk{
+ font:700 7px/1 Arial,sans-serif!important;color:#b9c2ca!important;
+ letter-spacing:.1px!important;margin:-3px 0 0!important;
+}
+.mixer #mixbody>.v70-mic>.v78-bottom-group>#mic-toggle{
+ margin:2px auto 3px!important;min-height:39px!important;
+ height:39px!important;width:49px!important;
+ border:3px solid #1755ca!important;box-shadow:0 0 7px #1453d9!important;
+}
+.mixer #mixbody>.v70-mic>.v78-bottom-group #mic-toggle .a9-mic-switch-button{
+ display:none!important;
+}
+.mixer #mixbody>.v70-mic>.v78-bottom-group #mic-toggle span:first-child{
+ display:none!important;
+}
+.mixer #mixbody>.v70-mic>.v78-bottom-group #mic-toggle span:last-child{
+ display:inline!important;color:#85d7ff!important;font:900 10px/1 Arial,sans-serif!important;
+}
+.mixer #mixbody>.v70-mic>.v78-bottom-group .v70-reference-label{
+ font-size:6px!important;max-width:100%!important;text-align:center!important;
+}
+@media(max-width:1320px){
+ .mixer #mixbody>.v70-mic>.v78-micfx-group .v70-toggle-line{gap:10px!important}
+ .mixer #mixbody>.v70-mic>.v78-mic-knob-group>.v70-knob-unit{min-height:49px!important}
+ .mixer #mixbody>.v70-mic .v78-mic-second .v78-mic-second-cap{width:35px!important;height:35px!important}
+}
+</style>
+<script id="signal-v78-mic-column-reference-script">
+(()=>{
+ function setup(){
+  const column=document.querySelector('.mixer #mixbody > .v70-mic');
+  if(!column||column.dataset.v78Ready)return;
+  const groups=[...column.querySelectorAll(':scope > .v77-left-group')];
+  function group(name){return groups.find(g=>g.querySelector(':scope > .v70-head')?.textContent.trim()===name)}
+  const mic=group('MIC'),talk=group('TALKOVER'),fx=group('MIC FX'),reverb=group('MIC REVERB'),bottom=group('MIC ON / OFF');
+  if(!mic||!fx||!reverb||!bottom)return;
+  column.dataset.v78Ready='1';
+  mic.classList.add('v78-mic-knob-group');
+  talk?.classList.add('v78-talkover-group');
+  fx.classList.add('v78-micfx-group');
+  reverb.classList.add('v78-reverb-group');
+  bottom.classList.add('v78-bottom-group');
+  // MIC strip has four matching knobs in the hardware reference.
+  // Keep existing working MIC 1 LEVEL, HI and LOW controls. The extra
+  // MIC 2 LEVEL is a separate reference rotary, not falsely routed to hardware.
+  const existing=[...mic.querySelectorAll(':scope > .v70-knob-unit')];
+  if(existing.length===3){
+   const wrapper=document.createElement('div');wrapper.className='v70-knob-unit v78-mic-second';
+   const label=document.createElement('small');label.textContent='MIC 2 LEVEL';wrapper.appendChild(label);
+   const knob=document.createElement('div');knob.className='v78-mic-second-cap';
+   knob.tabIndex=0;knob.setAttribute('role','slider');knob.setAttribute('aria-label','MIC 2 level, visual reference only');
+   knob.setAttribute('aria-valuemin','0');knob.setAttribute('aria-valuemax','100');
+   knob.title='MIC 2: reference dial. Only one microphone input is currently implemented.';
+   wrapper.appendChild(knob);existing[0].insertAdjacentElement('afterend',wrapper);
+   let val=50,drag=null;
+   function set(v){val=Math.max(0,Math.min(100,Math.round(v)));knob.setAttribute('aria-valuenow',String(val));knob.style.setProperty('--v78-pointer',((val-50)*2.6)+'deg')}
+   knob.addEventListener('wheel',e=>{e.preventDefault();set(val+(e.deltaY<0?3:-3))},{passive:false});
+   knob.addEventListener('keydown',e=>{if(['ArrowUp','ArrowRight','ArrowDown','ArrowLeft','Home','End'].includes(e.key)){e.preventDefault();set(e.key==='Home'?0:e.key==='End'?100:val+(['ArrowUp','ArrowRight'].includes(e.key)?2:-2))}});
+   knob.addEventListener('pointerdown',e=>{drag={y:e.clientY,v:val};knob.setPointerCapture(e.pointerId)});
+   knob.addEventListener('pointermove',e=>{if(drag)set(drag.v+(drag.y-e.clientY)*.65)});
+   knob.addEventListener('pointerup',()=>drag=null);knob.addEventListener('pointercancel',()=>drag=null);
+   set(50);
+  }
+  // Move the existing illuminated LED into its hardware reference position:
+  // below MIC REVERB PARAMETER and above MIC PUSH TO TALK.
+  fx.querySelector('.v72-mic-fx-led')?.remove();
+  const light=document.createElement('div');light.className='v78-beat-light';
+  light.textContent='BEAT FX';
+  const led=document.createElement('span');led.className='v78-beat-led';light.appendChild(led);
+  bottom.insertBefore(light,bottom.firstChild);
+  const heading=bottom.querySelector(':scope > .v70-head');
+  if(heading)heading.textContent='MIC';
+  const push=document.createElement('div');push.className='v78-push-talk';push.textContent='— PUSH TO TALK';
+  if(heading)heading.insertAdjacentElement('afterend',push);
+  const toggle=bottom.querySelector('#mic-toggle');if(toggle){
+   toggle.title='MIC ON/OFF. Browser microphone permission required. Push-to-talk mode is not implemented.';
+   toggle.setAttribute('aria-label','Microphone on/off (push-to-talk is reference text)');
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
+})();
+</script>
 </body></html>
