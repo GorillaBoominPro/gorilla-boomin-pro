@@ -3777,4 +3777,59 @@ body.signal-booth-v2:not(.festival) .deckshell>.signal-v52-zero-line{
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
 })();
 </script>
+<style id="signal-v53-visible-tempo-zero">
+/* Render the short zero reference OUTSIDE the slider, above its tick marks.
+   The original in-rail 0 is obscured by the fader's own slider hardware. */
+body.signal-booth-v2:not(.festival) .deckshell>.signal-v52-zero-line{display:none!important}
+body.signal-booth-v2:not(.festival) .deckshell>.pitchrail.cdjx-long-tempo .cdjx-tempo-label.zero{visibility:hidden!important}
+body.signal-booth-v2 .deckshell>.signal-v53-zero{
+ position:absolute;display:flex;align-items:center;gap:4px;
+ height:20px;white-space:nowrap;z-index:39;pointer-events:none;
+ color:#fff;font:900 14px/1 Arial,Helvetica,sans-serif;
+ text-shadow:0 0 2px #ffffff80,0 1px 2px #000;
+}
+body.signal-booth-v2 .deckshell>.signal-v53-zero[hidden]{display:none!important}
+body.signal-booth-v2 .deckshell>.signal-v53-zero .dash{
+ display:block;flex:1 1 auto;min-width:10px;height:3px;
+ border-radius:1px;background:#fff;box-shadow:0 0 3px #fffb;
+}
+body.signal-booth-v2 .deckshell>.signal-v53-zero .digit{flex:0 0 auto}
+</style>
+<script id="signal-v53-visible-tempo-zero-script">
+(()=>{
+ function install(){
+  const items=['A','B'].map(k=>{
+   const shell=document.querySelector('.deckshell.deck-'+k);
+   const button=shell?.querySelector(':scope > .cdjx-tempo-reset-wrap button');
+   const rail=shell?.querySelector(':scope > .pitchrail.cdjx-long-tempo');
+   if(!shell||!button||!rail)return null;
+   const marker=document.createElement('div');
+   marker.className='signal-v53-zero';marker.setAttribute('aria-hidden','true');
+   marker.innerHTML='<span class="dash"></span><span class="digit">0</span>';
+   shell.append(marker);
+   return {shell,button,rail,marker};
+  }).filter(Boolean);
+  function draw(){
+   for(const {shell,button,rail,marker} of items){
+    if(document.body.classList.contains('festival')){marker.hidden=true;continue}
+    const sr=shell.getBoundingClientRect(),br=button.getBoundingClientRect(),fr=rail.getBoundingClientRect();
+    if(!sr.width||!br.width||!fr.width){marker.hidden=true;continue}
+    const factor=shell.offsetWidth/sr.width;
+    const left=(br.right+7-sr.left)*factor;
+    const right=(fr.left-5-sr.left)*factor;
+    marker.hidden=false;
+    marker.style.left=left+'px';
+    marker.style.width=Math.max(24,right-left)+'px';
+    marker.style.top=((br.top+br.height/2-sr.top)*factor-10)+'px';
+   }
+  }
+  let scheduled=false;
+  function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;draw()})}
+  schedule();window.addEventListener('load',schedule,{once:true});window.addEventListener('resize',schedule,{passive:true});
+  document.querySelectorAll('#signal-view-controls button,#booth-club,#booth-festival').forEach(el=>el.addEventListener('click',schedule));
+  if(window.ResizeObserver){const ro=new ResizeObserver(schedule);items.forEach(({shell})=>ro.observe(shell))}
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+})();
+</script>
 </body></html>
