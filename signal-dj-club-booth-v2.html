@@ -891,6 +891,9 @@ body.signal-booth-v2 .cdjx-screen-grid b{font-variant-numeric:tabular-nums}
 body.signal-booth-v2 .cdjx-screen-grid .cdjx-remaining{font-size:10px;color:#afd9f7}
 body.signal-booth-v2 .cdjx-screen-grid .cdjx-time{color:#fff}
 body.signal-booth-v2 .cdjx-screen-grid .cdjx-bpm{color:#ffdf8c}
+</style><style id="signal-cdjx-markers-v5">
+body.signal-booth-v2 .cdjx-live-display>small{color:#d5bb8d!important}
+body.signal-booth-v2 .cdjx-main-wave,body.signal-booth-v2 .cdjx-overview-wave{image-rendering:auto}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -1901,7 +1904,11 @@ for(const k of ['A','B']){
  deck.insertBefore(monitor,deck.querySelector('.utility'));monitor.querySelector('.cdjx-wave-slot').appendChild(wave);
  const dock=document.createElement('section');dock.className='signal-cdjx-pad-dock';dock.setAttribute('aria-label','Deck '+k+' bottom performance pads');
  transport.insertAdjacentElement('afterend',dock);dock.appendChild(padBank);if(stems)dock.appendChild(stems);
- monitor.querySelectorAll('[data-action="browse"],[data-action="search"]').forEach(btn=>btn.addEventListener('click',()=>document.getElementById('signal-browser-toggle')?.click()));
+ monitor.querySelectorAll('[data-action="browse"],[data-action="search"]').forEach(btn=>btn.addEventListener('click',()=>{
+  const drawer=document.getElementById('signal-browser-drawer');
+  if(drawer?.hidden)document.getElementById('signal-browser-toggle')?.click();
+  if(btn.dataset.action==='search')requestAnimationFrame(()=>document.getElementById('sbd-search')?.focus());
+ }));
  monitor.querySelectorAll('[data-action="info"],[data-action="menu"]').forEach(btn=>btn.addEventListener('click',()=>{const title=monitor.querySelector('.cdjx-title');title.textContent=document.getElementById('name-'+k)?.textContent||'NO TRACK LOADED'}));
  monitor.querySelectorAll('[data-action="wave"]').forEach(btn=>btn.addEventListener('click',()=>wave.scrollIntoView({block:'nearest',behavior:'smooth'})));
  const update=()=>{
@@ -1926,7 +1933,7 @@ function start(){
   const controls=document.createElement('section');controls.className='cdjx-extra-controls';controls.setAttribute('aria-label','Deck '+k+' media player controls');
   controls.innerHTML='<label>PLAYER '+k+' · BEAT JUMP / MEMORY</label><button data-cdjx="back">◀ 4 BEATS</button><button data-cdjx="forward">4 BEATS ▶</button><div class="cdjx-memory"><button data-cdjx="store">MEMORY +</button><span class="cdjx-memory-readout">NO SAVED CUE</span><button data-cdjx="previous">◀</button><button data-cdjx="next">▶</button><button data-cdjx="delete">DELETE</button></div>';
   monitor.querySelector('.cdjx-screen-bottom')?.insertAdjacentElement('beforebegin',controls);
-  const memories=[],readout=controls.querySelector('.cdjx-memory-readout');let selected=-1;
+  const memories=[],readout=controls.querySelector('.cdjx-memory-readout');monitor.signalCueMemories=memories;let selected=-1;
   const display=()=>{readout.textContent=selected<0?'NO SAVED CUE':'MEMORY '+(selected+1)+' / '+memories.length+' · '+Math.floor(memories[selected]/60)+':'+String(Math.floor(memories[selected]%60)).padStart(2,'0')};
   const seek=dir=>{if(!audio.src||!Number.isFinite(audio.duration))return;const bpm=Math.max(40,Number(document.getElementById('manual-'+k)?.value)||128);audio.currentTime=Math.max(0,Math.min(audio.duration,audio.currentTime+dir*240/bpm))};
   const guard=()=>{if(audio.src)return true;readout.textContent='LOAD A TRACK FIRST';return false};
@@ -1974,7 +1981,12 @@ function initLCD(){
     for(let x=0;x<w;x+=2){const at=base+x/w*span;if(at<0||at>duration)continue;const idx=Math.max(0,Math.min(peaks.length-1,Math.floor(at/duration*peaks.length))),amp=Math.max(1,peaks[idx]*half*.94);
      const beatHue=Math.floor(at*3)%3;g.fillStyle=at<position?(beatHue===0?'#f7d15e':'#ed9d38'):(beatHue===0?'#73e4ef':beatHue===1?'#469cf2':'#886de9');g.fillRect(x,half-amp,2,amp*2);
     }
-    if(!isOverview){const bpm=Math.max(40,Number(document.getElementById('manual-'+k)?.value)||128),beat=60/bpm;g.lineWidth=1;for(let n=Math.floor(base/beat);n<=Math.ceil((base+span)/beat);n++){const x=(n*beat-base)/span*w;if(x<0||x>w)continue;g.strokeStyle=n%4===0?'#f4db8a72':'#789ab433';g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke()}}g.fillStyle='#fff';if(isOverview){g.fillRect(Math.min(w-2,position/duration*w),0,2,h)}else{g.fillRect(w/2-1,0,2,h);g.strokeStyle='#53627460';g.beginPath();g.moveTo(0,half);g.lineTo(w,half);g.stroke()}
+    if(!isOverview){const bpm=Math.max(40,Number(document.getElementById('manual-'+k)?.value)||128),beat=60/bpm;g.lineWidth=1;for(let n=Math.floor(base/beat);n<=Math.ceil((base+span)/beat);n++){const x=(n*beat-base)/span*w;if(x<0||x>w)continue;g.strokeStyle=n%4===0?'#f4db8a72':'#789ab433';g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke()}}const marks=[];
+    if(Array.isArray(deck?.cues))deck.cues.forEach((time,index)=>{if(Number.isFinite(time)&&time>=0)marks.push({time,label:String(index+1),color:'#f95f78'})});
+    (monitor.signalCueMemories||[]).forEach((time,index)=>{if(Number.isFinite(time)&&time>=0)marks.push({time,label:'M'+(index+1),color:'#f2ba50'})});
+    if(Number.isFinite(deck?.mainCue)&&deck.mainCue>0)marks.push({time:deck.mainCue,label:'C',color:'#ffffff'});
+    for(const mark of marks){const x=(mark.time-base)/span*w;if(x<0||x>w)continue;g.fillStyle=mark.color;g.fillRect(Math.round(x)-1,0,3,Math.max(4,h*.23));if(!isOverview&&w>320){g.font='9px sans-serif';g.textAlign='center';g.fillText(mark.label,x,Math.max(12,h*.23+9))}}
+    g.fillStyle='#fff';if(isOverview){g.fillRect(Math.min(w-2,Math.max(0,position/duration*w)),0,2,h)}else{g.fillRect(w/2-1,0,2,h);g.strokeStyle='#53627460';g.beginPath();g.moveTo(0,half);g.lineTo(w,half);g.stroke()}
    }
    render(canvas,false);render(overview,true);
   }
