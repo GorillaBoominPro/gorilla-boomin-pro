@@ -5444,4 +5444,153 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v71-beatfx.v74-fx{
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
 })();
 </script>
+<style id="signal-v75-mixer-hardware-finish">
+/* V75: coordinated professional hardware finish. Scoped to mixer only.
+   Original functioning channel controls, master/FX actions and decks are untouched. */
+body.signal-booth-v2:not(.festival) .mixer{
+ background:linear-gradient(90deg,#13181d 0%,#272c32 1%,#0e1116 3%,#181b20 97%,#090c11 99%,#343a41 100%)!important;
+ border-left:3px solid #626a74!important;border-right:3px solid #626a74!important;
+ box-shadow:inset 0 1px 0 #929aa25c,inset 0 -3px 5px #0009,0 8px 18px #0008!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody{
+ background:#070a0e!important;border-top:2px solid #404953!important;
+ border-bottom:2px solid #404953!important;padding:3px!important;
+ gap:1px!important;align-items:stretch!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody> :is(.v70-utility-col,.v73-channel,.v74-master,.v74-fx){
+ position:relative!important;isolation:isolate!important;
+ border-top:1px solid #626a735e!important;border-bottom:1px solid #0b0e12!important;
+ box-shadow:inset 1px 0 0 #838b9333,inset -2px 0 4px #0007!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody> :is(.v70-utility-col,.v73-channel,.v74-master,.v74-fx)::before,
+body.signal-booth-v2:not(.festival) .mixer #mixbody> :is(.v70-utility-col,.v73-channel,.v74-master,.v74-fx)::after{
+ content:""!important;position:absolute!important;z-index:0!important;
+ width:6px!important;height:6px!important;border-radius:50%!important;
+ background:radial-gradient(circle at 32% 30%,#76828b 0 15%,#29323a 34%,#0a0f13 66%,#58616a 94%)!important;
+ border:1px solid #0e141a!important;box-shadow:0 0 0 1px #86919a3d,inset 0 0 2px #000b!important;
+ pointer-events:none!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody> :is(.v70-utility-col,.v73-channel,.v74-master,.v74-fx)::before{top:4px!important;right:4px!important}
+body.signal-booth-v2:not(.festival) .mixer #mixbody> :is(.v70-utility-col,.v73-channel,.v74-master,.v74-fx)::after{bottom:5px!important;right:5px!important}
+body.signal-booth-v2:not(.festival) .mixer #mixbody> :is(.v70-utility-col,.v73-channel,.v74-master,.v74-fx)>*{
+ position:relative;z-index:1;
+}
+.mixer #mixbody .v70-utility-col .v70-knob-unit .utility-knob,
+.mixer #mixbody>.v73-channel .knob.rotary-control,
+.mixer #mixbody>.v74-master .v71-knob,
+.mixer #mixbody>.v74-fx .v71-knob{
+ box-shadow:inset 0 1px 2px #fff4,inset 0 -3px 5px #0008,0 2px 3px #000d,0 0 0 2px #11171d!important;
+}
+.mixer #mixbody>.v73-channel .channel-number{
+ font-size:19px!important;line-height:1.2!important;margin:3px 0 6px!important;
+}
+.mixer #mixbody>.v73-channel .v73-source-head{min-height:58px!important}
+.mixer #mixbody>.v73-channel .v73-source-caption{
+ color:#aeb8c3!important;letter-spacing:0!important;font-size:7px!important;
+}
+.mixer #mixbody>.v73-channel .v73-eq-box{
+ border-top:1px solid #616a7388!important;border-bottom:1px solid #313a44!important;
+ background:linear-gradient(#101419,#151a20 50%,#10151a)!important;
+ padding-bottom:8px!important;
+}
+.mixer #mixbody>.v73-channel .v73-color-zone{
+ border-top:1px solid #3d444d!important;border-bottom:1px solid #606870!important;
+ background:linear-gradient(#141920,#101419)!important;margin-top:6px!important;
+}
+.mixer #mixbody>.v73-channel .v73-cue-zone{
+ padding:10px 2px 5px!important;gap:4px!important;border-bottom:1px solid #414951!important;
+}
+.mixer #mixbody>.v73-channel .v73-cue-zone button{
+ border:2px solid #ad7d3c!important;
+ background:linear-gradient(#e4bc67 0%,#e2ac44 19%,#b87921 72%,#775017 100%)!important;
+ box-shadow:inset 0 1px 1px #fff8,inset 0 -2px 2px #0005,0 2px 2px #000b!important;
+ text-shadow:0 1px 0 #fff4!important;
+}
+.mixer #mixbody>.v73-channel .v73-cue-zone button[aria-pressed="true"]{
+ background:linear-gradient(#fff6d2,#f0bd55)!important;box-shadow:0 0 8px #ecb53c!important;
+}
+.mixer #mixbody>.v73-channel .v73-beat-fx-indicator{
+ margin-top:9px!important;margin-bottom:16px!important;
+}
+.mixer #mixbody>.v73-channel .fader-rail{
+ background:
+ repeating-linear-gradient(to bottom,transparent 0 12px,#aab4bd 12px 13px,transparent 13px 21px) left 2px top 8px/12px calc(100% - 16px) no-repeat,
+ repeating-linear-gradient(to bottom,transparent 0 12px,#aab4bd 12px 13px,transparent 13px 21px) right 2px top 8px/12px calc(100% - 16px) no-repeat,
+ linear-gradient(90deg,#141a20 0 42%,#000306 43% 57%,#141a20 58% 100%)!important;
+ box-shadow:inset 0 0 0 1px #555f68,inset 0 0 9px #000!important;
+}
+.mixer #mixbody>.v73-channel .channel-assign{
+ border-top:1px solid #424b54!important;margin-top:9px!important;
+ padding-top:10px!important;min-height:54px!important;
+}
+.mixer #mixbody>.v73-channel .assign-switch{box-shadow:inset 0 2px 3px #000a!important}
+.mixer #mixbody>.v74-master .v71-meter-pair{
+ background:linear-gradient(90deg,#080b0f,#14191e 40%,#080c10 60%,#101419)!important;
+ box-shadow:inset 0 0 0 1px #30373e!important;
+}
+.mixer #mixbody>.v74-fx .v71-screen{
+ background:linear-gradient(135deg,#090e17,#020408 70%)!important;
+ border:3px solid #414b55!important;
+ box-shadow:inset 0 0 12px #000,0 0 0 1px #05080c!important;
+}
+.mixer #mixbody>.v74-fx .v74-screen-top{color:#b3d2e5!important}
+.mixer #mixbody>.v74-fx .v71-screen .v71-fx-title{
+ font-weight:900!important;text-shadow:0 0 5px #b8d3ff44!important;
+}
+.mixer #mixbody>.v74-fx .a9-xpad{
+ box-shadow:inset 0 3px 9px #000e,inset 0 -2px 2px #859ab355,0 0 0 1px #3b4855!important;
+}
+.mixer #mixbody>.v74-fx .fx-on-button{
+ box-shadow:inset 0 2px 8px #fff9,inset 0 -6px 10px #143a7d,0 0 8px #438cff!important;
+}
+/* Main crossfader: centered, readable and mechanically recessed without changing its range handler. */
+body.signal-booth-v2:not(.festival) .mixer .crossSection{
+ border-top:2px solid #626c77!important;
+ background:linear-gradient(180deg,#191e23,#0c1117 60%,#141920)!important;
+ box-shadow:inset 0 1px 1px #9da6b03b!important;
+ padding:13px 10px 10px!important;
+}
+body.signal-booth-v2:not(.festival) .mixer .crossSection>label{
+ color:#d7dce3!important;font:900 9px/1.2 Arial,sans-serif!important;
+ letter-spacing:.5px!important;text-align:center!important;
+}
+body.signal-booth-v2:not(.festival) .mixer .crossSection>#cross{
+ width:min(77%,360px)!important;margin:13px auto 10px!important;
+ background:
+ repeating-linear-gradient(to right,transparent 0 8px,#87939d 8px 9px,transparent 9px 17px) center center/100% 30px no-repeat,
+ linear-gradient(#161c22,#04070a 50%,#161d25)!important;
+ box-shadow:inset 0 1px 6px #000,0 0 0 1px #53606a!important;
+}
+@media(max-width:1320px){
+ .mixer #mixbody>.v73-channel .v73-cue-zone{gap:2px!important;padding-left:0!important;padding-right:0!important}
+ .mixer #mixbody>.v73-channel .v73-source-caption{font-size:6px!important}
+}
+</style>
+<script id="signal-v75-mixer-finishing-script">
+(()=>{
+ function addFinish(){
+  const mix=document.getElementById('mixbody');
+  if(!mix||mix.dataset.v75Finish)return;
+  mix.dataset.v75Finish='1';
+  const channels=Array.from(mix.querySelectorAll(':scope > .v73-channel'));
+  // The reference uses an illuminated BEAT FX pilot on each channel.
+  // Reuse the existing indicator instead of adding nonfunctional switches.
+  for(const ch of channels){
+   const pilot=ch.querySelector('.v73-beat-fx-indicator');
+   if(pilot)pilot.setAttribute('aria-label','Channel Beat FX status indicator');
+  }
+  // Distinguish the real master and Beat FX sections with original branding.
+  const fx=mix.querySelector(':scope > .v74-fx');
+  const last=fx?.querySelector('.v71-multi');
+  if(last&&!last.querySelector('.v75-brand-mini')){
+   const mark=document.createElement('div');
+   mark.className='v75-brand-mini';
+   mark.textContent='G//BMN: SIGNAL FX';
+   mark.style.cssText='color:#8997a5;font:800 8px/1 Arial,sans-serif;letter-spacing:.3px;text-align:center;margin-top:3px';
+   last.appendChild(mark);
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',addFinish,{once:true});else addFinish();
+})();
+</script>
 </body></html>
