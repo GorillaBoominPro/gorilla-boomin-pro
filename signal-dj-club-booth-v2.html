@@ -1099,6 +1099,37 @@ body.signal-booth-v2 .mixbody{background:linear-gradient(#1b2530,#0e151e)!import
 body.signal-booth-v2 .mixbody .channel{border-left:1px solid #4a5868!important;border-right:1px solid #283442!important;box-shadow:inset 0 2px 3px #ffffff08!important}
 body.signal-booth-v2 .mixbody input[type=range]{accent-color:#9fb3c7}
 body.signal-booth-v2 .mixer button:focus-visible,body.signal-booth-v2 .mixer input:focus-visible{outline:2px solid #fff!important;outline-offset:2px}
+</style><style id="signal-cdjx-hardware-repair-v17">
+/* Correct the real raised-display proportions and group physical controls instead of tiny stacked UI buttons. */
+body.signal-booth-v2 .deckshell>.signal-cdjx-screen{left:15.5%!important;width:69%!important;top:-2%!important;height:37.1%!important}
+body.signal-booth-v2 .deckshell>.cdjx-side-wing{width:14.2%!important;top:1.9%!important;height:31.2%!important;gap:6px!important;padding:7px 4px!important;overflow:hidden!important;justify-content:flex-start!important}
+body.signal-booth-v2 .deckshell>.cdjx-side-wing.left{left:.65%!important}
+body.signal-booth-v2 .deckshell>.cdjx-side-wing.right{right:.65%!important}
+body.signal-booth-v2 .cdjx-side-wing .cdjx-usb-unit{width:100%;display:flex;flex-direction:column;gap:3px;border-bottom:1px solid #344252;padding:0 0 5px}
+body.signal-booth-v2 .cdjx-side-wing .cdjx-usb{position:relative;display:block;min-height:37px!important;background:linear-gradient(#1a212b,#090e14)!important;border:2px solid #627181!important;border-radius:2px!important;font-size:8px!important;padding-top:17px!important;letter-spacing:.4px}
+body.signal-booth-v2 .cdjx-side-wing .cdjx-usb:before{content:'';position:absolute;top:5px;left:50%;transform:translateX(-50%);width:23px;height:8px;border:1px solid #bac7d3;background:#06090e;box-shadow:inset 0 0 0 2px #1f2732}
+body.signal-booth-v2 .cdjx-side-wing .cdjx-stop{align-self:center;width:67%!important;min-height:18px!important;padding:2px!important;font-size:7px!important;border-color:#a04a55!important;background:linear-gradient(#3d2730,#1a141a)!important}
+body.signal-booth-v2 .cdjx-side-wing .cdjx-wing-double{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+body.signal-booth-v2 .cdjx-side-wing .cdjx-wing-double button{min-height:30px!important;font-size:7px!important;line-height:1.15!important;overflow-wrap:break-word!important;padding:3px 0!important}
+body.signal-booth-v2 .cdjx-side-wing .cdjx-quant{background:#333d48!important}
+body.signal-booth-v2 .cdjx-side-wing .cdjx-slip{background:#56232f!important;border-color:#d85167!important}
+body.signal-booth-v2 .cdjx-side-wing .cdjx-hint{font-size:6.5px!important;line-height:1.25;opacity:.85}
+body.signal-booth-v2 .deckshell>.cdjx-side-wing.right{display:flex!important}
+body.signal-booth-v2 .cdjx-side-wing.right .cdjx-wing-double button{min-height:34px!important}
+body.signal-booth-v2 .cdjx-side-wing.right .signal-cdjx-encoder{flex:1;min-height:0!important;height:auto!important;width:100%!important;display:flex!important;justify-content:center!important;gap:7px!important;padding:6px 2px!important;background:transparent!important;border:0!important}
+body.signal-booth-v2 .cdjx-side-wing.right .signal-cdjx-encoder .cdjx-rotary{width:54px!important;height:54px!important;max-width:94%!important;min-height:0!important;border-radius:50%!important}
+body.signal-booth-v2 .cdjx-side-wing.right .signal-cdjx-encoder .cdjx-encoder-label{font-size:8px!important}
+body.signal-booth-v2 .cdjx-side-wing.right .cdjx-push-label{font-size:7px!important}
+body.signal-booth-v2 .cdjx-direct-load{display:none!important} /* same file selection on realistic USB controls */
+body.signal-booth-v2 .deckshell>.cdjx-face-cluster{overflow:visible!important;box-shadow:none!important}
+body.signal-booth-v2 .deckshell>.cdjx-face-cluster .group{padding-bottom:2px!important;gap:2px!important}
+body.signal-booth-v2 .deckshell>.cdjx-face-cluster button{min-height:22px!important;padding:1px!important}
+body.signal-booth-v2 .deckshell>.cdjx-face-cluster button.round{width:29px!important;height:29px!important}
+body.signal-booth-v2 .deckshell>.cdjx-face-cluster .group strong{font-size:7px!important}
+body.signal-booth-v2 .deckshell>.cdjx-face-cluster{height:24%!important;top:41%!important}
+body.signal-booth-v2 .deckshell>.cdjx-face-hotcues{top:38.3%!important}
+body.signal-booth-v2 .deckshell>.cdjx-face-hotcue-label{top:36.7%!important}
+body.signal-booth-v2 .deckshell .platterZone{top:44%!important}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -2451,8 +2482,8 @@ function init(){
   left.className='cdjx-side-wing left';right.className='cdjx-side-wing right';
   left.setAttribute('aria-label','Deck '+k+' left source and transport hardware');
   right.setAttribute('aria-label','Deck '+k+' right screen navigation hardware');
-  left.innerHTML='<div class="cdjx-wing-label">MEDIA SOURCE</div><button type="button" class="cdjx-usb" data-c="usb1">USB 1 / FILE</button><button type="button" class="cdjx-stop" data-c="stop1">■ STOP 1</button><button type="button" class="cdjx-usb" data-c="usb2">USB 2 / FILE</button><button type="button" class="cdjx-stop" data-c="stop2">■ STOP 2</button><button type="button" data-c="quant">QUANTIZE · N/A</button><button type="button" data-c="slip">SLIP · N/A</button><button type="button" data-c="call">◀ CUE CALL</button><button type="button" data-c="delete">DELETE CUE</button><small class="cdjx-hint">USB ports simulated by file picker</small>';
-  right.innerHTML='<div class="cdjx-wing-label">TRACK CONTROL</div><button type="button" data-c="back">BACK</button><button type="button" data-c="tag">TAG TRACK / REMOVE</button><button type="button" data-c="filter">TRACK FILTER / EDIT</button><button type="button" data-c="shortcut">SHORT CUT</button>';
+  left.innerHTML='<div class="cdjx-wing-label">MEDIA SOURCE</div><div class="cdjx-usb-unit"><button type="button" class="cdjx-usb" data-c="usb1">USB 1</button><button type="button" class="cdjx-stop" data-c="stop1">■ STOP</button></div><div class="cdjx-usb-unit"><button type="button" class="cdjx-usb" data-c="usb2">USB 2</button><button type="button" class="cdjx-stop" data-c="stop2">■ STOP</button></div><div class="cdjx-wing-double"><button type="button" class="cdjx-quant" data-c="quant" title="Quantize: not implemented">QUANTIZE</button><button type="button" class="cdjx-slip" data-c="slip" title="Slip mode: not implemented">SLIP</button></div><div class="cdjx-wing-label">CUE / LOOP</div><div class="cdjx-wing-double"><button type="button" data-c="call">◀ CALL</button><button type="button" data-c="delete">DELETE</button></div><small class="cdjx-hint">USB selects files on Mac · QUANTIZE / SLIP not yet supported</small>';
+  right.innerHTML='<div class="cdjx-wing-label">TRACK BROWSER</div><div class="cdjx-wing-double"><button type="button" data-c="back">BACK</button><button type="button" data-c="tag">TAG TRACK / REMOVE</button></div><div class="cdjx-wing-double"><button type="button" data-c="filter">TRACK FILTER / EDIT</button><button type="button" data-c="shortcut">SHORT CUT</button></div>';
   const encoder=shell.querySelector('.signal-cdjx-encoder');
   if(encoder){encoder.querySelector('.cdjx-back')?.remove();right.insertBefore(encoder,right.querySelector('[data-c="tag"]'))}
   shell.append(left,right);
