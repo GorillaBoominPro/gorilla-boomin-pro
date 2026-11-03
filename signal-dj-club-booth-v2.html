@@ -4528,4 +4528,127 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.sidefx{
  display:none!important;
 }
 </style>
+<style id="signal-v70-twin-reference-utility-columns">
+/* V70: two hardware-reference columns BEFORE channel 1. No channel markup changes. */
+body.signal-booth-v2:not(.festival) .mixer #mixbody{
+ grid-template-columns:minmax(86px,.95fr) minmax(90px,1fr) repeat(4,minmax(56px,1fr))!important;
+ gap:2px!important;align-items:stretch!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-col{
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ min-width:0!important;min-height:850px!important;box-sizing:border-box!important;
+ background:linear-gradient(90deg,#161a1f,#090d12 52%,#22272e)!important;
+ border:0!important;border-right:2px solid #515a63!important;
+ padding:8px 3px 12px!important;gap:6px!important;text-align:center!important;
+ color:#dfe4e8!important;
+}
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.sidefx,
+body.signal-booth-v2:not(.festival) .mixer #mixbody>.mixer-utility-left{display:none!important}
+.mixer .v70-utility-col .v70-head{color:#dee5e9!important;text-align:center;font:900 10px/1.2 Arial,sans-serif;letter-spacing:.4px;margin:5px 0 2px}
+.mixer .v70-utility-col .v70-line{height:1px;width:95%;background:#6c747e;margin:5px 0}
+.mixer .v70-utility-col .v70-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;width:100%}
+.mixer .v70-utility-col button{cursor:pointer;min-height:26px!important;padding:3px 2px!important;font:800 8px/1.1 Arial,sans-serif!important;color:#f0f2f5!important;border-radius:2px!important;background:linear-gradient(#303840,#11171d)!important;border:1px solid #777f88!important;box-sizing:border-box}
+.mixer .v70-utility-col button.v70-blue{border-color:#1765cc!important;box-shadow:inset 0 -3px 0 #1453bb,0 0 3px #1e70d880!important;color:#b6d7ff!important}
+.mixer .v70-utility-col button.v70-red{border-color:#bd4655!important;box-shadow:inset 0 0 5px #ac2338!important;color:#ffc2c9!important}
+.mixer .v70-utility-col button[aria-pressed="true"]{background:linear-gradient(#3e7293,#123b6a)!important;box-shadow:inset 0 0 8px #5dc6ff,0 0 5px #168afa!important;color:white!important}
+.mixer .v70-utility-col button:focus-visible,.mixer .v70-utility-col [tabindex]:focus-visible{outline:2px solid #a7d9ff;outline-offset:2px}
+.mixer .v70-utility-col .v70-usb-row{margin:2px 0 9px}
+.mixer .v70-utility-col .v70-usb-row button{height:45px!important;background:linear-gradient(#292f36 50%,#0a1f48 88%,#153c8e)!important;border-color:#4f6478!important}
+.mixer .v70-utility-col .v70-knob-unit{width:100%;display:flex;flex-direction:column;align-items:center;gap:2px;margin:2px 0 5px;min-height:55px}
+.mixer .v70-utility-col .v70-knob-unit small{font:800 9px/1.2 Arial,sans-serif!important;color:#d4d9de!important}
+.mixer .v70-utility-col .utility-knob{display:block;position:relative;flex:none;cursor:ns-resize}
+.mixer .v70-utility-col .v70-knob-unit .utility-knob{width:39px!important;height:39px!important}
+.mixer .v70-utility-col .v70-knob-unit .utility-knob.utility-knob-large{width:45px!important;height:45px!important}
+.mixer .v70-utility-col .v70-port{width:20px;height:20px;border-radius:50%;border:4px solid #9a8c71;background:radial-gradient(circle,#050505 25%,#131313 60%,#282828 70%);box-shadow:inset 0 0 3px #000,0 0 2px #ddd}
+.mixer .v70-utility-col .a9-left-color-buttons{width:100%;margin:2px 0 3px;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+.mixer .v70-utility-col .a9-left-color-buttons button{height:27px!important;font-size:7px!important}
+.mixer .v70-utility-col .v70-reference-label{font:700 7px/1.25 Arial,sans-serif;color:#a3b0bd;max-width:100%}
+.mixer .v70-utility-col .v70-spacer{flex:1;min-height:4px}
+.mixer .v70-utility-col .v70-toggle-line{display:flex;flex-direction:column;gap:6px;align-items:center;width:100%}
+.mixer .v70-utility-col .v70-toggle-line button{width:83%;max-width:87px}
+.mixer .v70-utility-col .v70-phones-btn{color:#f7d379!important;border-color:#827453!important}
+.mixer .v70-utility-col .v70-knob-unit .a9-endmarks{display:flex;width:100%;justify-content:space-between;font-size:7px}
+.mixer .v70-utility-col .v70-mic-mid{width:39px;height:39px;border-radius:50%;border:3px solid #777;background:radial-gradient(circle at 40% 30%,#d0d6da,#646c73 46%,#121820 74%);cursor:ns-resize}
+.mixer .v70-utility-col .v70-mic-mid::after{content:"";position:relative;display:block;width:2px;height:13px;background:#f1f5f8;margin:3px auto;transform:rotate(var(--v70-angle,0deg));transform-origin:1px 16px}
+@media(max-width:1320px){
+ body.signal-booth-v2:not(.festival) .mixer #mixbody{
+ grid-template-columns:minmax(67px,.9fr) minmax(72px,.95fr) repeat(4,minmax(44px,1fr))!important;
+ }
+ .mixer .v70-utility-col .v70-head{font-size:8px}
+}
+</style>
+<script id="signal-v70-twin-reference-utility-columns-script">
+(()=>{
+ function setup(){
+  const body=document.getElementById('mixbody');
+  const old=body?.querySelector(':scope > .mixer-utility-left');
+  const channel=body?.querySelector(':scope > .channel');
+  if(!body||!old||!channel||body.querySelector('.v70-utility-col'))return;
+  const mic=document.createElement('aside'),tools=document.createElement('aside');
+  mic.className='v70-utility-col v70-mic';tools.className='v70-utility-col v70-utility-right';
+  mic.setAttribute('aria-label','Microphone and MIC FX controls');
+  tools.setAttribute('aria-label','USB, Bluetooth, MIDI, Sound Color FX and headphones');
+  function el(parent,tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!==undefined)e.innerHTML=html;parent.appendChild(e);return e}
+  function take(id,parent,wrap,heading){
+   const node=old.querySelector('#'+id);if(!node)return;
+   if(wrap){const unit=el(parent,'div','v70-knob-unit');if(heading)el(unit,'small','',heading);unit.appendChild(node);return node}
+   parent.appendChild(node);return node
+  }
+  function button(parent,caption,cls,pressed){
+   const b=el(parent,'button',cls||'',caption);b.type='button';if(pressed!==undefined)b.setAttribute('aria-pressed',String(pressed));return b
+  }
+  // First photographed vertical strip: USB selectors, MIC and MIC FX.
+  el(mic,'div','v70-head','USB');const usb=el(mic,'div','v70-pair v70-usb-row');
+  for(const label of ['A','B']){const b=button(usb,'USB '+label,'v70-usb',false);b.title='Reference USB socket selection — physical routing unavailable in a browser';b.onclick=()=>{usb.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));setStatus('USB '+label+' selected visually — hardware USB routing requires a physical mixer')}}
+  el(mic,'div','v70-head','MIC');
+  take('mic-level',mic,true,'LEVEL');take('mic-high',mic,true,'HI');
+  const midUnit=el(mic,'div','v70-knob-unit');el(midUnit,'small','','MID');
+  const mid=el(midUnit,'div','v70-mic-mid');mid.setAttribute('role','slider');mid.setAttribute('tabindex','0');mid.setAttribute('aria-label','MIC MID EQ — hardware reference, not audio connected');mid.setAttribute('aria-valuemin','-12');mid.setAttribute('aria-valuemax','12');mid.setAttribute('aria-valuenow','0');
+  let midVal=0;function setMid(x){midVal=Math.max(-12,Math.min(12,x));mid.setAttribute('aria-valuenow',String(midVal));mid.style.setProperty('--v70-angle',midVal*10+'deg')}
+  mid.addEventListener('wheel',e=>{e.preventDefault();setMid(midVal+(e.deltaY<0?1:-1))},{passive:false});
+  mid.addEventListener('keydown',e=>{if(['ArrowUp','ArrowRight','ArrowDown','ArrowLeft','Home'].includes(e.key)){e.preventDefault();setMid(e.key==='Home'?0:midVal+(['ArrowUp','ArrowRight'].includes(e.key)?1:-1))}});
+  take('mic-low',mic,true,'LOW');
+  el(mic,'div','v70-head','TALKOVER');
+  button(mic,'● TALK OVER','v70-red',false).onclick=e=>{const b=e.currentTarget;b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'));setStatus('Talkover: reference toggle only — automatic microphone ducking not enabled')};
+  el(mic,'div','v70-head','MIC FX');
+  const micFx=el(mic,'div','v70-toggle-line');
+  for(const name of ['ECHO','PITCH','MEGAPHONE']){const b=button(micFx,name,'v70-blue',false);b.onclick=()=>{micFx.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b&&x.getAttribute('aria-pressed')!=='true')));setStatus('MIC FX '+name+': visual selection — no microphone effects processor connected')}}
+  const p1=el(mic,'div','v70-knob-unit');el(p1,'small','','PARAMETER');const k1=el(p1,'input');k1.type='range';k1.min='0';k1.max='100';k1.value='50';k1.setAttribute('aria-label','MIC FX parameter (not audio connected)');
+  el(mic,'div','v70-head','MIC REVERB');
+  const rev=button(mic,'ON','v70-blue',false);rev.onclick=()=>{rev.setAttribute('aria-pressed',String(rev.getAttribute('aria-pressed')!=='true'));setStatus('MIC REVERB: visual state only — audio effect not connected')};
+  const p2=el(mic,'div','v70-knob-unit');el(p2,'small','','PARAMETER');const k2=el(p2,'input');k2.type='range';k2.min='0';k2.max='100';k2.value='50';k2.setAttribute('aria-label','MIC reverb parameter (not audio connected)');
+  el(mic,'div','v70-spacer');el(mic,'div','v70-head','MIC ON / OFF');
+  take('mic-toggle',mic,false);el(mic,'div','v70-reference-label','Browser microphone permission required');
+  // Second photographed strip: device selectors, Sound Color FX, headphones A.
+  el(tools,'div','v70-head','USB');const usb2=el(tools,'div','v70-pair v70-usb-row');
+  for(const label of ['A','B']){const b=button(usb2,'USB '+label,'v70-usb',false);b.title='Physical USB connections cannot be switched in-browser';b.onclick=()=>{usb2.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));setStatus('USB '+label+': visual source selected — physical USB ports unavailable')}}
+  const devs=el(tools,'div','v70-toggle-line');el(devs,'div','v70-head','BLUETOOTH');
+  const bt=button(devs,'PAIRING','v70-red',false);
+  bt.onclick=()=>setStatus('Bluetooth hardware pairing is not available to the browser DJ interface');
+  el(devs,'div','v70-head','MIDI');
+  const midi=button(devs,'ON / OFF','v70-blue',false);
+  midi.onclick=()=>setStatus('Configure MIDI mapping in the app settings; hardware MIDI port switching is unsupported here');
+  const startstop=button(devs,'START / STOP','v70-blue',false);
+  startstop.onclick=()=>setStatus('MIDI START / STOP: reference control, no MIDI transport mapped');
+  el(tools,'div','v70-head','SOUND COLOR FX');
+  el(tools,'div','v70-reference-label','SELECT TYPE');
+  const oldPower=old.querySelector('#color-fx-power');
+  if(oldPower)tools.appendChild(oldPower);
+  const oldColors=old.querySelector('.a9-left-color-buttons');if(oldColors)tools.appendChild(oldColors);
+  take('color-fx-parameter',tools,true,'PARAMETER');
+  el(tools,'div','v70-head','HEADPHONES A');
+  const cueRow=el(tools,'div','v70-pair');
+  for(const [label,key] of [['A','A'],['B','B']]){const b=button(cueRow,'CUE '+label,'v70-phones-btn',false);b.onclick=()=>{const target=document.getElementById('mixcue-'+key);if(target)target.click();b.setAttribute('aria-pressed',target?.getAttribute('aria-pressed')||'false')}}
+  take('headphone-mix',tools,true,'MIX');take('headphone-level',tools,true,'LEVEL');
+  el(tools,'div','v70-reference-label','PHONES A');
+  const port=el(tools,'div','v70-port');port.title='Visual 1/4 inch headphone jack — physical connection is on your audio interface';
+  // Keep every original event-wired node, and preserve old beat-fx column (hidden).
+  channel.before(mic,tools);
+  old.style.setProperty('display','none','important');
+  const status=document.getElementById('status');
+  function setStatus(message){if(status)status.textContent=message}
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
+})();
+</script>
 </body></html>
