@@ -1070,6 +1070,15 @@ body.signal-booth-v2 .deckshell .roundPair .play{border-color:#28cb78!important;
 body.signal-booth-v2 .deckshell .pitchrail{border-radius:3px}
 body.signal-booth-v2 .deckshell>.signal-cdjx-screen{z-index:19!important}
 body.signal-booth-v2 .deckshell>.cdjx-side-wing{z-index:20!important}
+</style><style id="signal-visible-hardware-fix-v15">
+/* Physical buttons belong on the shell itself: correct centered raised display and visible side wings. */
+body.signal-booth-v2 .deckshell>.cdjx-side-wing.left{left:0.5%!important}
+body.signal-booth-v2 .deckshell>.cdjx-side-wing.right{right:0.5%!important}
+body.signal-booth-v2 .deckshell>.cdjx-side-wing{width:14%!important;top:2%!important;height:31%!important;z-index:25!important;border-color:#8190a1!important;background:linear-gradient(135deg,#252d37,#10151d)!important}
+body.signal-booth-v2 .deckshell>.signal-cdjx-screen{left:15%!important;width:70%!important;top:-1.5%!important;z-index:24!important}
+body.signal-booth-v2 .cdjx-side-wing button{min-height:25px!important;font-size:8px!important;border-color:#657e98!important}
+body.signal-booth-v2 .cdjx-side-wing .cdjx-wing-label{color:#e3eaf4!important}
+body.signal-booth-v2 .deckshell>.cdjx-face-hotcue-label{z-index:17!important}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -2257,7 +2266,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 (()=>{
 function build(){
  for(const k of ['A','B']){
-  const host=document.querySelector('.deck-'+k+' .deckshell')||document.querySelector('.deck-'+k);
+  const host=document.querySelector('.deckshell.deck-'+k)||document.querySelector('.deck-'+k);
   if(!host||host.querySelector('.cdjx-hardware-rail'))continue;
   const make=(side)=>{const el=document.createElement('section');el.className='cdjx-hardware-rail '+side;el.setAttribute('aria-label','Deck '+k+' '+side+' physical controls');return el};
   const left=make('left'),right=make('right');
@@ -2391,7 +2400,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 (()=>{
 function install(){
  for(const k of ['A','B']){
-  const deck=document.querySelector('.deck-'+k+' .deckshell'),monitor=deck?.querySelector('.signal-cdjx-screen');
+  const deck=document.querySelector('.deckshell.deck-'+k),monitor=deck?.querySelector('.signal-cdjx-screen');
   if(!deck||!monitor||deck.querySelector('.signal-cdjx-encoder'))continue;
   const enc=document.createElement('section');enc.className='signal-cdjx-encoder';enc.setAttribute('aria-label','Deck '+k+' hardware-style track selector');
   enc.innerHTML='<div class="cdjx-encoder-label">BROWSE / LOAD</div><button type="button" class="cdjx-back">BACK</button><button type="button" class="cdjx-rotary" aria-label="Deck '+k+' push browse encoder; use mouse wheel or keyboard up and down">PUSH</button><div class="cdjx-push-label">SCROLL • PRESS</div><button type="button" class="cdjx-up">▲ TRACK</button><button type="button" class="cdjx-down">▼ TRACK</button><button type="button" class="cdjx-tag-key">TAG LIST</button><button type="button" class="cdjx-import-key">USB / FILE</button>';
@@ -2415,7 +2424,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 (()=>{
 function init(){
  for(const k of ['A','B']){
-  const shell=document.querySelector('.deck-'+k+' .deckshell');
+  const shell=document.querySelector('.deckshell.deck-'+k);
   const screen=shell?.querySelector('.signal-cdjx-screen');
   if(!shell||!screen||shell.querySelector('.cdjx-side-wing'))continue;
   const left=document.createElement('section'),right=document.createElement('section');
@@ -2453,7 +2462,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 function init(){
  const api=window.signalDJControl;
  for(const k of ['A','B']){
-  const shell=document.querySelector('.deck-'+k+' .deckshell'),panel=shell?.querySelector('.signal-cdjx-screen');
+  const shell=document.querySelector('.deckshell.deck-'+k),panel=shell?.querySelector('.signal-cdjx-screen');
   if(!shell||!panel||shell.querySelector('.cdjx-face-hotcues'))continue;
   const deck=()=>api?.getDecks?.()?.[k];
   const press=id=>document.getElementById(id+'-'+k)?.click();
