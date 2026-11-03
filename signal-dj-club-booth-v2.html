@@ -4978,9 +4978,14 @@ body.signal-booth-v2:not(.festival) .mixer #mixbody>.v70-utility-col{
   }
   const phonesHeading=Array.from(rhs.querySelectorAll('.v70-head')).find(e=>e.textContent?.trim()==='HEADPHONES A');
   phonesHeading?.classList.add('v72-phones-badge');
-  // Match two small headset cue buttons and keep linked real CH 1/2 cue functions.
-  for(const [i,b] of Array.from(rhs.querySelectorAll('.v70-phones-btn')).entries())b.textContent=i===0?'LINK CUE':'MONO SPLIT';
-  // The linked existing cue actions remain on those buttons; they do NOT switch hardware split mode.
+  // The reference uses LINK CUE and MONO SPLIT; never trigger CH 1/2 CUE for these controls.
+  // Real channel cue buttons remain intact in each original channel.
+  for(const [i,b] of Array.from(rhs.querySelectorAll('.v70-phones-btn')).entries()){
+   const feature=i===0?'LINK CUE':'MONO SPLIT';
+   b.textContent=feature;b.setAttribute('aria-pressed','false');
+   b.title=feature+' (reference control: dedicated headphone routing unavailable)';
+   b.onclick=()=>notify(feature+' requires dedicated headphone routing; use channel CUE buttons for supported monitoring');
+  }
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
