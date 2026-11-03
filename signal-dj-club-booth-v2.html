@@ -992,6 +992,20 @@ body.signal-booth-v2 .cdjx-direct-load button{flex:1;min-width:0;background:line
 body.signal-booth-v2 .cdjx-direct-load .cdjx-deck-file-state{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#a9c2d7;font-size:9px}
 body.signal-booth-v2 .cdjx-direct-load button:focus-visible{outline:2px solid #fff;outline-offset:2px}
 body.signal-booth-v2 .cdjx-direct-load button:hover{filter:brightness(1.15)}
+</style><style id="signal-cdjx-physical-browser-v12">
+/* LCD bezel and physical browse encoder; native control handlers remain connected. */
+body.signal-booth-v2 .deckshell>.signal-cdjx-screen{left:2%!important;width:77%!important;right:auto!important}
+body.signal-booth-v2 .deckshell>.signal-cdjx-encoder{position:absolute;top:1.3%;right:1.5%;height:32.5%;width:18%;z-index:12;background:linear-gradient(135deg,#2a3038,#0d1118 58%);border:2px solid #525963;border-radius:7px;box-shadow:inset 0 2px 0 #7e8d9a44,0 5px 8px #0008;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;padding:5px 3px;gap:3px;box-sizing:border-box}
+body.signal-booth-v2 .cdjx-encoder button{background:linear-gradient(#333e4a,#171e27);border:1px solid #737e8a;color:#f1f7ff;border-radius:5px;padding:4px 1px;min-height:24px;width:95%;font-size:8px;font-weight:bold;cursor:pointer;line-height:1.1}
+body.signal-booth-v2 .cdjx-encoder .cdjx-rotary{width:min(92%,66px);aspect-ratio:1;min-height:0;border-radius:50%;font-size:9px;padding:4px;background:radial-gradient(circle at 36% 32%,#e0e2e6 0%,#898f96 18%,#313842 40%,#0a0d11 58%,#394957 70%,#10141a 78%);border:4px solid #556270;box-shadow:0 0 0 3px #141c26,0 0 0 5px #7a8794,0 3px 9px #000e;color:#fff;text-shadow:0 1px 2px #000;flex:none;touch-action:none}
+body.signal-booth-v2 .cdjx-encoder .cdjx-rotary:active{filter:brightness(1.35)}
+body.signal-booth-v2 .cdjx-encoder .cdjx-encoder-label{font-size:8px;letter-spacing:.5px;font-weight:900;color:#b2c0d0;text-align:center;line-height:1.15}
+body.signal-booth-v2 .cdjx-encoder button:focus-visible{outline:2px solid #f5f5f5;outline-offset:2px}
+body.signal-booth-v2 .cdjx-encoder .cdjx-push-label{font-size:7px;color:#7ec5ef;text-align:center}
+body.signal-booth-v2 .cdjx-encoder .cdjx-import-key{border-color:#ee596f;color:#fff;background:linear-gradient(#813147,#3a1924)}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-screen-nav button{font-size:7px!important;min-height:22px!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-direct-load button{font-size:8px!important}
+body.signal-booth-v2 .signal-cdjx-screen .cdjx-main-wave{height:76px!important}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -2162,6 +2176,15 @@ function init(){
   previous.forEach(button=>{if(button.closest('.cdjx-screen-nav'))return;const fresh=button.cloneNode(true);button.replaceWith(fresh);fresh.addEventListener('click',()=>show('browse'))});
   document.getElementById('sbd-import')?.addEventListener('change',()=>setTimeout(()=>{if(!panel.hidden)draw()},400));
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden)hide()});
+  window.signalCDJBrowser=window.signalCDJBrowser||{};
+  window.signalCDJBrowser[k]={
+   open:()=>show('browse'),
+   turn:delta=>{if(panel.hidden)show('browse');if(!visible.length)return;selection=Math.max(0,Math.min(visible.length-1,selection+delta));draw();list.querySelector('.selected')?.scrollIntoView({block:'nearest'})},
+   push:()=>{if(panel.hidden){show('browse');return}load()},
+   back:()=>{if(!panel.hidden){hide();return}document.getElementById('signal-browser-toggle')?.click()},
+   tag:()=>{if(panel.hidden)show('browse');panel.querySelector('.cdjx-tag')?.click()},
+   importFile:()=>document.getElementById('file-'+k)?.click()
+  };
  }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
@@ -2296,6 +2319,30 @@ function install(){
    const name=filename.textContent.trim();
    if(name&&name!=='NO TRACK'){state.textContent=name;state.title=name}
   });obs.observe(filename,{subtree:true,childList:true,characterData:true})}
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+})();
+</script><script id="signal-cdjx-physical-browser-v12-script">
+(()=>{
+function install(){
+ for(const k of ['A','B']){
+  const deck=document.querySelector('.deck-'+k+' .deckshell'),monitor=deck?.querySelector('.signal-cdjx-screen');
+  if(!deck||!monitor||deck.querySelector('.signal-cdjx-encoder'))continue;
+  const enc=document.createElement('section');enc.className='signal-cdjx-encoder';enc.setAttribute('aria-label','Deck '+k+' hardware-style track selector');
+  enc.innerHTML='<div class="cdjx-encoder-label">BROWSE / LOAD</div><button type="button" class="cdjx-back">BACK</button><button type="button" class="cdjx-rotary" aria-label="Deck '+k+' push browse encoder; use mouse wheel or keyboard up and down">PUSH</button><div class="cdjx-push-label">SCROLL • PRESS</div><button type="button" class="cdjx-up">▲ TRACK</button><button type="button" class="cdjx-down">▼ TRACK</button><button type="button" class="cdjx-tag-key">TAG LIST</button><button type="button" class="cdjx-import-key">USB / FILE</button>';
+  monitor.after(enc);
+  const api=()=>window.signalCDJBrowser?.[k];
+  const call=(key,...args)=>api()?.[key]?.(...args);
+  const knob=enc.querySelector('.cdjx-rotary');
+  knob.onclick=()=>call('push');
+  knob.onwheel=e=>{e.preventDefault();call('turn',e.deltaY>=0?1:-1)};
+  knob.onkeydown=e=>{if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();call('turn',e.key==='ArrowDown'?1:-1)}else if(e.key==='Enter'||e.key===' '){e.preventDefault();call('push')}};
+  enc.querySelector('.cdjx-up').onclick=()=>call('turn',-1);
+  enc.querySelector('.cdjx-down').onclick=()=>call('turn',1);
+  enc.querySelector('.cdjx-back').onclick=()=>call('back');
+  enc.querySelector('.cdjx-tag-key').onclick=()=>call('tag');
+  enc.querySelector('.cdjx-import-key').onclick=()=>{const file=document.getElementById('file-'+k);if(file){file.value='';file.click()}};
  }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
