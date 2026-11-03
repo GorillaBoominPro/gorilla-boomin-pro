@@ -952,6 +952,24 @@ body.signal-booth-v2.signal-detail-booth #signal-booth-viewport>.console{transfo
 body.signal-booth-v2 #signal-view-controls button:focus-visible{outline:2px solid white}
 body.signal-booth-v2.signal-view-fullscreen #signal-view-controls{background:#101b2a}
 @media(max-width:780px){body.signal-booth-v2.signal-detail-booth #signal-booth-viewport>.console{display:grid!important;grid-template-columns:minmax(310px,1fr) minmax(510px,1.28fr) minmax(310px,1fr)!important}}
+</style><style id="signal-stage-fit-v9">
+/* The previous 3-row page chrome consumed valuable performance height. Fit is now a stage, not a scaled webpage. */
+body.signal-booth-v2.signal-fit-booth>header,
+body.signal-booth-v2.signal-fit-booth main>.import,
+body.signal-booth-v2.signal-fit-booth main>.keyboard-hint,
+body.signal-booth-v2.signal-fit-booth main>.signal-booth-toolbar{display:none!important}
+body.signal-booth-v2.signal-fit-booth main{padding-top:0!important;margin-top:0!important}
+body.signal-booth-v2.signal-fit-booth #signal-view-controls{margin-top:0!important;padding:5px 8px!important;min-height:34px;position:relative!important}
+body.signal-booth-v2.signal-fit-booth #signal-booth-viewport{margin-top:0!important}
+body.signal-booth-v2.signal-fit-booth #signal-booth-viewport>.console{position:relative!important}
+body.signal-booth-v2 #signal-view-controls .signal-view-brand{font-weight:900;letter-spacing:.5px;color:#fff;margin-right:6px;white-space:nowrap}
+body.signal-booth-v2 #signal-view-controls .signal-view-brand em{color:#ff4862;font-style:normal}
+body.signal-booth-v2 #signal-view-controls .signal-view-note{flex-basis:100%;text-align:center;line-height:1.1;font-size:9px}
+body.signal-booth-v2 #signal-view-controls button{padding:5px 8px!important;min-height:26px!important;font-size:10px!important}
+body.signal-booth-v2 #signal-view-controls button[data-action]{border-color:#536a7e}
+body.signal-booth-v2.signal-detail-booth #signal-view-controls{position:sticky}
+body.signal-booth-v2.signal-detail-booth main>.signal-booth-toolbar{display:flex!important}
+@media(max-width:720px){body.signal-booth-v2 #signal-view-controls{gap:3px!important}body.signal-booth-v2 #signal-view-controls button{padding:4px!important;font-size:9px!important}}
 </style></head><body>
 <div id="signal-boot" role="dialog" aria-modal="true" aria-label="SIGNAL DJ power on">
   <div class="boot-inner">
@@ -2176,11 +2194,14 @@ function install(){
  const viewport=document.createElement('div');viewport.id='signal-booth-viewport';
  consoleEl.parentNode.insertBefore(viewport,consoleEl);viewport.append(consoleEl);
  const toolbar=document.createElement('div');toolbar.id='signal-view-controls';toolbar.setAttribute('role','toolbar');toolbar.setAttribute('aria-label','SIGNAL DJ console view controls');
- toolbar.innerHTML='<button type="button" data-view="fit">⛶ FIT BOOTH</button><button type="button" data-view="detail">⊞ DETAIL VIEW</button><button type="button" data-view="fullscreen">⛶ FULLSCREEN</button><span class="signal-view-note" role="status">Fit keeps the full booth visible · Detail allows scrolling</span>';
+ toolbar.innerHTML='<span class="signal-view-brand">G//BMN: <em>SIGNAL DJ</em></span><button type="button" data-view="fit">⛶ FIT BOOTH</button><button type="button" data-view="detail">⊞ DETAIL VIEW</button><button type="button" data-view="fullscreen">⛶ FULLSCREEN</button><button type="button" data-action="library">▤ LIBRARY</button><button type="button" data-action="settings">⚙ SETTINGS</button><button type="button" data-action="mode">FESTIVAL / LIVE</button><span class="signal-view-note" role="status">STAGE VIEW · FULL BOOTH</span>';
  viewport.before(toolbar);
  const fullButton=toolbar.querySelector('[data-view="fullscreen"]'),oldFull=document.getElementById('signal-fullview');
  let view='fit',sizeScheduled=false;
- const buttons=[...toolbar.querySelectorAll('button')];
+ const buttons=[...toolbar.querySelectorAll('[data-view]')];
+ toolbar.querySelector('[data-action="library"]').onclick=()=>{const drawer=document.getElementById('signal-browser-drawer');if(drawer?.hidden)document.getElementById('signal-browser-toggle')?.click();else drawer.scrollIntoView({block:'nearest'})};
+ toolbar.querySelector('[data-action="settings"]').onclick=()=>document.getElementById('signal-settings-open')?.click();
+ toolbar.querySelector('[data-action="mode"]').onclick=e=>{const festival=document.body.classList.contains('festival');document.getElementById(festival?'booth-club':'booth-festival')?.click();e.currentTarget.textContent=festival?'FESTIVAL / LIVE':'CLUB STYLE'};
  const updateButtons=()=>{buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view||(b.dataset.view==='fullscreen'&&!!document.fullscreenElement))));fullButton.textContent=document.fullscreenElement?'⤡ EXIT FULLSCREEN':'⛶ FULLSCREEN'};
  function fit(){
   if(view!=='fit')return;
@@ -2195,11 +2216,12 @@ function install(){
   // Calculate real layout dimensions before applying the scale.
   const naturalHeight=Math.max(consoleEl.scrollHeight,consoleEl.getBoundingClientRect().height);
   const top=viewport.getBoundingClientRect().top;
-  const availableHeight=Math.max(320,window.innerHeight-top-9);
+  const availableHeight=Math.max(320,document.documentElement.clientHeight-top-5);
   const widthScale=Math.min(1,parentWidth/baseWidth);
   const heightScale=Math.min(1,availableHeight/Math.max(1,naturalHeight));
   const scale=Math.max(.25,Math.min(widthScale,heightScale));
-  consoleEl.style.transform='scale('+scale+')';
+  const leftSpace=Math.max(0,(parentWidth-baseWidth*scale)/2);
+  consoleEl.style.transform='translateX('+leftSpace+'px) scale('+scale+')';
   viewport.style.height=Math.ceil(naturalHeight*scale+3)+'px';
   toolbar.querySelector('.signal-view-note').textContent='Fit '+Math.round(scale*100)+'% · Full booth on screen';
  }
@@ -2222,8 +2244,9 @@ function install(){
  window.addEventListener('resize',scheduleFit,{passive:true});
  document.addEventListener('fullscreenchange',()=>{document.body.classList.toggle('signal-view-fullscreen',!!document.fullscreenElement);updateButtons();scheduleFit()});
  window.addEventListener('load',scheduleFit,{once:true});
- if(window.ResizeObserver){const ro=new ResizeObserver(()=>scheduleFit());ro.observe(toolbar);ro.observe(viewport);/* height-only fit updates do not rewrite the console geometry */ }
+ if(window.ResizeObserver){const ro=new ResizeObserver(()=>scheduleFit());ro.observe(toolbar);/* Avoid observing viewport height that fit() itself writes. */ }
  setView('fit');
+ requestAnimationFrame(()=>requestAnimationFrame(scheduleFit));
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
