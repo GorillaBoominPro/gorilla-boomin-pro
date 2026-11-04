@@ -7949,4 +7949,103 @@ function init(){
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
-<script id="signal-v104-sampler-timing">/* V104: shared decoder, cached impulse responses, drift-corrected sampler timing. */</script><script id="signal-v105-recording-cleanup">/* V105 cleanup + correct container format for master recording. */</script></body></html>
+<script id="signal-v104-sampler-timing">/* V104: shared decoder, cached impulse responses, drift-corrected sampler timing. */</script><script id="signal-v105-recording-cleanup">/* V105 cleanup + correct container format for master recording. */</script>
+<style id="signal-v106-performance-control-audit">
+#signal-settings-panel .v106-audit{display:flex;flex-direction:column;gap:9px;padding:12px;margin-top:12px;background:#0d1923;border:1px solid #405466;border-radius:6px}
+#signal-settings-panel .v106-audit h4{font-size:13px;color:#ecf6fe;margin:0}
+#signal-settings-panel .v106-audit small{color:#afc1d0;font-size:11px}
+#signal-settings-panel .v106-audit>button{align-self:flex-start}
+#signal-v106-inspector[hidden]{display:none!important}
+#signal-v106-inspector{position:fixed;right:12px;bottom:12px;z-index:12000;max-width:min(360px,92vw);background:#101d2b;color:#e9f5fd;border:1px solid #6a8ba2;box-shadow:0 5px 24px #000c;border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:9px;font:12px/1.4 Arial,sans-serif}
+#signal-v106-inspector strong{font-size:13px}
+#signal-v106-inspector p{font-size:11px;color:#bacfdf}
+#signal-v106-inspector .v106-actions{display:flex;gap:5px;flex-wrap:wrap}
+#signal-v106-inspector button{background:#243a4d;border:1px solid #7799b2;color:#fff;padding:7px;border-radius:4px;font-weight:700}
+#signal-v106-inspector .v106-last{font-size:11px;color:#9ed9ff;max-width:320px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+</style>
+<script id="signal-v106-performance-control-audit-script">
+(()=>{
+'use strict';
+function setup(){
+ const root=document.getElementById('signal-settings-panel');
+ const about=root?.querySelector('.settings-grid > section:nth-child(10)');
+ if(!about||document.getElementById('signal-v106-inspector'))return;
+ const info=document.createElement('div');info.className='v106-audit';
+ info.innerHTML='<h4>CONTROL AUDIT · MANUAL INTERACTION TEST</h4><small>Checks which visible deck/mixer buttons and sliders receive user interaction. It cannot automatically certify sound, cue routing, latency, or hardware connectivity.</small><button type="button" id="v106-start">START CONTROL TEST</button><button type="button" id="v106-speed">MEASURE 2-SECOND UI FPS</button><small id="v106-audit-status" role="status">No control test running.</small>';
+ about.append(info);
+ const box=document.createElement('aside');box.id='signal-v106-inspector';box.hidden=true;
+ box.innerHTML='<strong>🎛 SIGNAL DJ · CONTROL TEST</strong><p>Use actual console buttons, knobs and faders. The test records their DOM events only; listen and watch for each expected effect.</p><b class="v106-count">0 controls tested</b><div class="v106-last">No controls tested</div><div class="v106-actions"><button type="button" data-export>EXPORT REPORT</button><button type="button" data-end>END TEST</button></div>';
+ document.body.append(box);
+ let running=false,events=[],seen=new Set(),total=0;
+ const label=el=>el.getAttribute('aria-label')||el.getAttribute('title')||el.id||el.closest('label')?.textContent.trim().slice(0,70)||el.textContent?.trim().slice(0,55)||el.tagName;
+ const key=el=>el.id||(el.getAttribute('aria-label')||el.textContent||el.tagName).trim().slice(0,75);
+ const status=info.querySelector('#v106-audit-status');
+ function candidates(){
+  return [...document.querySelectorAll('.console button,.console input:not([type="hidden"]),.console select,.console [role="slider"]')].filter(el=>{
+   const st=getComputedStyle(el);
+   return !el.disabled&&st.display!=='none'&&st.visibility!=='hidden'&&!!el.getClientRects().length;
+  });
+ }
+ function count(){
+  box.querySelector('.v106-count').textContent=seen.size+' / '+total+' visible controls exercised';
+ }
+ function listen(e){
+  if(!running)return;
+  const el=e.target.closest?.('button,input,select,[role="slider"]');
+  if(!el||!el.closest('.console')||el.disabled)return;
+  const id=key(el),name=label(el);
+  if(!seen.has(id))seen.add(id);
+  if(events.length<1500)events.push({at:Math.round(performance.now()),type:e.type,id,label:name,value:'value'in el?String(el.value):undefined});
+  box.querySelector('.v106-last').textContent=e.type.toUpperCase()+' · '+name;
+  count();
+ }
+ function start(){
+  running=true;events=[];seen.clear();total=candidates().length;
+  box.hidden=false;count();
+  document.getElementById('signal-settings-close')?.click();
+  status.textContent='Testing in progress. Use END TEST when finished.';
+ }
+ function stop(){
+  running=false;box.hidden=true;
+  status.textContent=seen.size+' of '+total+' visible controls interacted with. Functionality and audio must still be verified by listening.';
+ }
+ info.querySelector('#v106-start').onclick=start;
+ box.querySelector('[data-end]').onclick=stop;
+ box.querySelector('[data-export]').onclick=()=>{
+  const report={product:'G//BMN: SIGNAL DJ 3000-V',generatedAt:new Date().toISOString(),note:'DOM interactions only; does not certify audio effect or hardware timing.',totalVisibleControls:total,interacted:seen.size,events};
+  const blob=new Blob([JSON.stringify(report,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob),link=document.createElement('a');
+  link.href=url;link.download='signal-dj-control-audit.json';link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),10000);
+ };
+ for(const type of ['click','input','change'])document.addEventListener(type,listen,true);
+ window.addEventListener('pagehide',()=>{running=false});
+ info.querySelector('#v106-speed').onclick=()=>{
+  const button=info.querySelector('#v106-speed');button.disabled=true;
+  const began=performance.now();let last=began,frames=0,jank=0,maxGap=0;
+  status.textContent='Measuring browser visual responsiveness...';
+  function frame(now){
+   const gap=now-last;last=now;if(frames>0){maxGap=Math.max(maxGap,gap);if(gap>50)jank++}
+   frames++;
+   if(now-began<2000){requestAnimationFrame(frame);return}
+   const fps=(frames*1000/(now-began)).toFixed(1);
+   status.textContent='Measured '+fps+' FPS over '+((now-began)/1000).toFixed(1)+'s; '+jank+' long frames (>50 ms), worst '+maxGap.toFixed(1)+'ms. NOT audio round-trip latency.';
+   button.disabled=false;
+  }
+  requestAnimationFrame(frame);
+ };
+ const network=root.querySelector('.settings-grid > section:nth-child(2)');
+ if(network){
+  const button=document.createElement('button');button.type='button';button.textContent='CHECK BROWSER NETWORK STATUS';
+  const result=document.createElement('small');result.setAttribute('role','status');
+  button.onclick=()=>{
+   const conn=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
+   result.textContent='Browser reports '+(navigator.onLine?'ONLINE':'OFFLINE')+(conn?.effectiveType?' · link estimate '+conn.effectiveType:'')+'. This does not test Wi-Fi credentials, throughput or streaming-server reachability.';
+  };
+  network.append(button,result);
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
+})();
+</script>
+</body></html>
