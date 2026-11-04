@@ -2535,7 +2535,8 @@ if(learningKey){e.preventDefault();e.stopImmediatePropagation();const key=e.key.
 if(e.repeat||e.metaKey||e.ctrlKey||e.altKey||e.target.closest('input,textarea,select,[contenteditable],#signal-settings'))return;
 const a=keymap[e.key.toLowerCase()];if(a){e.preventDefault();e.stopImmediatePropagation();perform(a)}
 },true);
-function attachMidi(input){input.onmidimessage=e=>{const [status,n,v]=e.data||[];if((status&0xf0)===0xb0||(status&0xf0)===0x90){if((status&0xf0)===0x90&&v===0)return;const key=(status&0xf0)+':'+n;if(learningMidi){midimap[key]=$('adv-map-action').value;localPut('signal-midi-map',midimap);learningMidi=false;$('adv-midi-learn').textContent='LEARN MIDI';renderMaps()}else if(midimap[key]&&v>0)perform(midimap[key])}}}
+const wiredMidiInputs=new WeakSet();
+function attachMidi(input){if(wiredMidiInputs.has(input))return;wiredMidiInputs.add(input);input.addEventListener('midimessage',e=>{const [status,n,v]=e.data||[];if((status&0xf0)===0xb0||(status&0xf0)===0x90){if((status&0xf0)===0x90&&v===0)return;const key=(status&0xf0)+':'+n;if(learningMidi){midimap[key]=$('adv-map-action').value;localPut('signal-midi-map',midimap);learningMidi=false;$('adv-midi-learn').textContent='LEARN MIDI';renderMaps()}else if(midimap[key]&&v>0)perform(midimap[key])}})}
 $('adv-midi-connect').onclick=async()=>{if(!navigator.requestMIDIAccess){$('adv-map-list').textContent='Web MIDI unsupported in this browser.';return}try{midi=await navigator.requestMIDIAccess();for(const input of midi.inputs.values())attachMidi(input);midi.onstatechange=()=>{for(const input of midi.inputs.values())attachMidi(input)};renderMaps();$('adv-map-list').textContent+=' · Connected '+midi.inputs.size+' MIDI input(s).'}catch(e){$('adv-map-list').textContent='MIDI unavailable: '+e.message}};
 $('adv-midi-learn').onclick=()=>{learningMidi=true;learningKey=false;$('adv-midi-learn').textContent='MOVE MIDI CONTROL…'};
 $('adv-map-reset').onclick=()=>{keymap={};midimap={};localPut('signal-custom-keys',keymap);localPut('signal-midi-map',midimap);renderMaps()};
@@ -2647,7 +2648,8 @@ refreshPlaylists();
  mapping.append(midiAction,midiButton,midiStatus);const midiMappings=persisted('midiMaps',{});
  let midiLearn=false;
  midiButton.onclick=async()=>{try{if(!navigator.requestMIDIAccess)throw Error('Web MIDI unsupported here');const access=await navigator.requestMIDIAccess();midiLearn=true;midiStatus.textContent='Move a MIDI controller button or knob to assign '+midiAction.value;
- const connect=input=>{input.onmidimessage=e=>{const bytes=[...e.data];const key=bytes[0]+':'+bytes[1];if(midiLearn){midiMappings[key]=midiAction.value;save('midiMaps',midiMappings);midiLearn=false;midiStatus.textContent='Assigned '+key+' → '+midiAction.value;return}if(bytes[2]>0&&midiMappings[key])document.getElementById(midiMappings[key])?.click()}};
+ const wiredAdvancedMidiInputs=new WeakSet();
+ const connect=input=>{if(wiredAdvancedMidiInputs.has(input))return;wiredAdvancedMidiInputs.add(input);input.addEventListener('midimessage',e=>{const bytes=[...e.data];const key=bytes[0]+':'+bytes[1];if(midiLearn){midiMappings[key]=midiAction.value;save('midiMaps',midiMappings);midiLearn=false;midiStatus.textContent='Assigned '+key+' → '+midiAction.value;return}if(bytes[2]>0&&midiMappings[key])document.getElementById(midiMappings[key])?.click()})};
  access.inputs.forEach(connect);access.onstatechange=()=>access.inputs.forEach(connect);
  if(!access.inputs.size)midiStatus.textContent='No MIDI input detected. Connect hardware and retry.'}catch(e){midiStatus.textContent=e.message}};
  note(mapping,'MIDI learn currently maps button presses and pad triggers, not continuous knob/fader values.');
@@ -7773,6 +7775,119 @@ function setup(){
  refresh();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
+})();
+</script>
+
+<style id="signal-v103-midi-rgb-controls">
+#signal-settings-panel .v103-panel{padding:12px;margin:12px 0;border:1px solid #506678;border-radius:6px;background:#131f2a;display:flex;flex-direction:column;gap:9px}
+#signal-settings-panel .v103-panel h4{font-size:13px;margin:0;color:#f1f5f9}
+#signal-settings-panel .v103-panel small{color:#b6c5d3;font-size:11px}
+#signal-settings-panel .v103-row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+#signal-settings-panel .v103-row select{flex:1;min-width:120px;max-width:100%}
+#signal-settings-panel .v103-row button{flex:1}
+#signal-settings-panel .v103-mappings{padding:8px;background:#07131d;border:1px solid #405469;color:#bed3e4;font:10px/1.5 ui-monospace,monospace;white-space:pre-wrap;max-height:110px;overflow:auto}
+</style>
+<script id="signal-v103-midi-rgb-controls-script">
+(()=>{
+'use strict';
+const rgbChoices={
+ split:{label:'DECK A/B · CYAN & ORANGE',color:(i)=>i%2?'#ff962e':'#20cfff'},
+ spectrum:{label:'FULL RGB SPECTRUM',color:(i,n)=>'hsl('+Math.round(i/n*320)+',93%,55%)'},
+ neon:{label:'NEON CLUB',color:(i)=>['#37f6a7','#9b78ff','#15cfff','#ff4b92'][Math.floor(i/5)%4]},
+ warm:{label:'WARM AMBER',color:(i)=>i%3?'#ff962e':'#ffe07c'},
+ blackout:{label:'BLACKOUT (NO LIGHTS)',color:()=> '#080b12'}
+};
+const rgbStore='signal.dj.rgb.visualizer.v1';
+let rgbMode='split';
+try{const saved=localStorage.getItem(rgbStore);if(rgbChoices[saved])rgbMode=saved}catch(e){}
+window.signalRGBTheme={color:(i,n,v)=>rgbChoices[rgbMode].color(i,n,v),get:()=>rgbMode};
+function init(){
+ const root=document.getElementById('signal-settings-panel');
+ if(!root||root.dataset.v103Ready)return;
+ root.dataset.v103Ready='1';
+ const make=(tag,text)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;return el};
+ const grid=root.querySelector('.settings-grid');
+ const visual=[...grid.querySelectorAll(':scope > section')].find(s=>s.querySelector('h3')?.textContent.includes('Visualizers'));
+ const mappings=[...grid.querySelectorAll(':scope > section')].find(s=>s.querySelector('h3')?.textContent.includes('MIDI Mapping'));
+ if(visual){
+  const box=make('div');box.className='v103-panel';
+  box.append(make('h4','RGB LIGHT SHOW · SCREEN VISUALIZER'),make('small','These palettes control the audio-reactive on-screen visualizer only. Physical DMX/Art-Net/sACN or network lighting is NOT connected.'));
+  const row=make('div');row.className='v103-row';const select=make('select');
+  for(const [id,data] of Object.entries(rgbChoices))select.add(new Option(data.label,id));
+  select.value=rgbMode;
+  select.onchange=()=>{rgbMode=select.value;try{localStorage.setItem(rgbStore,rgbMode)}catch(e){}status.textContent='RGB palette updated for the on-screen visualizer. Open the master visualizer to see it.'};
+  row.append(select);box.append(row);
+  const status=make('small','Choose a palette, then OPEN MASTER VISUALIZER. No strobe/flashing is generated.');status.setAttribute('role','status');box.append(status);visual.append(box);
+ }
+ if(mappings){
+  const box=make('div');box.className='v103-panel';
+  box.append(make('h4','MIDI CONTINUOUS CONTROLS · LEARN CC'),make('small','Map a MIDI CC knob or fader to a working on-screen slider. Existing audio input events are preserved. Browser MIDI availability varies; iPad Safari often lacks Web MIDI.'));
+  const row=make('div');row.className='v103-row',action=make('select');
+  const targets=[['cross','MAGVEL CROSSFADER'],['master','MASTER LEVEL'],
+   ...['A','B','C','D'].flatMap(k=>[
+    ['level-'+k,'CHANNEL '+k+' FADER'],['TRIM-'+k,'CHANNEL '+k+' TRIM'],
+    ['HI-'+k,'CHANNEL '+k+' HI'],['MID-'+k,'CHANNEL '+k+' MID'],
+    ['LOW-'+k,'CHANNEL '+k+' LOW'],['FILTER-'+k,'CHANNEL '+k+' COLOR']
+   ]),
+   ...['A','B'].map(k=>['speed-'+k,'DECK '+k+' TEMPO']),
+   ['headphone-mix','HEADPHONE MIX'],['headphone-level','HEADPHONE LEVEL'],
+   ['beat-time','BEAT FX TIME'],['beat-depth','BEAT FX DEPTH']];
+  for(const [id,label] of targets)if(document.getElementById(id))action.add(new Option(label,id));
+  const connect=make('button','CONNECT MIDI'),learn=make('button','LEARN CC');
+  row.append(action,connect,learn);box.append(row);
+  const status=make('small','Connect a controller, select a target, then LEARN CC and move a knob/fader.');
+  status.setAttribute('role','status');box.append(status);
+  const list=make('div');list.className='v103-mappings';box.append(list);
+  const clear=make('button','CLEAR CC MAPPINGS');box.append(clear);mappings.append(box);
+  const storage='signal.dj.midi.cc.v1';
+  let saved={};try{saved=JSON.parse(localStorage.getItem(storage)||'{}')||{}}catch(e){}
+  let midi=null,learning=false;
+  const attached=new WeakSet();
+  const put=()=>{try{localStorage.setItem(storage,JSON.stringify(saved))}catch(e){}};
+  function show(){list.textContent=Object.entries(saved).map(([cc,id])=>cc+' → '+(targets.find(t=>t[0]===id)?.[1]||id)).join('\n')||'No CC mappings saved.'}
+  function apply(id,v){
+   const el=document.getElementById(id);
+   if(!el||!('value' in el))return;
+   const min=Number(el.min||0),max=Number(el.max||100);
+   const step=Number(el.step||1);
+   const target=min+(max-min)*(v/127);
+   const quant=step>0&&Number.isFinite(step)?Math.round((target-min)/step)*step+min:target;
+   el.value=String(Math.max(min,Math.min(max,quant)));
+   el.dispatchEvent(new Event('input',{bubbles:true}));
+   el.dispatchEvent(new Event('change',{bubbles:true}));
+  }
+  function attach(input){
+   if(attached.has(input))return;attached.add(input);
+   input.addEventListener('midimessage',e=>{
+    const [status,number,value]=e.data||[];
+    if((status&0xf0)!==0xb0)return; // continuous controller data only
+    const key=(status&15)+':'+number;
+    if(learning){
+     learning=false;saved[key]=action.value;put();show();
+     status.textContent='Learned CC '+key+' → '+action.selectedOptions[0]?.textContent;
+     learn.textContent='LEARN CC';return;
+    }
+    if(saved[key])apply(saved[key],value);
+   });
+  }
+  connect.onclick=async()=>{
+   if(!navigator.requestMIDIAccess){status.textContent='Web MIDI unsupported in this browser. Try desktop Chrome or Edge.';return}
+   try{
+    midi=await navigator.requestMIDIAccess();
+    for(const input of midi.inputs.values())attach(input);
+    midi.addEventListener('statechange',()=>{for(const input of midi.inputs.values())attach(input)});
+    status.textContent=midi.inputs.size+' MIDI input(s) connected. You can LEARN CC.';
+   }catch(e){status.textContent='MIDI unavailable: '+e.message}
+  };
+  learn.onclick=()=>{if(!midi){status.textContent='Connect MIDI first.';return}
+   if(!action.value){status.textContent='No usable controls found.';return}
+   learning=true;learn.textContent='MOVE A KNOB…';status.textContent='Move the desired MIDI CC knob/fader.';
+  };
+  clear.onclick=()=>{saved={};put();show();status.textContent='CC mappings cleared.'};
+  show();
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
 </body></html>
