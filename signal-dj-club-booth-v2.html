@@ -2498,7 +2498,11 @@ window.signalDJControl={
 </section></div><div id="settings-feedback"></div></div></div><script id="signal-settings-script">
 (function(){
  const modal=document.getElementById('signal-settings'),opener=document.getElementById('signal-settings-open'),closer=document.getElementById('signal-settings-close'),feedback=document.getElementById('settings-feedback');
- let previous=null,recorder=null,recorded=[],recordStream=null;
+ let previous=null,recorder=null,recorded=[],recordStream=null,recordMaster=null;
+ function disconnectRecording(){
+  if(recordMaster&&recordStream){try{recordMaster.disconnect(recordStream)}catch(e){}}
+  recordMaster=null;recordStream=null;
+ }
  function open(){previous=document.activeElement;modal.hidden=false;closer.focus()}
  function close(){modal.hidden=true;(previous||opener).focus()}
  opener.addEventListener('click',open);closer.addEventListener('click',close);
@@ -2518,15 +2522,28 @@ window.signalDJControl={
    if(!window.MediaRecorder)throw new Error('MediaRecorder unsupported in this browser');
    if(typeof window.signalDJGetMasterForRecording!=='function')throw new Error('Mixer audio engine unavailable');
    const audio=await window.signalDJGetMasterForRecording();
-   recordStream=audio.audioContext.createMediaStreamDestination();audio.masterNode.connect(recordStream);
+   recordStream=audio.audioContext.createMediaStreamDestination();recordMaster=audio.masterNode;recordMaster.connect(recordStream);
    recorded=[];
-   const type=['audio/webm;codecs=opus','audio/webm'].find(t=>MediaRecorder.isTypeSupported(t))||'';
+   const type=['audio/webm;codecs=opus','audio/webm','audio/mp4'].find(t=>MediaRecorder.isTypeSupported?.(t))||'';
    recorder=new MediaRecorder(recordStream.stream,type?{mimeType:type}:undefined);
    recorder.ondataavailable=e=>{if(e.data&&e.data.size)recorded.push(e.data)};
-   recorder.onerror=e=>{recStatus.textContent='Recorder error: '+(e.error?.message||'Unknown');feedback.textContent='Recording failed; do not rely on this take.'};
-   recorder.onstop=()=>{try{audio.masterNode.disconnect(recordStream)}catch(e){}const blob=new Blob(recorded,{type:recorder.mimeType||'audio/webm'});if(blob.size){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='G-BMN-SIGNAL-DJ-set-'+new Date().toISOString().replace(/[:.]/g,'-')+'.webm';a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);recStatus.textContent='Recording saved: '+Math.round(blob.size/1024)+' KB';feedback.textContent='Saved local recording download.'}else recStatus.textContent='Recording produced no audio data';recButton.textContent='START RECORDING';recorder=null};
+   recorder.onerror=e=>{recStatus.textContent='Recorder error: '+(e.error?.message||'Unknown');feedback.textContent='Recording failed; do not rely on this take.';try{if(recorder?.state==='recording')recorder.stop()}catch(err){disconnectRecording()}};
+   recorder.onstop=()=>{
+    disconnectRecording();
+    const mime=recorder?.mimeType||type||'audio/webm';
+    const blob=new Blob(recorded,{type:mime});
+    if(blob.size){
+     const ext=mime.includes('mp4')?'m4a':'webm';
+     const url=URL.createObjectURL(blob),link=document.createElement('a');
+     link.href=url;link.download='G-BMN-SIGNAL-DJ-set-'+new Date().toISOString().replace(/[:.]/g,'-')+'.'+ext;
+     link.click();setTimeout(()=>URL.revokeObjectURL(url),60000);
+     recStatus.textContent='Recording saved: '+Math.round(blob.size/1024)+' KB ('+ext+')';
+     feedback.textContent='Downloaded locally. Play back the file before a live set.';
+    }else recStatus.textContent='Recording produced no audio data. Check permissions and master routing.';
+    recorded=[];recButton.textContent='START RECORDING';recorder=null;
+   };
    recorder.start(1000);recButton.textContent='STOP & SAVE';recStatus.textContent='Recording master output… Keep this browser tab open until saved.';feedback.textContent='Recording locally. No broadcast started.';
-  }catch(e){recStatus.textContent='Record failed: '+e.message;feedback.textContent='Recording unavailable.'}
+  }catch(e){disconnectRecording();recorder=null;recButton.textContent='START RECORDING';recStatus.textContent='Record failed: '+e.message;feedback.textContent='Recording unavailable. No live broadcast was started.'}
  };
 })();
 </script><script id="signal-advanced-workspace-script">
@@ -7932,4 +7949,4 @@ function init(){
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
-<script id="signal-v104-sampler-timing">/* V104: shared decoder, cached impulse responses, drift-corrected sampler timing. */</script></body></html>
+<script id="signal-v104-sampler-timing">/* V104: shared decoder, cached impulse responses, drift-corrected sampler timing. */</script><script id="signal-v105-recording-cleanup">/* V105 cleanup + correct container format for master recording. */</script></body></html>
