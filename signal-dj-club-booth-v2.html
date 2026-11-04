@@ -2547,7 +2547,7 @@ $('adv-auto-start').onclick=()=>{automix=true;autoIndex=0;const deck=deckA();if(
 $('adv-auto-stop').onclick=()=>{automix=false;deckA()?.removeEventListener('ended',nextTrack);notify('adv-auto-state','Automix off.')};
 let vizFrame=0,analyser=null,buf=null;
 const popup=document.createElement('div');popup.id='signal-viz-popup';popup.hidden=true;popup.innerHTML='<button id="signal-viz-close">CLOSE VISUALIZER</button><canvas id="signal-viz-canvas" width="1000" height="520"></canvas><small>Local master-spectrum visualization only · not a broadcast</small>';document.body.appendChild(popup);
-function draw(){if(popup.hidden)return;const canvas=$('signal-viz-canvas'),g=canvas.getContext('2d');g.fillStyle='#050a12';g.fillRect(0,0,canvas.width,canvas.height);if(analyser){analyser.getByteFrequencyData(buf);const count=64,w=canvas.width/count;for(let i=0;i<count;i++){const v=buf[Math.floor(i*buf.length/count)]/255;g.fillStyle=i%2?'#e32442':'#47b8ff';g.fillRect(i*w,canvas.height-v*canvas.height,w-3,v*canvas.height)}}vizFrame=requestAnimationFrame(draw)}
+function draw(){if(popup.hidden)return;const canvas=$('signal-viz-canvas'),g=canvas.getContext('2d');g.fillStyle='#050a12';g.fillRect(0,0,canvas.width,canvas.height);if(analyser){analyser.getByteFrequencyData(buf);const count=64,w=canvas.width/count;for(let i=0;i<count;i++){const v=buf[Math.floor(i*buf.length/count)]/255;g.fillStyle=window.signalRGBTheme?.color?.(i,count,v)||(i%2?'#e32442':'#47b8ff');g.fillRect(i*w,canvas.height-v*canvas.height,w-3,v*canvas.height)}}vizFrame=requestAnimationFrame(draw)}
 $('adv-viz-open').onclick=async()=>{try{const a=await api().audio();analyser=a.ctx.createAnalyser();analyser.fftSize=512;a.master.connect(analyser);buf=new Uint8Array(analyser.frequencyBinCount);popup.hidden=false;draw()}catch(e){alert(e.message)}};
 $('signal-viz-close').onclick=()=>{popup.hidden=true;cancelAnimationFrame(vizFrame);analyser?.disconnect();analyser=null};
 refreshPlaylists();
@@ -2573,7 +2573,7 @@ refreshPlaylists();
   ['Keyboard & MIDI Learn','Assign shortcuts and MIDI controls.'],
   ['Master Visualizer','Open an audio-reactive visualizer.'],
   ['Basic Automix','Play imported tracks consecutively without beatmatching.'],
-  ['Club Standard Training','Affordable hardware, professional DJ workflow and learning goals.']
+  ['Academy & Training','Interactive control exercises and professional DJ workflow.']
  ];
  const sections=[...grid.querySelectorAll(':scope > section')];
  const layout=document.createElement('div');layout.className='settings-layout';
@@ -7579,6 +7579,200 @@ body.signal-booth-v2:not(.festival) .mixer>.display .dhead>.v101-mixer-brand .v1
   heading.innerHTML='<span class="v101-signature">G<span class="v101-slashes">//</span>BMN<span class="v101-colon">:</span></span><span class="v101-sep"></span><span class="v101-product">SIGNAL DJ</span><span class="v101-sep"></span><span class="v101-model">3000-V</span>';
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
+})();
+</script>
+
+<style id="signal-v102-readiness-academy">
+/* All additions confined to Settings; absolutely no console geometry changes. */
+#signal-settings-panel .v102-box{display:flex;flex-direction:column;gap:9px;margin-top:12px;padding:12px;background:#111c26;border:1px solid #4d6172;border-radius:6px}
+#signal-settings-panel .v102-box h4{color:#f4f8fa;font-size:14px;margin:0 0 2px}
+#signal-settings-panel .v102-box p{color:#bfcedd;font-size:11px;margin:0}
+#signal-settings-panel .v102-result{padding:8px;background:#07121a;border:1px solid #3d5061;font:11px/1.55 ui-monospace,monospace;color:#d8e5ec;white-space:pre-wrap;overflow:auto;max-height:280px}
+#signal-settings-panel .v102-academy-step{display:flex;align-items:flex-start;gap:8px;padding:8px;background:#182736;border:1px solid #435363;border-radius:4px}
+#signal-settings-panel .v102-academy-step span:first-child{color:#93aaba;font-size:15px}
+#signal-settings-panel .v102-academy-step[data-done="true"]{border-color:#3c8967;background:#133128}
+#signal-settings-panel .v102-academy-step[data-done="true"] span:first-child{color:#81e8aa}
+#signal-settings-panel .v102-academy-step b{font-size:11px;color:#f0f5f8}
+#signal-settings-panel .v102-academy-step small{font-size:10px;color:#a9c1d1}
+#signal-settings-panel .v102-progress{height:8px;background:#172d38;border:1px solid #536674;border-radius:8px;overflow:hidden}
+#signal-settings-panel .v102-progress>span{display:block;height:100%;width:0%;background:#51c7a3;transition:width .2s}
+#signal-settings-panel .v102-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#signal-settings-panel .v102-line>button{flex:1;min-width:110px}
+#signal-settings-panel .v102-line select{flex:1;min-width:140px}
+</style>
+<script id="signal-v102-readiness-academy-script">
+(()=>{
+'use strict';
+function setup(){
+ const settings=document.getElementById('signal-settings-panel');
+ const academy=document.getElementById('settings-club-training');
+ const about=settings?.querySelector('.settings-grid > section:nth-child(10)');
+ if(!settings||!academy||!about||about.querySelector('.v102-diagnostics'))return;
+ const make=(tag,className,text)=>{const e=document.createElement(tag);if(className)e.className=className;if(text!==undefined)e.textContent=text;return e};
+ const diag=make('div','v102-box v102-diagnostics');
+ diag.append(make('h4','','SYSTEM READINESS CHECK'),make('p','','Feature detection and current audio-engine metrics. Actual device latency, streaming, iPad and hardware reliability require hands-on tests.'));
+ const buttons=make('div','v102-line'),check=make('button','','CHECK SYSTEM'),tone=make('button','','TEST AUDIO (LOW VOLUME)');
+ buttons.append(check,tone);diag.append(buttons);
+ const output=make('pre','v102-result','Press CHECK SYSTEM to inspect this browser and the console.');output.setAttribute('role','status');diag.append(output);about.append(diag);
+ const clock=make('div','v102-box');
+ clock.append(make('h4','','ABLETON LIVE · MIDI CLOCK (EXPERIMENTAL)'),make('p','','Sends 24-PPQN MIDI clock to a selected MIDI output, such as an enabled macOS IAC virtual port. This is NOT Ableton Link or sample-accurate sync. Avoid relying on it for live performances without testing.'));
+ const line=make('div','v102-line'),device=make('select'),source=make('select');
+ source.add(new Option('DECK A BPM','A'),new Option('DECK B BPM','B'));
+ device.add(new Option('CONNECT MIDI FIRST',''));
+ const connect=make('button','','FIND MIDI OUTPUTS');line.append(source,device,connect);clock.append(line);
+ const line2=make('div','v102-line'),start=make('button','','START CLOCK'),stop=make('button','','STOP CLOCK');
+ line2.append(start,stop);clock.append(line2);
+ const msg=make('small','','Clock OFF. Requires a MIDI output recognized by this browser.');clock.append(msg);
+ const mapping=settings.querySelector('.settings-grid > section:nth-child(3)');
+ mapping?.append(clock);
+ let midiAccess=null,outputPort=null,interval=null,next=0,period=0;
+ function stopClock(){
+  if(interval!==null){clearInterval(interval);interval=null}
+  if(outputPort){try{outputPort.send([0xfc])}catch(e){}}
+  msg.textContent='Clock OFF.';
+ }
+ function currentBpm(){
+  const k=source.value;
+  const bpm=Number(document.getElementById('manual-'+k)?.value);
+  const rate=Number(document.getElementById('speed-'+k)?.value||100)/100;
+  return Math.max(40,Math.min(250,(Number.isFinite(bpm)&&bpm>0?bpm:120)*rate));
+ }
+ connect.onclick=async()=>{
+  if(!navigator.requestMIDIAccess){msg.textContent='This browser has no Web MIDI output API (often unavailable on iPad Safari).';return}
+  try{
+   midiAccess=await navigator.requestMIDIAccess();
+   const outputs=[...midiAccess.outputs.values()];
+   device.replaceChildren(new Option('CHOOSE MIDI OUTPUT',''));
+   for(const p of outputs)device.add(new Option(p.name||'MIDI OUT',p.id));
+   msg.textContent=outputs.length+' MIDI output(s) detected. Choose the output and enable Sync input in Ableton Live.';
+  }catch(e){msg.textContent='MIDI permission denied/unavailable: '+e.message}
+ };
+ start.onclick=()=>{
+  stopClock();
+  outputPort=midiAccess?.outputs.get(device.value)||null;
+  if(!outputPort){msg.textContent='Select a connected MIDI output first.';return}
+  try{
+   period=60000/(currentBpm()*24);
+   next=performance.now()+50;
+   outputPort.send([0xfa]); // MIDI Start
+   const pump=()=>{
+    if(document.hidden){stopClock();msg.textContent='Clock paused: browser tab hidden. Restart manually.';return}
+    const target=60000/(currentBpm()*24);
+    if(Math.abs(target-period)>0.002)period=target;
+    let sent=0,now=performance.now();
+    while(next<now+95&&sent<24){
+     outputPort.send([0xf8],Math.max(now,next)); // timing clock
+     next+=period;sent++;
+    }
+    if(next<now-120)next=now+period; // underrun recovery
+    msg.textContent='CLOCK RUNNING · '+currentBpm().toFixed(1)+' BPM · '+(outputPort.name||'MIDI OUT')+' · Browser timing only';
+   };
+   interval=setInterval(pump,25);pump();
+  }catch(e){stopClock();msg.textContent='MIDI output failed: '+e.message}
+ };
+ stop.onclick=stopClock;
+ window.addEventListener('pagehide',stopClock);
+ device.onchange=()=>{if(interval!==null)stopClock()};
+ // Browser-specific capability matrix. This function is diagnostic only;
+ // initiating an AudioContext occurs solely after a user presses CHECK.
+ async function readiness(){
+  const report=[];
+  const line=(name,status,detail)=>report.push(name+': '+status+(detail?' — '+detail:''));
+  const proto=window.AudioContext||window.webkitAudioContext;
+  line('Secure context',isSecureContext?'YES':'NO','Web MIDI and microphone often require HTTPS');
+  line('Web Audio',proto?'SUPPORTED':'UNAVAILABLE');
+  line('Recording',window.MediaRecorder?'SUPPORTED · WebM/Opus where available':'UNAVAILABLE');
+  line('Input devices',navigator.mediaDevices?.getUserMedia?'PERMISSION-CONTROLLED':'UNAVAILABLE');
+  line('Audio outputs',navigator.mediaDevices?.enumerateDevices?'ENUMERATION SUPPORTED':'UNAVAILABLE');
+  line('Web MIDI',navigator.requestMIDIAccess?'API PRESENT · permission required':'UNAVAILABLE in this browser');
+  line('Browser fullscreen',document.fullscreenEnabled?'SUPPORTED · gesture required':'UNAVAILABLE');
+  line('Audio worklet',!!proto?.prototype?.audioWorklet?'CHECK AFTER CONTEXT START':'REQUIRES AN AUDIO CONTEXT');
+  line('External DMX / RGB fixtures','NOT IMPLEMENTED','on-screen visualizer only; no Art-Net/sACN/DMX transport');
+  line('Streaming platform uplink','NOT IMPLEMENTED','external encoder and authorization required');
+  line('Ableton Link','NOT IMPLEMENTED','experimental Web MIDI clock available separately');
+  const api=window.signalDJControl;
+  line('Mixer engine',api?.audio?'PRESENT':'MISSING');
+  for(const k of ['A','B','C','D']){
+   const audio=document.getElementById('audio-'+k);
+   const ids=['play-'+k,'cue-'+k,'level-'+k,'TRIM-'+k,'HI-'+k,'MID-'+k,'LOW-'+k,'FILTER-'+k,'mixcue-'+k];
+   const missing=ids.filter(id=>!document.getElementById(id));
+   line('Deck '+k,(!audio||missing.length)?'INCOMPLETE':'CONTROLS PRESENT',missing.join(', ')||'requires playback/drag test');
+  }
+  const cross=document.getElementById('cross');
+  line('Crossfader',cross?'CONTROL PRESENT':'MISSING',cross?'V85 style locked; movement test required':'');
+  if(api?.audio){
+   try{
+    const a=await api.audio();
+    const ctx=a.ctx;
+    line('Audio context',ctx.state.toUpperCase(),'sample rate '+ctx.sampleRate+' Hz');
+    line('Web Audio reported base latency',Number.isFinite(ctx.baseLatency)?(ctx.baseLatency*1000).toFixed(2)+' ms':'NOT REPORTED','not round-trip or hardware I/O latency');
+    line('Reported output latency',Number.isFinite(ctx.outputLatency)?(ctx.outputLatency*1000).toFixed(2)+' ms':'NOT REPORTED');
+    line('Audio worklet',ctx.audioWorklet?'AVAILABLE':'NOT AVAILABLE');
+   }catch(e){line('Audio startup','FAILED',e.message)}
+  }
+  output.textContent=report.join('\n');
+ }
+ check.onclick=readiness;
+ tone.onclick=async()=>{
+  try{
+   const a=await window.signalDJControl.audio(),ctx=a.ctx;
+   const osc=ctx.createOscillator(),gain=ctx.createGain();
+   osc.frequency.value=440;osc.type='sine';
+   gain.gain.value=.0001;
+   osc.connect(gain).connect(a.master);
+   const now=ctx.currentTime;
+   gain.gain.setValueAtTime(.0001,now);
+   gain.gain.linearRampToValueAtTime(.025,now+.025);
+   gain.gain.exponentialRampToValueAtTime(.0001,now+.27);
+   osc.start(now);osc.stop(now+.28);
+   osc.onended=()=>{osc.disconnect();gain.disconnect()};
+   output.textContent='Low-volume 440 Hz tone sent through the actual master bus. If inaudible, check system output, volume, mute and browser permissions.';
+  }catch(e){output.textContent='Audio test failed: '+e.message}
+ };
+ // Curriculum: only actual interaction can complete each step.
+ const classBox=make('div','v102-box');
+ classBox.append(make('h4','','ACADEMY · FOUNDATION PRACTICAL'),make('p','','Complete these real control tasks. The app checks your actions; reading a lesson does not mark it complete.'));
+ const progress=make('div','v102-progress'),bar=make('span');progress.append(bar);classBox.append(progress);
+ const steps=[
+  ['Import audio into Deck A','Load a local audio file into Deck A.'],
+  ['Play Deck A','Press PLAY and start actual playback.'],
+  ['Set or return to a cue','Press the CUE control on Deck A while a track is loaded.'],
+  ['Adjust a channel fader','Move the physical-style Channel 1 fader.'],
+  ['Work the crossfader','Move the crossfader toward either side.'],
+  ['Start Deck B','Load a second track and press PLAY on Deck B.']
+ ];
+ const done=Array(steps.length).fill(false),nodes=[];
+ steps.forEach(([heading,description],i)=>{
+  const el=make('div','v102-academy-step');
+  el.dataset.done='false';
+  const mark=make('span','','○'),details=make('div');
+  details.append(make('b','',heading),make('small','',description));
+  el.append(mark,details);classBox.append(el);nodes.push({el,mark});
+ });
+ const state=make('small','','0 / 6 practical skills verified in this session.');
+ const reset=make('button','','RESET TRAINING CHECKLIST');
+ reset.onclick=()=>{done.fill(false);refresh()};
+ classBox.append(state,reset);academy.append(classBox);
+ function refresh(){
+  const amount=done.filter(Boolean).length;
+  bar.style.width=(100*amount/done.length)+'%';
+  nodes.forEach(({el,mark},i)=>{el.dataset.done=String(done[i]);mark.textContent=done[i]?'✓':'○'});
+  state.textContent=amount+' / '+done.length+' practical skills verified in this session.';
+ }
+ const mark=i=>{if(!done[i]){done[i]=true;refresh()}};
+ for(const k of ['A','B']){
+  const audio=document.getElementById('audio-'+k);
+  audio?.addEventListener('loadedmetadata',()=>{if(k==='A')mark(0)});
+  audio?.addEventListener('play',()=>mark(k==='A'?1:5));
+ }
+ document.getElementById('cue-A')?.addEventListener('click',()=>{
+  if(document.getElementById('audio-A')?.src)mark(2)
+ });
+ document.getElementById('level-A')?.addEventListener('input',()=>mark(3));
+ document.getElementById('cross')?.addEventListener('input',()=>mark(4));
+ refresh();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
 })();
 </script>
 </body></html>
