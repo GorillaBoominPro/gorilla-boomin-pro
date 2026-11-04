@@ -8048,4 +8048,135 @@ function setup(){
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
 })();
 </script>
+
+<style id="signal-v107-localization">
+#signal-settings-panel .v107-language{display:flex;align-items:center;gap:7px;justify-content:flex-end;flex-wrap:wrap;font:700 10px/1 Arial,sans-serif;color:#e7f1fa}
+#signal-settings-panel .v107-language select{min-width:116px;background:#162636;color:#fff;border:1px solid #7399b2;padding:7px 8px;border-radius:4px}
+#signal-settings-panel .v107-language small{font-size:9px;color:#aabecf}
+#signal-settings-panel .settings-head{flex-wrap:wrap}
+</style>
+<script id="signal-v107-localization-script">
+(()=>{
+'use strict';
+const KEY='signal.dj.language.v1';
+const ro={
+ '⚙ G//BMN: SIGNAL DJ · SETTINGS':'⚙ G//BMN: SIGNAL DJ · SETĂRI',
+ '🔊 Speakers & Audio':'🔊 Boxe și sunet',
+ '📶 Wi-Fi & Bluetooth':'📶 Wi-Fi și Bluetooth',
+ '🎚 MIDI Mapping':'🎚 Configurare MIDI',
+ '⌨ Keyboard & Keys':'⌨ Tastatură și taste',
+ '🔴 ON AIR':'🔴 ÎN EMISIE',
+ '🎙 Record Sets':'🎙 Înregistrarea seturilor',
+ '🌐 Streaming & Social Media':'🌐 Transmisiuni și rețele sociale',
+ '🌈 Visualizers':'🌈 Vizualizatoare',
+ '🦍 Website':'🦍 Site oficial',
+ 'ⓘ About App':'ⓘ Despre aplicație',
+ '🎓 CLUB STANDARD TRAINING':'🎓 ANTRENAMENT PENTRU CLUB',
+ 'CHECK AUDIO SUPPORT':'VERIFICĂ SUPORTUL AUDIO',
+ 'CHECK MIDI':'VERIFICĂ MIDI',
+ 'TOGGLE INDICATOR':'COMUTĂ INDICATORUL',
+ 'START RECORDING':'PORNEȘTE ÎNREGISTRAREA',
+ 'OPEN STREAMING VIEW':'DESCHIDE TRANSMISIUNEA',
+ 'SHOW WAVES':'ARATĂ UNDELE',
+ 'SAVE TRAINING PROFILE':'SALVEAZĂ PROFILUL',
+ 'OPEN LIBRARY VIEW':'DESCHIDE BIBLIOTECA',
+ 'OPEN MIDI SETTINGS':'DESCHIDE SETĂRILE MIDI',
+ 'SETTINGS':'SETĂRI',
+ 'TRAINING OBJECTIVES':'OBIECTIVE DE ANTRENAMENT',
+ 'SYSTEM READINESS CHECK':'VERIFICAREA SISTEMULUI',
+ 'CHECK SYSTEM':'VERIFICĂ SISTEMUL',
+ 'TEST AUDIO (LOW VOLUME)':'TEST AUDIO (VOLUM REDUS)',
+ 'CONTROL AUDIT · MANUAL INTERACTION TEST':'TESTAREA COMENZILOR · VERIFICARE MANUALĂ',
+ 'START CONTROL TEST':'ÎNCEPE TESTUL COMENZILOR',
+ 'MEASURE 2-SECOND UI FPS':'MĂSOARĂ FPS (2 SECUNDE)',
+ 'ACADEMY · FOUNDATION PRACTICAL':'ACADEMIE · EXERCIȚII PRACTICE',
+ 'RESET TRAINING CHECKLIST':'RESETEAZĂ EXERCIȚIILE',
+ 'ABLETON LIVE · MIDI CLOCK (EXPERIMENTAL)':'ABLETON LIVE · CEAS MIDI (EXPERIMENTAL)',
+ 'FIND MIDI OUTPUTS':'CAUTĂ IEȘIRI MIDI',
+ 'START CLOCK':'PORNEȘTE CEASUL',
+ 'STOP CLOCK':'OPREȘTE CEASUL',
+ 'MIDI CONTINUOUS CONTROLS · LEARN CC':'COMENZI MIDI CONTINUE · ÎNVĂȚARE CC',
+ 'CONNECT MIDI':'CONECTEAZĂ MIDI',
+ 'LEARN CC':'ÎNVAȚĂ CC',
+ 'CLEAR CC MAPPINGS':'ȘTERGE ASOCIERILE CC',
+ 'RGB LIGHT SHOW · SCREEN VISUALIZER':'SPECTACOL DE LUMINI RGB · VIZUALIZATOR',
+ 'CHECK RECORDING SUPPORT':'VERIFICĂ ÎNREGISTRAREA',
+ 'OPEN LIVE VISUALIZER':'DESCHIDE VIZUALIZATORUL LIVE',
+ 'CREATE CRATE':'CREEAZĂ COLECȚIE',
+ 'ADD LOADED DECK TRACK':'ADAUGĂ PIESA ÎNCĂRCATĂ',
+ 'DELETE CRATE':'ȘTERGE COLECȚIA',
+ 'REFRESH AUDIO DEVICES':'ACTUALIZEAZĂ DISPOZITIVELE AUDIO',
+ 'APPLY OUTPUT':'APLICĂ IEȘIREA',
+ 'SAVE PROFILE':'SALVEAZĂ PROFILUL',
+ 'KEYBOARD MAPPING':'CONFIGURAREA TASTELOR',
+ 'PRESS TO ASSIGN A KEY':'APASĂ PENTRU A ALEGE O TASTĂ',
+ 'ENABLE MIDI LEARN':'ACTIVEAZĂ ÎNVĂȚAREA MIDI',
+ 'CHECK BROWSER NETWORK STATUS':'VERIFICĂ STAREA REȚELEI',
+ 'No control test running.':'Niciun test de comenzi activ.',
+ '0 / 6 practical skills verified in this session.':'0 / 6 exerciții verificate în această sesiune.',
+ 'TRAINING PROFILE':'PROFIL DE ANTRENAMENT',
+ 'DECK A':'DECK A',
+ 'DECK B':'DECK B'
+};
+const descriptions={
+ 'Master plays through the system default output. Select your speakers in macOS Sound settings; configure separate headphones using the mixer CUE controls.':'Sunetul principal folosește ieșirea implicită a sistemului. Alege boxele din setările audio macOS și configurează separat căștile din comenzile CUE ale mixerului.',
+ 'Connect Wi-Fi and Bluetooth devices in macOS settings. Browser DJ audio may have Bluetooth latency. System radio control is unavailable to this webpage.':'Conectează Wi-Fi și Bluetooth din setările macOS. Sunetul prin Bluetooth poate avea latență. Această pagină nu poate controla direct conexiunile sistemului.',
+ 'Detect connected MIDI hardware. Custom binding and MIDI learn are not yet implemented.':'Detectează dispozitivele MIDI conectate. Configurarea avansată MIDI este disponibilă în secțiunile suplimentare.',
+ 'Deck A: Q Play · W Cue · A/S Beat Jump. Deck B: O Play · P Cue · K/L Beat Jump. Shortcuts pause while typing. Remapping is planned.':'Deck A: Q redare · W cue · A/S salt ritmic. Deck B: O redare · P cue · K/L salt ritmic. Comenzile rapide se opresc când tastezi. Poți modifica asocierile în secțiunea de configurare.',
+ 'Record master output to a local WebM audio file. Supported browsers only. Stop to create a download.':'Înregistrează ieșirea principală într-un fișier audio local. Formatul depinde de browser. Oprește înregistrarea pentru a salva fișierul.',
+ 'Live broadcasts to YouTube, Facebook or other platforms require a streaming encoder and platform authorization. This app does not currently stream your mix to those platforms.':'Transmisiunile live pe YouTube, Facebook sau alte platforme necesită un encoder și autorizare. Aplicația nu transmite încă mixul direct către aceste servicii.',
+ 'The center WAVES view shows deck waveforms. Additional performance visualizers are planned.':'Vizualizarea WAVES afișează formele de undă ale deckurilor. Sunt planificate și alte vizualizatoare.',
+ 'Official G//BMN: artist, DJ and booking hub.':'Site-ul oficial G//BMN: pentru artist, DJ și rezervări.'
+};
+const dictionary={...ro,...descriptions};
+const targets='h2,h3,h4,p,button,a,small,option,label,strong,b';
+let current='en',observer=null,scheduled=false;
+function translate(){
+ const root=document.getElementById('signal-settings-panel');
+ if(!root)return;
+ for(const el of root.querySelectorAll(targets)){
+  if(el.closest('.v107-language'))continue;
+  // Only replace simple text-only elements; never overwrite controls, SVG or rich markup.
+  if(el.children.length)continue;
+  if(!el.dataset.v107Original){
+   const raw=el.textContent.trim();
+   if(dictionary[raw])el.dataset.v107Original=raw;
+  }
+  const original=el.dataset.v107Original;
+  if(!original)continue;
+  const desired=current==='ro'?dictionary[original]:original;
+  if(el.textContent!==desired)el.textContent=desired;
+ }
+ document.documentElement.lang=current;
+}
+function init(){
+ const root=document.getElementById('signal-settings-panel');
+ const head=root?.querySelector('.settings-head');
+ if(!head||head.querySelector('.v107-language'))return;
+ const wrap=document.createElement('label');
+ wrap.className='v107-language';
+ const title=document.createElement('span');title.textContent='🌐 LANGUAGE / LIMBĂ';
+ const select=document.createElement('select');
+ select.setAttribute('aria-label','Interface language / Limba interfeței');
+ select.add(new Option('English','en'),new Option('Română','ro'));
+ const hint=document.createElement('small');hint.textContent='English / Romanian interface · other languages planned';
+ wrap.append(title,select,hint);
+ head.insertBefore(wrap,head.querySelector('#signal-settings-close'));
+ try{const saved=localStorage.getItem(KEY);current=['en','ro'].includes(saved)?saved:'en'}catch(e){}
+ select.value=current;
+ select.onchange=()=>{
+  current=select.value;
+  try{localStorage.setItem(KEY,current)}catch(e){}
+  translate();
+  hint.textContent=current==='ro'?'Interfață EN/RO · alte limbi în pregătire':'English / Romanian interface · other languages planned';
+ };
+ const schedule=()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;observer?.disconnect();translate();observer?.observe(root,{childList:true,subtree:true})})};
+ observer=new MutationObserver(schedule);
+ observer.observe(root,{childList:true,subtree:true});
+ schedule();
+ window.signalDJLanguage={get:()=>current,set:(lang)=>{if(!['en','ro'].includes(lang))return false;select.value=lang;select.onchange();return true}};
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
 </body></html>
