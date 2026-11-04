@@ -2465,7 +2465,7 @@ window.signalDJControl={
  };
  let last=null;
  const identify=(target)=>target.closest('button,input,select,[role="slider"],[data-color-fx],[data-band],[data-beat-value],.utility-knob,.a9-mic-switch');
- function showFor(target){if(panel.hidden||panel.contains(target))return;const el=identify(target);if(!el||el===last)return;last=el;const msg=titleHelp(el);if(msg)out.textContent=msg}
+ function showFor(target){if(panel.hidden||panel.contains(target))return;const el=identify(target);if(!el||el===last)return;last=el;const msg=titleHelp(el);if(msg)out.textContent=window.signalGuideTranslate?.(el,msg)||msg}
  document.addEventListener('pointerover',e=>showFor(e.target));
  document.addEventListener('focusin',e=>showFor(e.target));
  document.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')showFor(e.target)});
@@ -8158,25 +8158,135 @@ function init(){
  const title=document.createElement('span');title.textContent='🌐 LANGUAGE / LIMBĂ';
  const select=document.createElement('select');
  select.setAttribute('aria-label','Interface language / Limba interfeței');
- select.add(new Option('English','en'),new Option('Română','ro'));
- const hint=document.createElement('small');hint.textContent='English / Romanian interface · other languages planned';
+ select.add(new Option("English","en"),new Option("Română","ro"),new Option("Español","es"),new Option("Italiano","it"),new Option("Français","fr"),new Option("Deutsch","de"),new Option("Português (Brasil)","pt-BR"),new Option("العربية","ar"),new Option("中文","zh"),new Option("日本語","ja"),new Option("한국어","ko"),new Option("Русский","ru"),new Option("Українська","uk"),new Option("עברית","he"),new Option("हिन्दी","hi"),new Option("ไทย","th"));
+ const hint=document.createElement('small');hint.textContent='EN / RO settings · multilingual control guide';
  wrap.append(title,select,hint);
  head.insertBefore(wrap,head.querySelector('#signal-settings-close'));
- try{const saved=localStorage.getItem(KEY);current=['en','ro'].includes(saved)?saved:'en'}catch(e){}
+ try{const saved=localStorage.getItem(KEY);current=["en","ro","es","it","fr","de","pt-BR","ar","zh","ja","ko","ru","uk","he","hi","th"].includes(saved)?saved:'en'}catch(e){}
  select.value=current;
  select.onchange=()=>{
   current=select.value;
   try{localStorage.setItem(KEY,current)}catch(e){}
   translate();
-  hint.textContent=current==='ro'?'Interfață EN/RO · alte limbi în pregătire':'English / Romanian interface · other languages planned';
+  hint.textContent=['en','ro'].includes(current)?'EN / RO settings · multilingual control guide':'Control guide translated · Settings may fall back to English';
  };
  const schedule=()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;observer?.disconnect();translate();observer?.observe(root,{childList:true,subtree:true})})};
  observer=new MutationObserver(schedule);
  observer.observe(root,{childList:true,subtree:true});
  schedule();
- window.signalDJLanguage={get:()=>current,set:(lang)=>{if(!['en','ro'].includes(lang))return false;select.value=lang;select.onchange();return true}};
+ window.signalDJLanguage={get:()=>current,set:(lang)=>{if(!["en","ro","es","it","fr","de","pt-BR","ar","zh","ja","ko","ru","uk","he","hi","th"].includes(lang))return false;select.value=lang;select.onchange();return true}};
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+
+<style id="signal-v108-multilingual-guide">
+#signal-info-view .v108-guide-meta{display:block;color:#b7c9d9;font-size:10px;margin:3px 0}
+#signal-info-view .v108-ableton-tip{display:block;color:#8fdbff;font-size:10px;margin-top:5px}
+</style>
+<script id="signal-v108-multilingual-guide-script">
+(()=>{
+'use strict';
+// Localized practical help; untranslated controls safely retain their original English instructions.
+// No automatic machine translation, external services, or silent claims of complete localization.
+const help={
+ ro:{
+ play:'Pornește sau oprește temporar redarea pe acest deck.',cue:'Setează sau revino la punctul CUE.',
+ trim:'Reglează câștigul de intrare înainte de EQ și de faderul canalului.',
+ eq:'Reglează frecvențele cu egalizatorul canalului.',
+ filter:'Butonul COLOR al canalului. Poziția centrală este neutră; rotește spre stânga sau dreapta pentru efect.',
+ fader:'Controlează volumul canalului cu faderul.',cross:'Crossfader: spre stânga se aud mai mult deckurile A/C, spre dreapta B/D.',
+ master:'MASTER controlează volumul general al ieșirii audio.',headphones:'CUE pentru căști necesită o ieșire audio separată.',
+ import:'Importă fișiere audio locale în biblioteca DJ.',midi:'Conectează un dispozitiv MIDI și configurează comenzile. Compatibilitatea depinde de browser.',
+ ableton:'Ableton Live: activează intrarea Sync pentru portul MIDI ales (de exemplu IAC pe macOS). Ceasul MIDI este experimental; Ableton Link nu este implementat.',
+ default:'Această comandă este interactivă. Verifică efectul prin ascultare; unele funcții sunt încă experimentale.'
+ },
+ es:{
+ play:'Reproduce o pausa esta plataforma.',cue:'Establece o vuelve al punto CUE.',trim:'Ajusta la ganancia de entrada antes del EQ y del fader.',eq:'Ajusta las frecuencias con el ecualizador del canal.',filter:'Control COLOR: el centro es neutro; gira a ambos lados para aplicar el efecto.',fader:'Controla el volumen del canal.',cross:'Crossfader: izquierda favorece A/C y derecha favorece B/D.',master:'MASTER controla el volumen general.',headphones:'La preescucha CUE necesita una salida de auriculares independiente.',import:'Importa archivos de audio locales.',midi:'Conecta y asigna controles MIDI según la compatibilidad del navegador.',ableton:'Ableton Live: activa Sync en la entrada MIDI seleccionada. El reloj MIDI es experimental; Ableton Link no está integrado.',default:'Control interactivo: escucha para comprobar su efecto.'
+ },
+ it:{
+ play:'Avvia o mette in pausa il deck.',cue:'Imposta o richiama il punto CUE.',trim:'Regola il guadagno prima di EQ e fader.',eq:'Regola le frequenze con l’equalizzatore del canale.',filter:'Manopola COLOR: il centro è neutro; ruota per applicare un effetto.',fader:'Regola il volume del canale.',cross:'Crossfader: a sinistra prevalgono A/C, a destra B/D.',master:'MASTER regola il volume generale.',headphones:'Il preascolto CUE richiede un’uscita cuffie separata.',import:'Importa file audio locali.',midi:'Collega un controller MIDI e assegna i comandi supportati dal browser.',ableton:'Ableton Live: attiva Sync sull’ingresso MIDI scelto. Il clock MIDI è sperimentale; Ableton Link non è integrato.',default:'Controllo interattivo: verifica l’effetto ascoltando.'
+ },
+ fr:{
+ play:'Démarre ou met en pause la platine.',cue:'Définit ou rappelle le point CUE.',trim:'Règle le gain avant l’EQ et le fader.',eq:'Règle les fréquences avec l’égaliseur du canal.',filter:'Commande COLOR : le centre est neutre; tournez pour appliquer un effet.',fader:'Règle le volume du canal.',cross:'Crossfader : à gauche A/C, à droite B/D.',master:'MASTER règle le volume général.',headphones:'La préécoute CUE nécessite une sortie casque séparée.',import:'Importez des fichiers audio locaux.',midi:'Connectez un contrôleur MIDI et attribuez les commandes compatibles.',ableton:'Ableton Live : activez Sync pour l’entrée MIDI choisie. L’horloge MIDI est expérimentale; Ableton Link n’est pas intégré.',default:'Commande interactive : vérifiez le résultat à l’écoute.'
+ },
+ de:{
+ play:'Startet oder pausiert das Deck.',cue:'Setzt den CUE-Punkt oder springt dorthin zurück.',trim:'Regelt den Eingangspegel vor EQ und Fader.',eq:'Regelt Frequenzen mit dem Kanal-EQ.',filter:'COLOR-Regler: Mittelstellung ist neutral; Drehen aktiviert den Effekt.',fader:'Regelt die Kanallautstärke.',cross:'Crossfader: links A/C, rechts B/D.',master:'MASTER regelt die Gesamtlautstärke.',headphones:'CUE-Vorhören benötigt einen getrennten Kopfhörerausgang.',import:'Lokale Audiodateien importieren.',midi:'MIDI-Controller verbinden und unterstützte Regler zuweisen.',ableton:'Ableton Live: Sync für den gewählten MIDI-Eingang einschalten. MIDI-Clock ist experimentell; Ableton Link ist nicht integriert.',default:'Interaktiver Regler: Wirkung durch Hören überprüfen.'
+ },
+ 'pt-BR':{
+ play:'Reproduz ou pausa este deck.',cue:'Define ou retorna ao ponto CUE.',trim:'Ajusta o ganho de entrada antes do EQ e do fader.',eq:'Ajusta as frequências pelo equalizador do canal.',filter:'Controle COLOR: o centro é neutro; gire para aplicar o efeito.',fader:'Controla o volume do canal.',cross:'Crossfader: à esquerda A/C, à direita B/D.',master:'MASTER controla o volume geral.',headphones:'A pré-escuta CUE exige uma saída de fones separada.',import:'Importe arquivos de áudio locais.',midi:'Conecte e mapeie controles MIDI compatíveis com o navegador.',ableton:'Ableton Live: ative Sync na entrada MIDI escolhida. O MIDI Clock é experimental; Ableton Link não está integrado.',default:'Controle interativo: confira o efeito ouvindo.'
+ },
+ ar:{
+ play:'تشغيل هذا المشغل أو إيقافه مؤقتًا.',cue:'تعيين نقطة CUE أو العودة إليها.',trim:'ضبط مستوى الإدخال قبل معادل الصوت والفيدر.',eq:'ضبط ترددات الصوت باستخدام معادل القناة.',filter:'مقبض COLOR: المنتصف محايد، أدره لتطبيق التأثير.',fader:'التحكم في مستوى صوت القناة.',cross:'كروس فيدر: اليسار للقناتين A/C واليمين للقناتين B/D.',master:'يتحكم MASTER في مستوى الصوت العام.',headphones:'تتطلب معاينة CUE مخرج سماعات منفصلًا.',import:'استيراد ملفات صوت محلية.',midi:'توصيل جهاز MIDI وتعيين عناصر التحكم المدعومة.',ableton:'Ableton Live: فعّل Sync لمدخل MIDI المحدد. ساعة MIDI تجريبية وAbleton Link غير مدمج.',default:'عنصر تحكم تفاعلي؛ تحقق من تأثيره بالاستماع.'
+ },
+ zh:{
+ play:'播放或暂停此唱盘。',cue:'设置或返回 CUE 提示点。',trim:'调节均衡器和推子之前的输入增益。',eq:'使用通道均衡器调节频率。',filter:'COLOR 旋钮：中间为中性位置，转动以应用效果。',fader:'调节通道音量。',cross:'交叉推子：左侧偏向 A/C，右侧偏向 B/D。',master:'MASTER 控制总输出音量。',headphones:'CUE 预听需要独立的耳机输出。',import:'导入本地音频文件。',midi:'连接 MIDI 控制器并映射浏览器支持的控件。',ableton:'Ableton Live：为所选 MIDI 输入启用 Sync。MIDI 时钟仍属实验功能；未集成 Ableton Link。',default:'交互控件：请通过聆听检查效果。'
+ },
+ ja:{
+ play:'このデッキを再生または一時停止します。',cue:'CUE ポイントを設定、またはそこへ戻ります。',trim:'EQ とフェーダーの前段の入力ゲインを調整します。',eq:'チャンネル EQ で周波数を調整します。',filter:'COLOR ノブ：中央はニュートラルです。回してエフェクトを適用します。',fader:'チャンネル音量を調整します。',cross:'クロスフェーダー：左は A/C、右は B/D が優先されます。',master:'MASTER は全体の出力音量を調整します。',headphones:'CUE モニターには独立したヘッドホン出力が必要です。',import:'ローカル音声ファイルを読み込みます。',midi:'対応する MIDI コントローラーを接続して割り当てます。',ableton:'Ableton Live：選択した MIDI 入力の Sync を有効にしてください。MIDI クロックは試験的機能で、Ableton Link には未対応です。',default:'操作可能なコントロールです。音を聴いて効果を確認してください。'
+ },
+ ko:{
+ play:'이 데크를 재생하거나 일시정지합니다.',cue:'CUE 지점을 설정하거나 해당 지점으로 돌아갑니다.',trim:'EQ와 페이더 이전의 입력 게인을 조절합니다.',eq:'채널 EQ로 주파수를 조절합니다.',filter:'COLOR 노브: 가운데는 중립입니다. 돌려서 효과를 적용합니다.',fader:'채널 볼륨을 조절합니다.',cross:'크로스페이더: 왼쪽은 A/C, 오른쪽은 B/D가 우선입니다.',master:'MASTER는 전체 출력 볼륨을 조절합니다.',headphones:'CUE 모니터링에는 별도 헤드폰 출력이 필요합니다.',import:'로컬 오디오 파일을 가져옵니다.',midi:'지원되는 MIDI 컨트롤러를 연결하고 매핑합니다.',ableton:'Ableton Live: 선택한 MIDI 입력의 Sync를 활성화하세요. MIDI 클록은 실험적 기능이며 Ableton Link는 통합되지 않았습니다.',default:'대화형 컨트롤입니다. 소리를 들어 효과를 확인하세요.'
+ },
+ ru:{
+ play:'Воспроизведение или пауза этой деки.',cue:'Установить точку CUE или вернуться к ней.',trim:'Регулировка входного усиления до EQ и фейдера.',eq:'Регулировка частот эквалайзером канала.',filter:'Ручка COLOR: центр нейтрален; поворот включает эффект.',fader:'Регулировка громкости канала.',cross:'Кроссфейдер: слева A/C, справа B/D.',master:'MASTER регулирует общую громкость.',headphones:'Для CUE нужен отдельный выход на наушники.',import:'Импорт локальных аудиофайлов.',midi:'Подключите MIDI-контроллер и назначьте доступные элементы.',ableton:'Ableton Live: включите Sync для выбранного MIDI-входа. MIDI Clock экспериментален; Ableton Link не подключён.',default:'Интерактивный элемент: проверьте действие на слух.'
+ },
+ uk:{
+ play:'Відтворення або пауза цієї деки.',cue:'Установити точку CUE або повернутися до неї.',trim:'Регулювання вхідного підсилення перед EQ і фейдером.',eq:'Регулювання частот еквалайзером каналу.',filter:'Ручка COLOR: центр нейтральний; поворот застосовує ефект.',fader:'Регулювання гучності каналу.',cross:'Кросфейдер: ліворуч A/C, праворуч B/D.',master:'MASTER регулює загальну гучність.',headphones:'Для CUE потрібен окремий вихід на навушники.',import:'Імпортуйте локальні аудіофайли.',midi:'Підключіть MIDI-контролер і призначте доступні елементи.',ableton:'Ableton Live: увімкніть Sync для вибраного входу MIDI. MIDI Clock експериментальний; Ableton Link не інтегровано.',default:'Інтерактивний елемент: перевірте дію на слух.'
+ },
+ he:{
+ play:'הפעלה או השהיה של הדק.',cue:'הגדרה או חזרה לנקודת CUE.',trim:'כיוון עוצמת הכניסה לפני EQ והפיידר.',eq:'כיוון תדרים באמצעות EQ של הערוץ.',filter:'כפתור COLOR: המרכז ניטרלי; סובבו להפעלת האפקט.',fader:'שליטה בעוצמת הערוץ.',cross:'קרוספיידר: שמאלה A/C, ימינה B/D.',master:'MASTER שולט בעוצמה הכללית.',headphones:'האזנת CUE דורשת יציאת אוזניות נפרדת.',import:'ייבוא קובצי שמע מקומיים.',midi:'חיבור בקר MIDI ומיפוי פקדים נתמכים.',ableton:'Ableton Live: הפעילו Sync בכניסת MIDI שנבחרה. שעון MIDI ניסיוני; Ableton Link אינו משולב.',default:'פקד אינטראקטיבי; בדקו את ההשפעה בהאזנה.'
+ },
+ hi:{
+ play:'इस डेक को चलाएँ या रोकें।',cue:'CUE पॉइंट सेट करें या उस पर वापस जाएँ।',trim:'EQ और फ़ेडर से पहले इनपुट गेन बदलें।',eq:'चैनल EQ से फ़्रीक्वेंसी समायोजित करें।',filter:'COLOR नॉब: बीच में कोई प्रभाव नहीं; घुमाकर प्रभाव लगाएँ।',fader:'चैनल की आवाज़ नियंत्रित करें।',cross:'क्रॉसफ़ेडर: बाएँ A/C, दाएँ B/D।',master:'MASTER कुल आवाज़ नियंत्रित करता है।',headphones:'CUE सुनने के लिए अलग हेडफ़ोन आउटपुट चाहिए।',import:'स्थानीय ऑडियो फ़ाइलें आयात करें।',midi:'समर्थित MIDI कंट्रोलर जोड़ें और मैप करें।',ableton:'Ableton Live: चुने गए MIDI इनपुट पर Sync सक्षम करें। MIDI क्लॉक प्रयोगात्मक है; Ableton Link एकीकृत नहीं है।',default:'यह इंटरैक्टिव कंट्रोल है; सुनकर प्रभाव जाँचें।'
+ },
+ th:{
+ play:'เล่นหรือหยุดเด็คนี้ชั่วคราว',cue:'ตั้งค่าหรือกลับไปยังจุด CUE',trim:'ปรับเกนอินพุตก่อน EQ และเฟดเดอร์',eq:'ปรับความถี่ด้วย EQ ของแชนเนล',filter:'ปุ่ม COLOR: ตรงกลางเป็นค่ากลาง หมุนเพื่อใช้เอฟเฟกต์',fader:'ควบคุมระดับเสียงของแชนเนล',cross:'ครอสเฟดเดอร์: ซ้ายเน้น A/C ขวาเน้น B/D',master:'MASTER ควบคุมระดับเสียงรวม',headphones:'การฟัง CUE ต้องใช้เอาต์พุตหูฟังแยกต่างหาก',import:'นำเข้าไฟล์เสียงจากเครื่อง',midi:'เชื่อมต่อคอนโทรลเลอร์ MIDI และกำหนดปุ่มที่รองรับ',ableton:'Ableton Live: เปิด Sync สำหรับอินพุต MIDI ที่เลือก MIDI Clock ยังอยู่ระหว่างทดลอง และยังไม่รองรับ Ableton Link',default:'เป็นปุ่มควบคุมแบบโต้ตอบ โปรดฟังเพื่อตรวจสอบผลลัพธ์'
+ }
+};
+const matchId=(el)=>{
+ const id=el.id||'';
+ if(/^play-[ABCD]$/i.test(id))return 'play';
+ if(/^cue-[ABCD]$/i.test(id))return 'cue';
+ if(/^TRIM-[ABCD]$/i.test(id))return 'trim';
+ if(/^(HI|MID|LOW)-[ABCD]$/i.test(id))return 'eq';
+ if(/^FILTER-[ABCD]$/i.test(id))return 'filter';
+ if(/^level-[ABCD]$/i.test(id))return 'fader';
+ if(id==='cross')return 'cross';
+ if(id==='master')return 'master';
+ if(['cue-device','cue-enable','cue-level','headphone-mix','headphone-level'].includes(id))return 'headphones';
+ if(['files','more'].includes(id))return 'import';
+ if(/midi|adv-map|keybind/i.test(id))return 'midi';
+ if(/clock|ableton/i.test(id)||el.closest?.('.v102-box')?.textContent?.includes('ABLETON LIVE'))return 'ableton';
+ return null;
+};
+window.signalGuideTranslate=(el,english)=>{
+ const locale=window.signalDJLanguage?.get?.()||'en',translated=help[locale];
+ if(!translated)return english;
+ const key=matchId(el);
+ return key&&translated[key]?translated[key]:english;
+};
+function setup(){
+ const info=document.getElementById('signal-info-view');
+ const output=document.getElementById('signal-info-description');
+ if(!info||!output||info.querySelector('.v108-guide-meta'))return;
+ const meta=document.createElement('small');meta.className='v108-guide-meta';
+ meta.textContent='🌐 Info Guide · follows Settings language · untranslated items remain English';
+ output.insertAdjacentElement('beforebegin',meta);
+ const tip=document.createElement('small');tip.className='v108-ableton-tip';
+ tip.textContent='Ableton: MIDI clock in Settings is experimental. MIDI Sync ≠ Ableton Link.';
+ output.insertAdjacentElement('afterend',tip);
+ const old=window.signalDJLanguage?.set;
+ if(typeof old==='function'){
+  window.signalDJLanguage.set=(locale)=>{const result=old(locale);if(result)output.textContent='🌐 '+locale.toUpperCase()+' · '+(help[locale]?.default||'Point at a control for its explanation.');return result};
+ }
+ const setting=document.getElementById('signal-settings-panel')?.querySelector('.v107-language select');
+ setting?.addEventListener('change',()=>{
+  const locale=setting.value;
+  output.textContent='🌐 '+locale.toUpperCase()+' · '+(help[locale]?.default||'Point at a control for its explanation.');
+ });
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
 })();
 </script>
 </body></html>
