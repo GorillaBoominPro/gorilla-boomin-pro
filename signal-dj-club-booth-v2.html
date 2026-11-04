@@ -1973,9 +1973,36 @@ for(let i=0;i<8;i++){let btn=document.createElement('button');btn.type='button';
 const chan=document.createElement('div');chan.className='channel';chan.innerHTML='<b class="channel-number">'+({'A':'1','B':'2','C':'3','D':'4'}[k])+'</b><div class="a9-source-select"><span>USB A</span><span>LINE</span><span>USB B</span></div><div class="ch-vu" aria-label="Channel '+k+' signal level"><i id="chvu-'+k+'"></i></div>'+['TRIM','HI','MID','LOW','FILTER'].map(n=>'<div class="knobWrap"><label>'+(n==='FILTER'?'COLOR':n)+'</label><div class="knob rotary-control" role="slider" tabindex="0" aria-label="'+n+' channel '+k+'" aria-valuemin="'+(n==='FILTER'?-100:n==='TRIM'?0:-24)+'" aria-valuemax="'+(n==='FILTER'?100:n==='TRIM'?150:12)+'" aria-valuenow="'+(n==='TRIM'?80:0)+'" ></div><input class="rotary-value" id="'+n+'-'+k+'" aria-label="'+n+' channel '+k+'" type="range" min="'+(n==='FILTER'?-100:n==='TRIM'?0:-24)+'" max="'+(n==='FILTER'?100:n==='TRIM'?150:12)+'" value="'+(n==='TRIM'?80:0)+'"></div>').join('')+'<button class="mixer-cue" type="button" id="mixcue-'+k+'" aria-pressed="false">CUE</button><div class="knobWrap"><label>CHANNEL FADER</label><div class="fader-rail"><input class="chFader" id="level-'+k+'" type="range" min="0" max="100" value="80"></div><div class="channel-assign"><label for="assign-'+k+'">CROSSFADER ASSIGN</label><select class="assign-switch" id="assign-'+k+'" aria-label="Channel '+k+' crossfader assignment"><option value="A"'+((k==='A'||k==='C')?' selected':'')+'>A</option><option value="THRU">THRU</option><option value="B"'+((k==='B'||k==='D')?' selected':'')+'>B</option></select></div></div>'; $('mixbody').appendChild(chan);
 $('file-'+k).addEventListener('change',e=>{if(e.target.files[0]){d.mainCue=0;load(k,e.target.files[0])}});
 $('play-'+k).onclick=async()=>{if(!d.audio.src){status('Load a track into deck '+k);return}try{await init();if(d.audio.paused)await d.audio.play();else d.audio.pause()}catch(e){status('Playback error: '+e.message)}};
-/* Cue: capture current position when paused; return to it during playback. */
+/* CDJ-style CUE: press while playing returns to CUE; hold while paused previews from CUE, release returns. */
 d.mainCue=0;
-$('cue-'+k).onclick=()=>{if(!d.audio.src)return;if(d.audio.paused){d.mainCue=d.audio.currentTime;status('Deck '+k+' cue set '+fmt(d.mainCue))}else{d.audio.pause();d.audio.currentTime=d.mainCue??0;status('Deck '+k+' returned to cue')}};
+let cuePreviewHeld=false,cuePressToken=0;
+const cueButton=$('cue-'+k);
+const returnToCue=()=>{d.audio.pause();d.audio.currentTime=d.mainCue??0;status('Deck '+k+' returned to CUE '+fmt(d.mainCue))};
+async function beginCuePress(){
+ if(!d.audio.src){status('Load a track into deck '+k+' before using CUE');return}
+ const token=++cuePressToken;
+ if(!d.audio.paused){cuePreviewHeld=false;returnToCue();return}
+ // At a new paused position the user is setting a fresh CUE point.
+ if(Math.abs(d.audio.currentTime-(d.mainCue??0))>.075)d.mainCue=d.audio.currentTime;
+ cuePreviewHeld=true;
+ try{await init();if(!cuePreviewHeld||token!==cuePressToken)return;await d.audio.play();if(!cuePreviewHeld||token!==cuePressToken){d.audio.pause();d.audio.currentTime=d.mainCue??0;return}status('Deck '+k+' CUE preview — release to return')}
+ catch(e){cuePreviewHeld=false;status('CUE preview unavailable: '+e.message)}
+}
+function endCuePress(){
+ ++cuePressToken;
+ if(!cuePreviewHeld)return;
+ cuePreviewHeld=false;d.audio.pause();d.audio.currentTime=d.mainCue??0;
+ status('Deck '+k+' CUE preview ended at '+fmt(d.mainCue));
+}
+cueButton.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();try{cueButton.setPointerCapture(e.pointerId)}catch(err){}beginCuePress()});
+cueButton.addEventListener('pointerup',endCuePress);
+cueButton.addEventListener('pointercancel',endCuePress);
+cueButton.addEventListener('lostpointercapture',endCuePress);
+cueButton.addEventListener('keydown',e=>{if((e.key===' '||e.key==='Enter')&&!e.repeat){e.preventDefault();beginCuePress()}});
+cueButton.addEventListener('keyup',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();endCuePress()}});
+cueButton.addEventListener('blur',endCuePress);
+// Accessible/software-generated click: one-shot CUE return or point-setting; mouse/touch hold uses pointer events above.
+cueButton.onclick=e=>{if(e.detail!==0)return;if(!d.audio.src)return;if(d.audio.paused){d.mainCue=d.audio.currentTime;status('Deck '+k+' CUE set '+fmt(d.mainCue))}else returnToCue()};
 
 $('speed-'+k).oninput=e=>{d.audio.playbackRate=e.target.value/100;$('speedval-'+k).textContent=(e.target.value-100)+'%';$('bpm-'+k).textContent='BPM: '+(Number($('manual-'+k).value)*d.audio.playbackRate).toFixed(1);$('lcd-bpm-'+k).textContent=(Number($('manual-'+k).value)*d.audio.playbackRate).toFixed(1)};
 $('manual-'+k).oninput=()=>$('speed-'+k).dispatchEvent(new Event('input'));
@@ -2046,7 +2073,33 @@ $('out-'+k).onclick=()=>{if(!d.audio.src||d.loopIn==null)return;d.loop=[d.loopIn
 $('reloop-'+k).onclick=()=>{const target=d.loop||d.savedLoop;if(target){d.loop=[...target];d.audio.currentTime=d.loop[0];status('Deck '+k+' loop recalled')}else status('Set a loop first')};
 $('slip-'+k).onclick=()=>status('Slip mode is not yet implemented');
 $('reverse-'+k).onclick=()=>status('Reverse playback requires a future audio-engine update');
-$('sync-'+k).onclick=()=>{const target=D[syncMaster];if(!target?.audio.src||!d.audio.src||k===syncMaster){status('Load two tracks and choose the other deck as MASTER');return}const mb=Number($('manual-'+syncMaster).value)||128,db=Number($('manual-'+k).value)||128;const targetBpm=mb*target.audio.playbackRate;const rate=targetBpm/db;const speed=$('speed-'+k);const min=Number(speed.min)/100,max=Number(speed.max)/100;if(rate<min||rate>max){status('SYNC: required speed is outside the tempo fader range');return}speed.value=String(Math.round(rate*100));speed.dispatchEvent(new Event('input'));const masterBeat=60/mb,deckBeat=60/db;const phase=((target.audio.currentTime/masterBeat)%1+1)%1;const currentPhase=((d.audio.currentTime/deckBeat)%1+1)%1;let difference=(phase-currentPhase)*deckBeat;if(difference>deckBeat/2)difference-=deckBeat;if(difference< -deckBeat/2)difference+=deckBeat;d.audio.currentTime=Math.max(0,Math.min(d.audio.duration||Infinity,d.audio.currentTime+difference));status('Deck '+k+' tempo matched to '+syncMaster+'; approximate phase aligned (no analyzed beatgrid)')};
+$('sync-'+k).onclick=()=>{
+ if(!d.audio.src){status('SYNC: load a track on deck '+k);return}
+ let sourceKey=syncMaster;
+ // Syncing the current master is a common first-time workflow: pick the other loaded deck.
+ if(sourceKey===k||!D[sourceKey]?.audio.src){
+  const others=Object.keys(D).filter(other=>other!==k&&D[other]?.audio.src);
+  sourceKey=others.find(other=>!D[other].audio.paused)||others[0];
+  if(!sourceKey){status('SYNC: load tracks into two decks, then press SYNC on the deck to match');return}
+  syncMaster=sourceKey;
+  for(const deck of Object.keys(D))$('r-master-'+deck)?.setAttribute('aria-pressed',String(deck===syncMaster));
+ }
+ const target=D[sourceKey],mb=Number($('manual-'+sourceKey).value)||128,db=Number($('manual-'+k).value)||128;
+ const targetBpm=mb*target.audio.playbackRate,rate=targetBpm/db;
+ const speed=$('speed-'+k),min=Number(speed.min)/100,max=Number(speed.max)/100;
+ if(!Number.isFinite(rate)||rate<min||rate>max){status('SYNC: '+targetBpm.toFixed(1)+' BPM is outside deck '+k+' tempo range ('+(min*100-100).toFixed(0)+'% to +'+(max*100-100).toFixed(0)+'%). Adjust BPM manually.');return}
+ speed.value=String(Math.round(rate*100));speed.dispatchEvent(new Event('input'));
+ // One-shot phase alignment only: these are BPM estimates, not analyzed beat grids.
+ const masterBeat=60/mb,deckBeat=60/db;
+ const phase=((target.audio.currentTime/masterBeat)%1+1)%1;
+ const currentPhase=((d.audio.currentTime/deckBeat)%1+1)%1;
+ let difference=(phase-currentPhase)*deckBeat;
+ if(difference>deckBeat/2)difference-=deckBeat;
+ if(difference< -deckBeat/2)difference+=deckBeat;
+ d.audio.currentTime=Math.max(0,Math.min(d.audio.duration||Infinity,d.audio.currentTime+difference));
+ $('r-sync-'+k)?.setAttribute('aria-pressed','true');
+ status('SYNC: deck '+k+' matched to MASTER '+sourceKey+' at '+(db*d.audio.playbackRate).toFixed(1)+' BPM · approximate one-shot beat alignment');
+};
 $('keylock-'+k).onclick=()=>status('Key lock requires pitch-preserving timestretch; not implemented yet');
 $('reset-ring-'+k).onclick=()=>$('tempreset-'+k).click();
 $('topreset-'+k).onclick=()=>$('tempreset-'+k).click();
@@ -2059,7 +2112,7 @@ $('r-tracknext-'+k).onclick=()=>status('Choose your next song from the music lib
 $('r-seekback-'+k).onclick=()=>{if(d.audio.src)d.audio.currentTime=Math.max(0,d.audio.currentTime-5)};
 $('r-seekforward-'+k).onclick=()=>{if(d.audio.src)d.audio.currentTime=Math.min(d.audio.duration||0,d.audio.currentTime+5)};
 $('r-mtempo-'+k).onclick=e=>{const on=e.currentTarget.getAttribute('aria-pressed')!=='true';e.currentTarget.setAttribute('aria-pressed',String(on));status('Master tempo indicator '+(on?'ON — key lock audio processing not yet implemented':'OFF'))};
-$('r-master-'+k).onclick=()=>{syncMaster=k;status('Deck '+k+' is SYNC MASTER')};
+$('r-master-'+k).onclick=()=>{syncMaster=k;for(const deck of Object.keys(D))$('r-master-'+deck)?.setAttribute('aria-pressed',String(deck===k));status('Deck '+k+' selected as SYNC MASTER; press SYNC on the other loaded deck')};
 const beatSeconds=()=>60/(Number($('manual-'+k).value)||128);
 const jumpBeats=(beats)=>{if(!d.audio.src)return;const end=Number.isFinite(d.audio.duration)?d.audio.duration:Infinity;d.audio.currentTime=Math.max(0,Math.min(end,d.audio.currentTime+beats*beatSeconds()));status('Deck '+k+' '+Math.abs(beats)+' beats '+(beats<0?'back':'forward'))};
 $('jumpback-'+k).onclick=()=>jumpBeats(-4);
@@ -2104,7 +2157,7 @@ requestAnimationFrame(positionEqMeters);
 window.addEventListener('resize',()=>requestAnimationFrame(positionEqMeters));
 
 let activeColorFx="FILTER",colorFxParameter=0.5,colorFxEnabled=false;
-let micStream=null,micSource=null,micGain=null,micEqHigh=null,micEqLow=null,micEnabled=false,headphoneMix=.5,headphoneLevel=.7,headphoneCueGain=null,headphoneMasterGain=null,beatBands=new Set(['LOW','MID','HI']);
+let micStream=null,micSource=null,micGain=null,micEqHigh=null,micEqLow=null,micEnabled=false,headphoneMix=0,headphoneLevel=.7,headphoneCueGain=null,headphoneMasterGain=null,beatBands=new Set(['LOW','MID','HI']);
 let beatFxOn=false,beatBpm=128,beatTapTimes=[],beatFxDelay=null,beatFxReturn=null,beatFxFeedback=null,beatFxTone=null,masterAnalyser=null;
 async function init(){if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});master=ctx.createGain();masterAnalyser=ctx.createAnalyser();masterAnalyser.fftSize=512;master.connect(masterAnalyser);masterAnalyser.connect(ctx.destination);
 beatFxDelay=ctx.createDelay(4);beatFxReturn=ctx.createGain();beatFxFeedback=ctx.createGain();beatFxTone=ctx.createBiquadFilter();beatFxTone.type='lowpass';beatFxTone.frequency.value=4500;
@@ -2250,14 +2303,14 @@ async function refreshCueDevices(){
  const devices=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='audiooutput'&&d.deviceId&&d.deviceId!=='default'&&d.deviceId!=='communications');
  select.replaceChildren(new Option('SELECT SEPARATE OUTPUT',''));
  for(const d of devices)select.add(new Option(d.label||'Audio output '+(select.length),d.deviceId));
- $('cue-note').textContent=devices.length?'Select your headphones or second interface output, then enable.':'No separate output listed. Connect an output device and check browser permissions.';
+ $('cue-note').textContent=devices.length?'CUE-only is selected by default. Choose a physically separate output, enable cue, then press a mixer CUE button. A second name for the SAME interface does not guarantee separate output channels.':'No separate output listed. Connect a second output device or configure independent output pairs through compatible routing software.';
 }
 refreshCueDevices().catch(e=>$('cue-note').textContent=e.message);
 $('cue-level').oninput=()=>{if(cueBus&&ctx)cueBus.gain.setTargetAtTime(Number($('cue-level').value)/100,ctx.currentTime,.02)};
 $('cue-enable').onclick=async()=>{try{
  const device=$('cue-device').value;if(!device)throw Error('Select a separate headphone output first.');
  await init();await cuePlayer.setSinkId(device);cuePlayer.srcObject=cueOutput.stream;await cuePlayer.play();
- $('cue-note').textContent='Headphone cue active on selected output. Verify it is not the master speakers.';
+ $('cue-note').textContent='CUE output enabled. Headphone MIXING starts at CUE-only; turn toward MASTER only to blend. Confirm this device feeds headphones independently from the master speakers. Chrome cannot select individual Scarlett 4i4 channels by itself.';
  }catch(e){$('cue-note').textContent='Cue unavailable: '+e.message}
 };
 document.querySelectorAll('.assign-switch').forEach(el=>el.addEventListener('change',()=>{mix();status('Channel '+el.id.slice(-1)+' crossfader assignment: '+el.value)}));$('cross').oninput=mix;$('master').oninput=mix;$('stop').onclick=()=>Object.values(D).forEach(d=>d.audio.pause());
