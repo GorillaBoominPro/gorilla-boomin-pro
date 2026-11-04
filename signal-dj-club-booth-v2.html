@@ -1903,7 +1903,14 @@ fxSwitch.onclick=()=>{const setting=padFx[selectedSample];setting.enabled=!setti
 padVolume.oninput=()=>{volumes[selectedSample]=Number(padVolume.value)/100;updateVoices(selectedSample)};
 function refreshPadFx(){const p=padFx[selectedSample];fxSelect.value=p.type;fxWet.value=Math.round(p.wet*100);padVolume.value=Math.round(volumes[selectedSample]*100);fxSwitch.setAttribute('aria-pressed',String(p.enabled));fxSwitch.textContent=p.enabled?'FX ON':'FX OFF'}
 function updateVoices(i){const p=padFx[i];for(const v of voices[i]){v.dry.gain.setTargetAtTime(p.enabled&&p.type!=='off'?1-p.wet:1,ctx.currentTime,.02);v.wet.gain.setTargetAtTime(p.enabled&&p.type!=='off'?p.wet:0,ctx.currentTime,.02);v.volume.gain.setTargetAtTime(volumes[i],ctx.currentTime,.02)}}
-function impulseResponse(context){const seconds=1.8,length=Math.floor(context.sampleRate*seconds),buffer=context.createBuffer(2,length,context.sampleRate);for(let ch=0;ch<2;ch++){const data=buffer.getChannelData(ch);for(let j=0;j<length;j++)data[j]=(Math.random()*2-1)*Math.pow(1-j/length,2.8)}return buffer}
+const samplerImpulseCache=new WeakMap();
+function impulseResponse(context){
+ let buffer=samplerImpulseCache.get(context);if(buffer)return buffer;
+ const seconds=1.8,length=Math.floor(context.sampleRate*seconds);
+ buffer=context.createBuffer(2,length,context.sampleRate);
+ for(let ch=0;ch<2;ch++){const data=buffer.getChannelData(ch);for(let j=0;j<length;j++)data[j]=(Math.random()*2-1)*Math.pow(1-j/length,2.8)}
+ samplerImpulseCache.set(context,buffer);return buffer;
+}
 
 const sampleButtons=Array.from({length:16},(_,i)=>{const b=document.createElement('button');b.type='button';b.textContent='S'+(i+1);b.onclick=async()=>{selectedSample=i;paintSteps();await init();playSample(i)};padHost.append(b);return b});
 const stepButtons=Array.from({length:16},(_,i)=>{const b=document.createElement('button');b.type='button';b.textContent=String(i+1);b.onclick=()=>{steps[selectedSample][i]=!steps[selectedSample][i];paintSteps()};seqHost.append(b);return b});
@@ -1922,10 +1929,45 @@ function playSample(i){
  voice.addEventListener('ended',()=>{voices[i].delete(active);setTimeout(()=>{try{volume.disconnect();dry.disconnect();wet.disconnect();fx.disconnect();for(const node of keep){if(node.disconnect)node.disconnect()}}catch(e){}},2200)},{once:true});
  voice.start();
 }
-sam.querySelector('.sampler-files').onchange=async e=>{const files=[...e.target.files].slice(0,16);let index=0;for(const file of files){try{const ac=new (window.AudioContext||window.webkitAudioContext)();sampleBank[index]=await ac.decodeAudioData(await file.arrayBuffer());await ac.close();sampleButtons[index].title=file.name;sampleButtons[index].textContent=file.name.slice(0,9);index++}catch(err){status('Sample not supported: '+file.name)}}paintSteps()};
-function stopSteps(){if(stepTimer!==null){clearTimeout(stepTimer);stepTimer=null}sam.querySelector('.sampler-start').textContent='START SEQUENCE'}
-function tickSteps(){const bpm=Math.max(50,Number($('manual-'+k).value)||128);for(let i=0;i<16;i++)if(steps[i][stepIndex])playSample(i);stepIndex=(stepIndex+1)%16;paintSteps();stepTimer=setTimeout(tickSteps,60000/bpm/4)}
-sam.querySelector('.sampler-start').onclick=async()=>{if(stepTimer!==null){stopSteps();return}await init();stepIndex=0;tickSteps();sam.querySelector('.sampler-start').textContent='PAUSE SEQUENCE'};
+sam.querySelector('.sampler-files').onchange=async e=>{
+ const files=[...e.target.files].slice(0,16);let index=0;
+ try{await init()}catch(err){status('Sampler audio engine unavailable: '+err.message);return}
+ for(const file of files){
+  try{
+   if(file.size>35*1024*1024)throw Error('Sample is over 35 MB; use a shorter clip');
+   const decoded=await ctx.decodeAudioData(await file.arrayBuffer());
+   sampleBank[index]=decoded;
+   sampleButtons[index].title=file.name;
+   sampleButtons[index].textContent=file.name.slice(0,9);
+   index++;
+  }catch(err){status('Sample '+file.name+': '+err.message)}
+ }
+ paintSteps();
+ status('Sampler: '+index+' sample(s) imported to Deck '+k);
+};
+/* V104: deadline-compensated 16th-step sequencer. Still browser-timed,
+   not sample-accurate; pauses when tab is hidden to avoid a late burst. */
+let samplerNextStepAt=0;
+function stopSteps(){
+ if(stepTimer!==null){clearTimeout(stepTimer);stepTimer=null}
+ samplerNextStepAt=0;sam.querySelector('.sampler-start').textContent='START SEQUENCE';
+}
+function tickSteps(){
+ if(document.hidden){stopSteps();status('Sampler sequence paused when tab became hidden');return}
+ const bpm=Math.max(50,Math.min(250,Number($('manual-'+k).value)||128));
+ const period=60000/bpm/4;
+ const now=performance.now();
+ if(samplerNextStepAt===0||samplerNextStepAt<now-period)samplerNextStepAt=now;
+ for(let i=0;i<16;i++)if(steps[i][stepIndex])playSample(i);
+ stepIndex=(stepIndex+1)%16;paintSteps();
+ samplerNextStepAt+=period;
+ stepTimer=setTimeout(tickSteps,Math.max(0,samplerNextStepAt-performance.now()));
+}
+sam.querySelector('.sampler-start').onclick=async()=>{
+ if(stepTimer!==null){stopSteps();return}
+ try{await init();stepIndex=0;samplerNextStepAt=performance.now();tickSteps();sam.querySelector('.sampler-start').textContent='PAUSE SEQUENCE'}
+ catch(e){status('Cannot start sampler: '+e.message)}
+};
 sam.querySelector('.sampler-stop').onclick=()=>{stopSteps();stepIndex=0;paintSteps()};paintSteps();
 for(let i=0;i<8;i++){let btn=document.createElement('button');btn.type='button';btn.textContent=i+1;btn.style.setProperty('--pad',['#f34348','#4ac0f5','#a8d154','#a58bff'][i%4]);btn.addEventListener('click',e=>{if(!d.audio.src)return;if(e.shiftKey){d.cues[i]=null;btn.classList.remove('set')}else if(d.cues[i]===null){d.cues[i]=d.audio.currentTime;btn.classList.add('set')}else d.audio.currentTime=d.cues[i]});$('pads-'+k).appendChild(btn)}
 const chan=document.createElement('div');chan.className='channel';chan.innerHTML='<b class="channel-number">'+({'A':'1','B':'2','C':'3','D':'4'}[k])+'</b><div class="a9-source-select"><span>USB A</span><span>LINE</span><span>USB B</span></div><div class="ch-vu" aria-label="Channel '+k+' signal level"><i id="chvu-'+k+'"></i></div>'+['TRIM','HI','MID','LOW','FILTER'].map(n=>'<div class="knobWrap"><label>'+(n==='FILTER'?'COLOR':n)+'</label><div class="knob rotary-control" role="slider" tabindex="0" aria-label="'+n+' channel '+k+'" aria-valuemin="'+(n==='FILTER'?-100:n==='TRIM'?0:-24)+'" aria-valuemax="'+(n==='FILTER'?100:n==='TRIM'?150:12)+'" aria-valuenow="'+(n==='TRIM'?80:0)+'" ></div><input class="rotary-value" id="'+n+'-'+k+'" aria-label="'+n+' channel '+k+'" type="range" min="'+(n==='FILTER'?-100:n==='TRIM'?0:-24)+'" max="'+(n==='FILTER'?100:n==='TRIM'?150:12)+'" value="'+(n==='TRIM'?80:0)+'"></div>').join('')+'<button class="mixer-cue" type="button" id="mixcue-'+k+'" aria-pressed="false">CUE</button><div class="knobWrap"><label>CHANNEL FADER</label><div class="fader-rail"><input class="chFader" id="level-'+k+'" type="range" min="0" max="100" value="80"></div><div class="channel-assign"><label for="assign-'+k+'">CROSSFADER ASSIGN</label><select class="assign-switch" id="assign-'+k+'" aria-label="Channel '+k+' crossfader assignment"><option value="A"'+((k==='A'||k==='C')?' selected':'')+'>A</option><option value="THRU">THRU</option><option value="B"'+((k==='B'||k==='D')?' selected':'')+'>B</option></select></div></div>'; $('mixbody').appendChild(chan);
@@ -7890,4 +7932,4 @@ function init(){
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
-</body></html>
+<script id="signal-v104-sampler-timing">/* V104: shared decoder, cached impulse responses, drift-corrected sampler timing. */</script></body></html>
