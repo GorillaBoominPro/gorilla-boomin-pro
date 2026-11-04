@@ -7747,7 +7747,7 @@ function setup(){
   line('Audio outputs',navigator.mediaDevices?.enumerateDevices?'ENUMERATION SUPPORTED':'UNAVAILABLE');
   line('Web MIDI',navigator.requestMIDIAccess?'API PRESENT · permission required':'UNAVAILABLE in this browser');
   line('Browser fullscreen',document.fullscreenEnabled?'SUPPORTED · gesture required':'UNAVAILABLE');
-  line('Audio worklet',!!proto?.prototype?.audioWorklet?'CHECK AFTER CONTEXT START':'REQUIRES AN AUDIO CONTEXT');
+  line('Audio worklet','CHECK AFTER CONTEXT START','The running AudioContext provides the definitive capability');
   line('External DMX / RGB fixtures','NOT IMPLEMENTED','on-screen visualizer only; no Art-Net/sACN/DMX transport');
   line('Streaming platform uplink','NOT IMPLEMENTED','external encoder and authorization required');
   line('Ableton Link','NOT IMPLEMENTED','experimental Web MIDI clock available separately');
