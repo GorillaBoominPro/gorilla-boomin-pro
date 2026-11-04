@@ -8289,4 +8289,257 @@ function setup(){
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
 })();
 </script>
+
+<style id="signal-v109-academy-mode">
+/* V109 Academy is a separate overlay / compact coach; no deck, mixer, fader,
+   footer, fullscreen or booth sizing rules are modified. */
+#signal-academy-entry{background:linear-gradient(180deg,#334657,#142334);color:#fff;border:1px solid #86a1b5;border-radius:6px;padding:8px 10px;font-weight:900;letter-spacing:.3px;white-space:nowrap}
+#signal-academy-entry:hover{border-color:#f0576d}
+#signal-academy-home[hidden],#signal-academy-coach[hidden]{display:none!important}
+#signal-academy-home{position:fixed;inset:0;z-index:14500;background:rgba(2,7,13,.89);display:flex;align-items:center;justify-content:center;padding:18px;overflow-y:auto}
+#signal-academy-home .academy-panel{position:relative;display:flex;flex-direction:column;gap:16px;max-width:1050px;width:100%;max-height:min(94vh,1000px);overflow-y:auto;background:linear-gradient(150deg,#1d2937,#0c131c 55%,#151f2a);border:1px solid #627282;border-radius:14px;box-shadow:0 24px 95px #000d;color:#f0f5f9;padding:clamp(14px,2.3vw,28px);font-family:Arial,sans-serif}
+#signal-academy-home .academy-top{display:flex;align-items:center;justify-content:space-between;gap:15px}
+#signal-academy-home .academy-identity{font-size:12px;font-weight:900;letter-spacing:2.5px;color:#d5e3ee}
+#signal-academy-home .academy-identity .slashes{color:#f43652}
+#signal-academy-home .academy-tag{font-size:11px;font-weight:700;color:#91c8e8;letter-spacing:1px}
+#signal-academy-home h2{font-size:clamp(21px,3vw,35px);letter-spacing:.3px;line-height:1.2;margin:4px 0 0}
+#signal-academy-home .academy-close{border:1px solid #7b8994;background:#1b2b39;color:#fff;padding:8px 12px;border-radius:6px;font-weight:900}
+#signal-academy-home .academy-desc{font-size:13px;line-height:1.6;color:#b9cad9;max-width:800px}
+#signal-academy-home .academy-stats{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+#signal-academy-home .academy-progress{height:9px;background:#243442;border-radius:10px;overflow:hidden;flex:1;min-width:140px;border:1px solid #486376}
+#signal-academy-home .academy-progress span{display:block;height:100%;background:linear-gradient(90deg,#f34560,#55c9e6);width:0;transition:width .2s}
+#signal-academy-home .academy-count{font-size:12px;color:#a9cce1;font-weight:900}
+#signal-academy-home .academy-track{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#signal-academy-home .academy-track span{background:#162b3a;color:#a6d9fa;border:1px solid #3c6073;border-radius:40px;padding:6px 10px;font-size:11px;font-weight:700}
+#signal-academy-home .academy-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:12px}
+#signal-academy-home .academy-card{display:flex;flex-direction:column;align-items:stretch;gap:10px;text-align:left;min-height:194px;border:1px solid #435767;background:linear-gradient(150deg,#263643,#121d28);border-radius:11px;padding:15px;color:#f3f7fc;box-shadow:inset 0 1px 0 #ffffff12}
+#signal-academy-home .academy-card:hover,#signal-academy-home .academy-card:focus-visible{border-color:#6ed3ff;box-shadow:0 0 0 2px #2da8df44}
+#signal-academy-home .academy-card[data-completed="true"]{border-color:#4b9875;background:linear-gradient(150deg,#1c3834,#121e27)}
+#signal-academy-home .academy-card .academy-icon{font-size:26px;line-height:1.1}
+#signal-academy-home .academy-card strong{font-size:15px;line-height:1.25}
+#signal-academy-home .academy-card small{font-size:11px;color:#b5c6d5;line-height:1.55;flex:1}
+#signal-academy-home .academy-card .academy-flag{font-size:10px;letter-spacing:1px;font-weight:900;color:#72d3ff}
+#signal-academy-home .academy-card[data-completed="true"] .academy-flag{color:#7ee9aa}
+#signal-academy-home .academy-note{border-top:1px solid #3b4a58;padding-top:13px;font-size:11px;line-height:1.5;color:#98adbd}
+#signal-academy-coach{position:fixed;z-index:14000;top:125px;right:12px;width:min(340px,calc(100vw - 24px));display:flex;flex-direction:column;gap:10px;padding:14px;background:linear-gradient(145deg,#233444,#101b28);color:#f2f8fd;border:1px solid #6d869b;border-left:3px solid #e93855;border-radius:10px;box-shadow:0 6px 30px #000c;font:12px/1.5 Arial,sans-serif;max-height:calc(100vh - 145px);overflow:auto}
+#signal-academy-coach .academy-coach-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+#signal-academy-coach strong{font-size:13px;letter-spacing:.2px}
+#signal-academy-coach .academy-coach-actions{display:flex;gap:6px;flex-wrap:wrap}
+#signal-academy-coach button{padding:7px 9px;border-radius:5px;color:#fff;background:#263d50;border:1px solid #799ab0;font-size:11px;font-weight:bold}
+#signal-academy-coach .academy-coach-actions button{flex:1}
+#signal-academy-coach .academy-coach-actions button:first-child{background:#314c61}
+#signal-academy-coach .academy-lesson-step{padding:10px;background:#0e2333;border:1px solid #416582;border-radius:7px;font-size:13px;line-height:1.55;color:#f3f9ff}
+#signal-academy-coach .academy-coach-tip{font-size:11px;color:#b6d0df;line-height:1.55}
+#signal-academy-coach .academy-coach-meter{height:6px;overflow:hidden;background:#1a2c3a;border-radius:7px}
+#signal-academy-coach .academy-coach-meter span{display:block;width:0;height:100%;background:#59dcb0;transition:width .2s}
+#signal-academy-coach .academy-feedback{font-size:11px;color:#95e7bc;min-height:18px}
+#signal-academy-coach[data-minimized="true"]{top:auto;bottom:12px;right:12px;width:270px;max-height:75px;overflow:hidden}
+#signal-academy-coach[data-minimized="true"]>:not(.academy-coach-top){display:none!important}
+.signal-academy-control-target{outline:3px solid #ffb945!important;outline-offset:3px!important;box-shadow:0 0 0 6px #ffb94533!important;z-index:5}
+@media(max-width:760px){
+ #signal-academy-home{padding:6px}
+ #signal-academy-home .academy-panel{padding:13px;max-height:98vh}
+ #signal-academy-home .academy-cards{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+ #signal-academy-coach{top:auto;bottom:7px;right:7px;max-height:min(52vh,410px)}
+}
+@media(prefers-reduced-motion:reduce){
+ #signal-academy-home .academy-progress span,#signal-academy-coach .academy-coach-meter span{transition:none}
+}
+</style>
+<script id="signal-v109-academy-mode-script">
+(()=>{
+'use strict';
+const STORAGE='signal.dj.academy.progress.v1';
+const lessons=[
+ {id:'orientation',icon:'🎛',name:'01 · Meet Your DJ Booth',short:'Explore Deck A, the mixer and the transport controls.',intro:'Understand the signal flow before learning to mix: a track plays on a deck, travels through its channel and reaches the master output.',steps:[
+  {text:'Find Deck A and press its PLAY button (load a track first).',tip:'Deck A sits to the left of the mixer. Import a song and start it using PLAY.',kind:'play',deck:'A',target:'play-A'},
+  {text:'Press Deck A CUE while music is loaded.',tip:'When paused, CUE sets a starting point. While playing, it returns to the last set point.',kind:'cue',deck:'A',target:'cue-A'},
+  {text:'Move the Channel A fader.',tip:'The fader controls the channel volume on its way to the master.',kind:'input',target:'level-A'}
+ ]},
+ {id:'library',icon:'🎵',name:'02 · Load Your Music',short:'Import files and prepare two decks for mixing.',intro:'A professional DJ prepares a music library before a set. Browser files must be imported again after reopening this app.',steps:[
+  {text:'Load any local audio track onto Deck A.',tip:'Use the deck FILE control, the main music library, or load from your imported crates.',kind:'loaded',deck:'A',target:'file-A'},
+  {text:'Load another audio track onto Deck B.',tip:'Choose a second song with a similar tempo for your first transition.',kind:'loaded',deck:'B',target:'file-B'}
+ ]},
+ {id:'cue',icon:'⏯',name:'03 · Master the CUE Button',short:'Practise starting, pausing and finding a cue point.',intro:'CUE points help you return to an exact location before introducing the next track. This lesson checks control actions, not timing accuracy.',steps:[
+  {text:'With a track loaded on Deck A, press CUE.',tip:'Pause the deck first if you want to set the cue at its current position.',kind:'cue',deck:'A',target:'cue-A'},
+  {text:'Start Deck A using PLAY.',tip:'Listen for the first beat. Avoid playing two tracks at full volume until you can control both channels.',kind:'play',deck:'A',target:'play-A'},
+  {text:'Press CUE again while Deck A is playing.',tip:'This returns the track to its saved cue point and pauses it.',kind:'cuePlaying',deck:'A',target:'cue-A'}
+ ]},
+ {id:'mixer',icon:'🎚',name:'04 · Learn the Mixer',short:'Control level, EQ and the MAGVEL crossfader.',intro:'Good DJs manage volume, frequency balance and transitions. Keep your master at a safe level while practising.',steps:[
+  {text:'Adjust the Channel A level fader.',tip:'Move it slowly and listen to the change in level.',kind:'input',target:'level-A'},
+  {text:'Turn the LOW EQ control on Channel A.',tip:'The LOW EQ affects bass frequencies. Avoid unnecessary bass buildup while blending tracks.',kind:'input',target:'LOW-A'},
+  {text:'Move the MAGVEL crossfader left or right.',tip:'The position blends assigned channels A/C and B/D. It does not automatically beatmatch.',kind:'input',target:'cross'}
+ ]},
+ {id:'mix',icon:'🔥',name:'05 · Your First Transition',short:'Play two tracks and practise a controlled blend.',intro:'This is your first two-deck exercise. The current app verifies actions only. Correct beatmatching and musical smoothness still require you to listen.',steps:[
+  {text:'Start an imported track playing on Deck A.',tip:'Load music first. Use a comfortable master level and keep Channel A audible.',kind:'play',deck:'A',target:'play-A'},
+  {text:'Start a different imported track playing on Deck B.',tip:'Use a similar BPM for your first practice. Listen through CUE if a separate headphone output is configured.',kind:'play',deck:'B',target:'play-B'},
+  {text:'Adjust Channel B level as you bring it into the mix.',tip:'Check your gain and avoid clipping; use the channel faders rather than boosting everything.',kind:'input',target:'level-B'},
+  {text:'Move the crossfader toward the arriving track.',tip:'Practise transitioning from A to B. We do not yet score musical timing or audio quality.',kind:'input',target:'cross'}
+ ]},
+ {id:'scenario',icon:'🏆',name:'06 · Club Decision Simulator',short:'Choose a smart response to a difficult dance floor.',intro:'A realistic DJ thinks beyond technical controls. Track selection and crowd awareness are as important as effects.',steps:[
+  {text:'Your last transition was rough and the dance floor is losing energy. Choose your response.',tip:'Good judgement starts with song selection and a clean transition—not with maximum effects.',kind:'quiz'}
+ ]}
+];
+let progress={};try{progress=JSON.parse(localStorage.getItem(STORAGE)||'{}')||{}}catch(e){progress={}}
+let active=null,index=0,coach=null,home=null,feedback=null,currentTarget=null,paused=false;
+const persist=()=>{try{localStorage.setItem(STORAGE,JSON.stringify(progress))}catch(e){}};
+const element=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e};
+function loaded(deck){const audio=document.getElementById('audio-'+deck);return !!(audio?.src&&audio.readyState>=1)}
+function playing(deck){const audio=document.getElementById('audio-'+deck);return !!(audio?.src&&!audio.paused&&!audio.ended)}
+function clearTarget(){currentTarget?.classList.remove('signal-academy-control-target');currentTarget=null}
+function highlight(id){
+ clearTarget();if(!id)return;
+ const el=document.getElementById(id);
+ if(!el)return;
+ currentTarget=el;
+ el.classList.add('signal-academy-control-target');
+}
+function countComplete(){return lessons.filter(l=>progress[l.id]?.completed).length}
+function renderHome(){
+ if(!home)return;
+ home.querySelector('.academy-count').textContent=countComplete()+' / '+lessons.length+' lessons completed';
+ home.querySelector('.academy-progress span').style.width=(countComplete()/lessons.length*100)+'%';
+ const cards=home.querySelector('.academy-cards');cards.replaceChildren();
+ for(const l of lessons){
+  const card=element('button','academy-card');card.type='button';card.dataset.completed=String(!!progress[l.id]?.completed);
+  card.append(element('span','academy-icon',l.icon),element('strong','',l.name),element('small','',l.short),element('span','academy-flag',progress[l.id]?.completed?'✓ COMPLETED':'START / REVISIT →'));
+  card.onclick=()=>startLesson(l.id);
+  cards.append(card);
+ }
+}
+function openHome(){
+ clearTarget();if(coach)coach.hidden=true;
+ active=null;paused=false;
+ const settings=document.getElementById('signal-settings');
+ if(settings&&!settings.hidden)document.getElementById('signal-settings-close')?.click();
+ renderHome();home.hidden=false;
+ home.querySelector('.academy-close')?.focus();
+}
+function closeHome(){home.hidden=true;document.getElementById('signal-academy-entry')?.focus()}
+function startLesson(id){
+ const lesson=lessons.find(l=>l.id===id);if(!lesson)return;
+ active=lesson;index=0;paused=false;home.hidden=true;
+ coach.hidden=false;coach.dataset.minimized='false';
+ feedback.textContent='Real control actions advance the lesson.';
+ renderCoach();
+}
+function finishStep(){
+ if(!active||paused)return;
+ const done=active;
+ index++;
+ feedback.textContent='✓ Step verified from your action.';
+ if(index>=done.steps.length){
+  progress[done.id]={completed:true,finishedAt:new Date().toISOString()};
+  persist();
+  clearTarget();
+  feedback.textContent='🏆 Lesson completed! Your progress has been saved locally on this browser.';
+  renderCoach();return;
+ }
+ renderCoach();
+}
+function renderCoach(){
+ if(!active||!coach)return;
+ const complete=index>=active.steps.length;
+ coach.querySelector('.academy-coach-name').textContent=active.name;
+ coach.querySelector('.academy-coach-counter').textContent=complete?'LESSON COMPLETE':('STEP '+(index+1)+' / '+active.steps.length);
+ coach.querySelector('.academy-coach-meter span').style.width=(Math.min(index,active.steps.length)/active.steps.length*100)+'%';
+ const task=coach.querySelector('.academy-lesson-step'),tip=coach.querySelector('.academy-coach-tip');
+ task.textContent=complete?'🏆 You completed this lesson. Return to the Academy to choose another exercise.':active.steps[index].text;
+ tip.textContent=complete?'Training progress is saved in this browser. This does not certify professional technique.':active.steps[index].tip;
+ const quiz=coach.querySelector('.academy-quiz');quiz.replaceChildren();
+ if(!complete&&active.steps[index].kind==='quiz'){
+  const options=[
+   ['a','Immediately jump to a much faster track.'],
+   ['b','Select a compatible track and rebuild the groove with a smooth transition.'],
+   ['c','Add every available effect at once.']
+  ];
+  for(const [key,value] of options){
+   const btn=element('button','',value);
+   btn.onclick=()=>{
+    if(key==='b'){feedback.textContent='✓ Correct: strong music selection and controlled mixing protect the flow.';finishStep()}
+    else feedback.textContent=key==='a'?'Try again: a sudden tempo jump can make the floor less comfortable.':'Try again: too many FX can make a rough transition worse.';
+   };
+   quiz.append(btn);
+  }
+ }
+ coach.querySelector('[data-academy-restart]').hidden=!complete;
+ highlight(!complete?active.steps[index].target:null);
+}
+function onAction(event){
+ if(!active||paused||index>=active.steps.length)return;
+ const step=active.steps[index];
+ const target=event.target;
+ if(step.kind==='quiz')return;
+ if(step.kind==='loaded'&&event.type==='loadedmetadata'){
+  if(target===document.getElementById('audio-'+step.deck)&&loaded(step.deck))finishStep();return;
+ }
+ if(step.kind==='play'&&event.type==='play'){
+  if(target===document.getElementById('audio-'+step.deck)&&playing(step.deck))finishStep();return;
+ }
+ if(step.kind==='input'&&event.type==='input'){
+  if(target.id===step.target)finishStep();return;
+ }
+ if((step.kind==='cue'||step.kind==='cuePlaying')&&event.type==='click'){
+  if(target.closest?.('#cue-'+step.deck)&&loaded(step.deck)){
+   if(step.kind==='cuePlaying'&&!playing(step.deck))return;
+   finishStep();
+  }
+ }
+}
+function init(){
+ if(document.getElementById('signal-academy-home'))return;
+ const entry=element('button','', '🎓 ACADEMY');entry.id='signal-academy-entry';entry.type='button';
+ const settingBtn=document.getElementById('signal-settings-open');
+ settingBtn?.insertAdjacentElement('beforebegin',entry);
+ entry.onclick=openHome;
+ home=element('section','');home.id='signal-academy-home';home.hidden=true;home.setAttribute('role','dialog');home.setAttribute('aria-modal','true');home.setAttribute('aria-label','SIGNAL DJ Academy');
+ const panel=element('div','academy-panel');
+ const top=element('div','academy-top');
+ const brand=element('div','');
+ const ident=element('div','academy-identity');
+ ident.append(document.createTextNode('G'),element('span','slashes','//'),document.createTextNode('BMN: · SIGNAL DJ'));
+ brand.append(ident,element('div','academy-tag','THE INTERACTIVE DJ ACADEMY'),element('h2','','FROM ZERO TO THE BOOTH.'));
+ const close=element('button','academy-close','✕ CLOSE');close.type='button';close.onclick=closeHome;
+ top.append(brand,close);
+ panel.append(top,element('p','academy-desc','Learn on the real SIGNAL DJ decks. Choose a lesson, follow the compact coach, operate actual controls and progress through verified actions. Your lessons save in this browser.'));
+ const stats=element('div','academy-stats');
+ const progressBar=element('div','academy-progress');progressBar.append(element('span'));
+ stats.append(progressBar,element('span','academy-count'));panel.append(stats);
+ const track=element('div','academy-track');
+ for(const label of ['🎧 ROOKIE DJ · AVAILABLE','🎛 CLUB DJ · PLANNED','🏆 PRO PERFORMANCE · PLANNED'])track.append(element('span','',label));
+ panel.append(track);
+ panel.append(element('div','academy-cards'));
+ panel.append(element('div','academy-note','Early Academy release: lessons 1–5 verify control actions; they do not automatically assess musical timing, sound quality or beatmatching. Lesson 6 tests a DJ decision. Future lessons will add real audio-performance evaluation, translated teaching materials and advanced club scenarios.'));
+ home.append(panel);document.body.append(home);
+ home.addEventListener('click',e=>{if(e.target===home)closeHome()});
+ coach=element('aside','');coach.id='signal-academy-coach';coach.hidden=true;coach.setAttribute('aria-label','Academy practice coach');
+ const head=element('div','academy-coach-top');
+ const header=element('div','');
+ header.append(element('strong','academy-coach-name'),element('div','academy-coach-counter'));
+ const minimize=element('button','','−');minimize.type='button';minimize.title='Minimize / restore Academy coach';minimize.onclick=()=>{coach.dataset.minimized=coach.dataset.minimized==='true'?'false':'true';minimize.textContent=coach.dataset.minimized==='true'?'+':'−'};
+ head.append(header,minimize);coach.append(head);
+ const bar=element('div','academy-coach-meter');bar.append(element('span'));coach.append(bar);
+ coach.append(element('div','academy-lesson-step'),element('div','academy-coach-tip'));
+ const quiz=element('div','academy-quiz');quiz.style.cssText='display:flex;flex-direction:column;gap:6px';coach.append(quiz);
+ feedback=element('div','academy-feedback');feedback.setAttribute('role','status');coach.append(feedback);
+ const controls=element('div','academy-coach-actions');
+ const homeBtn=element('button','','← LESSONS');homeBtn.onclick=openHome;
+ const restart=element('button','','RESTART');restart.dataset.academyRestart='true';
+ restart.onclick=()=>{if(active)startLesson(active.id)};
+ const pause=element('button','','PAUSE');pause.onclick=()=>{paused=!paused;pause.textContent=paused?'RESUME':'PAUSE';feedback.textContent=paused?'Lesson paused; controls work normally.':'Lesson resumed.';if(paused)clearTarget();else renderCoach()};
+ controls.append(homeBtn,pause,restart);coach.append(controls);
+ document.body.append(coach);
+ for(const type of ['click','input','play','loadedmetadata'])document.addEventListener(type,onAction,true);
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!home.hidden)closeHome()});
+ const legacy=document.getElementById('settings-club-training');
+ if(legacy){
+  const launch=element('button','','🎓 OPEN FULL ACADEMY');launch.type='button';launch.onclick=openHome;
+  legacy.insertBefore(launch,legacy.firstChild.nextSibling);
+ }
+ window.signalDJAcademy={open:openHome,getProgress:()=>({...progress}),lessonCount:lessons.length};
+ renderHome();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
 </body></html>
