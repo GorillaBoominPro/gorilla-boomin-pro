@@ -52,7 +52,7 @@
   let savedLang=null;
   try{savedLang=localStorage.getItem('gbmn-site-language')}catch(_){}
   let cookieLang=null;
-  try{const c=document.cookie.match(/(?:^|;\\s*)googtrans=([^;]+)/);if(c)cookieLang=decodeURIComponent(c[1]).split('/').pop()}catch(_){}
+  try{const c=document.cookie.match(/(?:^|;\s*)googtrans=([^;]+)/);if(c)cookieLang=decodeURIComponent(c[1]).split('/').pop()}catch(_){}
   const lang=supported.includes(searchLang)?searchLang:supported.includes(savedLang)?savedLang:supported.includes(cookieLang)?cookieLang:'en';
   const writeChoice=function(choice){
     const val=choice==='en'?'/en/en':'/en/'+choice;
