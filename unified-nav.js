@@ -42,9 +42,81 @@
   const current=location.pathname.split('/').pop()||'index.html';
   links.forEach(([label,url])=>{const a=document.createElement('a');a.href=url;a.textContent=label;if(label==='BOOKINGS')a.className='gbmn-book';if((label==='HOME'&&current==='index.html')||(label==='THE ARTIST'&&current==='gorilla-boomin-artist-v2.html')||(label==='MUSIC'&&current==='music.html')||(label==='APPS'&&current==='apps.html')||(label==='MAN OF STEEL'&&current==='man-of-steel-v2.html')||(label==='BASS CULTURE'&&current==='bass-culture-v2.html')||(label==='EPK'&&current==='gorilla-boomin-epk.html'))a.setAttribute('aria-current','page');menu.appendChild(a)});
   nav.appendChild(menu);
+  /* Language choice is global, not home-page-only. The homepage retains its
+     original Google Translate handler; all other pages initialize the same
+     service here. Preserve the choice in links, a cookie, and localStorage. */
+  const supported=['en','ro','es','fr','de','ja','it','ar','zh-CN','ru','uk','pt','ko','iw','hi','th'];
+  const labels={'en':'English','ro':'Română','es':'Español','fr':'Français','de':'Deutsch','ja':'日本語','it':'Italiano','ar':'العربية','zh-CN':'简体中文','ru':'Русский','uk':'Українська','pt':'Português (Brasil)','ko':'한국어','iw':'עברית','hi':'हिन्दी','th':'ไทย'};
   const existingLanguage=document.getElementById('site-language');
-  if(existingLanguage){existingLanguage.classList.add('gbmn-language');existingLanguage.setAttribute('aria-label','Website language');nav.appendChild(existingLanguage)}
-  else {const lang=document.createElement('a');lang.href='/';lang.textContent='🌐';lang.title='Languages on main website';lang.style.color='#fff';nav.appendChild(lang)}
+  const searchLang=new URLSearchParams(location.search).get('lang');
+  let savedLang=null;
+  try{savedLang=localStorage.getItem('gbmn-site-language')}catch(_){}
+  let cookieLang=null;
+  try{const c=document.cookie.match(/(?:^|;\\s*)googtrans=([^;]+)/);if(c)cookieLang=decodeURIComponent(c[1]).split('/').pop()}catch(_){}
+  const lang=supported.includes(searchLang)?searchLang:supported.includes(savedLang)?savedLang:supported.includes(cookieLang)?cookieLang:'en';
+  const writeChoice=function(choice){
+    const val=choice==='en'?'/en/en':'/en/'+choice;
+    document.cookie='googtrans='+val+';path=/;SameSite=Lax';
+    document.cookie='googtrans='+val+';path=/gorilla-boomin-pro/;SameSite=Lax';
+    try{localStorage.setItem('gbmn-site-language',choice)}catch(_){}
+  };
+  writeChoice(lang);
+  const picker=existingLanguage||document.createElement('select');
+  picker.id='site-language';
+  picker.classList.add('gbmn-language');
+  picker.setAttribute('aria-label','Website language');
+  if(!existingLanguage){
+    supported.forEach(code=>{const option=document.createElement('option');option.value=code;option.textContent=labels[code];picker.appendChild(option)});
+  }
+  picker.value=lang;
+  nav.appendChild(picker);
+  /* Delegated link rewriting also covers page-body links and dynamically
+     inserted navigation. External destinations and on-page hashes are untouched. */
+  document.addEventListener('click',function(event){
+    const a=event.target.closest&&event.target.closest('a[href]');
+    if(!a||event.defaultPrevented||event.button!==0||event.ctrlKey||event.metaKey||event.altKey||event.shiftKey||a.hasAttribute('download'))return;
+    if(a.target&&a.target!=='_self')return;
+    let u;try{u=new URL(a.href,location.href)}catch(_){return}
+    if(u.origin!==location.origin||!/^https?:$/.test(u.protocol))return;
+    const active=picker.value;
+    if(!supported.includes(active))return;
+    const isSamePage=u.pathname===location.pathname&&u.search===location.search&&!!u.hash;
+    if(isSamePage)return;
+    if(active==='en')u.searchParams.delete('lang');else u.searchParams.set('lang',active);
+    a.href=u.href;
+  },true);
+  if(!existingLanguage){
+    picker.addEventListener('change',function(){
+      const selected=picker.value;
+      if(!supported.includes(selected))return;
+      writeChoice(selected);
+      const u=new URL(location.href);
+      if(selected==='en')u.searchParams.delete('lang');else u.searchParams.set('lang',selected);
+      location.assign(u.href);
+    });
+    let container=document.getElementById('google_translate_element');
+    if(!container){
+      container=document.createElement('div');container.id='google_translate_element';
+      container.setAttribute('aria-hidden','true');
+      container.style.cssText='position:absolute;width:1px;height:1px;overflow:hidden;left:-9999px';
+      document.body.appendChild(container);
+    }
+    window.gbmnGoogleTranslateInit=function(){
+      if(window.google&&google.translate&&google.translate.TranslateElement){
+        new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:supported.filter(x=>x!=='en').join(','),autoDisplay:false},'google_translate_element');
+      }
+    };
+    if(!document.querySelector('script[data-gbmn-translate]')){
+      const script=document.createElement('script');
+      script.dataset.gbmnTranslate='1';
+      script.src='https://translate.google.com/translate_a/element.js?cb=gbmnGoogleTranslateInit';
+      script.async=true;
+      document.head.appendChild(script);
+    }
+  }else{
+    /* Homepage already owns the change/reload handler; sync storage before it navigates. */
+    picker.addEventListener('change',function(){if(supported.includes(picker.value))writeChoice(picker.value)});
+  }
   toggle.addEventListener('click',()=>{const open=nav.classList.toggle('gbmn-open');toggle.setAttribute('aria-expanded',String(open))});
   menu.addEventListener('click',()=>{nav.classList.remove('gbmn-open');toggle.setAttribute('aria-expanded','false')});
   document.querySelectorAll('.gbmn-shared-nav, header.nav, header.nav-v4b, header.top').forEach(el=>el.remove());
