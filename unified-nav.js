@@ -13,7 +13,11 @@
     #gbmn-unified-nav .gbmn-links a:hover,#gbmn-unified-nav .gbmn-links a[aria-current="page"]{color:#ff425d}
     #gbmn-unified-nav .gbmn-book{border:1px solid #f0354c;padding:10px 12px}
     #gbmn-unified-nav .gbmn-toggle{display:none;background:transparent;color:#fff;border:1px solid #ffffff60;padding:8px 12px;cursor:pointer;font-weight:800}
-    #gbmn-unified-nav .gbmn-language{color:#fff;background:#151c2b;border:1px solid #ffffff60;padding:7px 4px;max-width:110px;font-size:12px}
+    #gbmn-unified-nav .gbmn-language-wrap{display:flex!important;align-items:center!important;flex:0 0 auto;gap:7px;padding:6px 9px;border:1px solid #e1c68b;border-radius:6px;background:#1a2030;min-height:42px;margin-left:4px;box-shadow:0 0 0 1px #0005}
+    #gbmn-unified-nav .gbmn-language-label{color:#f3d9aa;font-weight:900;letter-spacing:.04em;font-size:12px;white-space:nowrap;cursor:pointer}
+    #gbmn-unified-nav .gbmn-language{display:block!important;visibility:visible!important;opacity:1!important;position:static!important;color:#fff!important;background:#151c2b!important;border:1px solid #ffffff60!important;padding:7px 6px!important;max-width:145px;min-width:100px;font-size:12px;font-weight:700;cursor:pointer}
+    #gbmn-unified-nav .gbmn-language option{background:#151c2b;color:#fff}
+    @media(max-width:600px){#gbmn-unified-nav{gap:7px;padding:8px 12px}#gbmn-unified-nav .gbmn-language-wrap{margin-left:auto;gap:3px;padding:4px 5px}#gbmn-unified-nav .gbmn-language-label{font-size:10px}#gbmn-unified-nav .gbmn-language{min-width:79px;max-width:105px;font-size:11px}}
     html{scroll-padding-top:80px}
     @media(max-width:1100px){
       #gbmn-unified-nav{flex-wrap:wrap}
@@ -69,7 +73,11 @@
     supported.forEach(code=>{const option=document.createElement('option');option.value=code;option.textContent=labels[code];picker.appendChild(option)});
   }
   picker.value=lang;
-  nav.appendChild(picker);
+  const languageWrap=document.createElement('div');languageWrap.className='gbmn-language-wrap';
+  const languageLabel=document.createElement('label');languageLabel.className='gbmn-language-label';languageLabel.htmlFor='site-language';languageLabel.textContent='🌐 LANG';
+  languageWrap.appendChild(languageLabel);
+  languageWrap.appendChild(picker);
+  nav.appendChild(languageWrap);
   /* Delegated link rewriting also covers page-body links and dynamically
      inserted navigation. External destinations and on-page hashes are untouched. */
   document.addEventListener('click',function(event){
